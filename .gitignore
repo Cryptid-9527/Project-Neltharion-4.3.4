@@ -39,3 +39,14 @@ project/src/cmake_install.cmake
 *.stamp
 *.depend
 /project/.vs
+*.user
+*.obj
+*.recipe
+*.ilk
+*.log
+*.pch
+*.res
+*.lastbuildstate
+*.tlog
+*.pdb
+*.lib
