@@ -38,3 +38,4 @@ project/src/cmake_install.cmake
 *.filters
 *.stamp
 *.depend
+/project/.vs
