@@ -35,27 +35,16 @@ void UnitAI::AttackStart(Unit* victim)
     if (!me->IsInWorld())
         return;
 
-    if (victim != me->getVictim())
+    if (!me->getThreatManager().getThreat(victim, false))
+        me->AddThreat(victim, 1.0f);
+    if (auto target = me->getThreatManager().getHostilTarget())
     {
-        if (!me->getThreatManager().getThreat(victim, false))
-            me->AddThreat(victim, 1.0f);
-
-
-        if (auto info = me->GetCharmInfo())
-            info->SetIsCommandAttack(true);
-
-        if (auto target = me->getThreatManager().getHostilTarget())
-        {
-            if (me->Attack(target, true))
-                if (auto m = me->GetMotionMaster())
-                    m->MoveChase(target);
-        }
-
-        if (victim)
-            if (me->Attack(victim, true))
-                if (auto m = me->GetMotionMaster())
-                m->MoveChase(victim);
+        if (me->Attack(target, true))
+            me->GetMotionMaster()->MoveChase(target);
+        return;
     }
+    if (victim && me->Attack(victim, true))
+        me->GetMotionMaster()->MoveChase(victim);
 }
 
 void UnitAI::AttackStart(Unit* victim, uint32 /*spellId*/)
