@@ -6,5 +6,3 @@ This becomes an issue when players are swapping sides constantly.
 - Some old scripts are just unstable. Way too many chained pointers without null checks. I've knocked them down by the hundreds but some old shit is just too fucked and we didn't want to disable it.
 
 - Item recovery saving was a cause of MAJOR memory access issues. It was gutted entireely once we identified the problem.
-
-- Combat/Threat was recently heavily reworked towards the end. Several scripts simply need attack start functions corrected. This does not affect unscripted npcs.
