@@ -16,7 +16,3 @@ CMakeLists.txt.user
 *.BACKUP.*
 *.BASE.*
 *.LOCAL.*
-/source/sql
-source/sql/base/world.zip
-source/sql/base/characters.zip
-source/sql/base/auth.zip
