@@ -29,6 +29,7 @@ Focused Content:
 - Endgame 85 Gameplay Loop
 - Critical Systems & QOL
 - Starting & chokepoint quest zones
+
 Neglected Content (Original to source cores):
 - Pre-Cata Dungeons & Raids
 - Quest zones where leveling in them is optional
