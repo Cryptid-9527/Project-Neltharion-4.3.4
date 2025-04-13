@@ -19,12 +19,20 @@ This release is "final", as there will be no further support by myself or under 
 The final product is not perfect, as finding more imperfections than you can fix is a natural part of reverse engineering a game. 
 The 4 year changelog may be impressive, but our project also started with a source we felt, at the time, was 'almost' complete before spending 4 years working on it.
 
-I have a few pieces of advice for those looking to start with this core:
-- Do not hold your breathe waiting for someone else to come fix it for you.
-- Do not shy away from breaking stuff in the process of a fix.
-- Spend plenty of time skimming existing code, as learning to fix issues is a process that snowballs. 
-Once you find or understand a solution to one part of the core, you will remember it and use it as a free step towards another solution later down the line.
+"What is the core based off?"
+- 2019 beta launch was a Chimera of OMFG private-leaked core and Paragon-WoW (FR) scripts. I cannot link as I am not the one who sourced them.
+- Anticheat pulled from Azerothcore WOTLK and fitted to cataclysm by Dandi
+- M+ System pulled from Legion by Traesh
+- All focus-content scripts and systems received hundreds if not thousands of hours of polishing work.
 
+Focused Content:
+- Endgame 85 Gameplay Loop
+- Critical Systems & QOL
+- Starting & chokepoint quest zones
+Neglected Content (Original to source cores):
+- Pre-Cata Dungeons & Raids
+- Quest zones where leveling in them is optional
+- Profession Gathering
 
 For the short list of issues I had in mind from the project's final days, Check the known issues file.
 For the full public changelog leading up to the october 6 2023 release, check the file next to the main readme.
