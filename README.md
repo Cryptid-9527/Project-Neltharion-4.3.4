@@ -21,12 +21,12 @@ The 4 year changelog may be impressive, but our project also started with a sour
 
 "What is the core based off?"
 - 2019 beta launch was a Chimera of OMFG private-leaked core and Paragon-WoW (FR) scripts. I cannot link as I am not the one who sourced them.
-- Anticheat pulled from Azerothcore WOTLK and fitted to cataclysm by Dandi
-- M+ System pulled from Legion by Traesh
+- Anticheat pulled from (Azerothcore?) WOTLK and fitted to cataclysm by Dandi
+- M+ System pulled from (Unkown) Legion and fitted to cataclysm by Traesh
 - All focus-content scripts and systems received hundreds if not thousands of hours of polishing work.
 
 Focused Content:
-- Endgame 85 Gameplay Loop
+- Endgame 85 Gameplay Loop (CLass Mechanics, Arena, BGs, WPvP, Dungeons, Raids, M+)
 - Critical Systems & QOL
 - Starting & chokepoint quest zones
 
