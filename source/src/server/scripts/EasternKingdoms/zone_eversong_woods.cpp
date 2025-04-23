@@ -176,7 +176,7 @@ public:
                     me->setFaction(FACTION_HOSTILE);
                     questPhase = 0;
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     {
                         me->AddThreat(target, 5000000.0f);
                         AttackStart(target);
@@ -330,7 +330,7 @@ public:
             {
                 if (timer <= diff)
                 {
-                    if (Creature* paladinSpawn = Unit::GetCreature((*me), paladinGuid[paladinPhase]))
+                    if (auto paladinSpawn = Unit::GetCreature((*me), paladinGuid[paladinPhase]))
                     {
                         CAST_AI(npc_second_trial_paladin::npc_secondTrialAI, paladinSpawn->AI())->Activate(me->GetGUID());
 
@@ -371,7 +371,7 @@ public:
             if (questPhase == 1)
             { // no player check, quest can be finished as group, so no complex PlayerGUID/group search code
                 for (uint8 i = 0; i < 4; ++i)
-                if (Creature* summoned = DoSpawnCreature(PaladinEntry[i], SpawnPosition[i].x, SpawnPosition[i].y, SpawnPosition[i].z, SpawnPosition[i].o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 180000))
+                if (auto summoned = DoSpawnCreature(PaladinEntry[i], SpawnPosition[i].x, SpawnPosition[i].y, SpawnPosition[i].z, SpawnPosition[i].o, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 180000))
                     paladinGuid[i] = summoned->GetGUID();
 
                 timer = OFFSET_NEXT_ATTACK;
@@ -400,7 +400,7 @@ void npc_second_trial_paladin::npc_secondTrialAI::JustDied(Unit* Killer)
 {
     if (Killer->GetTypeId() == TYPEID_PLAYER)
     {
-        if (Creature* summoner = Unit::GetCreature((*me), summonerGuid))
+        if (auto summoner = Unit::GetCreature((*me), summonerGuid))
             CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, summoner->AI())->SecondTrialKill();
 
         // last kill quest complete for group
@@ -423,7 +423,7 @@ public:
     bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
         // find spawn :: master_kelerun_bloodmourn
-        if (Creature* creature = go->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
+        if (auto creature = go->FindNearestCreature(MASTER_KELERUN_BLOODMOURN, 30.0f))
            CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, creature->AI())->StartEvent();
 
         return true;
@@ -492,14 +492,14 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (PlayerGUID)
-                if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
+                if (auto player = Unit::GetPlayer(*me, PlayerGUID))
                     player->FailQuest(QUEST_UNEXPECTED_RESULT);
         }
 
         void UpdateAI(const uint32 /*diff*/)
         {
             if (KillCount >= 3 && PlayerGUID)
-                if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
+                if (auto player = Unit::GetPlayer(*me, PlayerGUID))
                     player->CompleteQuest(QUEST_UNEXPECTED_RESULT);
 
             if (Summon)
@@ -592,7 +592,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (PlayerGUID && !Completed)
-                if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
+                if (auto player = Unit::GetPlayer(*me, PlayerGUID))
                     CAST_PLR(player)->FailQuest(QUEST_POWERING_OUR_DEFENSES);
         }
 
@@ -603,7 +603,7 @@ public:
                 Talk(EMOTE);
                 Completed = true;
                 if (PlayerGUID)
-                    if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
+                    if (auto player = Unit::GetPlayer(*me, PlayerGUID))
                         CAST_PLR(player)->CompleteQuest(QUEST_POWERING_OUR_DEFENSES);
 
                 me->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);

@@ -174,7 +174,7 @@ public:
             case PHASE_CHAINED:
                 if (!anchorGUID)
                 {
-                    if (Creature* anchor = me->FindNearestCreature(29521, 6))
+                    if (auto anchor = me->FindNearestCreature(29521, 6))
                     {
                         anchor->AI()->SetGUID(me->GetGUID());
                         anchor->CastSpell(me, SPELL_SOUL_PRISON_CHAIN, true);
@@ -217,7 +217,7 @@ public:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                         phase = PHASE_ATTACKING;
 
-                        if (Player* target = Unit::GetPlayer(*me, playerGUID))
+                        if (auto target = Unit::GetPlayer(*me, playerGUID))
                             me->AI()->AttackStart(target);
                         wait_timer = 0;
                     }
@@ -301,9 +301,9 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
-        if (Creature* anchor = go->FindNearestCreature(29521, 2))
+        if (auto anchor = go->FindNearestCreature(29521, 2))
             if (uint64 prisonerGUID = anchor->AI()->GetGUID())
-                if (Creature* prisoner = Creature::GetCreature(*go, prisonerGUID))
+                if (auto prisoner = Creature::GetCreature(*go, prisonerGUID))
                     if (prisoner->isAlive())
                         CAST_AI(npc_unworthy_initiate::npc_unworthy_initiateAI, prisoner->AI())->EventStart(anchor, player);
 
@@ -457,7 +457,7 @@ public:
                     {
                         me->setFaction(FACTION_HOSTILE);
 
-                        if (Unit* unit = Unit::GetUnit(*me, m_uiDuelerGUID))
+                        if (auto unit = Unit::GetUnit(*me, m_uiDuelerGUID))
                             AttackStart(unit);
                     }
                     else
@@ -547,7 +547,7 @@ public:
                         Phase = 1;
                         break;
                     case 1:
-                        if (Unit* target = Unit::GetUnit(*me, TargetGUID))
+                        if (auto target = Unit::GetUnit(*me, TargetGUID))
                             DoCast(target, SPELL_DESPAWN_HORSE, true);
                         PhaseTimer = 3000;
                         Phase = 2;
@@ -617,7 +617,7 @@ public:
             {
                 if (caster->GetTypeId() == TYPEID_UNIT && caster->IsVehicle())
                 {
-                    if (Unit* charmer = caster->GetCharmer())
+                    if (auto charmer = caster->GetCharmer())
                     {
                         if (charmer->HasAura(SPELL_EFFECT_STOLEN_HORSE))
                         {
@@ -625,7 +625,7 @@ public:
                             caster->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                             caster->setFaction(35);
                             DoCast(caster, SPELL_CALL_DARK_RIDER, true);
-                            if (Creature* Dark_Rider = me->FindNearestCreature(28654, 15))
+                            if (auto Dark_Rider = me->FindNearestCreature(28654, 15))
                                 CAST_AI(npc_dark_rider_of_acherus::npc_dark_rider_of_acherusAI, Dark_Rider->AI())->InitDespawnHorse(caster);
                         }
                     }
@@ -639,7 +639,7 @@ public:
 
             if (who->GetTypeId() == TYPEID_UNIT && who->IsVehicle() && me->IsWithinDistInMap(who, 5.0f))
             {
-                if (Unit* charmer = who->GetCharmer())
+                if (auto charmer = who->GetCharmer())
                 {
                     if (charmer->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -741,7 +741,7 @@ public:
 
             if (who->GetEntry() == NPC_GHOULS && me->IsWithinDistInMap(who, 10.0f))
             {
-                if (Unit* owner = who->GetOwner())
+                if (auto owner = who->GetOwner())
                 {
                     if (owner->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -811,7 +811,7 @@ public:
         //{
         //    if (!me->isInCombat())
         //    {
-        //        if (Unit* owner = me->GetOwner())
+        //        if (auto owner = me->GetOwner())
         //        {
         //            Player* plrOwner = owner->ToPlayer();
         //            if (plrOwner && plrOwner->isInCombat())
@@ -883,7 +883,7 @@ public:
 
         void DoAction(const int32 /*param*/)
         {
-            if (Creature* miner = Unit::GetCreature(*me, minerGUID))
+            if (auto miner = Unit::GetCreature(*me, minerGUID))
             {
                 me->SetWalk(false);
 
@@ -898,7 +898,7 @@ public:
         void PassengerBoarded(Unit* /*who*/, int8 /*seatId*/, bool apply)
         {
             if (!apply)
-                if (Creature* miner = Unit::GetCreature(*me, minerGUID))
+                if (auto miner = Unit::GetCreature(*me, minerGUID))
                     miner->DisappearAndDie();
         }
     };
@@ -989,7 +989,7 @@ public:
             switch (waypointId)
             {
                 case 1:
-                    if (Unit* car = Unit::GetCreature(*me, carGUID))
+                    if (auto car = Unit::GetCreature(*me, carGUID))
                     {
                         me->SetFacingToObject(car);
                     }
@@ -999,7 +999,7 @@ public:
                     IntroPhase = 1;
                     break;
                 case 17:
-                    if (Unit* car = Unit::GetCreature(*me, carGUID))
+                    if (auto car = Unit::GetCreature(*me, carGUID))
                     {
                         me->SetFacingToObject(car);
                         car->Relocate(car->GetPositionX(), car->GetPositionY(), me->GetPositionZ() + 1);
@@ -1021,14 +1021,14 @@ public:
                 {
                     if (IntroPhase == 1)
                     {
-                        if (Creature* car = Unit::GetCreature(*me, carGUID))
+                        if (auto car = Unit::GetCreature(*me, carGUID))
                             DoCast(car, SPELL_CART_DRAG);
                         IntroTimer = 800;
                         IntroPhase = 2;
                     }
                     else
                     {
-                        if (Creature* car = Unit::GetCreature(*me, carGUID))
+                        if (auto car = Unit::GetCreature(*me, carGUID))
                             car->AI()->DoAction(0);
                         IntroPhase = 0;
                     }
@@ -1059,10 +1059,10 @@ public:
         if (player->GetQuestStatus(12701) == QUEST_STATUS_INCOMPLETE)
         {
             // Hack Why Trinity Dont Support Custom Summon Location
-            if (Creature* miner = player->SummonCreature(28841, 2383.869629f, -5900.312500f, 107.996086f, player->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 1))
+            if (auto miner = player->SummonCreature(28841, 2383.869629f, -5900.312500f, 107.996086f, player->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 1))
             {
                 player->CastSpell(player, SPELL_CART_SUMM, true);
-                if (Creature* car = player->GetVehicleCreatureBase())
+                if (auto car = player->GetVehicleCreatureBase())
                 {
                     if (car->GetEntry() == 28817)
                     {

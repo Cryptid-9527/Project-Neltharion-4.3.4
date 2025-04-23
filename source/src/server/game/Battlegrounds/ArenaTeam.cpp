@@ -319,7 +319,7 @@ void ArenaTeam::SetCaptain(uint64 guid)
     }
 
     // Enable remove/promote buttons
-    if (Player* newCaptain = ObjectAccessor::FindPlayer(guid))
+    if (auto newCaptain = ObjectAccessor::FindPlayer(guid))
     {
         newCaptain->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_MEMBER, 0);
         if (oldCaptain)
@@ -342,7 +342,7 @@ void ArenaTeam::DelMember(uint64 guid, bool cleanDb)
         }
 
     // Remove arena team info from player data
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         // delete all info regarding this team
         player->DeleteArenaTeam(GetSlot(), true);
@@ -367,7 +367,7 @@ void ArenaTeam::Disband(WorldSession* session)
     if (session)
     {
         BroadcastEvent(ERR_ARENA_TEAM_DISBANDED_S, 0, 2, session->GetPlayerName(), GetName(), "");
-        if (Player* player = session->GetPlayer())
+        if (auto player = session->GetPlayer())
             TC_LOG_DEBUG("bg.arena", "Player: %s [GUID: %u] disbanded arena team type: %u [Id: %u].", player->GetName().c_str(), player->GetGUIDLow(), GetType(), GetId());
     }
 
@@ -497,7 +497,7 @@ void ArenaTeam::NotifyStatsChanged()
     // This is called after a rated match ended
     // Updates arena team stats for every member of the team (not only the ones who participated!)
     for (auto itr = Members.begin(); itr != Members.end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
+        if (auto player = ObjectAccessor::FindPlayer(itr->Guid))
             SendStats(player->GetSession());
 }
 
@@ -557,7 +557,7 @@ void ArenaTeamMember::ModifyMatchmakerRating(int32 mod, uint32 /*slot*/)
 void ArenaTeam::BroadcastPacket(WorldPacket* packet)
 {
     for (auto itr = Members.begin(); itr != Members.end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
+        if (auto player = ObjectAccessor::FindPlayer(itr->Guid))
             player->GetSession()->SendPacket(packet);
 }
 
@@ -750,7 +750,7 @@ void ArenaTeam::FinishGame(int32 mod, bool draw)
 
         // Check if rating related achivements are met
         for (auto itr = Members.begin(); itr != Members.end(); ++itr)
-            if (Player* member = ObjectAccessor::FindPlayer(itr->Guid))
+            if (auto member = ObjectAccessor::FindPlayer(itr->Guid))
                 member->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_TEAM_RATING, Stats.Rating, Type);
     }
 
@@ -951,7 +951,7 @@ void ArenaTeam::FinishWeek()
 bool ArenaTeam::IsFighting() const
 {
     for (auto itr = Members.begin(); itr != Members.end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer(itr->Guid))
+        if (auto player = ObjectAccessor::FindPlayer(itr->Guid))
             if (player->GetMap()->IsBattleArena())
                 return true;
 
@@ -979,7 +979,7 @@ ArenaTeamMember* ArenaTeam::GetMember(uint64 guid)
 Player* ArenaTeam::GetFirstMemberInArena()
 {
     for (auto itr = Members.begin(); itr != Members.end(); ++itr)
-        if (Player* target = ObjectAccessor::FindPlayer(itr->Guid))
+        if (auto target = ObjectAccessor::FindPlayer(itr->Guid))
             if (target->GetMap()->IsBattleArena())
                 return target;
     return NULL;

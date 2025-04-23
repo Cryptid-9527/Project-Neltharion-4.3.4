@@ -225,7 +225,7 @@ struct boss_twin_baseAI : public BossAI
     void JustDied(Unit* /*killer*/) override
     {
         Talk(SAY_DEATH);
-        if (Creature* pSister = GetSister())
+        if (auto pSister = GetSister())
         {
             if (!pSister->isAlive())
             {
@@ -251,7 +251,7 @@ struct boss_twin_baseAI : public BossAI
     void EnterCombat(Unit* /*who*/) override
     {
         me->SetInCombatWithZone();
-        if (Creature* pSister = GetSister())
+        if (auto pSister = GetSister())
         {
             me->AddAura(MyEmphatySpellId, pSister);
             pSister->SetInCombatWithZone();
@@ -298,7 +298,7 @@ struct boss_twin_baseAI : public BossAI
             case 1: // Vortex
                 if (SpecialAbilityTimer <= diff)
                 {
-                    if (Creature* pSister = GetSister())
+                    if (auto pSister = GetSister())
                         pSister->AI()->DoAction(ACTION_VORTEX);
                     Talk(VortexEmote);
                     DoCastAOE(VortexSpellId);
@@ -313,7 +313,7 @@ struct boss_twin_baseAI : public BossAI
                 {
                     Talk(EMOTE_TWINK_PACT);
                     Talk(SAY_TWINK_PACT);
-                    if (Creature* pSister = GetSister())
+                    if (auto pSister = GetSister())
                     {
                         pSister->AI()->DoAction(ACTION_PACT);
                         pSister->CastSpell(pSister, SPELL_POWER_TWINS, false);
@@ -340,7 +340,7 @@ struct boss_twin_baseAI : public BossAI
 
         if (IsHeroic() && TouchTimer <= diff)
         {
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true, OtherEssenceSpellId))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true, OtherEssenceSpellId))
                 me->CastCustomSpell(TouchSpellId, SPELLVALUE_MAX_TARGETS, 1, target, false);
             TouchTimer = urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS);
         }
@@ -693,7 +693,7 @@ class spell_powering_up : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (Aura* pAura = target->GetAura(poweringUp))
                     {
@@ -744,7 +744,7 @@ class spell_valkyr_essences : public SpellScriptLoader
 
             void Absorb(AuraEffect* /*aurEff*/, DamageInfo & dmgInfo, uint32 & /*absorbAmount*/)
             {
-                if (Unit* owner = GetUnitOwner())
+                if (auto owner = GetUnitOwner())
                 {
                     if (dmgInfo.GetSpellInfo())
                     {
@@ -834,18 +834,18 @@ class spell_power_of_the_twins : public SpellScriptLoader
 
             void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                 {
-                    if (Creature* Valk = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(GetCaster()->GetEntry())))
+                    if (auto Valk = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(GetCaster()->GetEntry())))
                         ENSURE_AI(boss_twin_baseAI, Valk->AI())->EnableDualWield(true);
                 }
             }
 
             void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                 {
-                    if (Creature* Valk = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(GetCaster()->GetEntry())))
+                    if (auto Valk = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(GetCaster()->GetEntry())))
                         ENSURE_AI(boss_twin_baseAI, Valk->AI())->EnableDualWield(false);
                 }
             }

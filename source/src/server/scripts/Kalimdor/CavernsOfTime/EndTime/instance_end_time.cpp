@@ -170,7 +170,7 @@ public:
                         DoUpdateWorldState(WORLDSTATE_SHOW_FRAGMENTS, fragCount);
                         if (fragCount >= MAX_FRAGMENTS)
                         {
-                            if (Creature* jaina = instance->GetCreature(dataEchoOfJainaGUID))
+                            if (auto jaina = instance->GetCreature(dataEchoOfJainaGUID))
                             {
                                 DoUpdateWorldState(WORLDSTATE_SHOW_FRAGMENTS, 0);
                                 jaina->SetVisible(true);
@@ -234,7 +234,7 @@ public:
             case NPC_INFINITE_WARDEN:
             case NPC_INFINITE_SUPPRESSOR:
                 if (unit->GetAreaId() == 5795)
-                if (Creature* muro = Unit::GetCreature(*unit, GetData64(DATA_MUROZOND_GUID)))
+                if (auto muro = Unit::GetCreature(*unit, GetData64(DATA_MUROZOND_GUID)))
                 {
                     murozond_killcount++;
                     if (murozond_killcount == 4)

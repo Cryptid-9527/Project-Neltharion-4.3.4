@@ -107,7 +107,7 @@ class boss_omor_the_unscarred : public CreatureScript
             {
                 Talk(SAY_SUMMON);
 
-                if (Unit* random = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto random = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     summoned->AI()->AttackStart(random);
 
                 ++SummonedCount;
@@ -140,7 +140,7 @@ class boss_omor_the_unscarred : public CreatureScript
                 {
                     if (ShadowWhip_Timer <= diff)
                     {
-                        if (Player* temp = Unit::GetPlayer(*me, PlayerGUID))
+                        if (auto temp = Unit::GetPlayer(*me, PlayerGUID))
                         {
                             //if unit dosen't have this flag, then no pulling back (script will attempt cast, even if orbital strike was resisted)
                             if (temp->HasUnitMovementFlag(MOVEMENTFLAG_FALLING_FAR))
@@ -192,7 +192,7 @@ class boss_omor_the_unscarred : public CreatureScript
                 {
                     Talk(SAY_CURSE);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         DoCast(target, SPELL_TREACHEROUS_AURA);
                         Aura_Timer = 8000+rand()%8000;
@@ -203,7 +203,7 @@ class boss_omor_the_unscarred : public CreatureScript
 
                 if (Shadowbolt_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         if (target)
                             target = me->getVictim();

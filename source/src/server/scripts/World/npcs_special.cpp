@@ -225,7 +225,7 @@ public:
             // check players with applied aura and expired timer
             while (uint32 playerGuidLow = playerCheckMap.ExecuteEvent())
             {
-                if (Player* player = ObjectAccessor::GetPlayer(*me, MAKE_NEW_GUID(playerGuidLow, 0, HIGHGUID_PLAYER)))
+                if (auto player = ObjectAccessor::GetPlayer(*me, MAKE_NEW_GUID(playerGuidLow, 0, HIGHGUID_PLAYER)))
                 {
                     Aura* markAura = player->GetAura(SPELL_GUARDS_MARK);
                     if (markAura)
@@ -258,7 +258,7 @@ public:
             // handle players which MoveInLineOfSight
             for (std::set<uint64>::const_iterator itr = targetGuids.begin(); itr != targetGuids.end(); ++itr)
             {
-                if (Player* playerTarget = ObjectAccessor::GetPlayer(*me, *itr))
+                if (auto playerTarget = ObjectAccessor::GetPlayer(*me, *itr))
                 {
                     Creature* lastSpawnedGuard = SpawnedGUID == 0 ? NULL : GetSummonedGuard();
 
@@ -711,7 +711,7 @@ public:
                             std::list<uint64>::const_iterator itr;
                             for (itr = Patients.begin(); itr != Patients.end(); ++itr)
                             {
-                                if (Creature* patient = Unit::GetCreature((*me), *itr))
+                                if (auto patient = Unit::GetCreature((*me), *itr))
                                     patient->setDeathState(JUST_DIED);
                             }
                         }
@@ -806,7 +806,7 @@ public:
             {
                 if ((CAST_PLR(caster)->GetQuestStatus(6624) == QUEST_STATUS_INCOMPLETE) || (CAST_PLR(caster)->GetQuestStatus(6622) == QUEST_STATUS_INCOMPLETE))
                     if (DoctorGUID)
-                        if (Creature* doctor = Unit::GetCreature(*me, DoctorGUID))
+                        if (auto doctor = Unit::GetCreature(*me, DoctorGUID))
                             CAST_AI(npc_doctor::npc_doctorAI, doctor->AI())->PatientSaved(me, CAST_PLR(caster), Coord);
 
                 //make not selectable
@@ -853,7 +853,7 @@ public:
                 me->SetFlag(UNIT_DYNAMIC_FLAGS, 32);
 
                 if (DoctorGUID)
-                    if (Creature* doctor = Unit::GetCreature((*me), DoctorGUID))
+                    if (auto doctor = Unit::GetCreature((*me), DoctorGUID))
                         CAST_AI(npc_doctor::npc_doctorAI, doctor->AI())->PatientDied(Coord);
             }
         }
@@ -898,7 +898,7 @@ void npc_doctor::npc_doctorAI::UpdateAI(uint32 const diff)
 
             if (Location* point = *itr)
             {
-                if (Creature* Patient = me->SummonCreature(patientEntry, point->x, point->y, point->z, point->o, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000))
+                if (auto Patient = me->SummonCreature(patientEntry, point->x, point->y, point->z, point->o, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000))
                 {
                     //303, this flag appear to be required for client side item->spell to work (TARGET_SINGLE_FRIEND)
                     Patient->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
@@ -994,7 +994,7 @@ public:
                 if (IsHealed && CanRun)
                     return;
 
-                if (Player* player = caster->ToPlayer())
+                if (auto player = caster->ToPlayer())
                 {
                     switch (me->GetEntry())
                     {
@@ -1103,7 +1103,7 @@ public:
             {
                 if (RunAwayTimer <= diff)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, CasterGUID))
+                    if (auto unit = Unit::GetUnit(*me, CasterGUID))
                     {
                         switch (me->GetEntry())
                         {
@@ -1661,7 +1661,7 @@ public:
             if (!transformChecked)
             {
                 if (me->GetOwner())
-                    if (Player* BannerOwner = me->GetOwner()->ToPlayer())
+                    if (auto BannerOwner = me->GetOwner()->ToPlayer())
                         if (BannerOwner->GetBattleground())
                             if (!BannerOwner->IsPlayingNative())
                             {
@@ -1991,7 +1991,7 @@ public:
 
             // Start attacking attacker of owner on first ai update after spawn - move in line of sight may choose better target
             if (!me->getVictim() && me->isSummon())
-                if (Unit* Owner = me->ToTempSummon()->GetSummoner())
+                if (auto Owner = me->ToTempSummon()->GetSummoner())
                     if (Owner->getAttackerForHelper())
                         AttackStart(Owner->getAttackerForHelper());
         }
@@ -2089,7 +2089,7 @@ public:
         {
             victimGUID = 0;
             hearts = 15000;
-            if (Unit* own = me->GetOwner())
+            if (auto own = me->GetOwner())
                 me->GetMotionMaster()->MoveFollow(own, 0, 0);
         }
 
@@ -2148,7 +2148,7 @@ public:
 
                 me->MonsterWhisper(whisp.c_str(), player->GetGUID());
                 if (victimGUID)
-                    if (Player* victim = Unit::GetPlayer(*me, victimGUID))
+                    if (auto victim = Unit::GetPlayer(*me, victimGUID))
                         victim->RemoveAura(43906);//remove polymorph frog thing
                 me->AddAura(43906, player);//add polymorph frog thing
                 victimGUID = player->GetGUID();
@@ -2280,7 +2280,7 @@ public:
             if (me->GetReactState() == REACT_ASSIST && me->getVictim())
                 me->SetReactState(REACT_AGGRESSIVE);
 
-            if (Unit* Owner = me->GetOwner())
+            if (auto Owner = me->GetOwner())
             {
                 if (!me->getVictim() && Owner->getVictim())
                     AttackStart(Owner->getVictim());
@@ -2384,7 +2384,7 @@ public:
                    me->GetMotionMaster()->MoveFall();
                    me->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_UNK1);//hide model
                    if (!exploded)
-                   if (Unit* owner = me->GetOwner())
+                   if (auto owner = me->GetOwner())
                    {
                        if (owner->HasAura(SPELL_FIRE_POWER_RANK_3))
                            me->CastSpell(me, SPELL_FIRE_POWER, true, NULL, NULL, me->GetOwnerGUID());
@@ -2472,7 +2472,7 @@ public:
                 return;
 
             Unit* victim = NULL;
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
             {
                 if (victim = ObjectAccessor::FindUnit(targetGuid))
                 {
@@ -2519,7 +2519,7 @@ public:
                         me->CastSpell(victim, SPELL_APPARITION_TARGET_DAMAGE, false, NULL, NULL, me->GetOwnerGUID());
 
                         // Priest T13 Shadow 4P Bonus (Shadowfiend and Shadowy Apparition)
-                        if (Unit* owner = me->GetOwner())
+                        if (auto owner = me->GetOwner())
                             if (owner->HasAura(105844, owner->GetGUID()))
                                 owner->CastCustomSpell(77487, SPELLVALUE_AURA_STACK, 3, owner, true);
                     }
@@ -2576,7 +2576,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             // Stop Feeding Gargoyle when it dies
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
                 owner->RemoveAurasDueToSpell(SPELL_SUMMON_GARGOYLE);
         }
 
@@ -3084,7 +3084,7 @@ class npc_mushroom : public CreatureScript
                     me->ToTempSummon()->SetMushroomTotemSlot(uint8(MinionList.size()));
                 }
 
-                if (Unit* owner = me->GetOwner())
+                if (auto owner = me->GetOwner())
                     if (owner->ToPlayer())
                     {
                         WorldPacket data(SMSG_TOTEM_CREATED, 1 + 8 + 4 + 4);
@@ -3410,7 +3410,7 @@ public:
         void Reset()
         {
             PetAI::Reset();
-            if (Unit* target = me->SelectNearestTarget(15.0f))
+            if (auto target = me->SelectNearestTarget(15.0f))
                 AttackStart(target);
         }
 
@@ -3427,7 +3427,7 @@ public:
         void JustDied(Unit* killer)
         {
             if (me->isSummon())
-                if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                if (auto owner = me->ToTempSummon()->GetSummoner())
                     if (owner->HasAura(GLYPH_OF_SHADOWFIEND))
                         owner->CastSpell(owner, GLYPH_OF_SHADOWFIEND_MANA, true);
         }
@@ -3476,7 +3476,7 @@ public:
             if (me->GetReactState() == REACT_ASSIST && me->getVictim())
                 me->SetReactState(REACT_AGGRESSIVE);
 
-            if (Unit* Owner = me->GetOwner())
+            if (auto Owner = me->GetOwner())
             {
                 if (auto v = me->getVictim())
                 {
@@ -3562,7 +3562,7 @@ public:
             if (me->GetReactState() == REACT_ASSIST && me->getVictim())
                 me->SetReactState(REACT_AGGRESSIVE);
 
-            if (Unit* Owner = me->GetOwner())
+            if (auto Owner = me->GetOwner())
             {
                 if (auto v = me->getVictim())
                 {
@@ -4211,7 +4211,7 @@ public:
 
         void Reset()
         {
-            if (GameObject* launcher = FindNearestLauncher())
+            if (auto launcher = FindNearestLauncher())
             {
                 launcher->SendCustomAnim(ANIM_GO_LAUNCH_FIREWORK);
                 me->SetOrientation(launcher->GetOrientation() + M_PI/2);
@@ -4232,7 +4232,7 @@ public:
                             case 1:
                             case 2:
                             case 3:
-                                if (Creature* minion = me->SummonCreature(NPC_MINION_OF_OMEN, me->GetPositionX()+frand(-5.0f, 5.0f), me->GetPositionY()+frand(-5.0f, 5.0f), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
+                                if (auto minion = me->SummonCreature(NPC_MINION_OF_OMEN, me->GetPositionX()+frand(-5.0f, 5.0f), me->GetPositionY()+frand(-5.0f, 5.0f), me->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
                                     minion->AI()->AttackStart(me->SelectNearestPlayer(20.0f));
                                 break;
                             case 9:
@@ -4301,7 +4301,7 @@ public:
             jumpTimer = urand(5000, 10000);
             bunnyTimer = urand(10000, 20000);
             searchTimer = urand(5000, 10000);
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
                 me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         }
 
@@ -4310,7 +4310,7 @@ public:
         void DoAction(const int32 /*param*/)
         {
             inLove = true;
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
                 owner->CastSpell(owner, SPELL_SPRING_FLING, true);
         }
 
@@ -4320,7 +4320,7 @@ public:
             {
                 if (jumpTimer <= diff)
                 {
-                    if (Unit* rabbit = Unit::GetUnit(*me, rabbitGUID))
+                    if (auto rabbit = Unit::GetUnit(*me, rabbitGUID))
                         DoCast(rabbit, SPELL_SPRING_RABBIT_JUMP);
                     jumpTimer = urand(5000, 10000);
                 } else jumpTimer -= diff;
@@ -4335,7 +4335,7 @@ public:
             {
                 if (searchTimer <= diff)
                 {
-                    if (Creature* rabbit = me->FindNearestCreature(NPC_SPRING_RABBIT, 10.0f))
+                    if (auto rabbit = me->FindNearestCreature(NPC_SPRING_RABBIT, 10.0f))
                     {
                         if (rabbit == me || rabbit->HasAura(SPELL_SPRING_RABBIT_IN_LOVE))
                             return;
@@ -4403,7 +4403,7 @@ public:
 
            me->CastSpell(me, 85526, true);
 
-           if (Unit* owner = me->GetOwner())
+           if (auto owner = me->GetOwner())
            {
                me->setFaction(owner->getFaction());
                me->CastSpell(me, 86000, true);
@@ -4462,7 +4462,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
             {
                 if (owner)
                 {
@@ -4497,7 +4497,7 @@ public:
             if (me->GetReactState() == REACT_ASSIST && me->getVictim())
                 me->SetReactState(REACT_AGGRESSIVE);
 
-            if (Unit* Owner = me->GetOwner())
+            if (auto Owner = me->GetOwner())
             {
                 if (!me->getVictim() && Owner->getVictim())
                     AttackStart(Owner->getVictim());
@@ -4561,7 +4561,7 @@ public:
             if (me->GetReactState() == REACT_ASSIST && me->getVictim())
                 me->SetReactState(REACT_AGGRESSIVE);
 
-            if (Unit* Owner = me->GetOwner())
+            if (auto Owner = me->GetOwner())
             {
                 if (!me->getVictim() && Owner->getVictim())
                     AttackStart(Owner->getVictim());
@@ -4582,7 +4582,7 @@ public:
 
             if (TauntTimer < diff)
             {
-                if (Unit* target = me->getVictim())
+                if (auto target = me->getVictim())
                 {
                     if (target->GetTypeId() == TYPEID_UNIT)
                     {
@@ -4834,8 +4834,8 @@ public:
 
         void Reset()
         {
-            if (Unit* summoner = me->GetOwner())
-                if (Unit* target = summoner->getVictim())
+            if (auto summoner = me->GetOwner())
+                if (auto target = summoner->getVictim())
                     if (me->canCreatureAttack(target))
                         me->AI()->AttackStart(target);
         }
@@ -4884,7 +4884,7 @@ public:
             if (me->GetReactState() != REACT_ASSIST)
                 me->SetReactState(REACT_ASSIST);
 
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
             {
                 if (owner->getVictim())
                     AttackStart(owner->getVictim());
@@ -4937,7 +4937,7 @@ public:
             {
                 TC_LOG_ERROR("bg.battleground", "SearingTotem npc script: Searing distance is null.");
             }
-            if (Unit* caster = me->ToUnit())
+            if (auto caster = me->ToUnit())
             {
                 if (AuraEffect* eff1 = caster->GetAuraEffect(86935, EFFECT_0, caster->GetGUID()))
                     AddPct(value, eff1->GetAmount());
@@ -4956,7 +4956,7 @@ public:
             if (!me)
                 return;
             if (UpdateVictim())
-            if (Unit* owner = me->GetOwner())
+            if (auto owner = me->GetOwner())
             {
                 if (auto v = me->getVictim())
                 {
@@ -5044,7 +5044,7 @@ public:
         {
             if (doomboltTimer < diff)
             {
-                if (Unit* owner = me->GetOwner())
+                if (auto owner = me->GetOwner())
                 {
                     targetFound = false;
                     std::list<Unit*> targets;
@@ -5053,7 +5053,7 @@ public:
                     me->VisitNearbyObject(range, searcher);
                     for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                     {
-                        if (Unit* target = (*itr)->ToUnit())
+                        if (auto target = (*itr)->ToUnit())
                         {
                             if (target->HasAura(SPELL_BANE_OF_DOOM, owner->GetGUID()) || target->HasAura(SPELL_BANE_OF_AGONY, owner->GetGUID()))
                             {
@@ -5065,7 +5065,7 @@ public:
                     }
 
                     if (!targetFound)
-                        if (Unit* target = owner->getAttackerForHelper())
+                        if (auto target = owner->getAttackerForHelper())
                             DoCast(target, SPELL_DOOM_BOLT, false);
                 }
 
@@ -5108,7 +5108,7 @@ public:
         {
             if (fireboltTimer < diff)
             {
-                if (Unit* owner = me->GetOwner())
+                if (auto owner = me->GetOwner())
                 {
                     targetFound = false;
                     std::list<Unit*> targets;
@@ -5117,7 +5117,7 @@ public:
                     me->VisitNearbyObject(40, searcher);
                     for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
                     {
-                        if (Unit* target = (*itr)->ToUnit())
+                        if (auto target = (*itr)->ToUnit())
                         {
                             if (target->HasAura(SPELL_BANE_OF_DOOM, owner->GetGUID()))
                             {
@@ -5129,8 +5129,8 @@ public:
                     }
 
                     if (!targetFound)
-                        if (Unit* owner = me->GetOwner())
-                            if (Unit* target = owner->getVictim())
+                        if (auto owner = me->GetOwner())
+                            if (auto target = owner->getVictim())
                                 DoCast(target, spellId, false);
                 }
 
@@ -5358,7 +5358,7 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (Creature* metzen = me->FindNearestCreature(NPC_METZEN, 200.0f, true))
+            if (auto metzen = me->FindNearestCreature(NPC_METZEN, 200.0f, true))
                 metzen->m_Events.AddEvent(new metzenRunDelayed(metzen), metzen->m_Events.CalculateTime(2000));
 
             for (uint8 i = 0; i < 9; ++i)
@@ -5392,9 +5392,9 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            if (Creature* c = me->SummonCreature(NPC_NASTY_LITTLE_HELPER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
+            if (auto c = me->SummonCreature(NPC_NASTY_LITTLE_HELPER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
                 c->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, me, TRIGGERED_IGNORE_CASTER_MOUNTED_OR_ON_VEHICLE);
-            if (Creature* c = me->SummonCreature(NPC_WICKED_LITTLE_HELPER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
+            if (auto c = me->SummonCreature(NPC_WICKED_LITTLE_HELPER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
                 c->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 2, me, TRIGGERED_IGNORE_CASTER_MOUNTED_OR_ON_VEHICLE);
             events.ScheduleEvent(EVENT_THROW_WINTER_VEIL_TREE, 10000);
             events.ScheduleEvent(EVENT_THROW_STRANGE_SNOWMAN, 3000);
@@ -5510,9 +5510,9 @@ public:
         {
             if (castTimer < diff)
             {
-                if (Player* owner = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto owner = me->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
-                    if (Unit* target = owner->GetSelectedUnit())
+                    if (auto target = owner->GetSelectedUnit())
                         me->CastSpell(target, 99026, TRIGGERED_IGNORE_POWER_AND_REAGENT_COST);
                 }
 
@@ -5583,7 +5583,7 @@ public:
         {
             if (targetCheckTimer < diff)
             {
-                if (Unit* owner = me->GetOwner())
+                if (auto owner = me->GetOwner())
                 {
                     targetFound = false;
                     Position casterPos;
@@ -5609,7 +5609,7 @@ public:
 
                     if (!targetFound)
                     {
-                        if (Unit* target = owner->getAttackerForHelper())
+                        if (auto target = owner->getAttackerForHelper())
                             me->AI()->AttackStart(target);
                     }
                     else
@@ -5676,9 +5676,9 @@ public:
                 switch (eventId)
                 {
                     case EVENT_MIND_FLAY:
-                        if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                        if (auto summoner = me->ToTempSummon()->GetSummoner())
                         {
-                            if (Unit* target = summoner->getAttackerForHelper())
+                            if (auto target = summoner->getAttackerForHelper())
                             {
                                 int32 baseDamage = BASE_DAMAGE_LFR;
                                 if (me->GetEntry() != 58077)
@@ -6024,7 +6024,7 @@ public:
         {
             if (!mounted)
             {
-                if (Unit* owner = me->GetOwner())
+                if (auto owner = me->GetOwner())
                     owner->CastSpell(me, SPELL_RIDE_VEHICLE, true);
             }
         }
@@ -6086,7 +6086,7 @@ public:
         void Reset()
         {
             if (me->isSummon())
-                if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                if (auto owner = me->ToTempSummon()->GetSummoner())
                     me->GetMotionMaster()->MovePoint(0, owner->GetPositionX() + 25 * cos(owner->GetOrientation()), owner->GetPositionY() + 25 * cos(owner->GetOrientation()), owner->GetPositionZ());
 
             _StinkerBrokenHeartTimer = 3.5 * IN_MILLISECONDS;
@@ -6151,131 +6151,131 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            if (Creature* creature = me->FindNearestCreature(39802, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39802, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41257, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41257, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41374, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41374, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41212, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41212, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41208, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41208, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41371, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41371, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41148, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41148, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41364, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41364, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39440, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39440, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39722, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39722, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(48139, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(48139, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(48141, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(48141, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(48140, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(48140, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(48143, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(48143, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39370, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39370, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39369, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39369, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39373, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39373, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39366, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39366, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40252, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40252, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39804, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39804, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40251, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40251, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40106, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40106, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40585, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40585, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40170, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40170, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(51329, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(51329, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40716, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40716, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40550, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40550, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39444, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39444, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40668, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40668, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40715, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40715, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(42556, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(42556, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40458, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40458, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40033, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40033, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39800, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39800, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39801, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39801, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40311, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40311, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40808, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40808, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40787, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40787, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40450, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40450, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(41055, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(41055, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39795, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39795, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39721, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39721, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39443, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39443, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40669, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40669, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(49941, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(49941, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40630, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40630, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40620, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40620, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(40310, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(40310, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39720, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39720, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(39803, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(39803, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47136, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47136, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(3870, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(3870, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47145, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47145, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47132, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47132, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47141, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47141, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47146, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47146, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47138, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47138, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(50561, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(50561, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47135, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47135, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47140, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47140, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(3877, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(3877, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(3873, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(3873, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
-            if (Creature* creature = me->FindNearestCreature(47131, 500.0f, true))
+            if (auto creature = me->FindNearestCreature(47131, 500.0f, true))
                 creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
 
         }
@@ -6329,7 +6329,7 @@ public:
     {
         npc_eye_of_kilroggAI(Creature* creature) : PetAI(creature)
         {
-            if (Unit* owner = me->GetCharmerOrOwner())
+            if (auto owner = me->GetCharmerOrOwner())
             {
 
                 if (owner->HasAura(GLYPH_OF_EYE_OF_KILROGG))
@@ -6425,6 +6425,15 @@ public:
     }
     uint32 getEquipmentSlotForInventoryItem(bool alternate, Player* player)
     {
+        if (!player)
+            return NULL;
+
+        if (Active_transmog_users.empty())
+            return NULL;
+
+        if (Active_transmog_users.find(player->GetGUID()) == Active_transmog_users.end())
+            return NULL;
+
         if (auto t = Active_transmog_users[player->GetGUID()].mogAppearanceItem->GetTemplate())
         switch (t->InventoryType)
         {

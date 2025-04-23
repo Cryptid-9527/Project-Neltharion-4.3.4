@@ -376,11 +376,11 @@ public:
         {
             if (GhostKillCount < 7 && TombBossGUIDs[TombEventCounter])
             {
-                if (Creature* boss = instance->GetCreature(TombBossGUIDs[TombEventCounter]))
+                if (auto boss = instance->GetCreature(TombBossGUIDs[TombEventCounter]))
                 {
                     boss->setFaction(FACTION_HOSTILE);
                     boss->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-                    if (Unit* target = boss->SelectNearestTarget(500))
+                    if (auto target = boss->SelectNearestTarget(500))
                         boss->AI()->AttackStart(target);
                 }
             }
@@ -392,7 +392,7 @@ public:
             HandleGameObject(GoTombEnterGUID, true);//event reseted, open entrance door
             for (uint8 i = 0; i < 7; ++i)
             {
-                if (Creature* boss = instance->GetCreature(TombBossGUIDs[i]))
+                if (auto boss = instance->GetCreature(TombBossGUIDs[i]))
                 {
                     if (!boss->isAlive())
                     {//do not call EnterEvadeMode(), it will create infinit loops
@@ -442,7 +442,7 @@ public:
                     // Check Killed bosses
                     for (uint8 i = 0; i < 7; ++i)
                     {
-                        if (Creature* boss = instance->GetCreature(TombBossGUIDs[i]))
+                        if (auto boss = instance->GetCreature(TombBossGUIDs[i]))
                         {
                             if (!boss->isAlive())
                             {

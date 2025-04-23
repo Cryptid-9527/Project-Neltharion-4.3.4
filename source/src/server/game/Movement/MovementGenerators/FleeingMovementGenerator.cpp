@@ -92,7 +92,7 @@ void FleeingMovementGenerator<T>::_getPoint(T* owner, float &x, float &y, float 
     }
 
     float dist_from_caster, angle_to_caster;
-    if (Unit* fright = ObjectAccessor::GetUnit(*owner, i_frightGUID))
+    if (auto fright = ObjectAccessor::GetUnit(*owner, i_frightGUID))
     {
         dist_from_caster = fright->GetDistance(owner);
         if (dist_from_caster > 0.2f)
@@ -216,7 +216,7 @@ void TimedFleeingMovementGenerator::Finalize(Unit* owner)
     owner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_FLEEING);
     owner->ClearUnitState(UNIT_STATE_FLEEING);
     owner->ClearUnitState(UNIT_STATE_FLEEING_MOVE);
-    if (Unit* victim = owner->getVictim())
+    if (auto victim = owner->getVictim())
     {
         if (owner->isAlive())
         {

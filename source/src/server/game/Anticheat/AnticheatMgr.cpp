@@ -403,7 +403,7 @@ void AnticheatMgr::AnticheatGlobalCommand(ChatHandler* handler)
 			float average = fieldsDB[1].GetFloat();
 			uint32 total_reports = fieldsDB[2].GetUInt32();
 
-			if (Player* player = sObjectMgr->GetPlayerByLowGUID(guid))
+			if (auto player = sObjectMgr->GetPlayerByLowGUID(guid))
 				handler->PSendSysMessage("Player: %s Average: %f Total Reports: %u", player->GetName(), average, total_reports);
 
 		} while (resultDB->NextRow());
@@ -429,7 +429,7 @@ void AnticheatMgr::AnticheatGlobalCommand(ChatHandler* handler)
 			float average = fieldsDB[1].GetFloat();
 			uint32 total_reports = fieldsDB[2].GetUInt32();
 
-			if (Player* player = sObjectMgr->GetPlayerByLowGUID(guid))
+			if (auto player = sObjectMgr->GetPlayerByLowGUID(guid))
 				handler->PSendSysMessage("Player: %s Total Reports: %u Average: %f", player->GetName(), total_reports, average);
 
 		} while (resultDB->NextRow());

@@ -425,7 +425,7 @@ public:
                 {
                     // for each prisoner on drake, give credit
                     for (uint8 i = 1; i < 4; ++i)
-                        if (Unit* prisoner = me->GetVehicleKit()->GetPassenger(i))
+                        if (auto prisoner = me->GetVehicleKit()->GetPassenger(i))
                         {
                             if (prisoner->GetTypeId() != TYPEID_UNIT)
                                 return;

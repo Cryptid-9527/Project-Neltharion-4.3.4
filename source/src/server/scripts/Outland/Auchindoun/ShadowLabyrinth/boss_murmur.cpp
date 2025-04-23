@@ -138,7 +138,7 @@ public:
             // Murmur's Touch
             if (MurmursTouch_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80, true))
                     DoCast(target, SPELL_MURMURS_TOUCH);
                 MurmursTouch_Timer = urand(25000, 35000);
             } else MurmursTouch_Timer -= diff;
@@ -156,7 +156,7 @@ public:
             // Magnetic Pull
             if (MagneticPull_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     if (target->GetTypeId() == TYPEID_PLAYER && target->isAlive())
                     {
                         DoCast(target, SPELL_MAGNETIC_PULL);
@@ -173,7 +173,7 @@ public:
                 {
                     ThreatContainer::StorageType threatlist = me->getThreatManager().getThreatList();
                     for (ThreatContainer::StorageType::const_iterator i = threatlist.begin(); i != threatlist.end(); ++i)
-                        if (Unit* target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
+                        if (auto target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                             if (target->isAlive() && !me->IsWithinDist(target, 35, false))
                                 DoCast(target, SPELL_THUNDERING_STORM, true);
                     ThunderingStorm_Timer = 15000;
@@ -182,7 +182,7 @@ public:
                 // Sonic Shock
                 if (SonicShock_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20, false))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20, false))
                         if (target->isAlive())
                             DoCast(target, SPELL_SONIC_SHOCK);
                     SonicShock_Timer = 10000+rand()%10000;
@@ -196,7 +196,7 @@ public:
             {
                 ThreatContainer::StorageType threatlist = me->getThreatManager().getThreatList();
                 for (ThreatContainer::StorageType::const_iterator i = threatlist.begin(); i != threatlist.end(); ++i)
-                    if (Unit* target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
+                    if (auto target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                         if (target->isAlive() && me->IsWithinMeleeRange(target))
                         {
                             me->TauntApply(target);

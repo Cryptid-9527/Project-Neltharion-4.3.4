@@ -72,7 +72,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            if (Creature* Mrfloppy = GetClosestCreatureWithEntry(me, NPC_MRFLOPPY, 50.0f))
+            if (auto Mrfloppy = GetClosestCreatureWithEntry(me, NPC_MRFLOPPY, 50.0f))
                 summoned->AI()->AttackStart(Mrfloppy);
             else
                 summoned->AI()->AttackStart(me->getVictim());
@@ -87,7 +87,7 @@ public:
             switch (waypointId)
             {
                 case 9:
-                    if (Creature* Mrfloppy = GetClosestCreatureWithEntry(me, NPC_MRFLOPPY, 100.0f))
+                    if (auto Mrfloppy = GetClosestCreatureWithEntry(me, NPC_MRFLOPPY, 100.0f))
                         MrfloppyGUID = Mrfloppy->GetGUID();
                     break;
                 case 10:
@@ -98,45 +98,45 @@ public:
                     }
                     break;
                 case 11:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                         Mrfloppy->GetMotionMaster()->MoveFollow(me, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
                     break;
                 case 17:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                         Mrfloppy->GetMotionMaster()->MovePoint(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
                     Talk(SAY_WORGRAGGRO3);
-                    if (Creature* RWORG = me->SummonCreature(NPC_RAVENOUS_WORG, me->GetPositionX()+10, me->GetPositionY()+8, me->GetPositionZ()+2, 3.229f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                    if (auto RWORG = me->SummonCreature(NPC_RAVENOUS_WORG, me->GetPositionX()+10, me->GetPositionY()+8, me->GetPositionZ()+2, 3.229f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
                     {
                         RWORG->setFaction(35);
                         RWORGGUID = RWORG->GetGUID();
                     }
                     break;
                 case 18:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                     {
-                        if (Creature* RWORG = Unit::GetCreature(*me, RWORGGUID))
+                        if (auto RWORG = Unit::GetCreature(*me, RWORGGUID))
                             RWORG->GetMotionMaster()->MovePoint(0, Mrfloppy->GetPositionX(), Mrfloppy->GetPositionY(), Mrfloppy->GetPositionZ());
                         DoCast(Mrfloppy, SPELL_MRFLOPPY);
                     }
                     break;
                 case 19:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                     {
                         if (Mrfloppy->HasAura(SPELL_MRFLOPPY, 0))
                         {
-                            if (Creature* RWORG = Unit::GetCreature(*me, RWORGGUID))
+                            if (auto RWORG = Unit::GetCreature(*me, RWORGGUID))
                                 Mrfloppy->EnterVehicle(RWORG);
                         }
                     }
                     break;
                 case 20:
-                    if (Creature* RWORG = Unit::GetCreature(*me, RWORGGUID))
+                    if (auto RWORG = Unit::GetCreature(*me, RWORGGUID))
                         RWORG->HandleEmoteCommand(34);
                     break;
                 case 21:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                     {
-                        if (Creature* RWORG = Unit::GetCreature(*me, RWORGGUID))
+                        if (auto RWORG = Unit::GetCreature(*me, RWORGGUID))
                         {
                             RWORG->Kill(Mrfloppy);
                             Mrfloppy->ExitVehicle();
@@ -147,11 +147,11 @@ public:
                     }
                     break;
                 case 22:
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                     {
                         if (Mrfloppy->isDead())
                         {
-                            if (Creature* RWORG = Unit::GetCreature(*me, RWORGGUID))
+                            if (auto RWORG = Unit::GetCreature(*me, RWORGGUID))
                                 RWORG->DisappearAndDie();
                             me->GetMotionMaster()->MovePoint(0, Mrfloppy->GetPositionX(), Mrfloppy->GetPositionY(), Mrfloppy->GetPositionZ());
                             Mrfloppy->setDeathState(ALIVE);
@@ -174,7 +174,7 @@ public:
                     break;
                 case 27:
                     me->DisappearAndDie();
-                    if (Creature* Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
+                    if (auto Mrfloppy = Unit::GetCreature(*me, MrfloppyGUID))
                         Mrfloppy->DisappearAndDie();
                     break;
             }
@@ -211,7 +211,7 @@ public:
         if (quest->GetQuestId() == QUEST_PERILOUS_ADVENTURE)
         {
             creature->AI()->Talk(SAY_QUEST_ACCEPT);
-            if (Creature* Mrfloppy = GetClosestCreatureWithEntry(creature, NPC_MRFLOPPY, 180.0f))
+            if (auto Mrfloppy = GetClosestCreatureWithEntry(creature, NPC_MRFLOPPY, 180.0f))
                 Mrfloppy->GetMotionMaster()->MoveFollow(creature, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
 
             if (npc_escortAI* pEscortAI = CAST_AI(npc_emily::npc_emilyAI, (creature->AI())))
@@ -244,7 +244,7 @@ public:
 
         void EnterCombat(Unit* Who)
         {
-            if (Creature* Emily = GetClosestCreatureWithEntry(me, NPC_EMILY, 50.0f))
+            if (auto Emily = GetClosestCreatureWithEntry(me, NPC_EMILY, 50.0f))
             {
                 switch (Who->GetEntry())
                 {
@@ -628,7 +628,7 @@ class npc_venture_co_straggler : public CreatureScript
             {
                 if (uiPlayerGUID && uiRunAwayTimer <= uiDiff)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, uiPlayerGUID))
+                    if (auto player = Unit::GetPlayer(*me, uiPlayerGUID))
                     {
                         switch (uiTimer)
                         {

@@ -69,7 +69,7 @@ public:
                 && (!instance->IsHeroic() || IsDone(DATA_AUGH_EVENT)))
             {
                 introDone = true;
-                if (Creature* siamat = instance->GetCreature(SiamatGUID))
+                if (auto siamat = instance->GetCreature(SiamatGUID))
                 {
                     siamat->AI()->DoAction(ACTION_INTRO);
                     if (auto platform = siamat->FindNearestGameObject(GO_SIAMAT_PLATFORM, 200.f))

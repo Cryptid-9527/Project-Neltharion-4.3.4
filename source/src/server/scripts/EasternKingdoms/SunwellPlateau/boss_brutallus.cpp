@@ -140,13 +140,13 @@ public:
             {
                 instance->SetData(DATA_BRUTALLUS_EVENT, DONE);
                 float x, y, z;
-                if (Creature* Madrigosa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MADRIGOSA) : 0))
+                if (auto Madrigosa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MADRIGOSA) : 0))
                     Madrigosa->GetPosition(x, y, z);
                 else
                     me->GetPosition(x, y, z);
                 me->SummonCreature(FELMYST, x, y, z+30, me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0);
                 me->GetPosition(x, y, z);
-                if (Creature* summon = me->SummonCreature(NPC_BRUTALLUS_DEATH_CLOUD, x, y, z, me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 80000))
+                if (auto summon = me->SummonCreature(NPC_BRUTALLUS_DEATH_CLOUD, x, y, z, me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 80000))
                     summon->CastSpell(summon, SPELL_BRUTALLUS_DEATH_CLOUD);
 
             }
@@ -299,7 +299,7 @@ public:
                 {
                     if (IntroFrostBoltTimer <= diff)
                     {
-                        if (Creature* Madrigosa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MADRIGOSA) : 0))
+                        if (auto Madrigosa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MADRIGOSA) : 0))
                         {
                             Madrigosa->CastSpell(me, SPELL_INTRO_FROSTBOLT, true);
                             IntroFrostBoltTimer = 2000;

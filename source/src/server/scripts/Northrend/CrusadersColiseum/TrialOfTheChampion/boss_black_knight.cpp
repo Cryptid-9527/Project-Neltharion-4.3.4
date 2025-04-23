@@ -154,14 +154,14 @@ public:
             DoCast(instance->GetData(DATA_TEAM) == ALLIANCE ? SPELL_RAISE_ARELAS : SPELL_RAISE_JAEREN);
             Talk(SAY_AGGRO);
 
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->GetData(BOSS_BLACK_KNIGHT) != IN_PROGRESS)
                     instance->SetData(BOSS_BLACK_KNIGHT, IN_PROGRESS);
         }
 
         void JustReachedHome()
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->GetData(BOSS_BLACK_KNIGHT) == IN_PROGRESS)
                     instance->SetData(BOSS_BLACK_KNIGHT, FAIL);
         }
@@ -246,7 +246,7 @@ public:
                         {
                             if (uiDeathRespiteTimer <= diff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 {
                                     if (target && target->isAlive())
                                         DoCast(target, SPELL_DEATH_RESPITE);
@@ -274,7 +274,7 @@ public:
                             }
                             if (uiDesecration <= diff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 {
                                     if (target && target->isAlive())
                                         DoCast(target, SPELL_DESECRATION);
@@ -301,7 +301,7 @@ public:
                     } else uiDeathBiteTimer -= diff;
                     if (uiMarkedDeathTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         {
                             if (target && target->isAlive())
                                 DoCast(target, SPELL_MARKED_DEATH);
@@ -335,7 +335,7 @@ public:
                 return;
 
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* ghoul = me->GetCreature(*me, *itr))
+                if (auto ghoul = me->GetCreature(*me, *itr))
                     ghoul->CastSpell(ghoul, SPELL_EXPLODE);
         }
 
@@ -389,7 +389,7 @@ public:
             uiAttackTimer = 3500;
             uiLeapTimer = 1000;
 
-            if (Creature* knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+            if (auto knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                 knight->AI()->JustSummoned(me);
         }
 
@@ -406,7 +406,7 @@ public:
 
             if (uiLeapTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30, true))
+                if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 30, true))
                 {
                     DoResetThreat();
                     me->AddThreat(target, 5.0f);
@@ -507,7 +507,7 @@ public:
                 break;
                 case 13:
                 me->SetUnitMovementFlags(MOVEMENTFLAG_FLYING);
-                if (Unit* blackKnight = _vehicleKit->GetPassenger(0))
+                if (auto blackKnight = _vehicleKit->GetPassenger(0))
                     blackKnight->ExitVehicle();
                 break;
             }

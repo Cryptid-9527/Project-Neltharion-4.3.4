@@ -152,7 +152,7 @@ public:
                         bYelled2 = true;
                     }
 
-                    if (Creature* pArthas = me->GetCreature(*me, instance ? instance->GetData64(DATA_ARTHAS) : 0))
+                    if (auto pArthas = me->GetCreature(*me, instance ? instance->GetData64(DATA_ARTHAS) : 0))
                         if (pArthas->isDead())
                         {
                             EnterEvadeMode();
@@ -171,7 +171,7 @@ public:
 
                     if (uiMindBlastTimer < diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_MIND_BLAST);
                         uiMindBlastTimer = 6000;
                     }
@@ -189,7 +189,7 @@ public:
                     if (uiSleepTimer < diff)
                     {
                         Talk(SAY_SLEEP);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_SLEEP);
                         uiSleepTimer = urand(15000, 20000);
                     }

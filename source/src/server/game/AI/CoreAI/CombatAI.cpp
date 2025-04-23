@@ -342,9 +342,9 @@ void VehicleAI::CheckConditions(const uint32 diff)
         if (!conditions.empty())
         {
             for (SeatMap::iterator itr = m_vehicle->Seats.begin(); itr != m_vehicle->Seats.end(); ++itr)
-                if (Unit* passenger = ObjectAccessor::GetUnit(*m_vehicle->GetBase(), itr->second.Passenger.Guid))
+                if (auto passenger = ObjectAccessor::GetUnit(*m_vehicle->GetBase(), itr->second.Passenger.Guid))
                 {
-                    if (Player* player = passenger->ToPlayer())
+                    if (auto player = passenger->ToPlayer())
                     {
                         if (!sConditionMgr->IsObjectMeetToConditions(player, me, conditions))
                         {

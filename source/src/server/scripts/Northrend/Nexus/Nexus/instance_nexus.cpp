@@ -210,7 +210,7 @@ public:
                 {
                     if (data == DONE)
                     {
-                        if (GameObject* Sphere = instance->GetGameObject(AnomalusContainmentSphere))
+                        if (auto Sphere = instance->GetGameObject(AnomalusContainmentSphere))
                             Sphere->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     }
                     m_auiEncounter[1] = data;
@@ -220,7 +220,7 @@ public:
                 {
                     if (data == DONE)
                     {
-                        if (GameObject* Sphere = instance->GetGameObject(OrmoroksContainmentSphere))
+                        if (auto Sphere = instance->GetGameObject(OrmoroksContainmentSphere))
                             Sphere->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     }
                     m_auiEncounter[2] = data;

@@ -284,14 +284,14 @@ static void AggroAllPlayers(Creature* creature)
 
     for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
     {
-        if (Player* player = i->getSource())
+        if (auto player = i->getSource())
         {
             if (player->isGameMaster())
                 continue;
 
             if (player->isAlive())
             {
-                if (Unit* mount = player->GetVehicleBase())
+                if (auto mount = player->GetVehicleBase())
                 {
                     creature->SetInCombatWith(mount);
                     mount->SetInCombatWith(creature);

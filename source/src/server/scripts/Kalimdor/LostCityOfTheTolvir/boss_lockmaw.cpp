@@ -117,7 +117,7 @@ public:
             events.Reset();
             summons.DespawnAll();
             me->DeleteThreatList();
-            if (Creature* augh = me->FindNearestCreature(NPC_AUGH_P1, 500.0, true))
+            if (auto augh = me->FindNearestCreature(NPC_AUGH_P1, 500.0, true))
                 augh->DespawnOrUnsummon();
             Rage = false;
         }
@@ -163,7 +163,7 @@ public:
             else
                 instance->SetData(DATA_AUGH_EVENT, DONE);
 
-            if (Creature* augh = me->FindNearestCreature(NPC_AUGH_P1, 500.0, true))
+            if (auto augh = me->FindNearestCreature(NPC_AUGH_P1, 500.0, true))
                 augh->DespawnOrUnsummon();
 
             std::list<Creature*> eventCr;
@@ -247,7 +247,7 @@ public:
                     */
                     //DoCast(SPELL_DUST_FLAIL);
                     //DoCastVictim(SPELL_DUST_FLAIL);
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.0f, true))
                     {
                         tailOrientation = me->GetAngle(target);
                         me->AttackStop();
@@ -291,7 +291,7 @@ public:
                     break;
                 case EVENT_SCENT_OF_BLOOD:
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         me->CastCustomSpell(SPELL_SCENT_OF_BLOOD, SPELLVALUE_MAX_TARGETS, 1, target, false);
 
                     std::list<Creature*> stalker;
@@ -310,7 +310,7 @@ public:
                     // if (auto i = urand(0, 7)) | 1-8 Chance to fail due to "if (0)"
                     // if (auto i = 0)           | if 0 will never be true
                     auto i = urand(0, 7);
-                        if (Creature* Augh = me->SummonCreature(NPC_AUGH_P1, augh_pt1_spawns[i], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto Augh = me->SummonCreature(NPC_AUGH_P1, augh_pt1_spawns[i], TEMPSUMMON_MANUAL_DESPAWN))
                             Augh->AI()->DoAction(ACTION_AUGH_P1_RANDOM_ATTACK);
                     break;
                 }
@@ -374,7 +374,7 @@ public:
 
         void IsSummonedBy(Unit* /*who*/)
         {
-            if (Creature* lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 40.f, true))
+            if (auto lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 40.f, true))
                 lockmaw->AI()->JustSummoned(me);
         }
 
@@ -385,7 +385,7 @@ public:
 
             if (searchTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 0.0f, true, SPELL_SCENT_OF_BLOOD))
+                if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0, 0.0f, true, SPELL_SCENT_OF_BLOOD))
                 {
                     DoResetThreat();
                     me->AddThreat(target, 1000000.0f);
@@ -398,7 +398,7 @@ public:
 
             if (vicious <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                     DoCast(target, SPELL_VICIOUS);
                 vicious = 10000;
             }
@@ -445,13 +445,13 @@ public:
                 //npc 
                 // spell 84768
 
-                if (Creature* a = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* b = me->SummonCreature(54638, me->GetPositionX()+5.f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* c = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY()+5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* d = me->SummonCreature(54638, me->GetPositionX()+5.f, me->GetPositionY()+5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* e = me->SummonCreature(54638, me->GetPositionX()-5.f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* f = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY()-5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
-                if (Creature* g = me->SummonCreature(54638, me->GetPositionX()-5.f, me->GetPositionY()-5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto a = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto b = me->SummonCreature(54638, me->GetPositionX()+5.f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto c = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY()+5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto d = me->SummonCreature(54638, me->GetPositionX()+5.f, me->GetPositionY()+5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto e = me->SummonCreature(54638, me->GetPositionX()-5.f, me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto f = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY()-5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto g = me->SummonCreature(54638, me->GetPositionX()-5.f, me->GetPositionY()-5.f, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
                 {
                     a->CastSpell(a, 84768, true);
                     b->CastSpell(b, 84768, true);
@@ -465,7 +465,7 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                 Talk(1);
-                if (Creature* cr = me->FindNearestCreature(43614, 1000.f))
+                if (auto cr = me->FindNearestCreature(43614, 1000.f))
                     me->GetMotionMaster()->MoveChase(cr);
                 events.ScheduleEvent(1, 2000);
             }
@@ -522,7 +522,7 @@ public:
 
         void JustReachedHome()
         {
-            if (Creature* lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 500.0, true))
+            if (auto lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 500.0, true))
                 lockmaw->AI()->DoAction(ACTION_START_EVENT);
             me->DespawnOrUnsummon();
         }
@@ -540,7 +540,7 @@ public:
             {
                 auto i = (urand(0, 3) + 12);
                 //TC_LOG_ERROR("sql.sql", "AUGH SPAWN TO PERFORM ACTION %u", i);
-                if (Player* p = me->FindNearestPlayer(100.f))
+                if (auto p = me->FindNearestPlayer(100.f))
                 {
                     me->AddThreat(p, 10000.f);
                     me->AI()->AttackStart(p);
@@ -606,7 +606,7 @@ public:
                 {
                 case EVENT_PARALYTIC_BLOW_DART:
                     //TC_LOG_ERROR("sql.sql", "AUGH_PT1 DoAction %u", act);
-                    if (Player* p = me->FindNearestPlayer(100.f))
+                    if (auto p = me->FindNearestPlayer(100.f))
                         me->CastCustomSpell(SPELL_PARALYTIC_BLOW_DART, SPELLVALUE_MAX_TARGETS, 1, p, false);
                     Talk(1);
                         events.CancelEvent(EVENT_STEALTH);
@@ -614,7 +614,7 @@ public:
                     break;
                 case EVENT_CLOUD:
                     //TC_LOG_ERROR("sql.sql", "AUGH_PT1 DoAction %u", act);
-                    if (Player* p = me->FindNearestPlayer(100.f))
+                    if (auto p = me->FindNearestPlayer(100.f))
                         DoCast(me, SPELL_CLOUD);
                     events.CancelEvent(EVENT_STEALTH);
                     events.ScheduleEvent(EVENT_STEALTH, 100);
@@ -622,7 +622,7 @@ public:
                 case EVENT_WHIRLWIND:
                     //TC_LOG_ERROR("sql.sql", "AUGH_PT1 DoAction %u", act);
                     me->AddAura(SPELL_WHIRLWIND, me);
-                    if (Player* p = me->FindNearestPlayer(20.f))
+                    if (auto p = me->FindNearestPlayer(20.f))
                     {
                         me->GetMotionMaster()->Clear();
                         me->GetMotionMaster()->MoveAroundPoint(*p, (me->GetDistance(p) * 0.6f), urand(0, 1), 30, 0.f, true);
@@ -779,7 +779,7 @@ public:
                     break;
                 case EVENT_RP_INTRO_1:
                     me->SetHomePosition(AughFightStartPos);
-                    if (Creature* lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 100.f, false))
+                    if (auto lockmaw = me->FindNearestCreature(BOSS_LOCKMAW, 100.f, false))
                         me->SetFacingTo(me->GetAngle(lockmaw));
                     Talk(1);
                     events.ScheduleEvent(EVENT_RP_INTRO_2, 5000);
@@ -796,7 +796,7 @@ public:
                     //Fight
                 case EVENT_PARALYTIC_BLOW_DART:
                     DoCastAOE(SPELL_RANDOM_AGGRO);
-                    if (Unit* target = me->getVictim())
+                    if (auto target = me->getVictim())
                     {
                         me->CastCustomSpell(SPELL_PARALYTIC_BLOW_DART, SPELLVALUE_MAX_TARGETS, 1, target, false);
                     }

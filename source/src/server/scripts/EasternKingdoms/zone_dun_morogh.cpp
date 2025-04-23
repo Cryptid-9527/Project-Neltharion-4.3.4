@@ -122,7 +122,7 @@ public:
 
         void TechnicanTalk(uint32 const groupId)
         {
-            if (Creature* technican = me->FindNearestCreature(NPC_SAFE_TECHNICAN, 20.f))
+            if (auto technican = me->FindNearestCreature(NPC_SAFE_TECHNICAN, 20.f))
                 technican->AI()->Talk(groupId);
         }
     };
@@ -202,7 +202,7 @@ public:
 
             if (who->GetTypeId() == TYPEID_PLAYER || who->isPet())
             {
-                if (Creature* guard = me->FindNearestCreature(NPC_COLDRIDGE_DEFENDER, 6.0f, true))
+                if (auto guard = me->FindNearestCreature(NPC_COLDRIDGE_DEFENDER, 6.0f, true))
                 {
                     guard->getThreatManager().resetAllAggro();
                     guard->CombatStop(true);
@@ -217,7 +217,7 @@ public:
         void UpdateAI(const uint32 diff)
         {
             if (!UpdateVictim())
-                if (Creature* guard = me->FindNearestCreature(NPC_COLDRIDGE_DEFENDER, 6.0f, true))
+                if (auto guard = me->FindNearestCreature(NPC_COLDRIDGE_DEFENDER, 6.0f, true))
                     me->AI()->AttackStart(guard);
 
                 DoMeleeAttackIfReady();

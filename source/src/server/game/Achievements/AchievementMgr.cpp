@@ -962,7 +962,7 @@ void AchievementMgr<T>::SendAchievementEarned(AchievementEntry const* achievemen
 
     TC_LOG_DEBUG("achievement", "AchievementMgr::SendAchievementEarned(%u)", achievement->ID);
 
-    if (Guild* guild = sGuildMgr->GetGuildById(GetOwner()->GetGuildId()))
+    if (auto guild = sGuildMgr->GetGuildById(GetOwner()->GetGuildId()))
     {
         Trinity::AchievementChatBuilder _builder(GetOwner(), CHAT_MSG_GUILD_ACHIEVEMENT, BROADCAST_TEXT_ACHIEVEMENT_EARNED, achievement->ID);
         Trinity::LocalizedPacketDo<Trinity::AchievementChatBuilder> _localizer(_builder);
@@ -2064,7 +2064,7 @@ void AchievementMgr<Player>::CompletedAchievement(AchievementEntry const* achiev
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
         return;
 
-    if (Guild* guild = referencePlayer->GetGuild())
+    if (auto guild = referencePlayer->GetGuild())
     {
         if (achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_NEWS)
             guild->AddGuildNews(GUILD_NEWS_PLAYER_ACHIEVEMENT, referencePlayer->GetGUID(), achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_HEADER, achievement->ID);
@@ -2153,7 +2153,7 @@ void AchievementMgr<Guild>::CompletedAchievement(AchievementEntry const* achieve
         return;
 
     if (achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_NEWS)
-        if (Guild* guild = referencePlayer->GetGuild())
+        if (auto guild = referencePlayer->GetGuild())
             guild->AddGuildNews(GUILD_NEWS_GUILD_ACHIEVEMENT, 0, achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_HEADER, achievement->ID);
 
     SendAchievementEarned(achievement);

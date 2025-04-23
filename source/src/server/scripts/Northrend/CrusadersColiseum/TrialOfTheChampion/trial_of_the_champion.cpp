@@ -200,7 +200,7 @@ public:
                 else
                 {
                     // Open door
-                    if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
+                    if (auto pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                         instance->HandleGameObject(pGO->GetGUID(), true);
                     events.ScheduleEvent(9, 3000);
                 }
@@ -213,7 +213,7 @@ public:
                     {
                         for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
                         {
-                            if (Player* player = i->getSource())
+                            if (auto player = i->getSource())
                             {
                                 if (player->isGameMaster())
                                     continue;
@@ -367,7 +367,7 @@ public:
                     case 2:
                         if (!playersGUID.empty())
                         {
-                            if (Player* player = me->GetMap()->GetPlayers().begin()->getSource())
+                            if (auto player = me->GetMap()->GetPlayers().begin()->getSource())
                                 AnnounceChampion(player);
                             events.ScheduleEvent(2, 8000);
                         } else
@@ -375,7 +375,7 @@ public:
 
                         break;
                     case 3:
-                        //                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        //                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         //   tirion->AI()->Talk(SAY_TIRION_INTRO_CHAMPS_1);
 
                         events.ScheduleEvent(4, 8000);
@@ -383,12 +383,12 @@ public:
                     case 4:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
+                            if (auto thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
                                 thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_H);
                             events.ScheduleEvent(5, 5000);
                         } else
                         {
-                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                            if (auto varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
                                 varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_A);
                             events.ScheduleEvent(5, 8000);
                         }
@@ -396,12 +396,12 @@ public:
                     case 5:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                            if (auto garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
                                 garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_H);
                             events.ScheduleEvent(6, 8000);
                         } else
                         {
-                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
+                            if (auto jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
                                 jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_A);
                             events.ScheduleEvent(6, 5000);
                         }
@@ -409,12 +409,12 @@ public:
                     case 6:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                            if (auto varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
                                 varian->AI()->Talk(SAY_VARIAN_INTRO_CHAMPS_H);
                             events.ScheduleEvent(7, 8000);
                         } else
                         {
-                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                            if (auto garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
                                 garrosh->AI()->Talk(SAY_GARROSH_INTRO_CHAMPS_A);
                             events.ScheduleEvent(7, 8000);
                         }
@@ -422,33 +422,33 @@ public:
                     case 7:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
+                            if (auto jaina = me->GetCreature(*me, instance->GetData64(DATA_JAINA)))
                                 jaina->AI()->Talk(SAY_JAINA_INTRO_CHAMPS_H);
                             events.ScheduleEvent(8, 5000);
                         } else
                         {
-                            if (Creature* thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
+                            if (auto thrall = me->GetCreature(*me, instance->GetData64(DATA_THRALL)))
                                 thrall->AI()->Talk(SAY_THRALL_INTRO_CHAMPS_A);
                             events.ScheduleEvent(8, 5000);
                         }
                         break;
                     case 8:
-                        //                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        //                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         //   tirion->AI()->Talk(SAY_TIRION_INTRO_CHAMPS_2);
 
                         // Open door
-                        if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
+                        if (auto pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), true);
 
                         events.ScheduleEvent(9, 7000);
                         break;
                     case 9:
                         // Summon invisible trigger for orientation prupouses only
-                        if (Creature* stalker = me->SummonCreature(20562, me->GetPositionX() , me->GetPositionY(), me->GetPositionZ()))
+                        if (auto stalker = me->SummonCreature(20562, me->GetPositionX() , me->GetPositionY(), me->GetPositionZ()))
                             stalkerGUID = stalker->GetGUID();
 
                         // Summon 1st Boss and adds and make them follow him
-                        if (Creature* boss = me->SummonCreature(bossEntry[0], SpawnPosition))
+                        if (auto boss = me->SummonCreature(bossEntry[0], SpawnPosition))
                         {
                             bossGUID[0] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
@@ -456,7 +456,7 @@ public:
 
                             for (uint8 i = 0; i < 3; ++i)
                             {
-                                if (Creature* add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[0][i] = add->GetGUID();
@@ -473,7 +473,7 @@ public:
                         break;
                     case 10:
                         // Move first boss to the new position
-                        if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(11, 5000);
@@ -482,12 +482,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<1; i++)
                         {
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
                                 boss->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -503,7 +503,7 @@ public:
                         break;
                     case 12:
                         // Summon 2nd Boss and adds and make them follow him
-                        if (Creature* boss = me->SummonCreature(bossEntry[1], SpawnPosition))
+                        if (auto boss = me->SummonCreature(bossEntry[1], SpawnPosition))
                         {
                             bossGUID[1] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
@@ -511,7 +511,7 @@ public:
 
                             for (uint8 i = 0; i < 3; ++i)
                             {
-                                if (Creature* add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[1][i] = add->GetGUID();
@@ -528,11 +528,11 @@ public:
                         break;
                     case 13:
                         // Move first boss to the new position
-                        if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[1]);
 
                         // Move second boss to the new position
-                        if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
+                        if (auto boss2 = me->GetCreature(*me, bossGUID[1]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(14, 5000);
@@ -541,12 +541,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<2; i++)
                         {
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
                                 boss->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -562,7 +562,7 @@ public:
                         break;
                     case 15:
                         // Summon 3rd Boss and adds and make them follow him
-                        if (Creature* boss = me->SummonCreature(bossEntry[2], SpawnPosition))
+                        if (auto boss = me->SummonCreature(bossEntry[2], SpawnPosition))
                         {
                             bossGUID[2] = boss->GetGUID();
                             boss->SetTarget(stalkerGUID);
@@ -570,7 +570,7 @@ public:
 
                             for (uint8 i = 0; i < 3; ++i)
                             {
-                                if (Creature* add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(GetAddId(boss->GetEntry()), SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[2][i] = add->GetGUID();
@@ -587,15 +587,15 @@ public:
                         break;
                     case 16:
                         // Move first boss to the new position
-                        if (Creature* boss1 = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss1 = me->GetCreature(*me, bossGUID[0]))
                             boss1->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[2]);
 
                         // Move second boss to the new position
-                        if (Creature* boss2 = me->GetCreature(*me, bossGUID[1]))
+                        if (auto boss2 = me->GetCreature(*me, bossGUID[1]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[1]);
 
                         // Move third boss to the new position
-                        if (Creature* boss2 = me->GetCreature(*me, bossGUID[2]))
+                        if (auto boss2 = me->GetCreature(*me, bossGUID[2]))
                             boss2->GetMotionMaster()->MovePoint(0, FactionChampionPosition()[0]);
 
                         events.ScheduleEvent(17, 5000);
@@ -604,12 +604,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<3; i++)
                         {
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
                                 boss->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -626,7 +626,7 @@ public:
                     case 18:
                         // Set home positions, in case of wipe, this avoids summons to go to the SpawnPos
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
                                 boss->SetTarget(0);
                                 boss->CastSpell(boss, SPELL_MOUNT_LANCE_STAND, true);
@@ -635,7 +635,7 @@ public:
 
                         for (uint8 i=0; i<3; i++)
                             for (uint8 j=0; j<3; j++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                 {
                                     add->SetTarget(0);
                                     add->SetFacingToObject(me);
@@ -651,7 +651,7 @@ public:
                         break;
                     case 19:
                         //Close Door
-                        if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
+                        if (auto pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), false);
 
                         events.Reset();
@@ -675,7 +675,7 @@ public:
                         {
                             for (uint8 i=0; i<3; i++)
                             {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[0][i]))
                                 {
                                     add->RemoveAurasDueToSpell(SPELL_MOUNT_LANCE_STAND);
                                     add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -690,7 +690,7 @@ public:
                         {
                             defeatedCount = 0;
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[0][i]))
                                     if (add->isDead())
                                         defeatedCount++;
 
@@ -706,7 +706,7 @@ public:
                     case 3:
                         // Despawn previous wave
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[0][i]))
+                            if (auto add = me->GetCreature(*me, addsGUID[0][i]))
                                 add->DespawnOrUnsummon();
 
                         // Start attack of second wave of adds
@@ -714,7 +714,7 @@ public:
                         {
                             for (uint8 i=0; i<3; i++)
                             {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[1][i]))
                                 {
                                     add->RemoveAurasDueToSpell(SPELL_MOUNT_LANCE_STAND);
                                     add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -729,7 +729,7 @@ public:
                         {
                             defeatedCount = 0;
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[1][i]))
                                     if (add->isDead())
                                         defeatedCount++;
 
@@ -745,7 +745,7 @@ public:
                     case 4:
                         // Despawn previous wave
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[1][i]))
+                            if (auto add = me->GetCreature(*me, addsGUID[1][i]))
                                 add->DespawnOrUnsummon();
 
                         // Start attack of third wave of adds
@@ -753,7 +753,7 @@ public:
                         {
                             for (uint8 i=0; i<3; i++)
                             {
-                                if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[2][i]))
                                 {
                                     add->RemoveAurasDueToSpell(SPELL_MOUNT_LANCE_STAND);
                                     add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -768,7 +768,7 @@ public:
                         {
                             defeatedCount = 0;
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[2][i]))
                                     if (add->isDead())
                                         defeatedCount++;
 
@@ -784,7 +784,7 @@ public:
                     case 5:
                         // Despawn previous wave
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, addsGUID[2][i]))
+                            if (auto add = me->GetCreature(*me, addsGUID[2][i]))
                                 add->DespawnOrUnsummon();
 
                         // Start attack of wave of bosses
@@ -792,7 +792,7 @@ public:
                         {
                             for (uint8 i=0; i<3; i++)
                             {
-                                if (Creature* add = me->GetCreature(*me, bossGUID[i]))
+                                if (auto add = me->GetCreature(*me, bossGUID[i]))
                                 {
                                     add->RemoveAurasDueToSpell(SPELL_MOUNT_LANCE_STAND);
                                     add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -807,7 +807,7 @@ public:
                         {
                             defeatedCount = 0;
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, bossGUID[i]))
+                                if (auto add = me->GetCreature(*me, bossGUID[i]))
                                     if (add->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
                                         defeatedCount++;
 
@@ -823,7 +823,7 @@ public:
                     case 6:
                         // Despawn boss wave
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* add = me->GetCreature(*me, bossGUID[i]))
+                            if (auto add = me->GetCreature(*me, bossGUID[i]))
                                 add->DespawnOrUnsummon();
 
                         events.Reset();
@@ -846,7 +846,7 @@ public:
                     case 2:
                         for (uint8 i=0; i<3; i++)
                         {
-                            if (Creature* boss = me->SummonCreature(bossEntry[i], GrandChampionSpawnPosition))
+                            if (auto boss = me->SummonCreature(bossEntry[i], GrandChampionSpawnPosition))
                             {
                                 bossGUID[i] = boss->GetGUID();
                                 boss->SetTarget(stalkerGUID);
@@ -867,9 +867,9 @@ public:
                         break;
                     case 3:
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
-                                if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                                if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                                     boss->SetFacingToObject(tirion);
                                 boss->SetHomePosition(boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ() + 1.0f, boss->GetOrientation());
                                 boss->SetReactState(REACT_AGGRESSIVE);
@@ -881,14 +881,14 @@ public:
                         if (instance->GetData(BOSS_GRAND_CHAMPIONS) == IN_PROGRESS)
                         {
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                                if (auto boss = me->GetCreature(*me, bossGUID[i]))
                                     if (!boss->isInCombat())
                                         AggroAllPlayers(boss);
                         }
 
                         defeatedCount = 0;
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                                 if (boss->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
                                     defeatedCount++;
 
@@ -902,7 +902,7 @@ public:
                         break;
                     case 5:
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[i]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[i]))
                             {
                                 boss->GetMotionMaster()->MovePoint(0, OutStadiumPosition);
                                 boss->DespawnOrUnsummon(4000);
@@ -918,17 +918,17 @@ public:
                 switch(events.ExecuteEvent())
                 {
                     case 1:
-                        //                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        //                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         //    tirion->AI()->Talk(SAY_TIRION_INTRO_ARGENT_1);
                         // Open door
-                        if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
+                        if (auto pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), true);
                         events.ScheduleEvent(2, 2000);
                         break;
                     case 2:
                         // Summon 1st wave
                         // The main add will move, and the two other will only follow him
-                        if (Creature* mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
+                        if (auto mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
                         {
                             addsGUID[0][0] = mainAdd->GetGUID();
                             mainAdd->SetTarget(stalkerGUID);
@@ -942,7 +942,7 @@ public:
                                     case 1: addEntry = NPC_ARGENT_PRIESTESS; break;
                                 }
 
-                                if (Creature* add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[0][i+1] = add->GetGUID();
@@ -958,7 +958,7 @@ public:
                         break;
                     case 3:
                         // Move first wave to his position
-                        if (Creature* mainAdd1 = me->GetCreature(*me, addsGUID[0][0]))
+                        if (auto mainAdd1 = me->GetCreature(*me, addsGUID[0][0]))
                             mainAdd1->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
                         events.ScheduleEvent(4, 3000);
@@ -967,12 +967,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<1; i++)
                         {
-                            if (Creature* mainAdd = me->GetCreature(*me, addsGUID[i][0]))
+                            if (auto mainAdd = me->GetCreature(*me, addsGUID[i][0]))
                             {
                                 mainAdd->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -987,7 +987,7 @@ public:
                         break;
                     case 5:
                         // Summon 2nd wave
-                        if (Creature* mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
+                        if (auto mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
                         {
                             addsGUID[1][0] = mainAdd->GetGUID();
                             mainAdd->SetTarget(stalkerGUID);
@@ -1001,7 +1001,7 @@ public:
                                     case 1: addEntry = NPC_ARGENT_PRIESTESS; break;
                                 }
 
-                                if (Creature* add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[1][i+1] = add->GetGUID();
@@ -1017,11 +1017,11 @@ public:
                         break;
                     case 6:
                         // Move first wave to the new position
-                        if (Creature* mainAdd1 = me->GetCreature(*me, addsGUID[0][0]))
+                        if (auto mainAdd1 = me->GetCreature(*me, addsGUID[0][0]))
                             mainAdd1->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[1]);
 
                         // Move second wave to the new position
-                        if (Creature* mainAdd2 = me->GetCreature(*me, addsGUID[1][0]))
+                        if (auto mainAdd2 = me->GetCreature(*me, addsGUID[1][0]))
                             mainAdd2->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
                         events.ScheduleEvent(7, 4000);
@@ -1030,12 +1030,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<2; i++)
                         {
-                            if (Creature* mainAdd = me->GetCreature(*me, addsGUID[i][0]))
+                            if (auto mainAdd = me->GetCreature(*me, addsGUID[i][0]))
                             {
                                 mainAdd->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -1050,7 +1050,7 @@ public:
                         break;
                     case 8:
                         // Summon 3rd wave
-                        if (Creature* mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
+                        if (auto mainAdd = me->SummonCreature(NPC_ARGENT_LIGHWIELDER, SpawnPosition))
                         {
                             addsGUID[2][0] = mainAdd->GetGUID();
                             mainAdd->SetTarget(stalkerGUID);
@@ -1064,7 +1064,7 @@ public:
                                     case 1: addEntry = NPC_ARGENT_PRIESTESS; break;
                                 }
 
-                                if (Creature* add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto add = me->SummonCreature(addEntry, SpawnPosition, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     add->SetTarget(stalkerGUID);
                                     addsGUID[2][i+1] = add->GetGUID();
@@ -1080,11 +1080,11 @@ public:
                         break;
                     case 9:
                         // Move second wave to the new position
-                        if (Creature* mainAdd2 = me->GetCreature(*me, addsGUID[1][0]))
+                        if (auto mainAdd2 = me->GetCreature(*me, addsGUID[1][0]))
                             mainAdd2->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[2]);
 
                         // Move third wave to the new position
-                        if (Creature* mainAdd3 = me->GetCreature(*me, addsGUID[2][0]))
+                        if (auto mainAdd3 = me->GetCreature(*me, addsGUID[2][0]))
                             mainAdd3->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
 
                         events.ScheduleEvent(10, 4000);
@@ -1093,12 +1093,12 @@ public:
                         // Refresh the adds position
                         for (uint8 i=0; i<3; i++)
                         {
-                            if (Creature* mainAdd = me->GetCreature(*me, addsGUID[i][0]))
+                            if (auto mainAdd = me->GetCreature(*me, addsGUID[i][0]))
                             {
                                 mainAdd->SetFacingToObject(me);
                                 for (uint8 j = 0; j<3; j++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                     {
                                         switch(j)
                                         {
@@ -1115,7 +1115,7 @@ public:
                         // Summon the boss
                         bool chance;
                         chance = urand(0, 1);
-                        if (Creature* boss = me->SummonCreature(chance ? NPC_EADRIC : NPC_PALETRESS, SpawnPosition))
+                        if (auto boss = me->SummonCreature(chance ? NPC_EADRIC : NPC_PALETRESS, SpawnPosition))
                         {
                             AnnounceChampion(boss);
                             bossGUID[0] = boss->GetGUID();
@@ -1124,7 +1124,7 @@ public:
                         break;
                     case 12:
                         // Set home positions, in case of wipe, this avoids summons goin back to the SpawnPos
-                        if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss = me->GetCreature(*me, bossGUID[0]))
                         {
                             boss->SetHomePosition(boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ(), boss->GetOrientation());
                             switch (boss->GetEntry())
@@ -1136,7 +1136,7 @@ public:
 
                         for (uint8 i=0; i<3; i++)
                             for (uint8 j=0; j<3; j++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[i][j]))
+                                if (auto add = me->GetCreature(*me, addsGUID[i][j]))
                                 {
                                     add->SetFacingToObject(me);
                                     add->SetHomePosition(add->GetPositionX(), add->GetPositionY(), add->GetPositionZ(), add->GetOrientation());
@@ -1145,7 +1145,7 @@ public:
                         break;
                     case 13:
                         // Set home positions, in case of wipe, this avoids summons goin back to the SpawnPos
-                        if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss = me->GetCreature(*me, bossGUID[0]))
                         {
                             switch (boss->GetEntry())
                             {
@@ -1160,10 +1160,10 @@ public:
                         break;
                     case 14:
                         //Close Door
-                        if (GameObject* pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
+                        if (auto pGO = GameObject::GetGameObject(*me, instance->GetData64(DATA_MAIN_GATE)))
                             instance->HandleGameObject(pGO->GetGUID(), false);
 
-                        //                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        //                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         //   tirion->AI()->Talk(SAY_TIRION_INTRO_ARGENT_2);
 
                         events.Reset();
@@ -1189,7 +1189,7 @@ public:
                             {
                                 for (uint8 i=0; i<3; i++)
                                 {
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[j][i]))
                                     {
                                         add->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                                         add->SetReactState(REACT_AGGRESSIVE);
@@ -1205,7 +1205,7 @@ public:
 
                             for (uint8 j=0; j<3; j++)
                                 for (uint8 i=0; i<3; i++)
-                                    if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                    if (auto add = me->GetCreature(*me, addsGUID[j][i]))
                                     {
                                         if (add->isDead())
                                             defeatedCount++;
@@ -1225,13 +1225,13 @@ public:
                         // Despawn previous wave
                         for (uint8 j=0; j<3; j++)
                             for (uint8 i=0; i<3; i++)
-                                if (Creature* add = me->GetCreature(*me, addsGUID[j][i]))
+                                if (auto add = me->GetCreature(*me, addsGUID[j][i]))
                                     add->DespawnOrUnsummon();
 
                         // Prepare the Argent Champion for the fight
                         if (!addsAttacking)
                         {
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[0]))
                             {
                                 boss->SetUnitMovementFlags(MOVEMENTFLAG_WALKING);
                                 boss->GetMotionMaster()->MovePoint(0, ArgentSoldierPosition[0]);
@@ -1243,7 +1243,7 @@ public:
                             events.ScheduleEvent(3, 1000);
                         } else // Wait for his/her death
                         {
-                            if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                            if (auto boss = me->GetCreature(*me, bossGUID[0]))
                             {
                                 if (boss->AI()->GetData(DATA_CHAMPION_DEFEATED) == 1)
                                     events.ScheduleEvent(4, 0);
@@ -1256,7 +1256,7 @@ public:
                         // Mark encounter as completed
                         events.Reset();
                         SetData(EVENT_WAVES_ARGENT, DONE);
-                        if (Creature* boss = me->GetCreature(*me, bossGUID[0]))
+                        if (auto boss = me->GetCreature(*me, bossGUID[0]))
                         {
                             if (boss->GetEntry() == NPC_EADRIC)
                                 instance->SetData(BOSS_ARGENT_CHALLENGE_E, DONE);
@@ -1272,16 +1272,16 @@ public:
                 switch(events.ExecuteEvent())
                 {
                     case 1:
-                        //                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        //                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         //   tirion->AI()->Talk(SAY_TIRION_INTRO_BK_1);
 
                         events.ScheduleEvent(2, 3000);
                         break;
                     case 2:
-                        if (Creature* mount = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT_GRYPHON)))
+                        if (auto mount = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT_GRYPHON)))
                         {
                             mount->SetPhaseMask(1, true);
-                            if (Creature* knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            if (auto knight = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                                 knight->SetPhaseMask(1, true);
                             Talk(SAY_ANNOUNCER_BK);
                             mount->AI()->SetData(1, 0);
@@ -1290,7 +1290,7 @@ public:
                         events.ScheduleEvent(3, 15000);
                         break;
                     case 3:
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                         {
                             if (blackKinght->GetVehicle())
                                 events.ScheduleEvent(3, 2000);
@@ -1303,7 +1303,7 @@ public:
                         }
                         break;
                     case 4:
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                         {
                             blackKinght->AI()->Talk(SAY_BK_INTRO_1);
                             //blackKinght->AI()->DoCast(SPELL_DEATH_RESPITE_INTRO);
@@ -1311,7 +1311,7 @@ public:
                         events.ScheduleEvent(5, 4000);
                         break;
                     case 5:
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                         {
                             blackKinght->AI()->DoCast(me, SPELL_DEATH_PUSH_INTRO);
                             blackKinght->SetTarget(0);
@@ -1319,10 +1319,10 @@ public:
                         events.ScheduleEvent(6, 2000);
                         break;
                     case 6:
-                        if (Creature* tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
+                        if (auto tirion = me->GetCreature(*me, instance->GetData64(DATA_TIRION)))
                         {
                             //                            tirion->AI()->Talk(SAY_TIRION_INTRO_BK_2);
-                            if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                            if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                             {
                                 DoCast(57626); // Feign death
                                 blackKinght->SetTarget(tirion->GetGUID());
@@ -1331,29 +1331,29 @@ public:
                         events.ScheduleEvent(7, 3000);
                         break;
                     case 7:
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                             blackKinght->AI()->Talk(SAY_BK_INTRO_2);
                         events.ScheduleEvent(8, 9000);
                         break;
                     case 8:
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                             blackKinght->AI()->Talk(SAY_BK_INTRO_3);
                         events.ScheduleEvent(9, 5000);
                         break;
                     case 9:
                         if (instance->GetData(DATA_TEAM) == HORDE)
                         {
-                            if (Creature* garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
+                            if (auto garrosh = me->GetCreature(*me, instance->GetData64(DATA_GARROSH)))
                                 garrosh->AI()->Talk(SAY_GARROSH_INTRO_BK);
                         } else
                         {
-                            if (Creature* varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
+                            if (auto varian = me->GetCreature(*me, instance->GetData64(DATA_VARIAN)))
                                 varian->AI()->Talk(SAY_VARIAN_INTRO_BK);
                         }
 
                         SetData(EVENT_BLACK_KNIGHT_INTRO, DONE);
                         events.Reset();
-                        if (Creature* blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
+                        if (auto blackKinght = me->GetCreature(*me, instance->GetData64(DATA_BLACK_KNIGHT)))
                         {
                             blackKinght->SetHomePosition(blackKinght->GetPositionX(), blackKinght->GetPositionY(), blackKinght->GetPositionZ(), blackKinght->GetOrientation());
                             blackKinght->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -1377,14 +1377,14 @@ public:
                 return false;
 
             for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                 {
                     if (player->isGameMaster())
                         continue;
 
                     if (player->isAlive())
                     {
-                        if (Creature* mount = player->GetVehicleCreatureBase())
+                        if (auto mount = player->GetVehicleCreatureBase())
                         {
                             if (dismountAndTeleport)
                             {
@@ -1449,8 +1449,8 @@ public:
         player->PlayerTalkClass->ClearMenus();
 
         // Remove chest (if any) before starting anything else
-        if (InstanceScript* instance = creature->GetInstanceScript())
-            if (GameObject* chest = GameObject::GetGameObject(*creature, instance->GetData64(DATA_CHEST)))
+        if (auto instance = creature->GetInstanceScript())
+            if (auto chest = GameObject::GetGameObject(*creature, instance->GetData64(DATA_CHEST)))
                 chest->RemoveFromWorld();
 
         switch (action)

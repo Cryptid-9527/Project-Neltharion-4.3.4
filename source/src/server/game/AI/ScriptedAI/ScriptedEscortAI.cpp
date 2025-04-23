@@ -128,12 +128,12 @@ void npc_escortAI::JustDied(Unit* /*killer*/)
     if (!HasEscortState(STATE_ESCORT_ESCORTING) || !m_uiPlayerGUID || !m_pQuestForEscort)
         return;
 
-    if (Player* player = GetPlayerForEscort())
+    if (auto player = GetPlayerForEscort())
     {
         if (Group* group = player->GetGroup())
         {
-            for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
-                if (Player* member = groupRef->getSource())
+            for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                if (auto member = groupRef->getSource())
                     if (member->GetQuestStatus(m_pQuestForEscort->GetQuestId()) == QUEST_STATUS_INCOMPLETE)
                         member->FailQuest(m_pQuestForEscort->GetQuestId());
         }
@@ -192,12 +192,12 @@ void npc_escortAI::EnterEvadeMode()
 
 bool npc_escortAI::IsPlayerOrGroupInRange()
 {
-    if (Player* player = GetPlayerForEscort())
+    if (auto player = GetPlayerForEscort())
     {
         if (Group* group = player->GetGroup())
         {
-            for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
-                if (Player* member = groupRef->getSource())
+            for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                if (auto member = groupRef->getSource())
                     if (me->IsWithinDistInMap(member, GetMaxPlayerDistance()))
                         return true;
         }

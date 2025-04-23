@@ -85,7 +85,7 @@ public:
                         events.ScheduleEvent(EVENT_FLAME_BREAK, 10 * IN_MILLISECONDS);
                         break;
                     case EVENT_IMMOLATE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_IMMOLATE);
                         events.ScheduleEvent(EVENT_IMMOLATE, 8 * IN_MILLISECONDS);
                         break;

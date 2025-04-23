@@ -137,7 +137,7 @@ void UnitAI::DoAddAuraToAllHostilePlayers(uint32 spellid)
         ThreatContainer::StorageType threatlist = me->getThreatManager().getThreatList();
         for (ThreatContainer::StorageType::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
         {
-            if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+            if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                 if (unit->GetTypeId() == TYPEID_PLAYER)
                     me->AddAura(spellid, unit);
         }
@@ -152,7 +152,7 @@ void UnitAI::DoCastToAllHostilePlayers(uint32 spellid, bool triggered)
         ThreatContainer::StorageType threatlist = me->getThreatManager().getThreatList();
         for (ThreatContainer::StorageType::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
         {
-            if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+            if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                 if (unit->GetTypeId() == TYPEID_PLAYER)
                     me->CastSpell(unit, spellid, triggered);
         }
@@ -229,7 +229,7 @@ void UnitAI::DoCastRandom(uint32 spellId, float dist, bool triggered, int32 aura
     if (me->HasUnitState(UNIT_STATE_CASTING) && !triggered)
         return;
 
-    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, position, dist, true, aura))
+    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, position, dist, true, aura))
         me->CastSpell(target, spellId, triggered);
 }
 

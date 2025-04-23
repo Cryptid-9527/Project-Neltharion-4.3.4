@@ -248,7 +248,7 @@ void SmartAI::EndPath(bool fail)
 
             if (Group* group = player->GetGroup())
             {
-                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                 {
                     Player* groupGuy = groupRef->getSource();
 
@@ -401,7 +401,7 @@ bool SmartAI::IsEscortInvokerInRange()
 
             if (Group* group = player->GetGroup())
             {
-                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                 {
                     Player* groupGuy = groupRef->getSource();
 
@@ -480,7 +480,7 @@ void SmartAI::EnterEvadeMode()
     }
     else if (mFollowGuid)
     {
-        if (Unit* target = me->GetUnit(*me, mFollowGuid))
+        if (auto target = me->GetUnit(*me, mFollowGuid))
             me->GetMotionMaster()->MoveFollow(target, mFollowDist, mFollowAngle);
 
         // evade is not cleared in MoveFollow, so we can't keep it
@@ -731,7 +731,7 @@ void SmartAI::OnCharmed(bool apply)
         else
             me->SetWalk(!mRun);
 
-        if (Unit* charmer = me->GetCharmer())
+        if (auto charmer = me->GetCharmer())
             if(me->IsValidAttackTarget(charmer))
                 AttackStart(charmer);
     }
@@ -870,7 +870,7 @@ void SmartAI::SetFollow(Unit* target, float dist, float angle, uint32 credit, ui
 
 void SmartAI::StopFollow()
 {
-    if (Player* player = ObjectAccessor::GetPlayer(*me, mFollowGuid))
+    if (auto player = ObjectAccessor::GetPlayer(*me, mFollowGuid))
     {
         if (!mFollowCreditType)
             player->RewardPlayerAndGroupAtEvent(mFollowCredit, me);

@@ -97,7 +97,7 @@ public:
         }
         void JustReachedHome()
         {
-            if (Creature* c = Unit::GetCreature(*me, vortexFocusGUID))
+            if (auto c = Unit::GetCreature(*me, vortexFocusGUID))
                 c->AI()->DoAction(ACTION_DESPAWN_VORTEX);
             if (instance)
                 instance->SetBossState(BOSS_GRAND_VIZIER_ERTAN, NOT_STARTED);
@@ -111,7 +111,7 @@ public:
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_SET_COMBAT_RES_LIMIT, me);
             Position pos;
             me->GetPosition(&pos);
-            if (Creature* c = me->SummonCreature(NPC_VORTEX_ROTATION_FOCUS, pos, TEMPSUMMON_MANUAL_DESPAWN))
+            if (auto c = me->SummonCreature(NPC_VORTEX_ROTATION_FOCUS, pos, TEMPSUMMON_MANUAL_DESPAWN))
                 vortexFocusGUID = c->GetGUID();
         }
 
@@ -125,7 +125,7 @@ public:
             Talk(SAY_DEATH);
             if (instance)
                 instance->SetData(DATA_GRAND_VIZIER_ERTAN, DONE);
-            if (Creature* c = Unit::GetCreature(*me, vortexFocusGUID))
+            if (auto c = Unit::GetCreature(*me, vortexFocusGUID))
                 c->AI()->DoAction(ACTION_DESPAWN_VORTEX);
             summons.DespawnAll();
             _JustDied();
@@ -137,7 +137,7 @@ public:
             {
             case ACTION_CYCLONE_SHIELD:
                 cycloneShield = false;
-                if (Creature* c = Unit::GetCreature(*me, vortexFocusGUID))
+                if (auto c = Unit::GetCreature(*me, vortexFocusGUID))
                     c->AI()->DoAction(ACTION_CYCLONE_SHIELD_END);
                 break;
             default:
@@ -199,7 +199,7 @@ public:
                         cycloneShield = true;
                         CycloneShield();
                         Talk(SAY_SHIELDS);
-                        if (Creature* c = Unit::GetCreature(*me, vortexFocusGUID))
+                        if (auto c = Unit::GetCreature(*me, vortexFocusGUID))
                             c->AI()->DoAction(ACTION_CYCLONE_SHIELD_START);
                         events.ScheduleEvent(EVENT_CYCLONE_SHIELD, 30000);
                         events.ScheduleEvent(EVENT_LIGHTNING_BOLT, 2000);
@@ -688,7 +688,7 @@ public:
 		void FilterTargets(std::list<WorldObject*>& unitList)
 		{
             /*
-			if (Unit* caster = GetCaster())
+			if (auto caster = GetCaster())
 				unitList.remove_if(StormsEdgeCheck(caster));
             */
 
@@ -794,7 +794,7 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Creature* Ertan = GetCaster()->ToCreature())
+            if (auto Ertan = GetCaster()->ToCreature())
                 Ertan->AI()->DoAction(ACTION_CYCLONE_SHIELD);
         }
 
@@ -852,7 +852,7 @@ public:
                     Map::PlayerList const& players = GetCaster()->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->GetDistance(GetCaster()) < 40.0f)
                                 {
                                     checkDist = true;

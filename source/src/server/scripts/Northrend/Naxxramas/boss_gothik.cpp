@@ -192,10 +192,10 @@ class boss_gothik : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 for (uint32 i = 0; i < POS_LIVE; ++i)
-                    if (Creature* trigger = DoSummon(WORLD_TRIGGER, PosSummonLive[i]))
+                    if (auto trigger = DoSummon(WORLD_TRIGGER, PosSummonLive[i]))
                         LiveTriggerGUID.push_back(trigger->GetGUID());
                 for (uint32 i = 0; i < POS_DEAD; ++i)
-                    if (Creature* trigger = DoSummon(WORLD_TRIGGER, PosSummonDead[i]))
+                    if (auto trigger = DoSummon(WORLD_TRIGGER, PosSummonDead[i]))
                         DeadTriggerGUID.push_back(trigger->GetGUID());
 
                 if (LiveTriggerGUID.size() < POS_LIVE || DeadTriggerGUID.size() < POS_DEAD)
@@ -260,25 +260,25 @@ class boss_gothik : public CreatureScript
                     {
                         case MOB_LIVE_TRAINEE:
                         {
-                            if (Creature* liveTrigger = Unit::GetCreature(*me, LiveTriggerGUID[0]))
+                            if (auto liveTrigger = Unit::GetCreature(*me, LiveTriggerGUID[0]))
                                 DoSummon(MOB_LIVE_TRAINEE, liveTrigger, 1);
-                            if (Creature* liveTrigger1 = Unit::GetCreature(*me, LiveTriggerGUID[1]))
+                            if (auto liveTrigger1 = Unit::GetCreature(*me, LiveTriggerGUID[1]))
                                 DoSummon(MOB_LIVE_TRAINEE, liveTrigger1, 1);
-                            if (Creature* liveTrigger2 = Unit::GetCreature(*me, LiveTriggerGUID[2]))
+                            if (auto liveTrigger2 = Unit::GetCreature(*me, LiveTriggerGUID[2]))
                                 DoSummon(MOB_LIVE_TRAINEE, liveTrigger2, 1);
                             break;
                         }
                         case MOB_LIVE_KNIGHT:
                         {
-                            if (Creature* liveTrigger3 = Unit::GetCreature(*me, LiveTriggerGUID[3]))
+                            if (auto liveTrigger3 = Unit::GetCreature(*me, LiveTriggerGUID[3]))
                                 DoSummon(MOB_LIVE_KNIGHT, liveTrigger3, 1);
-                            if (Creature* liveTrigger5 = Unit::GetCreature(*me, LiveTriggerGUID[5]))
+                            if (auto liveTrigger5 = Unit::GetCreature(*me, LiveTriggerGUID[5]))
                                 DoSummon(MOB_LIVE_KNIGHT, liveTrigger5, 1);
                             break;
                         }
                         case MOB_LIVE_RIDER:
                         {
-                            if (Creature* liveTrigger4 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
+                            if (auto liveTrigger4 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
                                 DoSummon(MOB_LIVE_RIDER, liveTrigger4, 1);
                             break;
                         }
@@ -290,21 +290,21 @@ class boss_gothik : public CreatureScript
                     {
                         case MOB_LIVE_TRAINEE:
                         {
-                            if (Creature* liveTrigger = Unit::GetCreature(*me, LiveTriggerGUID[4]))
+                            if (auto liveTrigger = Unit::GetCreature(*me, LiveTriggerGUID[4]))
                                 DoSummon(MOB_LIVE_TRAINEE, liveTrigger, 1);
-                            if (Creature* liveTrigger2 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
+                            if (auto liveTrigger2 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
                                 DoSummon(MOB_LIVE_TRAINEE, liveTrigger2, 1);
                             break;
                         }
                         case MOB_LIVE_KNIGHT:
                         {
-                            if (Creature* liveTrigger5 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
+                            if (auto liveTrigger5 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
                                 DoSummon(MOB_LIVE_KNIGHT, liveTrigger5, 1);
                             break;
                         }
                         case MOB_LIVE_RIDER:
                         {
-                            if (Creature* liveTrigger4 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
+                            if (auto liveTrigger4 = Unit::GetCreature(*me, LiveTriggerGUID[4]))
                                 DoSummon(MOB_LIVE_RIDER, liveTrigger4, 1);
                             break;
                         }
@@ -362,7 +362,7 @@ class boss_gothik : public CreatureScript
                 if (spellId && me->isInCombat())
                 {
                     me->HandleEmoteCommand(EMOTE_ONESHOT_SPELL_CAST);
-                    if (Creature* pRandomDeadTrigger = Unit::GetCreature(*me, DeadTriggerGUID[rand() % POS_DEAD]))
+                    if (auto pRandomDeadTrigger = Unit::GetCreature(*me, DeadTriggerGUID[rand() % POS_DEAD]))
                         me->CastSpell(pRandomDeadTrigger, spellId, true);
                 }
             }
@@ -481,7 +481,7 @@ class boss_gothik : public CreatureScript
                                     DoTeleportTo(PosGroundLiveSide);
 
                                 me->getThreatManager().resetAggro(NotOnSameSide(me));
-                                if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0))
+                                if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0))
                                 {
                                     me->getThreatManager().addThreat(target, 100.0f);
                                     AttackStart(target);
@@ -538,7 +538,7 @@ class mob_gothik_minion : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 if (me->isSummon())
-                    if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                    if (auto owner = me->ToTempSummon()->GetSummoner())
                         CombatAI::JustDied(owner);
             }
 

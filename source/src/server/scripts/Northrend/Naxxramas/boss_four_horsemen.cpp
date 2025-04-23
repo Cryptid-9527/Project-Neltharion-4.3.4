@@ -358,7 +358,7 @@ public:
 
                         if (caster)
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.0f))
                                 DoCast(target, SPELL_PRIMARY(id));
                         }
                         else
@@ -403,7 +403,7 @@ class spell_four_horsemen_mark : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 damage;
                     switch (GetStackAmount())

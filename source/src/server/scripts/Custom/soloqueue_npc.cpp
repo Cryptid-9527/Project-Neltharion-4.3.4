@@ -137,7 +137,7 @@ public:
                 }
                 else if (player->InBattlegroundQueueForBattlegroundQueueType(BATTLEGROUND_QUEUE_1v1_SOLO))
                 {
-                    if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+                    if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
                     {
                         WorldPacket data;
                         sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, player, player->GetBattlegroundQueueIndex(BATTLEGROUND_QUEUE_1v1_SOLO), STATUS_NONE, player->GetBattlegroundQueueJoinTime(BATTLEGROUND_AA), 0, ARENA_TYPE_1v1_SOLO);
@@ -150,7 +150,7 @@ public:
                 }
                 else if (player->InBattlegroundQueueForBattlegroundQueueType(BATTLEGROUND_QUEUE_3v3_SOLO))
                 {
-                    if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+                    if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
                     {
                         WorldPacket data;
                         sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, player, player->GetBattlegroundQueueIndex(BATTLEGROUND_QUEUE_3v3_SOLO), STATUS_NONE, player->GetBattlegroundQueueJoinTime(BATTLEGROUND_AA), 0, ARENA_TYPE_3v3_SOLO);
@@ -194,7 +194,7 @@ public:
         uint8 arenaslot = ArenaTeam::GetSlotByType(ARENA_TEAM_5v5);
         uint32 matchmakerRating = player->GetMMR(arenaslot);
 
-        if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+        if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
         {
             BattlegroundTypeId bgTypeId = bg->GetTypeID();
             BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(bgTypeId, ARENA_TYPE_1v1_SOLO);

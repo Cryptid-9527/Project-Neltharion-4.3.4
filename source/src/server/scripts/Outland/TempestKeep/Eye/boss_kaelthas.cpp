@@ -172,7 +172,7 @@ struct advisorbase_ai : public ScriptedAI
 
         //reset encounter
         if (instance && (instance->GetData(DATA_KAELTHASEVENT) == 1 || instance->GetData(DATA_KAELTHASEVENT) == 3))
-            if (Creature* Kaelthas = Unit::GetCreature(*me, instance->GetData64(DATA_KAELTHAS)))
+            if (auto Kaelthas = Unit::GetCreature(*me, instance->GetData64(DATA_KAELTHAS)))
                 Kaelthas->AI()->EnterEvadeMode();
     }
 
@@ -340,7 +340,7 @@ class boss_kaelthas : public CreatureScript
             {
                 for (uint8 i = 0; i < MAX_ADVISORS; ++i)
                 {
-                    if (Creature* creature = Unit::GetCreature(*me, m_auiAdvisorGuid[i]))
+                    if (auto creature = Unit::GetCreature(*me, m_auiAdvisorGuid[i]))
                     {
                         if (!creature->isAlive())
                         {
@@ -377,7 +377,7 @@ class boss_kaelthas : public CreatureScript
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         AttackStart(target);
                 }
                 else
@@ -438,7 +438,7 @@ class boss_kaelthas : public CreatureScript
                 // if not phoenix, then it's one of the 7 weapons
                 if (summoned->GetEntry() != NPC_PHOENIX)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         summoned->AI()->AttackStart(target);
 
                     summons.Summon(summoned);
@@ -464,7 +464,7 @@ class boss_kaelthas : public CreatureScript
 
                 for (uint8 i = 0; i < MAX_ADVISORS; ++i)
                 {
-                    if (Unit* pAdvisor = Unit::GetUnit(*me, m_auiAdvisorGuid[i]))
+                    if (auto pAdvisor = Unit::GetUnit(*me, m_auiAdvisorGuid[i]))
                         pAdvisor->Kill(pAdvisor);
                 }
             }
@@ -716,7 +716,7 @@ class boss_kaelthas : public CreatureScript
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 AttackStart(target);
 
                             Phase_Timer = 30000;
@@ -773,7 +773,7 @@ class boss_kaelthas : public CreatureScript
 
                             if (FlameStrike_Timer <= diff)
                             {
-                                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                     DoCast(unit, SPELL_FLAME_STRIKE);
 
                                 FlameStrike_Timer = 30000;
@@ -917,7 +917,7 @@ class boss_kaelthas : public CreatureScript
                                         // 2) At that point he will put a Gravity Lapse debuff on everyone
                                         for (i = threatlist.begin(); i != threatlist.end(); ++i)
                                         {
-                                            if (Unit* unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
+                                            if (auto unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                                             {
                                                 DoCast(unit, SPELL_KNOCKBACK, true);
                                                 //Gravity lapse - needs an exception in Spell system to work
@@ -949,7 +949,7 @@ class boss_kaelthas : public CreatureScript
                                         //Remove flight
                                         for (i = threatlist.begin(); i != threatlist.end(); ++i)
                                         {
-                                            if (Unit* unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
+                                            if (auto unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                                             {
                                                 //Using packet workaround
                                                 WorldPacket data(SMSG_MOVE_UNSET_CAN_FLY, 12);
@@ -984,7 +984,7 @@ class boss_kaelthas : public CreatureScript
                                 //NetherBeam_Timer
                                 if (NetherBeam_Timer <= diff)
                                 {
-                                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                    if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                         DoCast(unit, SPELL_NETHER_BEAM);
 
                                     NetherBeam_Timer = 4000;
@@ -1065,7 +1065,7 @@ class boss_thaladred_the_darkener : public CreatureScript
                 //Gaze_Timer
                 if (Gaze_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         DoResetThreat();
                         me->AddThreat(target, 5000000.0f);
@@ -1381,7 +1381,7 @@ class boss_master_engineer_telonicus : public CreatureScript
                 //RemoteToy_Timer
                 if (RemoteToy_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_REMOTE_TOY);
 
                     RemoteToy_Timer = 10000+rand()%5000;

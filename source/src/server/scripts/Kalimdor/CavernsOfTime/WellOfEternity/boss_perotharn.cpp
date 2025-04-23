@@ -455,7 +455,7 @@ public:
             events.ScheduleEvent(EVENT_UPDATE_DEMON_PATHING, 8000);
 
             for (auto i = 0; i <= 2; ++i)
-            if (Creature* c = me->SummonCreature(56087, portalPositions[i]))
+            if (auto c = me->SummonCreature(56087, portalPositions[i]))
             {
                 //moved to it's own script
             }
@@ -530,7 +530,7 @@ public:
                 case ACTION_DESPAWN_PORTAL_THREE:
                     // Here we use doaction to doaction because with a grid searcher we need ~500m search radius... here we have a summonlist...
                     for (uint64 summonGUID : summons)
-                        if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGUID))
+                        if (auto summon = ObjectAccessor::GetCreature(*me, summonGUID))
                             summon->AI()->DoAction(action);
                     if (action == ACTION_DESPAWN_PORTAL_THREE)
                     {
@@ -572,7 +572,7 @@ public:
                 case ACTION_PLAYER_FOUND:
                     me->DespawnCreaturesInArea(144951);
 
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                         me->CastWithDelay(7000, illidan, SPELL_END_EXHAUSTED, true);
 
                     lazyEyeAchievementDone = false;
@@ -633,7 +633,7 @@ public:
         {
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
             TalkWithDelay(2000, TALK_AGGRO);
-            if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+            if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
             {
                 illidan->AI()->TalkWithDelay(500, TALK_ILLIDAN_AGGRO_BOSS);
                 illidan->AI()->AttackStart(me);
@@ -660,9 +660,9 @@ public:
             instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             Talk(TALK_DEATH);
             _JustDied();
-            if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+            if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                 illidan->AI()->DoAction(ACTION_COMBAT_FINISHED);
-            if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU))
+            if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU))
                 nozdormu->NearTeleportTo(NozdormuPositions[0]);
             summons.DespawnAll();
 
@@ -780,7 +780,7 @@ public:
                     }
                     else
                     {
-                        if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_LEADER]))
+                        if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_LEADER]))
                             c->AI()->DoAction(ACTION_INTIALIZE_LEADER_MOVEMENT);
                         events.ScheduleEvent(EVENT_SUMMON_DEMONS, 1600);
                     }
@@ -795,7 +795,7 @@ public:
                     break;
                 case EVENT_DRAIN_ESSENCE_ILLIDAN:
                     DoCastAOE(SPELL_FEL_ADDLED);
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                     {
                         illidan->AI()->Talk(TALK_ILLIDAN_ABSORB);
                         illidan->CastSpell(me, SPELL_ABSORB_FEL_ENERGY, false);
@@ -811,7 +811,7 @@ public:
                     me->RemoveAllAuras();
                     DoCast(me, SPELL_CORRUPTING_TOUCH, true);
                     DoCast(me, SPELL_CAMOUFLAGE, true);
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                     {
                         illidan->CastSpell(illidan, SPELL_REGENERATION, true);
                         illidan->TalkWithDelay(1000, TALK_ILLIDAN_RETURN, NULL, CHAT_MSG_MONSTER_SAY);
@@ -831,7 +831,7 @@ public:
                         c->AddAura(108214, c);
                     }
 
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                         illidan->AI()->DoAction(ACTION_CLEAN_COMBAT);
 
                     events.ScheduleEvent(EVENT_END_EYE_EVENT, 40000);
@@ -843,7 +843,7 @@ public:
                 case EVENT_END_EYE_EVENT:
                     me->DespawnCreaturesInArea(144951);
 
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                         illidan->AI()->Talk(TALK_ILLIDAN_STRENGTH_RETURN);
                     TalkWithDelay(3000, TALK_YOU_HIDE_WELL);
                     DoCastAOE(SPELL_CANCEL_FEL_FIREBALL_AGGRO);
@@ -857,7 +857,7 @@ public:
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetInCombatWithZone();
                     summons.DespawnEntry(NPC_EYE_OF_THE_PEROTHARN);
-                    if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                    if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                         DoCast(illidan, SPELL_END_EXHAUSTED, true);
                     DoCast(me, SPELL_ENFEEBLED, true);
                     skipUpdateVictim = false;
@@ -1102,17 +1102,17 @@ public:
                 case ACTION_INTIALIZE_LEADER_MOVEMENT:
                     formationPosition = DEMON_SPAWN_LEADER;
                     events.ScheduleEvent(EVENT_MOVE_TO_COMBAT_AREA, 200);
-                    if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FWD_RIGHT]))
+                    if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FWD_RIGHT]))
                         c->AI()->DoAction(ACTION_INITIALIZE_FWD_RIGHT_FOLLOW);
-                    if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_AFT_RIGHT]))
+                    if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_AFT_RIGHT]))
                         c->AI()->DoAction(ACTION_INITIALIZE_AFT_RIGHT_FOLLOW);
-                    if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_AFT_LEFT]))
+                    if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_AFT_LEFT]))
                         c->AI()->DoAction(ACTION_INITIALIZE_AFT_LEFT_FOLLOW);
 
                     //two will be spawned for cosmetic purposes to appear as though a line is coming from the palace
-                    if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FAKE_LEFT]))
+                    if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FAKE_LEFT]))
                         c->AI()->DoAction(ACTION_INITIALIZE_FAKE_LEFT);
-                    if (Creature* c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FAKE_RIGHT]))
+                    if (auto c = me->SummonCreature(NPC_LEGION_DEMON_MASSES, DemonSpawns[DEMON_SPAWN_FAKE_RIGHT]))
                         c->AI()->DoAction(ACTION_INITIALIZE_FAKE_RIGHT);
                     break;
 
@@ -1267,7 +1267,7 @@ public:
             player->PrepareQuestMenu(creature->GetGUID());
             player->SendPreparedQuest(creature->GetGUID());
         }
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
             if (!instance->IsDone(DATA_PEROTHARN))
                 //player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "start event", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_TEXT_ONE_READY, GOSSIP_SENDER_MAIN, 2);
@@ -1368,7 +1368,7 @@ public:
                         switch (demonKillCounter)
                         {
                             case 3:
-                                if (GameObject* energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_ONE))
+                                if (auto energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_ONE))
                                 {
                                     Talk(TALK_ILLIDAN_DESTROY_THE_CRYSTALL, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
                                     energyFocus->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
@@ -1376,7 +1376,7 @@ public:
                                 }
                                 break;
                             case 6:
-                                if (GameObject* energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_TWO))
+                                if (auto energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_TWO))
                                 {
                                     Talk(TALK_ILLIDAN_DESTROY_THE_CRYSTALL);
                                     energyFocus->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
@@ -1388,7 +1388,7 @@ public:
                                 SetEscortPaused(false);
                                 break;
                             case 10:
-                                if (GameObject* energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_THREE))
+                                if (auto energyFocus = instance->GetGameObject(DATA_ENERGY_FOCUS_THREE))
                                 {
                                     Talk(TALK_ILLIDAN_DESTROY_THE_CRYSTALL, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
                                     energyFocus->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED);
@@ -1398,7 +1398,7 @@ public:
                             default:
                                 break;
                         }
-                        if (Creature* visual = me->FindNearestCreature(NPC_FEL_CRYSTAL_STALKER, 50.00f))
+                        if (auto visual = me->FindNearestCreature(NPC_FEL_CRYSTAL_STALKER, 50.00f))
                             visual->CastSpell(visual, SPELL_ARCANE_EXPLOSION_VISUAL, true);
                         events.CancelEvent(EVENT_PLAYER_IN_COMBAT_CHECK); 
                         events.CancelEvent(EVENT_PLAYER_ALIVE_CHECK);
@@ -1419,7 +1419,7 @@ public:
                         me->SummonCreature(NPC_ILLIDAN_SHADOWCLOAK_STALKER, pos, TEMPSUMMON_MANUAL_DESPAWN);
                     }
                     TalkWithDelay(5000, TALK_ILLIDAN_LEAVING);
-                    if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                    if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                         perotharn->AI()->DoAction(currentPortalAction);
 
                     std::list<Creature*> list_of_npcs;
@@ -1433,7 +1433,7 @@ public:
                         }
                     Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                     for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             if (player->GetQuestStatus(QUEST_IN_UNENDING_NUMBERS) == QUEST_STATUS_INCOMPLETE)
                                 player->KilledMonsterCredit(currentPortalAction == 10 ? QUEST_CREDIT_PORTAL_ONE : (currentPortalAction == 11 ? QUEST_CREDIT_PORTAL_TWO : QUEST_CREDIT_PORTAL_THREE));
 
@@ -1577,7 +1577,7 @@ public:
                 case 72:
                 {
                     Talk(TALK_ILLIDAN_CUT_THIS_ONE_DOWN, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
-                    if (Creature* demon = me->FindNearestCreature(NPC_LEGION_DEMON, 20.00f))
+                    if (auto demon = me->FindNearestCreature(NPC_LEGION_DEMON, 20.00f))
                         demon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                     SetEscortPaused(true);
                     Position newHomePos(*me);
@@ -1609,7 +1609,7 @@ public:
                     Talk(TALK_ILLIDAN_TOO_EASY, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
                     break;
                 case 104: // Appear boss
-                    if (Creature* boss = instance->GetCreature(DATA_PEROTHARN))
+                    if (auto boss = instance->GetCreature(DATA_PEROTHARN))
                         boss->AI()->DoAction(ACTION_APPEAR_MID);
                     break;
                 case 109:
@@ -1664,7 +1664,7 @@ public:
                     {
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (!player->HasAura(SPELL_PLAYER_SHADOWCLOAK) && !player->HasAura(SPELL_DEMONIC_GRIP_ROOT) && player->isAlive())
                                     if (player->GetAreaId() == 5993)
                                         player->CastSpell(player, SPELL_PLAYER_SHADOWCLOAK, true);
@@ -1676,7 +1676,7 @@ public:
                         SetEscortPaused(false);
                         break;
                     case EVENT_START_BOSS_FIGHT:
-                        if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                        if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                             perotharn->AI()->DoAction(ACTION_START_COMBAT);
                         break;
                     case EVENT_PLAYER_IN_COMBAT_CHECK:
@@ -1684,7 +1684,7 @@ public:
                         bool needsNewCheck = true;
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->GetDistance2d(me) <= 40.00f && player->isInCombat())
                                 {
                                     SetCanAttack(true);
@@ -1705,7 +1705,7 @@ public:
                         bool alivePlayerFound = false;
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (!player->isGameMaster() && player->isAlive())
                                 {
                                     alivePlayerFound = true;
@@ -1794,7 +1794,7 @@ public:
                 switch (eventid)
                 {
                     case EVENT_START_PEROTHARN_INTRO:
-                        if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                        if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                         {
                             // perotharn->AI()->Talk(TALK_PEROTHARN_INTRO);
                             // perotharn->AI()->TalkWithDelay(6000, TALK_PEROTHARN_INTRO_TWO);
@@ -1804,7 +1804,7 @@ public:
                             perotharn->AI()->TalkWithDelay(9000, TALK_PEROTHARN_INTRO_THREE, NULL, CHAT_MSG_MONSTER_SAY);
                         }
                         for (uint64 summonGuid : summons)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGuid))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, summonGuid))
                                 if (summon->GetEntry() == NPC_LEGION_DEMON)
                                     summon->EmoteWithDelay(6000, EMOTE_ONESHOT_SALUTE_NO_SHEATH);
                         events.ScheduleEvent(EVENT_START_DEMON_MOVEMENT, 12000);
@@ -1812,7 +1812,7 @@ public:
                     case EVENT_START_DEMON_MOVEMENT:
                         for (uint64 summonGuid : summons)
                         {
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGuid))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, summonGuid))
                             {
                                 switch (summon->GetEntry())
                                 {
@@ -1826,20 +1826,20 @@ public:
                             }
                         }
 
-                        if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                        if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                             perotharn->GetMotionMaster()->MovePoint(POINT_EVENT_WALK, eventWaypoints[1]);
                         break;
                     case EVENT_TALK_PEROTHARN_INTRO_TWO:
-                        //if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN)) 
-                        if (Creature* c = me->FindNearestCreature(NPC_PEROTHARN, 500.f))
+                        //if (auto perotharn = instance->GetCreature(DATA_PEROTHARN)) 
+                        if (auto c = me->FindNearestCreature(NPC_PEROTHARN, 500.f))
                         {
                             c->AI()->Talk(TALK_PEROTHARN_INTRO_TWO, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         }
 
                         break;
                     case EVENT_TALK_PEROTHARN_INTRO_THREE:
-                        //if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
-                        if (Creature* c = me->FindNearestCreature(NPC_PEROTHARN, 500.f))
+                        //if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
+                        if (auto c = me->FindNearestCreature(NPC_PEROTHARN, 500.f))
                         {
                             c->AI()->Talk(TALK_PEROTHARN_INTRO_THREE, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         }
@@ -1919,19 +1919,19 @@ public:
         {
             if (!isSecFirewallDemon)
             {
-                if (GameObject* go = instance->GetGameObject(DATA_COURTYYARD_DOOR_ONE))
+                if (auto go = instance->GetGameObject(DATA_COURTYYARD_DOOR_ONE))
                     go->SetGoState(GO_STATE_ACTIVE);
 
-                if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_ONE)))
+                if (auto go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_ONE)))
                     go->SetGoState(GO_STATE_ACTIVE);
             }
             else
             {
-                if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_TWO)))
+                if (auto go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_TWO)))
                     go->SetGoState(GO_STATE_ACTIVE);
-                if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_THREE)))
+                if (auto go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_THREE)))
                     go->SetGoState(GO_STATE_ACTIVE);
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                     illidan->AI()->DoAction(ACTION_DEMON_KILLED);
             }
 
@@ -1949,7 +1949,7 @@ public:
                 switch (eventid)
                 {
                     case EVENT_REMOVE_FLAGS:
-                        if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_ONE)))
+                        if (auto go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_FIREWALL_ONE)))
                             go->SetGoState(GO_STATE_READY);
 
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
@@ -2021,7 +2021,7 @@ public:
 
         void JustDied(Unit* killer) override
         {
-            if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+            if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                 illidan->AI()->DoAction(ACTION_DEMON_KILLED);
         }
 
@@ -2035,7 +2035,7 @@ public:
                         if (me->HasUnitState(UNIT_STATE_CASTING)) events.ScheduleEvent(eventid, 250);
                         else
                         {
-                            if (Creature* arcanist = me->FindNearestCreature(NPC_CORRUPTED_ARCANIST, 40.00f))
+                            if (auto arcanist = me->FindNearestCreature(NPC_CORRUPTED_ARCANIST, 40.00f))
                                 if (!arcanist->HasAura(SPELL_DEMONIC_WARDING))
                                     DoCast(arcanist, SPELL_DEMONIC_WARDING);
                             events.ScheduleEvent(EVENT_DEMONIC_WARDING, urand(8000, 16000));
@@ -2123,7 +2123,7 @@ public:
 
         void JustDied(Unit* killer) override
         {
-            if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+            if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                 illidan->AI()->DoAction(ACTION_DEMON_KILLED);
         }
 
@@ -2294,18 +2294,18 @@ public:
         if (!go->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE))
         {
             go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-            if (Creature* stalker = go->FindNearestCreature(NPC_FEL_CRYSTAL_STALKER, 5.0f))
+            if (auto stalker = go->FindNearestCreature(NPC_FEL_CRYSTAL_STALKER, 5.0f))
             {
                 stalker->RemoveAurasDueToSpell(SPELL_FEL_CRYSTAL_SWITCH_GLOW);
                 stalker->CastSpell(stalker, SPELL_FEL_CRYSTAL_MELTDOWN, false);
             }
 
-            if (InstanceScript* instance = go->GetInstanceScript())
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
+            if (auto instance = go->GetInstanceScript())
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_ONE))
                     illidan->AI()->DoAction(ACTION_MOVE_NEXT_PORTAL);
 
 
-            if (Creature* portal = go->FindNearestCreature(56087, 65.0f))
+            if (auto portal = go->FindNearestCreature(56087, 65.0f))
             {
                 portal->SetObjectScale(0.03f);
                 portal->DespawnOrUnsummon(15000);
@@ -2384,9 +2384,9 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
+            if (auto instance = GetTarget()->GetInstanceScript())
             {
-                if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                 {
                     int32 damage = eventInfo.GetHealInfo()->GetHeal();
                     perotharn->CastCustomSpell(eventInfo.GetActor(), SPELL_FEL_SURGE, &damage, NULL, NULL, true);
@@ -2485,12 +2485,12 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
-                if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+            if (auto instance = GetTarget()->GetInstanceScript())
+                if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                 {
                     Position summonPos(*GetTarget());
                     GetTarget()->PlayOneShotAnimKit(ANIM_ONE_SHOT_CIRCLE);
-                    if (Creature* eye = perotharn->SummonCreature(NPC_EYE_OF_THE_PEROTHARN, summonPos))
+                    if (auto eye = perotharn->SummonCreature(NPC_EYE_OF_THE_PEROTHARN, summonPos))
                     {
 
                     }
@@ -2621,7 +2621,7 @@ public:
 
         void HandleDamage(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 SetHitDamage(target->CountPctFromMaxHealth(5));
             }
@@ -2652,7 +2652,7 @@ public:
 
         void ApplyStun(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastSpell(target, SPELL_ASPHYXIATE, true);
         }
 
@@ -2739,7 +2739,7 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* u = GetTarget())
+            if (auto u = GetTarget())
                 if (u->HasAuraType(SPELL_AURA_MOUNTED))
                     u->RemoveAurasByType(SPELL_AURA_MOUNTED);
         }
@@ -2747,7 +2747,7 @@ public:
         void AfterApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             Position pos(*GetTarget());
-            if (Creature* creature = GetTarget()->SummonCreature(NPC_PLAYER_SHADOWCLOAK_STALKER, pos, TEMPSUMMON_MANUAL_DESPAWN))
+            if (auto creature = GetTarget()->SummonCreature(NPC_PLAYER_SHADOWCLOAK_STALKER, pos, TEMPSUMMON_MANUAL_DESPAWN))
             {
                 creature->CastSpell(creature, SPELL_PLAYER_SHADOWCLOAK_COSMETIC, true);
                 creature->CastSpell(GetTarget(), SPELL_RIDE_VEHICLE_HARDCODED, true);
@@ -2780,7 +2780,7 @@ public:
         void onPeriodicTick(AuraEffect const* aurEff)
         {
             uint8 position = aurEff->GetTickNumber();
-            if (Creature* target = GetTarget()->SummonCreature(56096, firewallPeriodicPositions[position]))
+            if (auto target = GetTarget()->SummonCreature(56096, firewallPeriodicPositions[position]))
                 target->CastSpell(target, SPELL_SUMMON_FIREWALL_PULSE, true);
         }
 
@@ -2810,7 +2810,7 @@ public:
             if (aurEff->GetTickNumber() > 3)
                 return;
 
-            if (Creature* visual = GetTarget()->SummonCreature(NPC_DISTRACT_STALKER, DemonStalkerPos[aurEff->GetTickNumber()], TEMPSUMMON_TIMED_DESPAWN, 15000))
+            if (auto visual = GetTarget()->SummonCreature(NPC_DISTRACT_STALKER, DemonStalkerPos[aurEff->GetTickNumber()], TEMPSUMMON_TIMED_DESPAWN, 15000))
                 visual->CastSpell(visual, SPELL_DISTRACT_DEMONS_STATIONARY, true);
         }
 
@@ -2835,7 +2835,7 @@ public:
 
     bool Execute(uint64 /*time*/, uint32 /*diff*/)
     {
-        if (Creature* crystal = ObjectAccessor::GetCreature(*_trigger, _targetGUID))
+        if (auto crystal = ObjectAccessor::GetCreature(*_trigger, _targetGUID))
             _trigger->Kill(crystal);
         return true;
     }
@@ -2856,7 +2856,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes mode)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->CastSpell(GetUnitOwner(), SPELL_SHATTER_FEL_CRYSTAL, true);
                 GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_FEL_CRYSTAL_DESTRUCTION, true);
@@ -2864,11 +2864,11 @@ public:
                 if (!caster->HasAura(SPELL_FEL_CRYSTAL_DESTROYED))
                     caster->CastSpell(caster, SPELL_FEL_CRYSTAL_DESTROYED, true);
 
-                if (GameObject* focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_ONE, 5.00f))
+                if (auto focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_ONE, 5.00f))
                     focus->RemoveFromWorld();
-                else if (GameObject* focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_TWO, 5.00f))
+                else if (auto focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_TWO, 5.00f))
                     focus->RemoveFromWorld();
-                else if (GameObject* focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_THREE, 5.00f))
+                else if (auto focus = caster->FindNearestGameObject(GO_PORTAL_ENERGY_FOCUS_THREE, 5.00f))
                     focus->RemoveFromWorld();
 
                 if (GetTarget() != caster)
@@ -2953,8 +2953,8 @@ public:
         }
         SpellCastResult CheckCast()
         {
-            if (Unit* c = GetCaster())
-                if (Unit* h = GetExplTargetUnit())
+            if (auto c = GetCaster())
+                if (auto h = GetExplTargetUnit())
                     if (c->GetDistance(h) > 5.f)
                         return SPELL_FAILED_DONT_REPORT;
 
@@ -2984,7 +2984,7 @@ public:
 
         void ModDestHeight(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* guardian = GetCaster()->FindNearestCreature(NPC_GUARDIAN_DEMON, 100.00f))
+            if (auto guardian = GetCaster()->FindNearestCreature(NPC_GUARDIAN_DEMON, 100.00f))
             {
                 Position pos;
                 guardian->GetNearPosition(pos, 5.0f, 0.0f);
@@ -3016,7 +3016,7 @@ public:
         void onPeriodicTick(AuraEffect const* aurEff)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (auto o = GetOwner())
                 if (auto target = o->ToUnit())
                     if (auto aura = aurEff->GetBase())
@@ -3069,8 +3069,8 @@ public:
         void HandleOnEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             //TC_LOG_ERROR("sql.sql", "float script activated by apply.");
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                 {
                     Position dest(*caster);
                     caster->MoveBlink(dest, 5.f, 0.f);
@@ -3087,8 +3087,8 @@ public:
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             //TC_LOG_ERROR("sql.sql", "float script activated by remove");
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                     if (target->ToPlayer())
                     {
                         target->ClearUnitState(UNIT_STATE_STUNNED);
@@ -3299,13 +3299,13 @@ public:
                 switch (eventId)
                 {
                 case EVENT_CAST_BEAM_ONE:
-                    if (Creature* target = me->FindNearestCreature(GetTarget(), 28.f))
+                    if (auto target = me->FindNearestCreature(GetTarget(), 28.f))
                     {
                         me->CastSpell(target, SPELL_CAST_BEAM);
                         //events.ScheduleEvent(EVENT_CAST_BEAM_ONE, 3000);
                     }
 
-                    if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                    if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                         perotharn->AI()->JustSummoned(me);
                     break;
                 default:

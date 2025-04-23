@@ -80,7 +80,7 @@ class npc_torek : public CreatureScript
 
             void WaypointReached(uint32 waypointId)
             {
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                 {
                     switch (waypointId)
                     {
@@ -210,7 +210,7 @@ class npc_ruul_snowhoof : public CreatureScript
                 {
                     case 0:
                         me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                        if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 20))
+                        if (auto Cage = me->FindNearestGameObject(GO_CAGE, 20))
                             Cage->SetGoState(GO_STATE_ACTIVE);
                         break;
                     case 13:
@@ -233,7 +233,7 @@ class npc_ruul_snowhoof : public CreatureScript
 
             void Reset()
             {
-                if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 20))
+                if (auto Cage = me->FindNearestGameObject(GO_CAGE, 20))
                     Cage->SetGoState(GO_STATE_READY);
             }
 
@@ -332,7 +332,7 @@ class npc_muglash : public CreatureScript
 
             void WaypointReached(uint32 waypointId)
             {
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                 {
                     switch (waypointId)
                     {
@@ -342,7 +342,7 @@ class npc_muglash : public CreatureScript
                         case 24:
                             Talk(SAY_MUG_BRAZIER, player->GetGUID());
 
-                            if (GameObject* go = GetClosestGameObjectWithEntry(me, GO_NAGA_BRAZIER, INTERACTION_DISTANCE*2))
+                            if (auto go = GetClosestGameObjectWithEntry(me, GO_NAGA_BRAZIER, INTERACTION_DISTANCE*2))
                             {
                                 go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                                 SetEscortPaused(true);
@@ -364,7 +364,7 @@ class npc_muglash : public CreatureScript
 
             void EnterCombat(Unit* /*who*/)
             {
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                     if (HasEscortState(STATE_ESCORT_PAUSED))
                     {
                         if (urand(0, 1))
@@ -383,7 +383,7 @@ class npc_muglash : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 if (HasEscortState(STATE_ESCORT_ESCORTING))
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                         player->FailQuest(QUEST_VORSHA);
             }
 
@@ -462,7 +462,7 @@ class go_naga_brazier : public GameObjectScript
 
         bool OnGossipHello(Player* /*player*/, GameObject* go)
         {
-            if (Creature* creature = GetClosestCreatureWithEntry(go, NPC_MUGLASH, INTERACTION_DISTANCE*2))
+            if (auto creature = GetClosestCreatureWithEntry(go, NPC_MUGLASH, INTERACTION_DISTANCE*2))
             {
                 if (npc_muglash::npc_muglashAI* pEscortAI = CAST_AI(npc_muglash::npc_muglashAI, creature->AI()))
                 {

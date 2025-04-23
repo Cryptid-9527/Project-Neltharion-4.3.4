@@ -395,7 +395,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
                                 if (!faefireTarget->HasAura(SPELL_IVUS_FAEFIRE))
                                     DoCast(faefireTarget, SPELL_IVUS_FAEFIRE, true);
                         events.ScheduleEvent(EVENT_IVUS_CAST_FAEFIRE, 4000);
@@ -415,7 +415,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(faefireTarget, SPELL_IVUS_STARFIRE);
                         events.ScheduleEvent(EVENT_IVUS_CAST_STARFIRE, 14000);
                     }
@@ -443,7 +443,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM, NULL, NULL, true))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM, NULL, NULL, true))
                                 if (!faefireTarget->HasAura(SPELL_IVUS_MOONFIRE))
                                     DoCast(faefireTarget, SPELL_IVUS_MOONFIRE, true);
                         events.ScheduleEvent(EVENT_IVUS_CAST_MOONFIRE, 4000);
@@ -655,7 +655,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
                                 if (!faefireTarget->HasAura(SPELL_LOKHO_SHOCK))
                                     DoCast(faefireTarget, SPELL_LOKHO_SHOCK, true);
                         events.ScheduleEvent(EVENT_LOKHO_CAST_SHOCK, 4000);
@@ -674,7 +674,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
                                 if (!faefireTarget->HasAura(SPELL_LOKHO_BLOCK_2))
                                     DoCast(faefireTarget, SPELL_LOKHO_BLOCK_2, true);
                         events.ScheduleEvent(EVENT_LOKHO_CAST_BLOCK2, 16000);
@@ -685,7 +685,7 @@ public:
                     if (me->isInCombat())
                     {
                         if (UpdateVictim())
-                            if (Unit* faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto faefireTarget = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(faefireTarget, SPELL_LOKHO_BLIZZ);
                         events.ScheduleEvent(EVENT_LOKHO_CAST_BLIZZ, 14000);
                     }
@@ -852,7 +852,7 @@ public:
                 case 1:
                     if (me->isInCombat())
                         if (!me->HasBreakableByDamageCrowdControlAura())
-                            if (Unit* currentTarget = me->getVictim())
+                            if (auto currentTarget = me->getVictim())
                                 if (!me->IsWithinMeleeRange(currentTarget))
                                     if (me->GetDistance(currentTarget) <= 60.f)
                                     {

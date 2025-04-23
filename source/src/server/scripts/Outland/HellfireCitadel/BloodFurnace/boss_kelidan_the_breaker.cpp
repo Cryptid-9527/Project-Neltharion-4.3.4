@@ -317,7 +317,7 @@ class mob_shadowmoon_channeler : public CreatureScript
 
             void EnterCombat(Unit* who)
             {
-                if (Creature* Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
+                if (auto Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
                     CAST_AI(boss_kelidan_the_breaker::boss_kelidan_the_breakerAI, Kelidan->AI())->ChannelerEngaged(who);
                 if (me->IsNonMeleeSpellCasted(false))
                     me->InterruptNonMeleeSpells(true);
@@ -326,7 +326,7 @@ class mob_shadowmoon_channeler : public CreatureScript
 
             void JustDied(Unit* killer)
             {
-               if (Creature* Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
+               if (auto Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
                    CAST_AI(boss_kelidan_the_breaker::boss_kelidan_the_breakerAI, Kelidan->AI())->ChannelerDied(killer);
             }
 
@@ -337,10 +337,10 @@ class mob_shadowmoon_channeler : public CreatureScript
                     if (check_Timer <= diff)
                     {
                         if (!me->IsNonMeleeSpellCasted(false))
-                            if (Creature* Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
+                            if (auto Kelidan = me->FindNearestCreature(ENTRY_KELIDAN, 100))
                             {
                                 uint64 channeler = CAST_AI(boss_kelidan_the_breaker::boss_kelidan_the_breakerAI, Kelidan->AI())->GetChanneled(me);
-                                if (Unit* channeled = Unit::GetUnit(*me, channeler))
+                                if (auto channeled = Unit::GetUnit(*me, channeler))
                                     DoCast(channeled, SPELL_CHANNELING);
                             }
                         check_Timer = 5000;
@@ -352,7 +352,7 @@ class mob_shadowmoon_channeler : public CreatureScript
 
                 if (MarkOfShadow_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_MARK_OF_SHADOW);
                     MarkOfShadow_Timer = 15000+rand()%5000;
                 }

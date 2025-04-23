@@ -156,7 +156,7 @@ class boss_alar : public CreatureScript
             void JustSummoned(Creature* summon)
             {
                 if (summon->GetEntry() == CREATURE_EMBER_OF_ALAR)
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         summon->AI()->AttackStart(target);
             }
 
@@ -285,7 +285,7 @@ class boss_alar : public CreatureScript
                                 WaitTimer = 4000;
                                 return;
                             case WE_DIVE:
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 {
                                     me->RemoveAurasDueToSpell(SPELL_DIVE_BOMB_VISUAL);
                                     DoCast(target, SPELL_DIVE_BOMB, true);
@@ -405,7 +405,7 @@ class boss_alar : public CreatureScript
 
                     if (FlamePatch_Timer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             Creature* Summoned = me->SummonCreature(CREATURE_FLAME_PATCH_ALAR, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 120000);
                             if (Summoned)
@@ -502,7 +502,7 @@ class mob_ember_of_alar : public CreatureScript
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     if (instance && instance->GetData(DATA_ALAREVENT) == 2)
                     {
-                        if (Unit* Alar = Unit::GetUnit(*me, instance->GetData64(DATA_ALAR)))
+                        if (auto Alar = Unit::GetUnit(*me, instance->GetData64(DATA_ALAR)))
                         {
                             int32 AlarHealth = int32(Alar->GetHealth()) - int32(Alar->CountPctFromMaxHealth(3));
                             if (AlarHealth > 0)

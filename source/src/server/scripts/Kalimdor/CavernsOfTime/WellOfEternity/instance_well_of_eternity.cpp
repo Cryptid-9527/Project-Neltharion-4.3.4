@@ -158,7 +158,7 @@ class instance_well_of_eternity : public InstanceMapScript
                     case 55541:
                     case 55542:
                     case 55543:
-                        if (Creature* perotharn = instance->GetCreature(DATA_PEROTHARN))
+                        if (auto perotharn = instance->GetCreature(DATA_PEROTHARN))
                             perotharn->AI()->JustSummoned(creature);
                         break;
                     default:

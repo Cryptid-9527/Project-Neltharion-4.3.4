@@ -163,7 +163,7 @@ class npc_winterfin_playmate : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_PLAYMATE_ORACLE) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -261,7 +261,7 @@ class npc_snowfall_glade_playmate : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_PLAYMATE_WOLVAR) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -361,7 +361,7 @@ class npc_the_biggest_tree : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_THE_BIGGEST_TREE_EVER) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -447,7 +447,7 @@ class npc_high_oracle_soo_roo : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_THE_BRONZE_DRAGONSHRINE_ORACLE) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -535,7 +535,7 @@ class npc_elder_kekek : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_THE_BRONZE_DRAGONSHRINE_WOLVAR) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -623,7 +623,7 @@ class npc_the_etymidian : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_MEETING_A_GREAT_ONE) == QUEST_STATUS_INCOMPLETE)
                         {
                             playerGUID = player->GetGUID();
@@ -736,7 +736,7 @@ class npc_alexstraza_the_lifebinder : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                     {
                         if (player->GetQuestStatus(QUEST_THE_DRAGON_QUEEN_ORACLE) == QUEST_STATUS_INCOMPLETE)
                         {
@@ -810,7 +810,7 @@ class npc_alexstraza_the_lifebinder : public CreatureScript
                             timer = 5000;
                             break;
                         case 8:
-                            if (Creature* krasus = me->FindNearestCreature(NPC_KRASUS, 10.0f))
+                            if (auto krasus = me->FindNearestCreature(NPC_KRASUS, 10.0f))
                             {
                                 orphan->SetFacingToObject(krasus);
                                 krasus->AI()->Talk(TEXT_KRASUS_8);
@@ -931,7 +931,7 @@ class npc_cw_area_trigger : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (who && me->GetDistance2d(who) < 20.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->HasAura(SPELL_ORPHAN_OUT))
                         {
                             uint32 questId = 0;
@@ -971,7 +971,7 @@ class npc_cw_area_trigger : public CreatureScript
                                     {
                                         player->AreaExploredOrEventHappens(QUEST_NOW_WHEN_I_GROW_UP);
                                         if (player->GetQuestStatus(QUEST_NOW_WHEN_I_GROW_UP) == QUEST_STATUS_COMPLETE)
-                                            if (Creature* samuro = me->FindNearestCreature(25151, 20.0f))
+                                            if (auto samuro = me->FindNearestCreature(25151, 20.0f))
                                             {
                                                 uint32 emote = 0;
                                                 switch (urand(1, 5))
@@ -1027,9 +1027,9 @@ class npc_grizzlemaw_cw_trigger : public CreatureScript
             void MoveInLineOfSight(Unit* who)
             {
                 if (who && who->GetDistance2d(me) < 10.0f)
-                    if (Player* player = who->ToPlayer())
+                    if (auto player = who->ToPlayer())
                         if (player->GetQuestStatus(QUEST_HOME_OF_THE_BEAR_MEN) == QUEST_STATUS_INCOMPLETE)
-                            if (Creature* orphan = Creature::GetCreature(*me, getOrphanGUID(player, ORPHAN_WOLVAR)))
+                            if (auto orphan = Creature::GetCreature(*me, getOrphanGUID(player, ORPHAN_WOLVAR)))
                             {
                                 player->AreaExploredOrEventHappens(QUEST_HOME_OF_THE_BEAR_MEN);
                                 orphan->AI()->Talk(TEXT_WOLVAR_ORPHAN_10);

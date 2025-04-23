@@ -105,7 +105,7 @@ public:
             //Fear_Timer
             if (Fear_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     DoCast(target, SPELL_FEAR);
 
                 Fear_Timer = 40000;
@@ -115,7 +115,7 @@ public:
             //Sleep_Timer
             if (Sleep_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
                     DoCast(target, SPELL_SLEEP);
 
                 Sleep_Timer = 30000;
@@ -132,7 +132,7 @@ public:
             //Dispel_Timer
             if (Dispel_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_DISPELMAGIC);
 
                 DispelMagic_Timer = 30000;

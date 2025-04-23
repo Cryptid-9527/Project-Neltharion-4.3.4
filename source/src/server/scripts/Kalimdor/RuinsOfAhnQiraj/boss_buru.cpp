@@ -76,7 +76,7 @@ class boss_buru : public CreatureScript
                 BossAI::EnterEvadeMode();
 
                 for (std::list<uint64>::iterator i = Eggs.begin(); i != Eggs.end(); ++i)
-                    if (Creature* egg = me->GetMap()->GetCreature(*Eggs.begin()))
+                    if (auto egg = me->GetMap()->GetCreature(*Eggs.begin()))
                         egg->Respawn();
 
                 Eggs.clear();
@@ -118,7 +118,7 @@ class boss_buru : public CreatureScript
                 events.ScheduleEvent(EVENT_GATHERING_SPEED, 9000);
                 events.ScheduleEvent(EVENT_FULL_SPEED, 60000);
 
-                if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                 {
                     DoResetThreat();
                     AttackStart(victim);
@@ -160,7 +160,7 @@ class boss_buru : public CreatureScript
                             events.ScheduleEvent(EVENT_CREEPING_PLAGUE, 6000);
                             break;
                         case EVENT_RESPAWN_EGG:
-                            if (Creature* egg = me->GetMap()->GetCreature(*Eggs.begin()))
+                            if (auto egg = me->GetMap()->GetCreature(*Eggs.begin()))
                             {
                                 egg->Respawn();
                                 Eggs.pop_front();
@@ -206,7 +206,7 @@ class npc_buru_egg : public CreatureScript
 
             void EnterCombat(Unit* attacker)
             {
-                if (Creature* buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
+                if (auto buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
                     if (!buru->isInCombat())
                         buru->AI()->AttackStart(attacker);
             }
@@ -214,8 +214,8 @@ class npc_buru_egg : public CreatureScript
             void JustSummoned(Creature* who)
             {
                 if (who->GetEntry() == NPC_HATCHLING)
-                    if (Creature* buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
-                        if (Unit* target = buru->AI()->SelectTarget(SELECT_TARGET_RANDOM))
+                    if (auto buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
+                        if (auto target = buru->AI()->SelectTarget(SELECT_TARGET_RANDOM))
                             who->AI()->AttackStart(target);
             }
 
@@ -225,7 +225,7 @@ class npc_buru_egg : public CreatureScript
                 DoCastAOE(SPELL_EXPLODE_2, true); // Unknown purpose
                 DoCast(me, SPELL_SUMMON_HATCHLING, true);
 
-                if (Creature* buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
+                if (auto buru = me->GetMap()->GetCreature(_instance->GetData64(DATA_BURU)))
                     if (boss_buru::boss_buruAI* buruAI = dynamic_cast<boss_buru::boss_buruAI*>(buru->AI()))
                         buruAI->ManageRespawn(me->GetGUID());
             }
@@ -250,13 +250,13 @@ class spell_egg_explosion : public SpellScriptLoader
 
             void HandleAfterCast()
             {
-                if (Creature* buru = GetCaster()->FindNearestCreature(NPC_BURU, 5.f))
+                if (auto buru = GetCaster()->FindNearestCreature(NPC_BURU, 5.f))
                     buru->AI()->DoAction(ACTION_EXPLODE);
             }
 
             void HandleDummyHitTarget(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     GetCaster()->DealDamage(target, -16 * GetCaster()->GetDistance(target) + 500);
             }
 

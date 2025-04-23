@@ -382,7 +382,7 @@ public:
             {
                 Damage = 0;
 
-                if (Player* player = pDoneBy->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto player = pDoneBy->GetCharmerOrOwnerPlayerOrPlayerItself())
                     player->GroupEventHappens(QUEST_MISSING_DIPLO_PT16, me);
 
                 Talk(EMOTE_SURRENDER);
@@ -447,7 +447,7 @@ public:
             SetCombatMovement(true);
 
             if (me->isInCombat())
-                if (Unit* unit = me->getVictim())
+                if (auto unit = me->getVictim())
                     me->GetMotionMaster()->MoveChase(unit);
         }
 
@@ -673,7 +673,7 @@ class spell_ooze_zap_channel_end : public SpellScriptLoader
             void HandleDummy(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Player* player = GetCaster()->ToPlayer())
+                if (auto player = GetCaster()->ToPlayer())
                     player->CastSpell(player, SPELL_OOZE_CHANNEL_CREDIT, true);
                 GetHitUnit()->Kill(GetHitUnit());
             }
@@ -756,7 +756,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* go)
     {
         go->UseDoorOrButton();
-        if (Creature* prisoner = go->FindNearestCreature(NPC_THERAMORE_PRISONER, 1.0f))
+        if (auto prisoner = go->FindNearestCreature(NPC_THERAMORE_PRISONER, 1.0f))
         {
             if (player)
                 player->KilledMonsterCredit(NPC_THERAMORE_PRISONER, 0);

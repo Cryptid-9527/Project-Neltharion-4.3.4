@@ -67,7 +67,7 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+22:
                 player->CLOSE_GOSSIP_MENU();
-                if (InstanceScript* instance = creature->GetInstanceScript())
+                if (auto instance = creature->GetInstanceScript())
                 {
                     //are 5 minutes expected? go template may have data to despawn when used at quest
                     instance->DoRespawnGameObject(instance->GetData64(DATA_GO_CHALICE), MINUTE*5);
@@ -217,7 +217,7 @@ public:
             //Immolate_Timer
             if (Immolate_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_IMMOLATE);
 
                 Immolate_Timer = 25000;

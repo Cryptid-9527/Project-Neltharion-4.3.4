@@ -201,7 +201,7 @@ public:
     }
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             if (CAST_AI(npc_slipstream::npc_slipstreamAI, creature->AI())->isSleapStream(SLIPSTREAM_ENTERANCE_LEFT)
                 || CAST_AI(npc_slipstream::npc_slipstreamAI, creature->AI())->isSleapStream(SLIPSTREAM_ERTAN_1))
@@ -305,11 +305,11 @@ public:
             {
                 if ((*itr)._sleapStreamTimer <= diff)
                 {
-                    if (Unit* player = Unit::GetUnit(*me, (*itr)._playerGUID))
+                    if (auto player = Unit::GetUnit(*me, (*itr)._playerGUID))
                     {
                         if ((*itr)._action != SLIPSTREAM_ERTAN_ARRIVAL && (*itr)._action != SLIPSTREAM_ALTAIRUS_ARRIVAL)
                         {
-                            if (Creature* sl = Unit::GetCreature(*me, _slipStream[(int)(*itr)._action]))
+                            if (auto sl = Unit::GetCreature(*me, _slipStream[(int)(*itr)._action]))
                             {
                                 if (sl->GetVehicleKit())
                                     if (sl->GetVehicleKit()->GetPassenger(0) != NULL)
@@ -351,7 +351,7 @@ public:
         {
             me->RemoveAllAuras();
             me->SetSpeed(MOVE_FLIGHT, 3.0f);
-            if (Player* player = Unit::GetPlayer(*me, guid))
+            if (auto player = Unit::GetPlayer(*me, guid))
                 player->CastSpell(me, 84988, true);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
@@ -360,7 +360,7 @@ public:
             if (sleapStreamRefresh <= diff)
             {
                 if (me->GetVehicleKit())
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = me->GetVehicleKit()->GetPassenger(0))
                     {
                         Position pos(*me);
                         passenger->Relocate(&pos);
@@ -448,7 +448,7 @@ public:
             {
                 bool despawn = true;
                 for (std::list<uint64 >::iterator itr = own_stars.begin(); itr != own_stars.end(); itr++)
-                    if (Creature* vortex = Unit::GetCreature(*me, (*itr)))
+                    if (auto vortex = Unit::GetCreature(*me, (*itr)))
                         if (vortex->isAlive())
                         {
                             despawn = false;
@@ -480,7 +480,7 @@ public:
                 orient = fmod(orient + 0.1f, 2.0f * static_cast<float>(M_PI));
                 for (std::list<uint64 >::iterator itr = own_stars.begin(); itr != own_stars.end(); itr++)
                 {
-                    if (Creature* vortex = Unit::GetCreature(*me, (*itr)))
+                    if (auto vortex = Unit::GetCreature(*me, (*itr)))
                     {
                         float x, y;
                         orient += 2 * M_PI / NB_STARS;
@@ -560,7 +560,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             instance->SetData(DATA_GOLDEN_ORB, DONE);
             creature->DespawnOrUnsummon();
@@ -610,7 +610,7 @@ public:
                     _events.RescheduleEvent(EVENT_ASPHYXIATE, urand(22 * IN_MILLISECONDS, 23 * IN_MILLISECONDS));
                     break;
                 case EVENT_HURRICANE:
-                    if (Unit* _target = SelectTarget(SELECT_TARGET_RANDOM, 0, 28.0f, true))
+                    if (auto _target = SelectTarget(SELECT_TARGET_RANDOM, 0, 28.0f, true))
                         DoCast(_target, SPELL_HURRICANE);
                     _events.RescheduleEvent(EVENT_HURRICANE, urand(12 * IN_MILLISECONDS, 13 * IN_MILLISECONDS));
                     break;
@@ -1412,26 +1412,26 @@ public:
                 switch (_eventId)
                 {
                 case EVENT_HOLY_SMITE:
-                    if (Unit* _victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 39.0f, true))
+                    if (auto _victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 39.0f, true))
                         DoCast(_victim, SPELL_HOLY_SMITE);
                     _events.RescheduleEvent(EVENT_HOLY_SMITE, urand(2 * IN_MILLISECONDS, 6 * IN_MILLISECONDS));
                     break;
                 case EVENT_GREATER_HEAL:
                 {
                     _events.RescheduleEvent(EVENT_GREATER_HEAL, 5 * IN_MILLISECONDS);
-                    if (Creature* _ally = me->FindNearestCreature(NPC_EXECUTOR_OF_THE_CALIPH, 35.0f, true))
+                    if (auto _ally = me->FindNearestCreature(NPC_EXECUTOR_OF_THE_CALIPH, 35.0f, true))
                         if (_ally->GetHealthPct() <= 50.0f)
                         {
                             DoCast(_ally, SPELL_GREATER_HEAL);
                             return;
                         }
-                    if (Creature* _ally = me->FindNearestCreature(NPC_SERVANT_OF_ASAAD, 35.0f, true))
+                    if (auto _ally = me->FindNearestCreature(NPC_SERVANT_OF_ASAAD, 35.0f, true))
                         if (_ally->GetHealthPct() <= 50.0f)
                         {
                             DoCast(_ally, SPELL_GREATER_HEAL);
                             return;
                         }
-                    if (Creature* _ally = me->FindNearestCreature(NPC_MINISTER_OF_AIR, 35.0f, true))
+                    if (auto _ally = me->FindNearestCreature(NPC_MINISTER_OF_AIR, 35.0f, true))
                         if (_ally->GetHealthPct() <= 50.0f)
                         {
                             DoCast(_ally, SPELL_GREATER_HEAL);
@@ -1623,7 +1623,7 @@ public:
                 return;
 
             _events.Update(diff);
-            if (Unit* _victim = me->getVictim())
+            if (auto _victim = me->getVictim())
                 if (_victim && _victim->IsWithinLOSInMap(me) && me->GetDistance2d(_victim) <= 25.0f)
                     me->StopMoving();
             if (me->HasUnitState(UNIT_STATE_CASTING))
@@ -1637,7 +1637,7 @@ public:
                     if (me->HasUnitState(UNIT_STATE_CASTING)) _events.RescheduleEvent(_eventId, 250);
                     else
                     {
-                        if (Unit* _target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                        if (auto _target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                             DoCast(_target, SPELL_CYCLONE);
                         _events.RescheduleEvent(EVENT_CYCLONE, urand(18000, 20000));
                     }

@@ -113,7 +113,7 @@ public:
                 for (std::list<uint64>::const_iterator itr = Crystals.begin(); itr != Crystals.end(); ++itr)
                 {
                     //Unit* unit = Unit::GetUnit(*me, FelCrystals[i]);
-                    if (Creature* creature = Unit::GetCreature(*me, *itr))
+                    if (auto creature = Unit::GetCreature(*me, *itr))
                     {
                         if (!creature->isAlive())
                             creature->Respawn();      // Let the core handle setting death state, etc.
@@ -342,7 +342,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
             {
                 Creature* Selin = (Unit::GetCreature(*me, instance->GetData64(DATA_SELIN)));
                 if (Selin && Selin->isAlive())

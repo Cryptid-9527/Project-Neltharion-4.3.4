@@ -250,7 +250,7 @@ public:
         {
             for (uint8 i = 0; i < 3; ++i)
             {
-                if (Creature* add = Unit::GetCreature(*me, SpellBinderGUID[i]))
+                if (auto add = Unit::GetCreature(*me, SpellBinderGUID[i]))
                     add->DisappearAndDie();
 
                 float nx = x;
@@ -398,7 +398,7 @@ public:
             //despawn copy
             if (Demon)
             {
-                if (Creature* pDemon = Unit::GetCreature(*me, Demon))
+                if (auto pDemon = Unit::GetCreature(*me, Demon))
                     pDemon->DespawnOrUnsummon();
             }
             if (instance)
@@ -781,7 +781,7 @@ public:
                 Map::PlayerList const &PlayerList = map->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
                 {
-                    if (Player* i_pl = itr->getSource())
+                    if (auto i_pl = itr->getSource())
                     {
                         bool isCasting = false;
                         for (uint8 i = 0; i < CURRENT_MAX_SPELL; ++i)

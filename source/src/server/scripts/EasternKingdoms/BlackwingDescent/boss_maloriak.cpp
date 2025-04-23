@@ -212,7 +212,7 @@ class boss_maloriak : public CreatureScript
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_FLASH_FREEZE);
 
                 if (me->isAlive())
-                if (Creature* nefarian = me->GetCreature(*me, nefGUID))
+                if (auto nefarian = me->GetCreature(*me, nefGUID))
                 {
                     nefarian->CastSpell(nefarian, SPELL_TELEPORTATION_VISUAL, true);
                     nefarian->DespawnOrUnsummon(1000);
@@ -239,7 +239,7 @@ class boss_maloriak : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* nefarian = me->FindNearestCreature(NPC_NEFARIUS_MALORIAK, 200.f))
+                if (auto nefarian = me->FindNearestCreature(NPC_NEFARIUS_MALORIAK, 200.f))
                 {
                     nefarian->AI()->DoAction(SAY_DEATH);
                 }
@@ -338,29 +338,29 @@ class boss_maloriak : public CreatureScript
                         case PHASE_BLUE:
                             DoCast(me, SPELL_DRINK_BLUE_VIAL);
                             me->AddAura(SPELL_AURA_FROST_IMBUED, me);
-                            if (GameObject* go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
+                            if (auto go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
                                 go->SendCustomAnim(GOBJ_ANIM_BLUE);
                             break;
                         case PHASE_RED:
                             DoCast(me, SPELL_DRINK_RED_VIAL);
                             me->AddAura(SPELL_AURA_FIRE_IMBUED, me);
-                            if (GameObject* go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
+                            if (auto go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
                                 go->SendCustomAnim(GOBJ_ANIM_RED);
                             break;
                         case PHASE_GREEN:
-                            if (Creature* stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
+                            if (auto stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
                             {
                                 stalker->CastSpell((Unit*)NULL, SPELL_DEBILITATING_SLIME_DMG, true);
                                 stalker->CastSpell(stalker, SPELL_DEBILITATING_SLIME_VIS, true);
                                 stalker->CastSpell((Unit*)NULL, SPELL_DEBILITATING_SLIME_KNK, true);
                             }
-                            if (GameObject* go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
+                            if (auto go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
                                 go->SendCustomAnim(GOBJ_ANIM_GREEN);
                             break;
                         case PHASE_BLACK:
                             DoCast(me, SPELL_DRINK_BLACK_VIAL);
                             me->AddAura(SPELL_AURA_SHADOW_IMBUED, me);
-                            if (GameObject* go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
+                            if (auto go = me->FindNearestGameObject(GO_CAULDRON, 20.0f))
                                 go->SendCustomAnim(GOBJ_ANIM_BLACK);
                             break;
                         case PHASE_25:
@@ -394,13 +394,13 @@ class boss_maloriak : public CreatureScript
                 }
 
                 for (uint8 i = 0; i < MAX_ABERRATIONS; ++i)
-                    if (Creature* aberration = me->SummonCreature(NPC_ABERRATION, aberrationSpawn[i]))
+                    if (auto aberration = me->SummonCreature(NPC_ABERRATION, aberrationSpawn[i]))
                         aberration->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                if (Creature* prime = me->SummonCreature(NPC_PRIME_SUBJECT, primeSubjectSpawn[0]))
+                if (auto prime = me->SummonCreature(NPC_PRIME_SUBJECT, primeSubjectSpawn[0]))
                     prime->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                if (Creature* prime = me->SummonCreature(NPC_PRIME_SUBJECT, primeSubjectSpawn[1]))
+                if (auto prime = me->SummonCreature(NPC_PRIME_SUBJECT, primeSubjectSpawn[1]))
                     prime->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             }
 
@@ -505,7 +505,7 @@ class boss_maloriak : public CreatureScript
                                 Talk(SAY_RED_PHASE);
                                 events.ScheduleEvent(EVENT_CONSUMING_FLAMES, 10000, EVENT_GROUP_RED);
                                 events.ScheduleEvent(EVENT_SCORCHING_BLAST, 20000, EVENT_GROUP_RED);
-                                if (Creature* stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
+                                if (auto stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
                                     DoCast(stalker, SPELL_THROW_RED, true);
                                 break;
                             case PHASE_BLUE:
@@ -513,21 +513,21 @@ class boss_maloriak : public CreatureScript
                                 Talk(SAY_BLUE_PHASE);
                                 events.ScheduleEvent(EVENT_BITING_CHILL, 20000, EVENT_GROUP_BLUE);
                                 events.ScheduleEvent(EVENT_FLASH_FREEZE, 15000, EVENT_GROUP_BLUE);
-                                if (Creature* stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
+                                if (auto stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
                                     DoCast(stalker, SPELL_THROW_BLUE, true);
                                 break;
                             case PHASE_GREEN:
                                 Talk(EMOTE_GREEN_BOTTLE);
                                 Talk(SAY_GREEN_PHASE);
-                                if (Creature* stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
+                                if (auto stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 30.0f))
                                     DoCast(stalker, SPELL_THROW_GREEN, true);
                                 break;
                             case PHASE_BLACK:
                             {
                                 events.ScheduleEvent(EVENT_ENGULFING_DARKNESS, 4500, EVENT_GROUP_BLACK);
                                 events.ScheduleEvent(EVENT_VIL_RATA, 0, EVENT_GROUP_BLACK);
-                                if (Creature* nefarian = me->GetCreature(*me, nefGUID))
-                                    if (Creature* stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 50.0f))
+                                if (auto nefarian = me->GetCreature(*me, nefGUID))
+                                    if (auto stalker = me->FindNearestCreature(NPC_CAULDRON_STALKER, 50.0f))
                                     {
                                         nefarian->AI()->DoAction(PHASE_BLACK);
                                         nefarian->CastSpell(stalker, SPELL_THROW_BLACK, true);
@@ -548,7 +548,7 @@ class boss_maloriak : public CreatureScript
                         else
                             events.ScheduleEvent(EVENT_NEXT_VIAL, phase == PHASE_BLACK ? 90000 : 50000);
                         me->SetReactState(REACT_AGGRESSIVE);
-                        if (Unit* victim = me->getVictim())
+                        if (auto victim = me->getVictim())
                         {
                             me->SetUInt64Value(UNIT_FIELD_TARGET, victim->GetGUID());
                             DoStartMovement(victim);
@@ -676,9 +676,9 @@ public:
                 me->RemoveAurasDueToSpell(SPELL_DROWNED_STATE);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                 DoCast(me, SPELL_GROWTH_CATALYST);
-                if (GameObject* chamber = me->FindNearestGameObject(GO_LARGE_CHAMBER, 10.0f))
+                if (auto chamber = me->FindNearestGameObject(GO_LARGE_CHAMBER, 10.0f))
                     chamber->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
-                if (Creature* releaseTrigger = me->FindNearestCreature(NPC_RELEASE_TRIGGER, 100.0f, true))
+                if (auto releaseTrigger = me->FindNearestCreature(NPC_RELEASE_TRIGGER, 100.0f, true))
                     me->GetMotionMaster()->MoveJump(releaseTrigger->GetPositionX(), releaseTrigger->GetPositionY(), releaseTrigger->GetPositionZ(), 20.0f, 20.0f, POINT_RELEASE);
             }
         }
@@ -759,9 +759,9 @@ public:
                 me->RemoveAurasDueToSpell(SPELL_DROWNED_STATE);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                 DoCast(me, SPELL_GROWTH_CATALYST);
-                if (GameObject* chamber = me->FindNearestGameObject(GO_SMALL_CHAMBER, 10.0f))
+                if (auto chamber = me->FindNearestGameObject(GO_SMALL_CHAMBER, 10.0f))
                     chamber->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
-                if (Creature* releaseTrigger = me->FindNearestCreature(NPC_RELEASE_TRIGGER, 100.0f, true))
+                if (auto releaseTrigger = me->FindNearestCreature(NPC_RELEASE_TRIGGER, 100.0f, true))
                     me->GetMotionMaster()->MoveJump(releaseTrigger->GetPositionX(), releaseTrigger->GetPositionY(), releaseTrigger->GetPositionZ(), 10.0f, 10.0f, POINT_RELEASE);
             }
         }
@@ -804,7 +804,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* maloriak = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_MALORIAK)))
+            if (auto maloriak = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_MALORIAK)))
                 maloriak->AI()->JustSummoned(me);
 
             DoCast(me, SPELL_FLASH_FREEZE_VIS, true);
@@ -925,10 +925,10 @@ class spell_maloriak_magma_jets_periodic : public SpellScriptLoader
                 float dist = aurEff->GetTickNumber() * 5.0f;
                 Position pos;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     caster->GetNearPosition(pos, dist, 0.0f);
-                    if (Creature* summon = caster->SummonCreature(NPC_MAGMA_JET, pos, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                    if (auto summon = caster->SummonCreature(NPC_MAGMA_JET, pos, TEMPSUMMON_TIMED_DESPAWN, 20000))
                         summon->CastSpell(summon, SPELL_MAGMA_JETS_EFF, true);
                 }
             }
@@ -998,13 +998,13 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Unit *target = GetHitUnit())
                 {
                     Map::PlayerList const& players = caster->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (target->GetDistance(player) < 5.0f || target->GetGUID() == player->GetGUID())
                                 {
                                     player->CastSpell(player, SPELL_FLASH_FREEZE_SUMMON, true);
@@ -1302,7 +1302,7 @@ class spell_maloriak_vil_rata_periodic : public SpellScriptLoader
 
             void HandleEffectPeriodic(AuraEffect const* aurEff)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     float x, y;
                     caster->GetNearPoint2D(x, y, 3.0f, (float)(M_PI * (float)aurEff->GetTickNumber() / (float)aurEff->GetTotalTicks()));

@@ -287,7 +287,7 @@ void MotionMaster::MoveFollow(Unit* target, float dist, float angle, MovementSlo
 
 void MotionMaster::MovePoint(uint32 id, float x, float y, float z, bool generatePath, float speed, bool fixedOrientation)
 {
-    if (Creature* c = _owner->ToCreature())
+    if (auto c = _owner->ToCreature())
         if (c->GetCreatureTemplate())
             if (c->GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_IGNORE_PATHFINDING)
                 generatePath = false;

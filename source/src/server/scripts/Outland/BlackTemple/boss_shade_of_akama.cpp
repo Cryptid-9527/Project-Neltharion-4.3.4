@@ -254,7 +254,7 @@ public:
             Sorcerers.clear();
             summons.DespawnAll();//despawn all adds
 
-            if (Creature* Akama = Unit::GetCreature(*me, AkamaGUID))
+            if (auto Akama = Unit::GetCreature(*me, AkamaGUID))
             {
                 Akama->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);//turn gossip on so players can restart the event
                 if (Akama->isDead())
@@ -417,7 +417,7 @@ public:
             }
 
             for (std::list<uint64>::const_iterator itr = Channelers.begin(); itr != Channelers.end(); ++itr)
-                if (Creature* Channeler = (Unit::GetCreature(*me, *itr)))
+                if (auto Channeler = (Unit::GetCreature(*me, *itr)))
                     Channeler->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         }
 
@@ -447,7 +447,7 @@ public:
                         bool move = true;
                         if (AkamaGUID)
                         {
-                            if (Creature* Akama = Unit::GetCreature(*me, AkamaGUID))
+                            if (auto Akama = Unit::GetCreature(*me, AkamaGUID))
                             {
                                 float x, y, z;
                                 Akama->GetPosition(x, y, z);
@@ -695,7 +695,7 @@ public:
                     break;
 
                 case 1:
-                    if (Creature* Shade = Unit::GetCreature(*me, ShadeGUID))
+                    if (auto Shade = Unit::GetCreature(*me, ShadeGUID))
                     {
                         me->SetTarget(ShadeGUID);
                         DoCast(Shade, SPELL_AKAMA_SOUL_RETRIEVE);
@@ -838,7 +838,7 @@ public:
                         {
                             bool Yelled = false;
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* unit = Unit::GetCreature(*me, *itr))
+                                if (auto unit = Unit::GetCreature(*me, *itr))
                                 {
                                     if (!Yelled)
                                     {
@@ -855,7 +855,7 @@ public:
                         if (!BrokenList.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* unit = Unit::GetCreature(*me, *itr))
+                                if (auto unit = Unit::GetCreature(*me, *itr))
                                     // This is the incorrect spell, but can't seem to find the right one.
                                     unit->CastSpell(unit, 39656, true);
                         }
@@ -866,7 +866,7 @@ public:
                         if (!BrokenList.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* unit = Unit::GetCreature((*me), *itr))
+                                if (auto unit = Unit::GetCreature((*me), *itr))
                                     unit->AI()->Talk(SAY_BROKEN_FREE_02);
                         }
                         SoulRetrieveTimer = 0;

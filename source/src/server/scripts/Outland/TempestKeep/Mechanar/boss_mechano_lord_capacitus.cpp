@@ -184,7 +184,7 @@ class spell_capacitus_polarity_charge : public SpellScriptLoader
                 uint8 count = 0;
                 for (std::list<WorldObject*>::iterator ihit = targetList.begin(); ihit != targetList.end(); ++ihit)
                     if ((*ihit)->GetGUID() != GetCaster()->GetGUID())
-                        if (Player* target = (*ihit)->ToPlayer())
+                        if (auto target = (*ihit)->ToPlayer())
                             if (target->HasAura(GetTriggeringSpell()->Id))
                                 ++count;
 

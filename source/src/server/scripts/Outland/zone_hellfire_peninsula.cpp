@@ -177,7 +177,7 @@ public:
         void MoveInLineOfSight(Unit* who)
         {
             if (!pRyga && who->GetEntry() == NPC_RYGA && me->IsWithinDistInMap(who, 15.0f))
-                if (Creature* temp = who->ToCreature())
+                if (auto temp = who->ToCreature())
                     pRyga = temp;
 
             npc_escortAI::MoveInLineOfSight(who);
@@ -477,12 +477,12 @@ public:
             if (uiType != POINT_MOTION_TYPE || uiId != 1)
                 return;
 
-            if (Creature* pHelboar = me->GetCreature(*me, uiHelboarGUID))
+            if (auto pHelboar = me->GetCreature(*me, uiHelboarGUID))
             {
                 pHelboar->RemoveCorpse();
                 DoCast(SPELL_SUMMON_POO);
 
-                if (Player* owner = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto owner = me->GetCharmerOrOwnerPlayerOrPlayerItself())
                     me->GetMotionMaster()->MoveFollow(owner, 0.0f, 0.0f);
             }
         }
@@ -491,7 +491,7 @@ public:
         {
             if (uiCheckTimer <= uiDiff)
             {
-                if (Creature* pHelboar = me->FindNearestCreature(NPC_DERANGED_HELBOAR, 10.0f, false))
+                if (auto pHelboar = me->FindNearestCreature(NPC_DERANGED_HELBOAR, 10.0f, false))
                 {
                     if (pHelboar->GetGUID() != uiHelboarGUID && me->GetMotionMaster()->GetCurrentMovementGeneratorType() != POINT_MOTION_TYPE && !me->FindCurrentSpellBySpellId(SPELL_SUMMON_POO))
                     {

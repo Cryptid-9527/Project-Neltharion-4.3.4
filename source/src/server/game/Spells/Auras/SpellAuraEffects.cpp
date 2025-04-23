@@ -480,7 +480,7 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
     // check item enchant aura cast
     if (!amount && caster)
         if (uint64 itemGUID = GetBase()->GetCastItemGUID())
-            if (Player* playerCaster = caster->ToPlayer())
+            if (auto playerCaster = caster->ToPlayer())
                 if (Item* castItem = playerCaster->GetItemByGuid(itemGUID))
                     if (castItem->GetItemSuffixFactor())
                     {
@@ -897,7 +897,7 @@ void AuraEffect::HandleEffect(Unit* target, uint8 mode, bool apply)
    // ASSERT(aurApp);
     if (!aurApp)
     {
-        if (Player* player = target->ToPlayer())
+        if (auto player = target->ToPlayer())
             TC_LOG_ERROR("spells", "AuraEffect::HandleEffect no AuraApp: %d on playerTarget: %s, %d", GetId(), player->GetName().c_str(), player->GetGUIDLow());
         else
             TC_LOG_ERROR("spells", "AuraEffect::HandleEffect no AuraApp: %d on unitTarget: %s, %d", GetId(), target->GetName().c_str(), target->GetEntry());
@@ -1154,7 +1154,7 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
             switch (GetId())
             {
             case 82327: // Holy radiance
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(GetBase()->GetUnitOwner(), 86452, true);
                 break;
             }
@@ -1205,7 +1205,7 @@ bool AuraEffect::IsAffectingSpell(SpellInfo const* spell) const
     switch (GetId())
     {
     case 44544: // Fingers of frost
-        if (Unit* owner = GetBase()->GetUnitOwner())
+        if (auto owner = GetBase()->GetUnitOwner())
             if (spell->Id == 44614 && owner->HasAura(57761))
                 return true;
         break;
@@ -1542,7 +1542,7 @@ void AuraEffect::HandleShapeshiftBoosts(Unit* target, bool apply) const
             target->RemoveOwnedAura(spellId2, target->GetGUID());
 
         // Improved Barkskin - apply/remove armor bonus due to shapeshift
-        if (Player* player=target->ToPlayer())
+        if (auto player=target->ToPlayer())
         {
             if (player->HasSpell(63410) || player->HasSpell(63411))
             {
@@ -1821,7 +1821,7 @@ void AuraEffect::HandlePhase(AuraApplication const* aurApp, uint8 mode, bool app
 
     Unit* target = aurApp->GetTarget();
 
-    if (Player* player = target->ToPlayer())
+    if (auto player = target->ToPlayer())
     {
         if (apply)
             player->GetPhaseMgr().RegisterPhasingAuraEffect(this);
@@ -1839,7 +1839,7 @@ void AuraEffect::HandlePhase(AuraApplication const* aurApp, uint8 mode, bool app
         if (!newPhase)
         {
             newPhase = PHASEMASK_NORMAL;
-            if (Creature* creature = target->ToCreature())
+            if (auto creature = target->ToCreature())
                 if (CreatureData const* data = sObjectMgr->GetCreatureData(creature->GetDBTableGUIDLow()))
                     newPhase = data->phaseMask;
         }
@@ -1960,7 +1960,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
                 if (target->IsPolymorphed())
                     target->RemoveAurasDueToSpell(target->getTransForm());
 
-                if (Player* player = target->ToPlayer())
+                if (auto player = target->ToPlayer())
                     player->UpdateArmorSpecialization();
                 break;
             }
@@ -2038,7 +2038,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             target->SetShapeshiftForm(FORM_NONE);
             if (target->getClass() == CLASS_DRUID)
             {
-                if (Player* player = target->ToPlayer())
+                if (auto player = target->ToPlayer())
                     player->UpdateArmorSpecialization();
                 target->setPowerType(POWER_MANA);
                 if (oldForm == FORM_MOONKIN)
@@ -2319,7 +2319,7 @@ void AuraEffect::HandleAuraTransform(AuraApplication const* aurApp, uint8 mode, 
                     // Polymorph (sheep)
                     if (GetSpellInfo()->SpellFamilyName == SPELLFAMILY_MAGE && GetSpellInfo()->SpellIconID == 82 && GetSpellInfo()->SpellVisual[0] == 12978)
                     {
-                        if (Unit* caster = GetCaster())
+                        if (auto caster = GetCaster())
                         {
                             if (caster->HasAura(52648))         // Glyph of the Penguin
                             {
@@ -3143,7 +3143,7 @@ void AuraEffect::HandleAuraModStun(AuraApplication const* aurApp, uint8 mode, bo
 
     Unit* target = aurApp->GetTarget();
 
-    if (Creature* c = target->ToCreature())
+    if (auto c = target->ToCreature())
         if (c && c->GetScriptName() == "npc_training_dummy")
         return;
 
@@ -3822,7 +3822,7 @@ void AuraEffect::HandleAuraModEffectImmunity(AuraApplication const* aurApp, uint
         {
             if (target->ToPlayer()->InBattleground())
             {
-                if (Battleground* bg = target->ToPlayer()->GetBattleground())
+                if (auto bg = target->ToPlayer()->GetBattleground())
                     bg->EventPlayerDroppedFlag(target->ToPlayer());
             }
             else
@@ -5118,7 +5118,7 @@ void AuraEffect::HandleModDamageDone(AuraApplication const* aurApp, uint8 mode, 
     }
     else if (target->isPet())
     {
-        if (Unit* owner = target->GetOwner())
+        if (auto owner = target->GetOwner())
             owner->ApplyModUInt32Value(PLAYER_PET_SPELL_POWER, GetAmount(), apply);
     }
 }
@@ -5298,7 +5298,7 @@ void AuraEffect::HandleAuraRetainComboPoints(AuraApplication const* aurApp, uint
     // combo points was added in SPELL_EFFECT_ADD_COMBO_POINTS handler
     // remove only if aura expire by time (in case combo points amount change aura removed without combo points lost)
     if (!(apply) && GetBase()->GetDuration() == 0 && target->ToPlayer()->GetComboTarget())
-        if (Unit* unit = ObjectAccessor::GetUnit(*target, target->ToPlayer()->GetComboTarget()))
+        if (auto unit = ObjectAccessor::GetUnit(*target, target->ToPlayer()->GetComboTarget()))
             target->ToPlayer()->AddComboPoints(unit, -GetAmount());
 }
 
@@ -5464,7 +5464,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     // Waiting to resurrect spell cancel, we must remove player from resurrect queue
                     if (target->GetTypeId() == TYPEID_PLAYER)
                     {
-                        if (Battleground* bg = target->ToPlayer()->GetBattleground())
+                        if (auto bg = target->ToPlayer()->GetBattleground())
                             bg->RemovePlayerFromResurrectQueue(target->GetGUID(), (mode & AURA_EFFECT_HANDLE_REAPPLY) != 0);
                         if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(target->GetZoneId()))
                             bf->RemovePlayerFromResurrectQueue(target->GetGUID());
@@ -6150,7 +6150,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
             if (target->GetMap()->IsDungeon() && int(target->GetAppliedAuras().count(62399)) >= (target->GetMap()->IsHeroic() ? 4 : 2))
             {
                 target->CastSpell(target, 62475, true); // System Shutdown
-                if (Unit* veh = target->GetVehicleBase())
+                if (auto veh = target->GetVehicleBase())
                     veh->CastSpell(target, 62475, true);
             }
             break;
@@ -6201,7 +6201,7 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                 }
             case 105737:
                 {
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                     {
                         // Converts up to 10 rage per second into health for $d.Each point of rage is converted into ${ $m2 / 10 }.1% of max health.
                         // Should be manauser
@@ -6587,12 +6587,12 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
 
                 if (permafrostCaster)
                 {
-                    if (Creature* permafrostCasterCreature = permafrostCaster->ToCreature())
+                    if (auto permafrostCasterCreature = permafrostCaster->ToCreature())
                         permafrostCasterCreature->DespawnOrUnsummon(3000);
 
                     target->CastSpell(target, 66181, false);
                     target->RemoveAllAuras();
-                    if (Creature* targetCreature = target->ToCreature())
+                    if (auto targetCreature = target->ToCreature())
                         targetCreature->DisappearAndDie();
                 }
                 break;
@@ -6669,7 +6669,7 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                     break;
 
                 // Glyph of Power Word: Barrier
-                if (Unit* owner = caster->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto owner = caster->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
                     if (owner->HasAura(55689))
                         break;
@@ -6715,7 +6715,7 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
 
     if (triggeredSpellInfo)
     {
-        if (Unit* triggerCaster = triggeredSpellInfo->NeedsToBeTriggeredByCaster() ? caster : target)
+        if (auto triggerCaster = triggeredSpellInfo->NeedsToBeTriggeredByCaster() ? caster : target)
         {
             triggerCaster->CastSpell(target, triggeredSpellInfo, true, NULL, this);
             TC_LOG_DEBUG("spells", "AuraEffect::HandlePeriodicTriggerSpellAuraTick: Spell %u Trigger %u", GetId(), triggeredSpellInfo->Id);
@@ -6735,7 +6735,7 @@ void AuraEffect::HandlePeriodicTriggerSpellWithValueAuraTick(Unit* target, Unit*
     uint32 triggerSpellId = GetSpellInfo()->Effects[m_effIndex].TriggerSpell;
     if (SpellInfo const* triggeredSpellInfo = sSpellMgr->GetSpellInfo(triggerSpellId))
     {
-        if (Unit* triggerCaster = triggeredSpellInfo->NeedsToBeTriggeredByCaster() ? caster : target)
+        if (auto triggerCaster = triggeredSpellInfo->NeedsToBeTriggeredByCaster() ? caster : target)
         {
             int32 basepoints0 = GetAmount();
             triggerCaster->CastCustomSpell(target, triggerSpellId, &basepoints0, 0, 0, true, 0, this);
@@ -7084,7 +7084,7 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
             damage /= float(GetTotalTicks());  
 
         // Apply mods like field dressing
-        if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DOT, damage);
 
         damage = uint32(damage * TakenTotalMod);
@@ -7403,11 +7403,11 @@ void AuraEffect::HandleRaidProcFromChargeAuraProc(AuraApplication* aurApp, ProcE
     // next target selection
     if (jumps > 0)
     {
-        if (Unit* caster = GetCaster())
+        if (auto caster = GetCaster())
         {
             float radius = GetSpellInfo()->Effects[GetEffIndex()].CalcRadius(caster);
 
-            if (Unit* triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
+            if (auto triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
             {
                 target->CastSpell(triggerTarget, GetSpellInfo(), true, NULL, this, GetCasterGUID());
                 if (Aura* aura = triggerTarget->GetAura(GetId(), GetCasterGUID()))
@@ -7444,11 +7444,11 @@ void AuraEffect::HandleRaidProcFromChargeWithValueAuraProc(AuraApplication* aurA
     // next target selection
     if (jumps > 0)
     {
-        if (Unit* caster = GetCaster())
+        if (auto caster = GetCaster())
         {
             float radius = GetSpellInfo()->Effects[GetEffIndex()].CalcRadius(caster);
 
-            if (Unit* triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
+            if (auto triggerTarget = target->GetNextRandomRaidMemberOrPet(radius))
             {
                 target->CastCustomSpell(triggerTarget, GetId(), &value, NULL, NULL, true, NULL, this, GetCasterGUID());
                 if (Aura* aura = triggerTarget->GetAura(GetId(), GetCasterGUID()))

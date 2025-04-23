@@ -191,7 +191,7 @@ class boss_tyrannus : public CreatureScript
             void EnterEvadeMode()
             {
                 instance->SetBossState(DATA_TYRANNUS, FAIL);
-                if (Creature* rimefang = GetRimefang())
+                if (auto rimefang = GetRimefang())
                     rimefang->AI()->EnterEvadeMode();
 
                 me->DespawnOrUnsummon();
@@ -213,7 +213,7 @@ class boss_tyrannus : public CreatureScript
                     summ->SetTempSummonType(TEMPSUMMON_DEAD_DESPAWN);
 
                 // Stop combat for Rimefang
-                if (Creature* rimefang = GetRimefang())
+                if (auto rimefang = GetRimefang())
                     rimefang->AI()->DoAction(ACTION_END_COMBAT);
             }
 
@@ -314,7 +314,7 @@ class boss_tyrannus : public CreatureScript
                             me->GetMotionMaster()->MovePoint(0, miscPos);
                             break;
                         case EVENT_COMBAT_START:
-                            if (Creature* rimefang = me->GetCreature(*me, instance->GetData64(DATA_RIMEFANG)))
+                            if (auto rimefang = me->GetCreature(*me, instance->GetData64(DATA_RIMEFANG)))
                                 rimefang->AI()->DoAction(ACTION_START_RIMEFANG);    //set rimefang also infight
                             events.SetPhase(PHASE_COMBAT);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -326,7 +326,7 @@ class boss_tyrannus : public CreatureScript
                             events.ScheduleEvent(EVENT_MARK_OF_RIMEFANG, urand(25000, 27000));
                             break;
                         case EVENT_OVERLORD_BRAND:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_OVERLORD_BRAND);
                             events.ScheduleEvent(EVENT_OVERLORD_BRAND, urand(11000, 12000));
                             break;
@@ -342,7 +342,7 @@ class boss_tyrannus : public CreatureScript
                             break;
                         case EVENT_MARK_OF_RIMEFANG:
                             Talk(SAY_MARK_RIMEFANG_1);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                             {
                                 Talk(SAY_MARK_RIMEFANG_2, target->GetGUID());
                                 DoCast(target, SPELL_MARK_OF_RIMEFANG);
@@ -438,12 +438,12 @@ class boss_rimefang : public CreatureScript
                             _events.ScheduleEvent(EVENT_MOVE_NEXT, 2000, 0, PHASE_COMBAT);
                             break;
                         case EVENT_ICY_BLAST:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_ICY_BLAST);
                             _events.ScheduleEvent(EVENT_ICY_BLAST, 15000, 0, PHASE_COMBAT);
                             break;
                         case EVENT_HOARFROST:
-                            if (Unit* target = me->GetUnit(*me, _hoarfrostTargetGUID))
+                            if (auto target = me->GetUnit(*me, _hoarfrostTargetGUID))
                             {
                                 DoCast(target, SPELL_HOARFROST);
                                 _hoarfrostTargetGUID = 0;
@@ -560,8 +560,8 @@ class spell_tyrannus_mark_of_rimefang : public SpellScriptLoader
                 if (!caster || caster->GetTypeId() != TYPEID_UNIT)
                     return;
 
-                if (InstanceScript* instance = caster->GetInstanceScript())
-                    if (Creature* rimefang = ObjectAccessor::GetCreature(*caster, instance->GetData64(DATA_RIMEFANG)))
+                if (auto instance = caster->GetInstanceScript())
+                    if (auto rimefang = ObjectAccessor::GetCreature(*caster, instance->GetData64(DATA_RIMEFANG)))
                         rimefang->AI()->SetGUID(GetTarget()->GetGUID(), GUID_HOARFROST);
             }
 
@@ -625,7 +625,7 @@ class at_tyrannus_event_starter : public AreaTriggerScript
                 return false;
 
             if (instance->GetBossState(DATA_TYRANNUS) != IN_PROGRESS && !instance->IsDone(DATA_TYRANNUS))
-                if (Creature* tyrannus = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS)))
+                if (auto tyrannus = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS)))
                 {
                     tyrannus->AI()->DoAction(ACTION_START_INTRO);
                     return true;
@@ -647,7 +647,7 @@ class at_tyrannus_en_event_starter : public AreaTriggerScript
             if (player->isGameMaster() || !instance)
                 return false;
 
-            if (Creature* tyrannusEvent = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS_EVENT)))
+            if (auto tyrannusEvent = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS_EVENT)))
                 if (tyrannusEvent->GetVehicleKit())
                     if (tyrannusEvent->GetVehicleKit()->GetPassenger(0))
                         if (Creature *tyrannus = tyrannusEvent->GetVehicleKit()->GetPassenger(0)->ToCreature())
@@ -672,7 +672,7 @@ class at_tyrannus_ga_event_starter : public AreaTriggerScript
             if (player->isGameMaster() || !instance)
                 return false;
 
-            if (Creature* tyrannusEvent = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS_EVENT)))
+            if (auto tyrannusEvent = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_TYRANNUS_EVENT)))
                 if (tyrannusEvent->GetVehicleKit())
                     if (tyrannusEvent->GetVehicleKit()->GetPassenger(0))
                         if (Creature *tyrannus = tyrannusEvent->GetVehicleKit()->GetPassenger(0)->ToCreature())

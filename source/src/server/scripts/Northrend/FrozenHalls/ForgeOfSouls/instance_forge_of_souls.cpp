@@ -50,7 +50,7 @@ class instance_forge_of_souls : public InstanceMapScript
 
                 Map::PlayerList const &players = instance->GetPlayers();
                 if (!players.isEmpty())
-                    if (Player* player = players.begin()->getSource())
+                    if (auto player = players.begin()->getSource())
                         teamInInstance = player->GetTeam();
 
                 switch (creature->GetEntry())

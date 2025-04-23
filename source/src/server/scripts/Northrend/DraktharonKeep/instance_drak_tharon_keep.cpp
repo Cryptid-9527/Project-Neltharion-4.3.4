@@ -255,7 +255,7 @@ public:
 
             if (unit->GetEntry() == NPC_CRYSTAL_HANDLER)
                 if (novosGUID)
-                    if (Creature* novos = instance->GetCreature(novosGUID))
+                    if (auto novos = instance->GetCreature(novosGUID))
                         novos->AI()->DoAction(ACTION_CRYSTAL_HANDLER_DIED);
         }
 

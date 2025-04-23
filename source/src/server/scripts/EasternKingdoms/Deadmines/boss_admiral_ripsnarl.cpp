@@ -195,7 +195,7 @@ public:
             _JustDied();
 
 
-            if (Creature* creature = me->FindNearestCreature(NPC_CAPTAIN_COOKIE, 500.f, true))
+            if (auto creature = me->FindNearestCreature(NPC_CAPTAIN_COOKIE, 500.f, true))
                 creature->AI()->DoAction(ACTION_ACTIVATE);
         }
 

@@ -98,7 +98,7 @@ class boss_arcanist_doan : public CreatureScript
                             events.ScheduleEvent(EVENT_SILENCE, 8 * IN_MILLISECONDS);
                             break;
                         case EVENT_POLYMORPH:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 30.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 30.0f, true))
                                 DoCast(target, SPELL_POLYMORPH);
                             events.ScheduleEvent(EVENT_POLYMORPH, 20 * IN_MILLISECONDS);
                             break;

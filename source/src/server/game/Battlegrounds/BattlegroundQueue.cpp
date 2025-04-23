@@ -179,7 +179,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
     //add players from group to ginfo
     if (grp)
     {
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -207,7 +207,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
         //announce to world, this code needs mutex
         if (!isRated && !isPremade && sWorld->getBoolConfig(CONFIG_BATTLEGROUND_QUEUE_ANNOUNCER_ENABLE))
         {
-            if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(ginfo->BgTypeId))
+            if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(ginfo->BgTypeId))
             {
                 if (sWorld->getBoolConfig(BATTLEGROUND_CROSSFACTION_ENABLED))
                 {
@@ -215,7 +215,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
                     uint32 MinPlayers = bg->GetMinPlayersPerTeam()*2;
 
                     if (ginfo->BgTypeId == BATTLEGROUND_RB)
-                        if (Battleground* randomBg = sBattlegroundMgr->GetBattlegroundTemplate(GetNextRandomBattleground()))
+                        if (auto randomBg = sBattlegroundMgr->GetBattlegroundTemplate(GetNextRandomBattleground()))
                             MinPlayers = randomBg->GetMinPlayersPerTeam() * 2;
 
                     uint32 qPlayers = 0;
@@ -239,7 +239,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
                     char const* bgName = bg->GetName();
                     uint32 MinPlayers = bg->GetMinPlayersPerTeam();
                     if (ginfo->BgTypeId == BATTLEGROUND_RB)
-                        if (Battleground* randomBg = sBattlegroundMgr->GetBattlegroundTemplate(GetNextRandomBattleground()))
+                        if (auto randomBg = sBattlegroundMgr->GetBattlegroundTemplate(GetNextRandomBattleground()))
                             MinPlayers = randomBg->GetMinPlayersPerTeam();
                     uint32 qHorde = 0;
                     uint32 qAlliance = 0;
@@ -281,7 +281,7 @@ WarGameGroupQueueInfo BattlegroundQueue::AddWarGameGroup(Group* groupA, Group* g
     for (uint8 i = 0; i < 2; ++i)
     {
         loopGroup = i == 0 ? groupA : groupB;
-        for (GroupReference* itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -413,7 +413,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
         if ((*itr).IsPlayerIn(guid, &team, true))
         {
             if (decreaseInvitedCount && (*itr).IsInvitedToBGInstanceGUID)
-                if (Battleground* bg = sBattlegroundMgr->GetBattleground((*itr).IsInvitedToBGInstanceGUID, (*itr).BgTypeId))
+                if (auto bg = sBattlegroundMgr->GetBattleground((*itr).IsInvitedToBGInstanceGUID, (*itr).BgTypeId))
                     bg->DecreaseInvitedCount(team);
 
             if ((*itr).TeamA.empty() && (*itr).TeamB.empty())
@@ -500,7 +500,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
 
     // if invited to bg, and should decrease invited count, then do it
     if (decreaseInvitedCount && group->IsInvitedToBGInstanceGUID)
-        if (Battleground* bg = sBattlegroundMgr->GetBattleground(group->IsInvitedToBGInstanceGUID, group->BgTypeId))
+        if (auto bg = sBattlegroundMgr->GetBattleground(group->IsInvitedToBGInstanceGUID, group->BgTypeId))
             bg->DecreaseInvitedCount(group->Team);
 
     // remove player queue info
@@ -522,7 +522,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
                 bg->AddEmptyPlayerScoresForGUID(guid, group->Team);
 
             TC_LOG_DEBUG("bg.battleground", "UPDATING memberLost's personal arena rating for %u by opponents rating: %u", GUID_LOPART(guid), group->OpponentsTeamRating);
-            if (Player* player = ObjectAccessor::FindPlayer(guid))
+            if (auto player = ObjectAccessor::FindPlayer(guid))
                 at->MemberLost(player, group->OpponentsMatchmakerRating);
             else
                 at->OfflineMemberLost(guid, group->OpponentsMatchmakerRating);
@@ -545,7 +545,7 @@ void BattlegroundQueue::RemovePlayer(uint64 guid, bool decreaseInvitedCount)
     {
         // remove next player, this is recursive
         // first send removal information
-        if (Player* plr2 = ObjectAccessor::FindPlayer(group->Players.begin()->first))
+        if (auto plr2 = ObjectAccessor::FindPlayer(group->Players.begin()->first))
         {
             Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(group->BgTypeId);
             BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(group->BgTypeId, group->ArenaType);
@@ -1010,7 +1010,7 @@ void BattlegroundQueue::IncreaseTeamMMrRange(GroupQueueInfo* ginfo)
         {
             uint32 minRating = std::max(0, int32(ginfo->ArenaMatchmakerRating - completeRange));
             uint32 maxRating = std::min(int32(ginfo->ArenaMatchmakerRating + completeRange), 4000);
-            if (Player* plr = sObjectAccessor->FindPlayer(itr->first))
+            if (auto plr = sObjectAccessor->FindPlayer(itr->first))
                 ChatHandler(plr->GetSession()).PSendSysMessage("The Matchmaking system will now try to find enemy teams between %i and %i Matchmaking Rating", minRating, maxRating);
         }
     }

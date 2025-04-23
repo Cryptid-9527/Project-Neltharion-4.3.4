@@ -124,7 +124,7 @@ enum Events
             {
                 Talk(SAY_DEATH);
 
-                if (Creature* tyrannus = me->GetCreature(*me, instance->GetData64(DATA_TYRANNUS)))
+                if (auto tyrannus = me->GetCreature(*me, instance->GetData64(DATA_TYRANNUS)))
                     tyrannus->AI()->Talk(SAY_TYRANNUS_DEATH);
 
                 instance->SetBossState(DATA_GARFROST, DONE);
@@ -201,7 +201,7 @@ enum Events
                     switch (eventId)
                     {
                         case EVENT_THROW_SARONITE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             {
                                 Talk(SAY_THROW_SARONITE, target->GetGUID());
                                 DoCast(target, SPELL_THROW_SARONITE);
@@ -213,7 +213,7 @@ enum Events
                             events.ScheduleEvent(EVENT_CHILLING_WAVE, 40000, 0, PHASE_TWO);
                             break;
                         case EVENT_DEEP_FREEZE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             {
                                 Talk(SAY_CAST_DEEP_FREEZE, target->GetGUID());
                                 DoCast(target, SPELL_DEEP_FREEZE);
@@ -269,7 +269,7 @@ class spell_garfrost_permafrost : public SpellScriptLoader
 
             void PreventHitByLoS()
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     Unit* caster = GetCaster();
                     //Temporary Line of Sight Check
@@ -299,7 +299,7 @@ class spell_garfrost_permafrost : public SpellScriptLoader
 
             void RestoreImmunity()
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     target->ApplySpellImmune(GetSpellInfo()->Id, IMMUNITY_ID, GetSpellInfo()->Id, false);
                     if (prevented)
@@ -330,7 +330,7 @@ class achievement_doesnt_go_to_eleven : public AchievementCriteriaScript
         bool OnCheck(Player* /*source*/, Unit* target)
         {
             if (target)
-                if (Creature* garfrost = target->ToCreature())
+                if (auto garfrost = target->ToCreature())
                     if (garfrost->AI()->GetData(ACHIEV_DOESNT_GO_TO_ELEVEN) <= 10)
                         return true;
 

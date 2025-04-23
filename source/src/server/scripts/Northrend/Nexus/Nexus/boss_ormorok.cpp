@@ -138,7 +138,7 @@ public:
                     events.ScheduleEvent(EVENT_CRYSTAL_SPIKES, 12000);
                     break;
                 case EVENT_CRYSTALLINE_TANGLER:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, OrmorokTanglerPredicate(me)))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, OrmorokTanglerPredicate(me)))
                         DoCast(target, SPELL_SUMMON_CRYSTALLINE_TANGLER);
                     events.ScheduleEvent(EVENT_CRYSTALLINE_TANGLER, 17000);
                     break;
@@ -199,7 +199,7 @@ public:
                      me->SetFacingToObject(owner);
                      break;
                 case NPC_CRYSTAL_SPIKE_TRIGGER:
-                    if (Creature* trigger = owner->ToCreature())
+                    if (auto trigger = owner->ToCreature())
                         _count = trigger->AI()->GetData(DATA_COUNT) + 1;
                     break;
                 default:
@@ -208,7 +208,7 @@ public:
             }
 
             if (me->GetEntry() == NPC_CRYSTAL_SPIKE_TRIGGER)
-                if (GameObject* trap = me->FindNearestGameObject(GO_CRYSTAL_SPIKE_TRAP, 1.0f))
+                if (auto trap = me->FindNearestGameObject(GO_CRYSTAL_SPIKE_TRAP, 1.0f))
                     trap->Use(me);
 
             _despawntimer = 2000;
@@ -224,7 +224,7 @@ public:
             if (_despawntimer <= diff)
             {
                 if (me->GetEntry() == NPC_CRYSTAL_SPIKE_TRIGGER)
-                    if (GameObject* trap = me->FindNearestGameObject(GO_CRYSTAL_SPIKE_TRAP, 1.0f))
+                    if (auto trap = me->FindNearestGameObject(GO_CRYSTAL_SPIKE_TRAP, 1.0f))
                         trap->Delete();
 
                 me->DespawnOrUnsummon();
@@ -258,7 +258,7 @@ class spell_crystal_spike : public SpellScriptLoader
             {
                 Unit* target = GetTarget();
                 if (target->GetEntry() == NPC_CRYSTAL_SPIKE_INITIAL || target->GetEntry() == NPC_CRYSTAL_SPIKE_TRIGGER)
-                    if (Creature* trigger = target->ToCreature())
+                    if (auto trigger = target->ToCreature())
                     {
                         uint32 spell = target->GetEntry() == NPC_CRYSTAL_SPIKE_INITIAL ? crystalSpikeSummon[0] : crystalSpikeSummon[urand(0, 2)];
                         if (trigger->AI()->GetData(DATA_COUNT) < MAX_COUNT)

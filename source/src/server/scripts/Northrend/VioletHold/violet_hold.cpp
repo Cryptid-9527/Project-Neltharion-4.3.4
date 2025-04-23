@@ -264,7 +264,7 @@ public:
             case GOSSIP_ACTION_INFO_DEF+1:
                 player->CLOSE_GOSSIP_MENU();
                 CAST_AI(npc_sinclari_vh::npc_sinclariAI, (creature->AI()))->uiPhase = 1;
-                if (InstanceScript* instance = creature->GetInstanceScript())
+                if (auto instance = creature->GetInstanceScript())
                     instance->SetData(DATA_MAIN_EVENT_PHASE, SPECIAL);
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
@@ -283,7 +283,7 @@ public:
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             switch (instance->GetData(DATA_MAIN_EVENT_PHASE))
             {
@@ -334,7 +334,7 @@ public:
             {
                 for (std::list<Creature*>::const_iterator itr = GuardList.begin(); itr != GuardList.end(); ++itr)
                 {
-                    if (Creature* pGuard = *itr)
+                    if (auto pGuard = *itr)
                     {
                         pGuard->DisappearAndDie();
                         pGuard->Respawn();
@@ -367,7 +367,7 @@ public:
                             if (!GuardList.empty())
                                 for (std::list<Creature*>::const_iterator itr = GuardList.begin(); itr != GuardList.end(); ++itr)
                                 {
-                                    if (Creature* pGuard = *itr)
+                                    if (auto pGuard = *itr)
                                     {
                                         pGuard->SetWalk(false);
                                         pGuard->GetMotionMaster()->MovePoint(0, MovePosition);
@@ -384,7 +384,7 @@ public:
                             if (!GuardList.empty())
                                 for (std::list<Creature*>::const_iterator itr = GuardList.begin(); itr != GuardList.end(); ++itr)
                                 {
-                                    if (Creature* pGuard = *itr)
+                                    if (auto pGuard = *itr)
                                     {
                                         pGuard->SetVisible(false);
                                         pGuard->SetReactState(REACT_PASSIVE);
@@ -641,7 +641,7 @@ public:
                         {
                             bPortalGuardianOrKeeperOrEliteSpawn = true;
                             uint32 entry = RAND(CREATURE_PORTAL_GUARDIAN, CREATURE_PORTAL_KEEPER);
-                            if (Creature* pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
+                            if (auto pPortalKeeper = DoSummon(entry, me, 2.0f, 0, TEMPSUMMON_DEAD_DESPAWN))
                                 me->CastSpell(pPortalKeeper, SPELL_PORTAL_CHANNEL, false);
                         }
                         uiSpawnTimer = SPAWN_TIME;
@@ -788,7 +788,7 @@ struct violet_hold_trashAI : public npc_escortAI
     {
         if (instance)
         {
-            if (Creature* portal = Unit::GetCreature((*me), instance->GetData64(DATA_TELEPORTATION_PORTAL)))
+            if (auto portal = Unit::GetCreature((*me), instance->GetData64(DATA_TELEPORTATION_PORTAL)))
                 CAST_AI(npc_teleportation_portal_vh::npc_teleportation_portalAI, portal->AI())->SummonedMobDied(me);
 
             instance->SetData(DATA_NPC_PRESENCE_AT_DOOR_REMOVE, 1);

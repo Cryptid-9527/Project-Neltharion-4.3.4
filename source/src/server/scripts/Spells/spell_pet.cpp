@@ -161,7 +161,7 @@ public:
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* owner = caster->GetOwner())
+            if (auto owner = caster->GetOwner())
                 if (!caster->HasAura(SPELL_HUNTER_PET_HEART_OF_THE_PHOENIX_DEBUFF))
                 {
                     owner->CastCustomSpell(SPELL_HUNTER_PET_HEART_OF_THE_PHOENIX_TRIGGERED, SPELLVALUE_BASE_POINT0, 100, caster, true);
@@ -200,11 +200,11 @@ public:
 
         void CalculateMaxHealthAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (pet->isPet())
                 {
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float mod = 0.0f;
                         if (pet->HasAura(SPELL_HUNTER_PET_FEROCITY_MARKER))
@@ -223,7 +223,7 @@ public:
 
         void ApplyEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (_tempHealth)
                     pet->SetHealth(_tempHealth);
@@ -234,13 +234,13 @@ public:
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 _tempHealth = pet->GetHealth();
         }
 
         void CalculateAttackPowerAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -257,7 +257,7 @@ public:
 
         void CalculateSpellDamageDoneAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -309,7 +309,7 @@ public:
 
         void CalculateFrostResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -328,7 +328,7 @@ public:
 
         void CalculateFireResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -347,7 +347,7 @@ public:
 
         void CalculateNatureResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -396,7 +396,7 @@ public:
 
         void CalculateShadowResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -415,7 +415,7 @@ public:
 
         void CalculateArcaneResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -434,7 +434,7 @@ public:
 
         void CalculateArmorAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (!pet->isPet())
                     return;
@@ -493,7 +493,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitMelee = 0.0f;
@@ -510,7 +510,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitSpell = 0.0f;
@@ -527,7 +527,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float Expertise = 0.0f;
@@ -578,7 +578,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float meleeHaste = (1.0f - owner->m_modAttackSpeedPct[BASE_ATTACK]) * 100.0f;
                 amount += int32(meleeHaste);
@@ -587,7 +587,7 @@ public:
 
         void CalculateAmountResistance(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
                 amount += owner->GetInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE);
         }
 
@@ -691,7 +691,7 @@ public:
 
         void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasUnitTypeMask(UNIT_MASK_GUARDIAN))
                 {
@@ -726,7 +726,7 @@ public:
 
         void HandlePeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 267, EFFECT_0))
                     if (roll_chance_i(aurEff->GetAmount()))
                         caster->CastSpell(GetTarget(), 24406, true);
@@ -748,7 +748,7 @@ public:
 
         SpellCastResult CheckState()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (Pet* pPet = caster->ToPlayer()->GetPet())
                 {
@@ -801,7 +801,7 @@ public:
         void HandleHit(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* owner = caster->GetOwner())
+            if (auto owner = caster->GetOwner())
             {
                 int32 baseDamage = 0;
                 switch (GetSpellInfo()->Id)
@@ -839,7 +839,7 @@ public:
 
         void HandleKillCommand(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* owner = GetCaster()->GetOwner())
+            if (auto owner = GetCaster()->GetOwner())
             {
                 owner->RemoveAura(94006);
                 owner->RemoveAura(94007);
@@ -875,7 +875,7 @@ public:
             if (!GetCaster())
                 return;
 
-            if (Unit* owner = GetCaster()->GetOwner())
+            if (auto owner = GetCaster()->GetOwner())
             {
                 float coeff = 0.35f * 0.5f;
                 SetEffectDamage(GetEffectValue() + (coeff * owner->GetTotalAttackPowerValue(RANGED_ATTACK)));
@@ -903,7 +903,7 @@ public:
             if (!caster)
                 return;
 
-            if (Unit* owner = caster->GetOwner())
+            if (auto owner = caster->GetOwner())
             {
                 float coeff = 0.35f * 0.335f;
                 amount += (coeff * owner->GetTotalAttackPowerValue(RANGED_ATTACK));
@@ -1087,9 +1087,9 @@ public:
 
         void CalculateStaminaAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
-                if (Unit* owner = pet->GetOwner())
+                if (auto owner = pet->GetOwner())
                 {
                     float mod = 0.8f;
                     // Glyph of Raise dead
@@ -1104,20 +1104,20 @@ public:
 
         void ApplyEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (_tempHealth)
                     pet->SetHealth(_tempHealth);
         }
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 _tempHealth = pet->GetHealth();
         }
 
         void CalculateStrengthAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 Unit* owner = pet->GetOwner();
                 if (!owner)
@@ -1171,7 +1171,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HasteMelee = 0.0f;
@@ -1185,7 +1185,7 @@ public:
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
 
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 Unit::AuraEffectList const& auraDamagePctList = owner->GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
                 for (Unit::AuraEffectList::const_iterator itr = auraDamagePctList.begin(); itr != auraDamagePctList.end(); ++itr)
@@ -1228,7 +1228,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitMelee = 0.0f;
@@ -1245,7 +1245,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitSpell = 0.0f;
@@ -1289,7 +1289,7 @@ public:
 
         void CalculateAmountCritPct(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float CritSpell = owner->GetMeleeCritFromAgility();
                 CritSpell += owner->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_CRIT_CHANCE);
@@ -1301,7 +1301,7 @@ public:
 
         void CalculateAmountResistance(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
                 amount += owner->GetInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE);
         }
 
@@ -1336,7 +1336,7 @@ public:
 
         void CalculateDamageDoneAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 Unit* owner = pet->GetOwner();
                 if (!owner)
@@ -1353,7 +1353,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HasteMelee = 0.0f;
@@ -1388,7 +1388,7 @@ public:
 
             SpellCastResult CheckState()
         {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasUnitState(UNIT_STATE_ROOT)) // Cant jump while rooted
                         return SPELL_FAILED_ROOTED;
 
@@ -1426,7 +1426,7 @@ public:
         void CalculateAmountCritPct(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
             if (GetCaster() && GetCaster()->ToTempSummon() && GetCaster()->ToTempSummon()->GetSummoner())
-                if (Player* owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
+                if (auto owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
                 {
                     float CritSpell = owner->GetSpellCritFromIntellect();
                     CritSpell += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_CRIT_CHANCE);
@@ -1440,7 +1440,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner() || !GetCaster()->ToTempSummon() || !GetCaster()->ToTempSummon()->GetSummoner())
                 return;
-            if (Player* owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
+            if (auto owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
             {
                 float meleeHaste = (1.0f - owner->m_modAttackSpeedPct[BASE_ATTACK]) * 100.0f;
                 amount += int32(meleeHaste);
@@ -1451,7 +1451,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
                 amount += owner->GetInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE);
         }
 
@@ -1507,7 +1507,7 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 // Flame Orb
                 if (caster->GetEntry() == 44214)
@@ -1590,7 +1590,7 @@ public:
         void CalculateAmountCritPct(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
             if (GetCaster() && GetCaster()->ToTempSummon() && GetCaster()->ToTempSummon()->GetSummoner())
-                if (Player* owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
+                if (auto owner = GetCaster()->ToTempSummon()->GetSummoner()->ToPlayer())
                 {
                     float CritSpell = owner->GetSpellCritFromIntellect();
                     CritSpell += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_CRIT_CHANCE);
@@ -1604,7 +1604,7 @@ public:
         {
             if (!GetCaster() || !GetCaster()->GetOwner())
                 return;
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
                 amount += owner->GetInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE);
         }
 
@@ -1656,7 +1656,7 @@ public:
             GetTarget()->CastSpell(_procTarget, SPELL_PRIEST_MANA_LEECH_PROC, true, NULL, aurEff);
 
             // Priest T13 Shadow 4P Bonus (Shadowfiend and Shadowy Apparition)
-            if (Unit* owner = GetTarget()->GetOwner())
+            if (auto owner = GetTarget()->GetOwner())
                 if (owner->HasAura(105844, owner->GetGUID()))
                     owner->CastCustomSpell(77487, SPELLVALUE_AURA_STACK, 3, owner, true);
         }
@@ -1688,7 +1688,7 @@ public:
 
         void HandleProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* target = eventInfo.GetActionTarget())
+            if (auto target = eventInfo.GetActionTarget())
             {
                 int32 damage = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), aurEff->GetAmount());
                 GetTarget()->CastCustomSpell(target, SPELL_PRIEST_SHADOWFLAME, &damage, NULL, NULL, TRIGGERED_FULL_MASK);
@@ -1725,7 +1725,7 @@ public:
 
         void CalculateAmountMeleeHit(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitMelee = 0.0f;
@@ -1740,7 +1740,7 @@ public:
 
         void CalculateAmountSpellHit(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float HitSpell = 0.0f;
@@ -1784,29 +1784,29 @@ public:
 
         void ApplyEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 pet->SetHealth(pet->GetMaxHealth());
         }
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 _tempHealth = pet->GetHealth();
         }
 
         void CalculateMaxHealthAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                         amount += owner->ToPlayer()->GetHealthBonusFromStamina() * 0.75f;
         }
 
         void CalculateAttackPowerAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         int32 fire = int32(owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE))
                             - owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
@@ -1831,9 +1831,9 @@ public:
 
         void CalculateDamageDoneAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         //the damage bonus used for pets is either fire or shadow damage, whatever is higher
                         int32 fire = int32(owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE))
@@ -1886,22 +1886,22 @@ public:
 
         void ApplyEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (_tempMana)
                     pet->SetPower(POWER_MANA, _tempMana);
         }
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 _tempMana = pet->GetPower(POWER_MANA);
         }
 
         void CalculateEnergyAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         float multiplicator = 15.0f;
@@ -1928,9 +1928,9 @@ public:
 
         void CalculateArmorAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetArmor(), 35);
@@ -1940,9 +1940,9 @@ public:
 
         void CalculateFireResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetResistance(SPELL_SCHOOL_FIRE), 40);
@@ -1988,9 +1988,9 @@ public:
 
         void CalculateFrostResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetResistance(SPELL_SCHOOL_FROST), 40);
@@ -2000,9 +2000,9 @@ public:
 
         void CalculateArcaneResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetResistance(SPELL_SCHOOL_ARCANE), 40);
@@ -2012,9 +2012,9 @@ public:
 
         void CalculateNatureResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetResistance(SPELL_SCHOOL_NATURE), 40);
@@ -2054,9 +2054,9 @@ public:
 
         void CalculateShadowResistanceAmount(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
                 if (pet->isPet())
-                    if (Unit* owner = pet->ToPet()->GetOwner())
+                    if (auto owner = pet->ToPet()->GetOwner())
                     {
                         float ownerBonus = 0.0f;
                         ownerBonus = CalculatePct(owner->GetResistance(SPELL_SCHOOL_SHADOW), 40);
@@ -2094,7 +2094,7 @@ public:
 
         void CalculateAmountMeleeHit(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float HitMelee = 0.0f;
                 HitMelee += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -2105,7 +2105,7 @@ public:
 
         void CalculateAmountSpellHit(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float HitSpell = 0.0f;
                 HitSpell += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -2116,7 +2116,7 @@ public:
 
         void CalculateAmountExpertise(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 // For others recalculate it from:
                 float Expertise = 0.0f;
@@ -2161,7 +2161,7 @@ public:
 
         void CalculateAmountCritPct(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float CritSpell = owner->GetSpellCritFromIntellect();
                 CritSpell += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_CRIT_CHANCE);
@@ -2173,7 +2173,7 @@ public:
 
         void CalculateAmountMeleeHaste(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float HasteMelee = 0.0f;
                 HasteMelee += (1 - owner->m_modAttackSpeedPct[BASE_ATTACK]) * 100;
@@ -2183,7 +2183,7 @@ public:
 
         void CalculateAmountResistance(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
                 amount += owner->GetInt32Value(PLAYER_FIELD_MOD_TARGET_RESISTANCE);
         }
 
@@ -2219,7 +2219,7 @@ public:
 
         void CalculateAmountCritSpell(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float CritSpell = 0.0f;
                 CritSpell += owner->GetSpellCritFromIntellect();
@@ -2235,7 +2235,7 @@ public:
 
         void CalculateAmountCritMelee(AuraEffect const* /* aurEff */, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Player* owner = GetCaster()->GetOwner()->ToPlayer())
+            if (auto owner = GetCaster()->GetOwner()->ToPlayer())
             {
                 float CritMelee = 0.0f;
                 CritMelee += owner->GetMeleeCritFromAgility();
@@ -2321,7 +2321,7 @@ public:
 
         void HandleHit(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* owner = GetCaster()->GetOwner())
+            if (auto owner = GetCaster()->GetOwner())
             {
                 float coeff = 1.0f;
                 switch (GetSpellInfo()->Id)

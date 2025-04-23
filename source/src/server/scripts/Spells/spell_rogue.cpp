@@ -191,7 +191,7 @@ class spell_rog_deadly_poison : public SpellScriptLoader
 
             void HandleBeforeHit()
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     // Deadly Poison
                     if (AuraEffect const* aurEff = target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x10000, 0x80000, 0, GetCaster()->GetGUID()))
                         _stackAmount = aurEff->GetBase()->GetStackAmount();
@@ -204,7 +204,7 @@ class spell_rog_deadly_poison : public SpellScriptLoader
 
                 Player* player = GetCaster()->ToPlayer();
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
 
                     Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
@@ -441,7 +441,7 @@ class spell_rog_recuperate : public SpellScriptLoader
             void CalculateBonus(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     amount *= 1000;
                     // Improved Recuperate
@@ -477,7 +477,7 @@ class spell_rog_stealth : public SpellScriptLoader
 
             void HandleApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     // Overkill
                     if (caster->HasAura(58426))
                         caster->CastSpell(caster, 58427, true);
@@ -485,7 +485,7 @@ class spell_rog_stealth : public SpellScriptLoader
 
             void HandleRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     // Overkill
                     if (Aura* overkill = target->GetAura(58427, target->GetGUID()))
                     {
@@ -525,7 +525,7 @@ class spell_rog_rupture : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     canBeRecalculated = false;
 
@@ -561,7 +561,7 @@ class spell_rog_rupture : public SpellScriptLoader
                     if (aurEff->GetBase()->GetDuration() >= 1000)
                     {
                         int32 bp0 = 5 * (aurEff->GetBase()->GetDuration() / 1000);
-                        if (Unit* caster = GetCaster())
+                        if (auto caster = GetCaster())
                             if (caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_ROGUE, 4888, EFFECT_0))
                                 caster->CastCustomSpell(caster, 51637, &bp0, 0, 0, true);
                     }
@@ -606,7 +606,7 @@ class spell_rog_shiv : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     caster->CastSpell(unitTarget, SPELL_ROGUE_SHIV_TRIGGERED, true);
             }
 
@@ -642,7 +642,7 @@ class spell_rog_backstab : public SpellScriptLoader
             void HandleOnHit()
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     if (unitTarget->HasAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, GetSpellInfo(), caster))
                         if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_ROGUE, 134, 0))
                         {
@@ -694,7 +694,7 @@ class spell_rog_tricks_of_the_trade : public SpellScriptLoader
                     GetTarget()->ResetRedirectThreat();
 
                 if (GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE)
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                         caster->ToPlayer()->RemoveSpellCooldown(GetId(), true);
             }
 
@@ -713,7 +713,7 @@ class spell_rog_tricks_of_the_trade : public SpellScriptLoader
                 target->CastSpell(target, SPELL_ROGUE_TRICKS_OF_THE_TRADE_PROC, true);
                 Remove(AURA_REMOVE_BY_DEFAULT); // maybe handle by proc charges
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Rogue T12 4P Bonus
                     if (caster->HasAura(99175, caster->GetGUID()))
@@ -905,7 +905,7 @@ class spell_rog_blind : public SpellScriptLoader
             void HandleOnHit()
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     if (caster->GetDummyAuraEffect(SPELLFAMILY_ROGUE, 48, 0))
                     {
                         unitTarget->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, unitTarget->GetAura(32409)); // SW:D shall not be removed.
@@ -975,7 +975,7 @@ public:
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
             /// @HACK: this should be handle by proc of EFFECT_2 of the strike aura
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 if (AuraEffect const* strike = target->GetAuraEffect(SPELL_ROGUE_REVEALING_STRIKE, EFFECT_2, GetCaster()->GetGUID()))
                 {
@@ -1028,7 +1028,7 @@ public:
             if (AuraEffect* aurEff = player->GetDummyAuraEffect(SPELLFAMILY_ROGUE, 857, EFFECT_2))
                 talentProcChance = aurEff->GetAmount();
 
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 Item* mainItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND);
                 Item* offitem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
@@ -1220,9 +1220,9 @@ public:
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return;
 
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     Unit::AuraList& scAuras = caster->GetSingleCastAuras();
                     for (Unit::AuraList::iterator itr = scAuras.begin(); itr != scAuras.end(); ++itr)
@@ -1277,7 +1277,7 @@ public:
 
         void HandleApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
                 if (target->GetTypeId() == TYPEID_PLAYER)
                     SetDuration(10 * IN_MILLISECONDS);
         }
@@ -1306,9 +1306,9 @@ public:
 
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Unit* target = eventInfo.GetActionTarget())
+                if (auto target = eventInfo.GetActionTarget())
                 {
                     SpellInfo const* burningWounds = sSpellMgr->GetSpellInfo(SPELL_ROGUE_T12_2P_TRIGGERED);
                     int32 damage = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), burningWounds->Effects[EFFECT_0].CalcValue(caster));
@@ -1396,8 +1396,8 @@ public:
 
         void OnProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
-            if (Unit* target = eventInfo.GetActionTarget())
-                if (Unit* caster = eventInfo.GetActor())
+            if (auto target = eventInfo.GetActionTarget())
+                if (auto caster = eventInfo.GetActor())
                 {
                     // Don't proc anymore when we have the maximum benefit
                     if (caster->HasAura(SPELL_ROGUE_DEEP_INSIGHT))
@@ -1489,7 +1489,7 @@ public:
 
         bool CheckProc(ProcEventInfo& eventInfo)
         {
-            if (Player* player = GetTarget()->ToPlayer())
+            if (auto player = GetTarget()->ToPlayer())
             {
                 // This values are taken from a VALID BLUEPOST DONT CHANGE IT!
                 float procChance = 9.438f;
@@ -1551,17 +1551,17 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
-                if (Player* player = caster->ToPlayer())
+            if (auto caster = GetCaster())
+                if (auto player = caster->ToPlayer())
                     OwnerSpec = player->GetActiveSpec();
             return true;
         }
 
         void AuraUpdate(AuraEffect* aurEff, const uint32 diff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Player* player = caster->ToPlayer())
+                if (auto player = caster->ToPlayer())
                     if (player->GetActiveSpec() != OwnerSpec)
                         Remove(1);
             }

@@ -170,7 +170,7 @@ public:
 
             for (std::list<uint64>::const_iterator itr = lSparkList.begin(); itr != lSparkList.end(); ++itr)
             {
-                if (Creature* pSpark = Unit::GetCreature(*me, *itr))
+                if (auto pSpark = Unit::GetCreature(*me, *itr))
                 {
                     if (pSpark->isAlive())
                     {
@@ -256,7 +256,7 @@ public:
 
             if (uiStaticOverloadTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_STATIC_OVERLOAD);
 
                 uiStaticOverloadTimer = urand(5*IN_MILLISECONDS, 6*IN_MILLISECONDS);

@@ -756,8 +756,8 @@ void Aura::SetDuration(int32 duration, bool withMods)
 {
     if (withMods)
     {
-        if (Unit* caster = GetCaster())
-            if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto caster = GetCaster())
+            if (auto modOwner = caster->GetSpellModOwner())
                 modOwner->ApplySpellMod(GetId(), SPELLMOD_DURATION, duration);
     }
     m_duration = duration;
@@ -840,7 +840,7 @@ uint8 Aura::CalcMaxCharges(Unit* caster) const
 
     if (caster)
     {
-        if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(GetId(), SPELLMOD_CHARGES, maxProcCharges);
 
         // HACKFIX!!! Because didn't worked over SetCharges()
@@ -962,7 +962,7 @@ bool Aura::ModStackAmount(int32 num, AuraRemoveMode removeMode)
 void Aura::RefreshSpellMods()
 {
     for (auto appIter = m_applications.begin(); appIter != m_applications.end(); ++appIter)
-        if (Player* player = appIter->second->GetTarget()->ToPlayer())
+        if (auto player = appIter->second->GetTarget()->ToPlayer())
             player->RestoreAllSpellMods(0, this);
 }
 
@@ -1100,8 +1100,8 @@ int32 Aura::CalcDispelChance(Unit* auraTarget, bool offensive) const
     int32 resistChance = 0;
 
     // Apply dispel mod from aura caster
-    if (Unit* caster = GetCaster())
-        if (Player* modOwner = caster->GetSpellModOwner())
+    if (auto caster = GetCaster())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(GetId(), SPELLMOD_RESIST_DISPEL_CHANCE, resistChance);
 
     // Dispel resistance from target SPELL_AURA_MOD_DISPEL_RESIST
@@ -1482,7 +1482,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                             target->CastSpell(target, 32612, true, NULL, GetEffect(1));
                             target->CombatStop();
                             if (target->GetTypeId() == TYPEID_PLAYER)
-                                if (Unit* pet = target->ToPlayer()->GetPet())
+                                if (auto pet = target->ToPlayer()->GetPet())
                                 {
                                     pet->CastSpell(pet, 96243, true);
                                     pet->CombatStop();
@@ -1635,7 +1635,7 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             {
                 case 19574: // Bestial Wrath
                     // The Beast Within cast on owner if talent present
-                    if (Unit* owner = target->GetOwner())
+                    if (auto owner = target->GetOwner())
                     {
                         // Search talent
                         if (owner->HasAura(34692))
@@ -2012,7 +2012,7 @@ float Aura::CalcProcChance(SpellProcEntry const& procEntry, ProcEventInfo& event
     float chance = procEntry.chance;
     // calculate chances depending on unit with caster's data
     // so talents modifying chances and judgements will have properly calculated proc chance
-    if (Unit* caster = GetCaster())
+    if (auto caster = GetCaster())
     {
         // calculate ppm chance if present and we're using weapon
         if (eventInfo.GetDamageInfo() && procEntry.ratePerMinute != 0)
@@ -2021,7 +2021,7 @@ float Aura::CalcProcChance(SpellProcEntry const& procEntry, ProcEventInfo& event
             chance = caster->GetPPMProcChance(WeaponSpeed, procEntry.ratePerMinute, GetSpellInfo());
         }
         // apply chance modifer aura, applies also to ppm chance (see improved judgement of light spell)
-        if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(GetId(), SPELLMOD_CHANCE_OF_SUCCESS, chance);
     }
     return chance;
@@ -2537,7 +2537,7 @@ void UnitAura::FillTargetMap(std::map<Unit*, uint8> & targets, Unit* caster)
                 case SPELL_EFFECT_APPLY_AREA_AURA_OWNER:
                 {
                     targetList.push_back(GetUnitOwner());
-                    if (Unit* owner = GetUnitOwner()->GetCharmerOrOwner())
+                    if (auto owner = GetUnitOwner()->GetCharmerOrOwner())
                         if (!isolated && GetUnitOwner()->IsWithinDistInMap(owner, radius))
                             targetList.push_back(owner);
                     break;

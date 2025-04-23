@@ -109,7 +109,7 @@ public:
 
             if (uiBlizzardTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_BLIZZARD);
                 uiBlizzardTimer = 15000;
             } else uiBlizzardTimer -= diff;
@@ -130,7 +130,7 @@ public:
             {
                 if (uiManaDestructionTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_MANA_DESTRUCTION);
                     uiManaDestructionTimer = 30000;
                 } else uiManaDestructionTimer -= diff;

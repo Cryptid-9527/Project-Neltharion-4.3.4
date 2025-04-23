@@ -159,7 +159,7 @@ public:
                         //Cast Impale on a random target
                         //Do NOT cast it when we are afflicted by locust swarm
                         if (!me->HasAura(RAID_MODE(SPELL_LOCUST_SWARM_10, SPELL_LOCUST_SWARM_25)))
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, RAID_MODE(SPELL_IMPALE_10, SPELL_IMPALE_25));
                         events.ScheduleEvent(EVENT_IMPALE, urand(10000, 20000));
                         break;

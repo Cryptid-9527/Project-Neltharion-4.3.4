@@ -134,7 +134,7 @@ public:
 
             for (uint8 i = 0; i < 3; ++i)
             {
-                if (GameObject* go = me->FindNearestGameObject(entry_search[i], 30))
+                if (auto go = me->FindNearestGameObject(entry_search[i], 30))
                 {
                     if (me->IsWithinDist(go, diff, false))
                     {

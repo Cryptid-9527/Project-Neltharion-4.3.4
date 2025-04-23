@@ -223,13 +223,13 @@ public:
                         events.ScheduleEvent(EVENT_FLAME, 20000, GCD_CAST);
                         break;
                     case EVENT_HATEFUL_STRIKE:
-                        if (Unit* target = CalculateHatefulStrikeTarget())
+                        if (auto target = CalculateHatefulStrikeTarget())
                             DoCast(target, SPELL_HATEFUL_STRIKE);
                         events.DelayEvents(1000, GCD_CAST);
                         events.ScheduleEvent(EVENT_HATEFUL_STRIKE, 5000, GCD_CAST, PHASE_STRIKE);
                         break;
                     case EVENT_SWITCH_TARGET:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                         {
                             DoResetThreat();
                             me->AddThreat(target, 5000000.0f);

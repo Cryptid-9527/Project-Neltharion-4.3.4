@@ -129,7 +129,7 @@ public:
         void SendMyListToBuddies()
         {
             for (int i=0; i<3; ++i)
-                if (Creature* pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
+                if (auto pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
                     GiveBuddyMyList(pNearby);
         }
 
@@ -218,7 +218,7 @@ public:
                 {
                     if (!NearbyGUID[i])
                         continue;
-                    if (Creature* pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
+                    if (auto pNearby = Unit::GetCreature(*me, NearbyGUID[i]))
                     {
                         if (pNearby->isDead())
                             pNearby->Respawn();

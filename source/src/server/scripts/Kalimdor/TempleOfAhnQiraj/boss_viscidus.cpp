@@ -266,7 +266,7 @@ class npc_glob_of_viscidus : public CreatureScript
                 if (!Instance)
                     return;
 
-                if (Creature* Viscidus = me->GetMap()->GetCreature(Instance->GetData64(DATA_VISCIDUS)))
+                if (auto Viscidus = me->GetMap()->GetCreature(Instance->GetData64(DATA_VISCIDUS)))
                 {
                     if (BossAI* ViscidusAI = dynamic_cast<BossAI*>(Viscidus->GetAI()))
                         ViscidusAI->SummonedCreatureDespawn(me);

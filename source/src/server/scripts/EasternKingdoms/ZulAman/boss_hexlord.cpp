@@ -273,7 +273,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                 summons.DespawnAll();
                 me->DeleteThreatList();
 
-                if (GameObject* Exit = me->FindNearestGameObject(GO_GATE_HEXLORD_EXIT, 100.0f))
+                if (auto Exit = me->FindNearestGameObject(GO_GATE_HEXLORD_EXIT, 100.0f))
                     Exit->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
             }
 
@@ -288,7 +288,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                     addList.erase(addList.begin()+rand()%addList.size());
 
                 uint8 i = 0;
-                for (std::vector<uint32>::const_iterator itr = addList.begin(); itr != addList.end(); ++itr, ++i)
+                for (auto itr = addList.begin(); itr != addList.end(); ++itr, ++i)
                     addEntry[i] = *itr;
             }
 
@@ -623,7 +623,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                             if (me->HasUnitState(UNIT_STATE_CASTING))events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = DoSelectLowestHpFriendly(40))
+                                if (auto target = DoSelectLowestHpFriendly(40))
                                     me->CastSpell(target, SPELL_PA_HOLY_LIGHT, false);
                                 else
                                     me->CastSpell(me, SPELL_PA_HOLY_LIGHT, false);
@@ -644,7 +644,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                             if (me->HasUnitState(UNIT_STATE_CASTING))events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = DoSelectLowestHpFriendly(40))
+                                if (auto target = DoSelectLowestHpFriendly(40))
                                     me->CastSpell(target, SPELL_PR_FLASH_HEAL, false);
                                 else
                                     me->CastSpell(me, SPELL_PR_FLASH_HEAL, false);
@@ -663,7 +663,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                             if (me->HasUnitState(UNIT_STATE_CASTING))events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = DoSelectLowestHpFriendly(40))
+                                if (auto target = DoSelectLowestHpFriendly(40))
                                     me->CastSpell(target, SPELL_PR_LEAP_OF_FAITH, false);
                                 events.ScheduleEvent(EVENT_PR_LEAP_OF_FAITH, 10000);
                             }
@@ -719,7 +719,7 @@ class boss_hex_lord_malacrass : public CreatureScript
                             if (me->HasUnitState(UNIT_STATE_CASTING))events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = DoSelectLowestHpFriendly(40))
+                                if (auto target = DoSelectLowestHpFriendly(40))
                                     me->CastSpell(target, SPELL_SH_HEALING_WAVE, false);
                                 else
                                     me->CastSpell(me, SPELL_SH_HEALING_WAVE, false);
@@ -842,7 +842,7 @@ class boss_alyson_antille : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_FLASH_HEAL:
-                            if (Unit* target = DoSelectLowestHpFriendly(40))
+                            if (auto target = DoSelectLowestHpFriendly(40))
                                 me->CastSpell(target, SPELL_FLASH_HEAL, false);
                             events.ScheduleEvent(EVENT_FLASH_HEAL, 5000);
                             break;
@@ -1183,7 +1183,7 @@ class spell_hexlord_unstable_affliction : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* dispelInfo)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(dispelInfo->GetDispeller(), SPELL_WL_UNSTABLE_AFFL_DISPEL, true, NULL, GetEffect(EFFECT_0));
             }
 
@@ -1215,15 +1215,15 @@ public:
         {
             go->SetGoState(GO_STATE_ACTIVE);
             go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-            if (Unit* p = player->ToUnit())
+            if (auto p = player->ToUnit())
             {
                 Position daakaraSpawn = { 119.981003f, 674.244995f, 51.824501f, 1.466080f };
 
-                if (Creature* daakara = instance->GetCreature(instance->GetData64(DATA_DAAKARAEVENT)))
+                if (auto daakara = instance->GetCreature(instance->GetData64(DATA_DAAKARAEVENT)))
                     daakara->AI()->DoAction(3);
                 else
                 {
-                    if (Creature* daakara = go->SummonCreature(NPC_DAAKARA, daakaraSpawn))
+                    if (auto daakara = go->SummonCreature(NPC_DAAKARA, daakaraSpawn))
                         daakara->AI()->DoAction(3);
                 }
 

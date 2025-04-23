@@ -173,13 +173,13 @@ class npc_apothecary_hummel : public CreatureScript
                 me->SetCorpseDelay(900); // delay despawn while still fighting baxter or frye
                 summons.DespawnAll();
                                 
-                if (Creature* baxter = Creature::GetCreature(*me, instance->GetData64(NPC_BAXTER)))
+                if (auto baxter = Creature::GetCreature(*me, instance->GetData64(NPC_BAXTER)))
                     if (!baxter->isAlive())
                         baxter->Respawn(true);
                     else
                         baxter->GetMotionMaster()->MoveTargetedHome();
 
-                if (Creature* frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
+                if (auto frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
                     if (!frye->isAlive())
                         frye->Respawn(true);
                     else
@@ -193,9 +193,9 @@ class npc_apothecary_hummel : public CreatureScript
                     case START_INTRO:
                     {
 
-                        if (Creature* baxter = Creature::GetCreature(*me, instance->GetData64(NPC_BAXTER)))
+                        if (auto baxter = Creature::GetCreature(*me, instance->GetData64(NPC_BAXTER)))
                             baxter->AI()->DoAction(START_INTRO);
-                        if (Creature* frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
+                        if (auto frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
                             frye->AI()->DoAction(START_INTRO);
 
                         phase = PHASE_INTRO;
@@ -386,13 +386,13 @@ class npc_apothecary_baxter : public CreatureScript
                 chainReactionTimer = urand (10000, 25000);
                 phase = PHASE_NORMAL;
 
-                if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                     if (!hummel->isAlive())
                         hummel->Respawn(true);
                     else
                         hummel->GetMotionMaster()->MoveTargetedHome();
 
-                if (Creature* frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
+                if (auto frye = Creature::GetCreature(*me, instance->GetData64(NPC_FRYE)))
                     if (!frye->isAlive())
                         frye->Respawn(true);
                     else
@@ -411,7 +411,7 @@ class npc_apothecary_baxter : public CreatureScript
                     }
                     case START_FIGHT:
                     {
-                        if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                        if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                             hummel->AI()->Talk(SAY_CALL_BAXTER);
 
                         phase = PHASE_NORMAL;
@@ -466,7 +466,7 @@ class npc_apothecary_baxter : public CreatureScript
             void JustDied(Unit* /*killer*/) override
             {
                 Talk(SAY_DEATH_BAXTER);
-                if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                     hummel->AI()->DoAction(APOTHECARY_DIED);
             }
 
@@ -509,13 +509,13 @@ class npc_apothecary_frye : public CreatureScript
                 _targetSwitchTimer = urand(1000, 2000);
                 phase = PHASE_NORMAL;
 
-                if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                     if (!hummel->isAlive())
                         hummel->Respawn(true);
                     else
                         hummel->GetMotionMaster()->MoveTargetedHome();
 
-                if (Creature* baxter = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                if (auto baxter = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                     if (!baxter->isAlive())
                         baxter->Respawn(true);
                     else
@@ -534,7 +534,7 @@ class npc_apothecary_frye : public CreatureScript
                     }
                     case START_FIGHT:
                     {
-                        if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                        if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                             hummel->AI()->Talk(SAY_CALL_FRYE);
 
                         phase = PHASE_NORMAL;
@@ -550,7 +550,7 @@ class npc_apothecary_frye : public CreatureScript
                 if (!target)
                     return;
 
-                if (Creature* bunny = me->SummonCreature(NPC_VIAL_BUNNY, *target, TEMPSUMMON_TIMED_DESPAWN, 25*IN_MILLISECONDS))
+                if (auto bunny = me->SummonCreature(NPC_VIAL_BUNNY, *target, TEMPSUMMON_TIMED_DESPAWN, 25*IN_MILLISECONDS))
                 {
                     bunny->setFaction(FACTION_HOSTILE);
                     bunny->SetReactState(REACT_PASSIVE);
@@ -590,7 +590,7 @@ class npc_apothecary_frye : public CreatureScript
 
                     if (_throwTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             DoCast(target, urand(0, 1) ? SPELL_THROW_PERFUME : SPELL_THROW_COLOGNE);
                         _throwTimer = urand(5000, 7500);
                     }
@@ -599,7 +599,7 @@ class npc_apothecary_frye : public CreatureScript
 
                     if (_targetSwitchTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                         {
                             me->getThreatManager().modifyThreatPercent(me->getVictim(), -100);
                             me->AddThreat(target, 9999999.9f);
@@ -625,7 +625,7 @@ class npc_apothecary_frye : public CreatureScript
             void JustDied(Unit* /*killer*/) override
             {
                 Talk(SAY_DEATH_FRYE);
-                if (Creature* hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
+                if (auto hummel = Creature::GetCreature(*me, instance->GetData64(NPC_HUMMEL)))
                     hummel->AI()->DoAction(APOTHECARY_DIED);
             }
 
@@ -661,7 +661,7 @@ class npc_crazed_apothecary : public CreatureScript
             {
                 DoZoneInCombat();
                 _explodeTimer = urand(8000,10000);
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150.0f, true))                
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150.0f, true))                
                     me->GetMotionMaster()->MoveFollow(target, 0.0f, float(2 * M_PI*rand_norm()));
                 else
                     me->DespawnOrUnsummon();

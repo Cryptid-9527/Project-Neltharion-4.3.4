@@ -306,14 +306,14 @@ public:
                             }
                             if (EarthShardsTimer <= diff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                     DoCast(target, SPELL_EARTH_SHARDS);
                                 //                                DoCast(me, SPELL_EARTH_SHARD_SUMMON);
                                 EarthShardsTimer = 20000;
                             }
                             if (LavaBoltTimer <= diff)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                     me->CastSpell(target, SPELL_LAVA_BOLT);
                                 LavaBoltTimer = 10000;
                             }
@@ -398,7 +398,7 @@ public:
             events.Reset();
             events.ScheduleEvent(EVENT_VEHICLE, 3000);
             summons.DespawnAll();
-            if (Creature* erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
+            if (auto erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
             {
                 if (!erunak->isAlive())
                 {
@@ -423,7 +423,7 @@ public:
                 instance->SetData(DATA_ERUNAK_STONESPEAKER, DONE);
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_ENSLAVE_BUFF);
 
-                if (Creature* erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
+                if (auto erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
                 {
                     erunak->DeleteThreatList();
                     erunak->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -440,7 +440,7 @@ public:
 
         void JustReachedHome()
         {
-            if (Creature* erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
+            if (auto erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
             {
                 me->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, erunak, false);
                 erunak->setFaction(14);
@@ -461,7 +461,7 @@ public:
         {
             if (type == 0)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)) // tank or not ?
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)) // tank or not ?
                 {
                     enslaveTargetGUID = unit->GetGUID();
                     EnslaveTarget(unit, true);
@@ -500,7 +500,7 @@ public:
             }
             if (!target)
                 return;
-            if (Creature* erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
+            if (auto erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
             {
                 uint32 vehicleId = 786; // from sniff
                 if (apply)
@@ -561,7 +561,7 @@ public:
                 case EVENT_VEHICLE:
                     if (!me->isInCombat())
                     {
-                        if (Creature* erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
+                        if (auto erunak = Unit::GetCreature((*me), instance->GetData64(DATA_ERUNAK_STONESPEAKER)))
                             if (instance->GetData(DATA_ERUNAK_STONESPEAKER) == NOT_STARTED && erunak != me->GetVehicleCreatureBase())
                                 me->DespawnOrUnsummon();
                     }
@@ -767,8 +767,8 @@ public:
             if (!GetAura()->IsExpired())
                 return;
 
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                     if (target->isAlive() && caster->isAlive())
                         if (target->GetHealthPct() > 50.0f)
                             caster->Kill(target, true);

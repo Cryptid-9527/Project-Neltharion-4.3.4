@@ -1223,7 +1223,7 @@ void MapManager::UnLoadTransportFromMap(Transport* t)
 
     for (Transport::CreatureSet::iterator itr = t->m_NPCPassengerSet.begin(); itr != t->m_NPCPassengerSet.end();)
     {
-        if (Creature* npc = *itr)
+        if (auto npc = *itr)
         {
             npc->SetTransport(NULL);
             npc->setActive(false);
@@ -1234,7 +1234,7 @@ void MapManager::UnLoadTransportFromMap(Transport* t)
 
     for (Transport::GameObjectSet::iterator itr = t->m_GOPassengerSet.begin(); itr != t->m_GOPassengerSet.end();)
     {
-        if (GameObject* go = *itr)
+        if (auto go = *itr)
         {
             go->SetTransport(NULL);
             go->setActive(false);
@@ -1288,7 +1288,7 @@ void MapManager::UnLoadTransportForPlayers(Player* player)
     {
         for (Transport::CreatureSet::iterator itr = (*i)->m_NPCPassengerSet.begin(); itr != (*i)->m_NPCPassengerSet.end();)
         {
-            if (Creature* npc = *itr)
+            if (auto npc = *itr)
             {
                 npc->SetTransport(NULL);
                 npc->setActive(false);
@@ -1299,7 +1299,7 @@ void MapManager::UnLoadTransportForPlayers(Player* player)
 
         for (Transport::GameObjectSet::iterator itr = (*i)->m_GOPassengerSet.begin(); itr != (*i)->m_GOPassengerSet.end();)
         {
-            if (GameObject* go = *itr)
+            if (auto go = *itr)
             {
                 go->SetTransport(NULL);
                 go->setActive(false);

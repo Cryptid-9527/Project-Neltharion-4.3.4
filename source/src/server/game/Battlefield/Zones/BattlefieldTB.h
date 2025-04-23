@@ -1029,23 +1029,23 @@ struct BfTBGameObjectBuilding
     void UpdateCreatureAndGo()
     {
         for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureTopList[m_TB->GetDefenderTeam()].end(); ++itr)
-              if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                if (Creature* creature = unit->ToCreature())
+              if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                if (auto creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
         for (GuidSet::const_iterator itr = m_CreatureTopList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureTopList[m_TB->GetAttackerTeam()].end(); ++itr)
-            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                if (Creature* creature = unit->ToCreature())
+            if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                if (auto creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
         for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetDefenderTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetDefenderTeam()].end(); ++itr)
-            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                if (Creature* creature = unit->ToCreature())
+            if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                if (auto creature = unit->ToCreature())
                     m_TB->HideNpc(creature);
 
         for (GuidSet::const_iterator itr = m_CreatureBottomList[m_TB->GetAttackerTeam()].begin(); itr != m_CreatureBottomList[m_TB->GetAttackerTeam()].end(); ++itr)
-            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                if (Creature* creature = unit->ToCreature())
+            if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                if (auto creature = unit->ToCreature())
                     m_TB->ShowNpc(creature, true);
 
         for (TBGameObjectSet::const_iterator itr = m_GameObjectList[m_TB->GetDefenderTeam()].begin(); itr != m_GameObjectList[m_TB->GetDefenderTeam()].end(); ++itr)
@@ -1166,20 +1166,20 @@ struct BfTBWorkShopData
     // Spawning associate creature and store them
     void AddCreature(BfTBObjectPosition obj)
     {
-        if (Creature* creature = m_TB->SpawnCreature(obj.entryh, obj.x, obj.y, obj.z, obj.o, TEAM_HORDE))
+        if (auto creature = m_TB->SpawnCreature(obj.entryh, obj.x, obj.y, obj.z, obj.o, TEAM_HORDE))
             m_CreatureOnPoint[TEAM_HORDE].insert(creature->GetGUID());
 
-        if (Creature* creature = m_TB->SpawnCreature(obj.entrya, obj.x, obj.y, obj.z, obj.o, TEAM_ALLIANCE))
+        if (auto creature = m_TB->SpawnCreature(obj.entrya, obj.x, obj.y, obj.z, obj.o, TEAM_ALLIANCE))
             m_CreatureOnPoint[TEAM_ALLIANCE].insert(creature->GetGUID());
     }
 
     // Spawning Associate gameobject and store them
     void AddGameObject(BfTBObjectPosition obj)
     {
-        if (GameObject* gameobject = m_TB->SpawnGameObject(obj.entryh, obj.x, obj.y, obj.z, obj.o, 732))
+        if (auto gameobject = m_TB->SpawnGameObject(obj.entryh, obj.x, obj.y, obj.z, obj.o, 732))
             m_GameObjectOnPoint[TEAM_HORDE].insert(gameobject);
 
-        if (GameObject* gameobject = m_TB->SpawnGameObject(obj.entrya, obj.x, obj.y, obj.z, obj.o, 732))
+        if (auto gameobject = m_TB->SpawnGameObject(obj.entrya, obj.x, obj.y, obj.z, obj.o, 732))
             m_GameObjectOnPoint[TEAM_ALLIANCE].insert(gameobject);
     }
 

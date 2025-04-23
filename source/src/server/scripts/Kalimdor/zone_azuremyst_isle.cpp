@@ -131,7 +131,7 @@ public:
                 {
                     me->RemoveAurasDueToSpell(SPELL_IRRIDATION);
 
-                    if (Player* player = Unit::GetPlayer(*me, pCaster))
+                    if (auto player = Unit::GetPlayer(*me, pCaster))
                     {
                         Talk(SAY_HEAL, player->GetGUID());
 
@@ -368,7 +368,7 @@ public:
 
         void WaypointReached(uint32 waypointId)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 switch (waypointId)
                 {
@@ -460,7 +460,7 @@ public:
         {
             Step = 0;
             EventStarted = true;
-            if (Creature* Spark = me->SummonCreature(MOB_SPARK, SparkPos, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
+            if (auto Spark = me->SummonCreature(MOB_SPARK, SparkPos, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
             {
                 SparkGUID = Spark->GetGUID();
                 Spark->setActive(true);
@@ -588,7 +588,7 @@ public:
         go->UseDoorOrButton();
         if (player->GetQuestStatus(QUEST_STRENGTH_ONE) == QUEST_STATUS_INCOMPLETE)
         {
-            if (Creature* ravager = go->FindNearestCreature(NPC_DEATH_RAVAGER, 5.0f, true))
+            if (auto ravager = go->FindNearestCreature(NPC_DEATH_RAVAGER, 5.0f, true))
             {
                 ravager->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 ravager->SetReactState(REACT_AGGRESSIVE);
@@ -677,7 +677,7 @@ class npc_stillpine_capitive : public CreatureScript
 
             void Reset()
             {
-                if (GameObject* cage = me->FindNearestGameObject(GO_BRISTELIMB_CAGE, 5.0f))
+                if (auto cage = me->FindNearestGameObject(GO_BRISTELIMB_CAGE, 5.0f))
                 {
                     cage->SetLootState(GO_JUST_DEACTIVATED);
                     cage->SetGoState(GO_STATE_READY);
@@ -744,7 +744,7 @@ class go_bristlelimb_cage : public GameObjectScript
             go->SetGoState(GO_STATE_READY);
             if (player->GetQuestStatus(QUEST_THE_PROPHECY_OF_AKIDA) == QUEST_STATUS_INCOMPLETE)
             {
-                if (Creature* capitive = go->FindNearestCreature(NPC_STILLPINE_CAPITIVE, 5.0f, true))
+                if (auto capitive = go->FindNearestCreature(NPC_STILLPINE_CAPITIVE, 5.0f, true))
                 {
                     go->ResetDoorOrButton();
                     CAST_AI(npc_stillpine_capitive::npc_stillpine_capitiveAI, capitive->AI())->StartMoving(player);

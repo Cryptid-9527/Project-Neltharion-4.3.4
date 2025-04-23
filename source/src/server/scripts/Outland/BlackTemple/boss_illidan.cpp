@@ -1051,7 +1051,7 @@ public:
 
                 case EVENT_PARASITIC_SHADOWFIEND:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200, true))
                             DoCast(target, SPELL_PARASITIC_SHADOWFIEND, true);
                         Timer[EVENT_PARASITIC_SHADOWFIEND] = urand(35000, 45000);
                     }
@@ -1535,7 +1535,7 @@ public:
             else
                 return; // if door not spawned, don't crash server
 
-            if (Creature* Channel = me->SummonCreature(ILLIDAN_DOOR_TRIGGER, x, y, z+5, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 360000))
+            if (auto Channel = me->SummonCreature(ILLIDAN_DOOR_TRIGGER, x, y, z+5, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 360000))
             {
                 ChannelGUID = Channel->GetGUID();
                 Channel->SetDisplayId(11686); // Invisible but spell visuals can still be seen.
@@ -1543,7 +1543,7 @@ public:
             }
 
             for (uint8 i = 0; i < 2; ++i)
-                if (Creature* Spirit = me->SummonCreature(i ? SPIRIT_OF_OLUM : SPIRIT_OF_UDALO, SpiritSpawns[i].x, SpiritSpawns[i].y, SpiritSpawns[i].z, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                if (auto Spirit = me->SummonCreature(i ? SPIRIT_OF_OLUM : SPIRIT_OF_UDALO, SpiritSpawns[i].x, SpiritSpawns[i].y, SpiritSpawns[i].z, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                 {
                     Spirit->SetVisible(false);
                     SpiritGUID[i] = Spirit->GetGUID();
@@ -1915,7 +1915,7 @@ void boss_illidan_stormrage::boss_illidan_stormrageAI::JustSummoned(Creature* su
         }
         break;
     case SHADOW_DEMON:
-        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 999, true)) // only on players.
+        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 999, true)) // only on players.
         {
             summon->AddThreat(target, 5000000.0f);
             summon->AI()->AttackStart(target);
@@ -2075,7 +2075,7 @@ public:
                         DespawnTimer = 5000;
                         if (who->HasAura(SPELL_ENRAGE))
                             who->RemoveAurasDueToSpell(SPELL_ENRAGE); // Dispel his enrage
-                        // if (GameObject* CageTrap = instance->instance->GetGameObject(instance->GetData64(CageTrapGUID)))
+                        // if (auto CageTrap = instance->instance->GetGameObject(instance->GetData64(CageTrapGUID)))
 
                         //    CageTrap->SetLootState(GO_JUST_DEACTIVATED);
                     }
@@ -2094,7 +2094,7 @@ public:
 
                 // if (IllidanGUID && !SummonedBeams)
                 // {
-                //    if (Unit* Illidan = Unit::GetUnit(*me, IllidanGUID)
+                //    if (auto Illidan = Unit::GetUnit(*me, IllidanGUID)
                 //    {
                 //        // TODO: Find proper spells and properly apply 'caged' Illidan effect
                 //    }
@@ -2114,7 +2114,7 @@ public:
         player->GetPosition(x, y, z);
 
         // Grid search for nearest live Creature of entry 23304 within 10 yards
-        if (Creature* pTrigger = go->FindNearestCreature(23304, 10.0f))
+        if (auto pTrigger = go->FindNearestCreature(23304, 10.0f))
             CAST_AI(mob_cage_trap_trigger::cage_trap_triggerAI, pTrigger->AI())->Active = true;
         go->SetGoState(GO_STATE_ACTIVE);
         return true;
@@ -2150,7 +2150,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* target = Unit::GetUnit(*me, TargetGUID))
+            if (auto target = Unit::GetUnit(*me, TargetGUID))
                 target->RemoveAurasDueToSpell(SPELL_PARALYZE);
         }
 
@@ -2243,7 +2243,7 @@ public:
                 if (!me->getVictim()->HasAura(SPELL_PARASITIC_SHADOWFIEND)
                     && !me->getVictim()->HasAura(SPELL_PARASITIC_SHADOWFIEND2))
                 {
-                    if (Creature* illidan = Unit::GetCreature((*me), IllidanGUID))// summon only in 1. phase
+                    if (auto illidan = Unit::GetCreature((*me), IllidanGUID))// summon only in 1. phase
                         if (CAST_AI(boss_illidan_stormrage::boss_illidan_stormrageAI, illidan->AI())->Phase == PHASE_NORMAL)
                             if (auto v = me->getVictim()) me->CastSpell(v, SPELL_PARASITIC_SHADOWFIEND2, true, 0, 0, IllidanGUID); // do not stack
                 }
@@ -2256,7 +2256,7 @@ public:
         {
             if (!me->getVictim())
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 999, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 999, true))
                     AttackStart(target);
                 else
                 {

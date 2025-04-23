@@ -96,16 +96,16 @@ class boss_kirtonos_the_herald : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_KIRTONOS)))
+                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_KIRTONOS)))
                     gate->SetGoState(GO_STATE_ACTIVE);
                 _JustDied();
             }
 
             void EnterEvadeMode()
             {
-                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_KIRTONOS)))
+                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_KIRTONOS)))
                     gate->SetGoState(GO_STATE_ACTIVE);
-                if (GameObject* brazier = me->GetMap()->GetGameObject(instance->GetData64(GO_BRAZIER_OF_THE_HERALD)))
+                if (auto brazier = me->GetMap()->GetGameObject(instance->GetData64(GO_BRAZIER_OF_THE_HERALD)))
                 {
                     brazier->ResetDoorOrButton();
                     brazier->SetGoState(GO_STATE_READY);
@@ -155,13 +155,13 @@ class boss_kirtonos_the_herald : public CreatureScript
                                 me->GetMotionMaster()->MoveSmoothPath(introPath, introPathSize);
                                 break;
                             case INTRO_2:
-                                if (GameObject* gate = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_GATE_KIRTONOS)))
+                                if (auto gate = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_GATE_KIRTONOS)))
                                     gate->SetGoState(GO_STATE_READY);
                                 me->SetFacingTo(0.01745329f);
                                 events.ScheduleEvent(INTRO_3, 3000);
                                 break;
                             case INTRO_3:
-                                if (GameObject* brazier = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_BRAZIER_OF_THE_HERALD)))
+                                if (auto brazier = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_BRAZIER_OF_THE_HERALD)))
                                     brazier->SetGoState(GO_STATE_READY);
                                 me->SetWalk(true);
                                 me->SetDisableGravity(false);

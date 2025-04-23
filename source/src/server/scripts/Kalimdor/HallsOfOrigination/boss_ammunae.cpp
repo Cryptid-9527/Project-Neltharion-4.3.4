@@ -212,7 +212,7 @@ class boss_ammunae : public CreatureScript
                             else
                             {
                                 me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, true);
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 {
                                     DoCast(target, SPELL_CONSUME_LIFE_ENERGIZE_EFFECT);
                                     DoCast(target, SPELL_CONSUME_LIFE_DAMAGE_EFFECT);
@@ -415,7 +415,7 @@ public:
                 {
                     case EVENT_ENERGIZE:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                        if (Unit* target = me->FindNearestCreature(BOSS_AMMUNAE, 100.f))
+                        if (auto target = me->FindNearestCreature(BOSS_AMMUNAE, 100.f))
                             DoCast(target, SPELL_ENERGIZE);//dummy aura
                         me->AddAura(SPELL_SEEDLING_POD_VISUAL_AURA, me);//actual aura that will energize and heal ammunae
                         events.ScheduleEvent(EVENT_ENERGIZE, 3000);
@@ -550,7 +550,7 @@ public:
 
         void IsSummonedBy(Unit* creator)
         {
-            if (Player* victim = me->FindNearestPlayer(50.0f))
+            if (auto victim = me->FindNearestPlayer(50.0f))
                 me->Attack(victim, false);
             me->setFaction(16);
         }

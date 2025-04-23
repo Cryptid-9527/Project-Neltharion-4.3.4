@@ -408,7 +408,7 @@ public:
         void JustSummoned(Creature* summoned)
         {
             if (instance)
-                if (Unit* target = Unit::GetUnit(*me, instance->GetData64(DATA_PLAYER_GUID)))
+                if (auto target = Unit::GetUnit(*me, instance->GetData64(DATA_PLAYER_GUID)))
                     summoned->AI()->AttackStart(target);
 
             Summons.Summon(summoned);
@@ -632,7 +632,7 @@ public:
                     case 3:
                         SpellTimer = urand(400, 900);
                         NeedForAHack = 1;
-                        if (Unit* Temp = me->getVictim())
+                        if (auto Temp = me->getVictim())
                         {
                             if (Temp->GetPositionZ() > 73 && Victim)
                                 AttackStart(Victim);

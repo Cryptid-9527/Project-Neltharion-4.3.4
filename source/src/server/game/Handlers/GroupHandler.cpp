@@ -455,7 +455,7 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket& recvData)
         {
             if (Group* group = GetPlayer()->GetGroup())
             {
-                if (Player* player = ObjectAccessor::FindPlayer(guid))
+                if (auto player = ObjectAccessor::FindPlayer(guid))
                 {
                     SendPartyResult(PARTY_OP_UNINVITE, "", res, (sLFGMgr->GetVoteKickCooldownTimer(group->GetGUID()) - time(NULL)));
                     return;
@@ -482,7 +482,7 @@ void WorldSession::HandleGroupUninviteGuidOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (Player* player = grp->GetInvited(guid))
+    if (auto player = grp->GetInvited(guid))
     {
         player->UninviteFromGroup();
         return;
@@ -527,7 +527,7 @@ void WorldSession::HandleGroupUninviteOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (Player* player = grp->GetInvited(membername))
+    if (auto player = grp->GetInvited(membername))
     {
         player->UninviteFromGroup();
         return;
@@ -654,7 +654,7 @@ void WorldSession::HandleRollPollBegin(WorldPacket& recvData)
     recvData.rfinish();
 
     if (Group *group = GetPlayer()->GetGroup())
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             if (Player *member = itr->getSource())
             {
                 WorldPacket data(SMSG_ROLE_POLL_BEGIN, 8);

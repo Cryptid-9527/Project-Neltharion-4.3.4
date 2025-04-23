@@ -78,7 +78,7 @@ public:
                 caster->ToPlayer()->KilledMonsterCredit(me->GetEntry(), me->GetGUID());
                 Talk(SAY_SPELL_HIT, caster->GetGUID());
                 me->RemoveAllAuras();
-                if (GameObject* Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
+                if (auto Lumberpile = me->FindNearestGameObject(GO_LUMBERPILE, 20))
                     me->GetMotionMaster()->MovePoint(1, Lumberpile->GetPositionX()-1, Lumberpile->GetPositionY(), Lumberpile->GetPositionZ());
             }
         }
@@ -135,7 +135,7 @@ class spell_voodoo : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 uint32 spellid = RAND(SPELL_BREW, SPELL_GHOSTLY, RAND(SPELL_HEX1, SPELL_HEX2, SPELL_HEX3), SPELL_GROW, SPELL_LAUNCH);
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     GetCaster()->CastSpell(target, spellid, false);
             }
 

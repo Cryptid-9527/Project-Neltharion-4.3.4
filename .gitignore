@@ -50,3 +50,5 @@ project/src/cmake_install.cmake
 *.tlog
 *.pdb
 *.lib
+*.txt
+*.aps

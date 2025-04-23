@@ -1489,7 +1489,7 @@ public:
         uint32 leaderGUID = 0;
         if (!*args)
         {
-            if (Creature* nearestCreature = handler->GetSession()->GetPlayer()->FindNearestCreature(0, 5.f))
+            if (auto nearestCreature = handler->GetSession()->GetPlayer()->FindNearestCreature(0, 5.f))
                 leaderGUID = nearestCreature->GetDBTableGUIDLow();
         }
         else

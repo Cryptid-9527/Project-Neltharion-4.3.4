@@ -112,15 +112,15 @@ void LFGPlayerScript::OnMapChanged(Player* player)
             return;
         }
 
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
-            if (Player* member = itr->getSource())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (auto member = itr->getSource())
                 player->GetSession()->SendNameQueryOpcode(member->GetGUID());
 
 
         uint8 StackCount = 0;
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            if (Player* plrg = itr->getSource())
+            if (auto plrg = itr->getSource())
             {
                 if(sLFGMgr->GetIsPremade(plrg->GetGUID()) == false)
                     StackCount++;
@@ -239,7 +239,7 @@ void LFGGroupScript::OnRemoveMember(Group* group, uint64 guid, RemoveMethod meth
     sLFGMgr->SetGroup(guid, 0);
     uint8 players = sLFGMgr->RemovePlayerFromGroup(gguid, guid);
 
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         if (method == GROUP_REMOVEMETHOD_LEAVE && state == LFG_STATE_DUNGEON &&
             players >= LFG_GROUP_KICK_VOTES_NEEDED)
@@ -252,7 +252,7 @@ void LFGGroupScript::OnRemoveMember(Group* group, uint64 guid, RemoveMethod meth
     }
 
     if (isLFG && state != LFG_STATE_FINISHED_DUNGEON) // Need more players to finish the dungeon
-        if (Player* leader = ObjectAccessor::FindPlayer(sLFGMgr->GetLeader(gguid)))
+        if (auto leader = ObjectAccessor::FindPlayer(sLFGMgr->GetLeader(gguid)))
             leader->GetSession()->SendLfgOfferContinue(sLFGMgr->GetDungeon(gguid, false));
 }
 

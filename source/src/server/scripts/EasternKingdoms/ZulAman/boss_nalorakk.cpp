@@ -348,7 +348,7 @@ class boss_nalorakk : public CreatureScript
                 _JustDied();
                 Talk(YELL_DEATH);
 
-                if (Creature* hazlek = me->FindNearestCreature(NPC_HOSTAGE_2, 200.f, true))
+                if (auto hazlek = me->FindNearestCreature(NPC_HOSTAGE_2, 200.f, true))
                     hazlek->AI()->DoAction(2);
             }
 
@@ -486,7 +486,7 @@ class boss_nalorakk : public CreatureScript
 
                 if (!UpdateVictim())
                     if (!me->isInCombat())
-                        if (Player* player = me->FindNearestPlayer(15.0f))
+                        if (auto player = me->FindNearestPlayer(15.0f))
                             if (me->ToUnit()->IsValidAttackTarget(player->ToUnit()))
                                 if (CommenceFight)
                                 {
@@ -614,7 +614,7 @@ public:
                 trash_events.ScheduleEvent(EVENT_MOVE_START_1, urand(0, 2500));
                 break;
             case ACTION_NALORAKK_ATTACK_ORDER_2:
-                if (Player* player = me->FindNearestPlayer(150.0f))
+                if (auto player = me->FindNearestPlayer(150.0f))
                     me->AI()->AttackStart(player->ToUnit());
                 break;
             default:
@@ -676,7 +676,7 @@ public:
                     trash_events.ScheduleEvent(EVENT_ATTACK_1, 3000);
                     break;
                 case EVENT_ATTACK_1:
-                    if (Player* player = me->FindNearestPlayer(50.0f))
+                    if (auto player = me->FindNearestPlayer(50.0f))
                         me->AI()->AttackStart(player->ToUnit());
                     break;
                 case EVENT_CHAIN_HEAL:

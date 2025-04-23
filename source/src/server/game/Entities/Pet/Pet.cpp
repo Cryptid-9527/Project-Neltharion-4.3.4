@@ -837,7 +837,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
             {
                 case 510: // mage Water Elemental
                 {
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_SPELL);
                         m_modSpellHitChance += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -853,9 +853,9 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 case 1863:
                 case 17252: // warlock mastery hackfix
                 {
-                    if (Unit* owner = GetOwner())
+                    if (auto owner = GetOwner())
                     {
-                        if (Player* Powner = owner->ToPlayer())
+                        if (auto Powner = owner->ToPlayer())
                         {
                             if (Powner->IsMasteryLearned() && (Powner->GetPrimaryTalentTree(Powner->GetActiveSpec()) == TALENT_TREE_WARLOCK_DEMONOLOGY))
                             {
@@ -886,7 +886,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 }
                 case 1964: //force of nature
                 {
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         int32 bonusDmg = int32(owner->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_NATURE) * 0.15f);
                         SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE) + bonusDmg);
@@ -899,7 +899,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 }
                 case 53432: // burning treant
                 {
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_SPELL);
                         m_modSpellHitChance += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -915,7 +915,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 {
                     SetCreateMana(pInfo ? pInfo->mana : 28 + 10 * petlevel);
                     SetMaxHealth(m_owner->CountPctFromMaxHealth(75));
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         SetSpellBonusDamage(owner->SpellBaseDamageBonusDone(SPELL_SCHOOL_MASK_MAGIC));
                         m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_SPELL);
@@ -977,7 +977,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                         SetCreateMana(28 + 30 * petlevel);
                         SetCreateHealth(28 + 10 * petlevel);
                     }
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_SPELL);
                         m_modSpellHitChance += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -988,7 +988,7 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 }
                 case 53438: // t12 mirror image should only scale with hit rating
                 {
-                    if (Player* owner = m_owner->ToPlayer())
+                    if (auto owner = m_owner->ToPlayer())
                     {
                         m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_SPELL);
                         m_modSpellHitChance += owner->GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_HIT_CHANCE);
@@ -1075,9 +1075,9 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                         SetStat(STAT_SPIRIT, 27);
                     }
 
-                    if (Unit* owner = GetOwner())
+                    if (auto owner = GetOwner())
                     {
-                        if (Player* Powner = owner->ToPlayer())
+                        if (auto Powner = owner->ToPlayer())
                         {
                             if (Powner->IsMasteryLearned() && (Powner->GetPrimaryTalentTree(Powner->GetActiveSpec()) == TALENT_TREE_WARLOCK_DEMONOLOGY))
                             {
@@ -1095,9 +1095,9 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
                 }
                 case 50675: // ebon imp spell scaling
                 {
-                    if (Unit* owner = GetOwner())
+                    if (auto owner = GetOwner())
                     {
-                        if (Player* Powner = owner->ToPlayer())
+                        if (auto Powner = owner->ToPlayer())
                         {
                             if (Powner->IsMasteryLearned() && (Powner->GetPrimaryTalentTree(Powner->GetActiveSpec()) == TALENT_TREE_WARLOCK_DEMONOLOGY))
                             {
@@ -1625,7 +1625,7 @@ bool Pet::removeSpell(uint32 spell_id, bool learn_prev, bool clear_ab)
         if (!m_loading)
         {
             // need update action bar for last removed rank
-            if (Unit* owner = GetOwner())
+            if (auto owner = GetOwner())
                 if (owner->GetTypeId() == TYPEID_PLAYER)
                     owner->ToPlayer()->PetSpellInitialize();
         }
@@ -1771,7 +1771,7 @@ uint8 Pet::GetMaxTalentPointsForLevel(uint8 level)
 {
     uint8 points = (level >= 20) ? ((level - 16) / 4) : 0;
     // Mod points from owner SPELL_AURA_MOD_PET_TALENT_POINTS
-    if (Unit* owner = GetOwner())
+    if (auto owner = GetOwner())
         points+=owner->GetTotalAuraModifier(SPELL_AURA_MOD_PET_TALENT_POINTS);
     return points;
 }
@@ -2027,7 +2027,7 @@ void Pet::ProhibitSpellSchool(SpellSchoolMask idSchoolMask, uint32 unTimeMs)
     {
         BuildCooldownPacket(data, SPELL_COOLDOWN_FLAG_NONE, cooldowns);
 
-        if (Player* owner = GetOwner())
+        if (auto owner = GetOwner())
             owner->GetSession()->SendPacket(&data);
     }
 }
@@ -2369,8 +2369,8 @@ void Pet::SetDisplayId(uint32 modelId)
     if (!isControlled())
         return;
 
-    if (Unit* owner = GetOwner())
-        if (Player* player = owner->ToPlayer())
+    if (auto owner = GetOwner())
+        if (auto player = owner->ToPlayer())
             if (player->GetGroup())
                 player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_PET_MODEL_ID);
 }

@@ -110,7 +110,7 @@ public:
                     events.ScheduleEvent(EVENT_QUIVERING_STRIKE, 10000);
                     break;
                 case EVENT_IMPENDING_DESPAIR:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                     {
                         Talk(SAY_IMPENDING_DESPAIR);
                         DoCast(target, SPELL_IMPENDING_DESPAIR);

@@ -348,7 +348,7 @@ public:
 					break;
 				case EVENT_ADDS_SUMMON:
 				{
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
 					{
 						uint8 amount = 3;
 						uint8 pos = urand(0, 1);
@@ -483,14 +483,14 @@ public:
 
 		void HandleScript(SpellEffIndex effIndex)
 		{
-			if (Unit* caster = GetCaster())
+			if (auto caster = GetCaster())
 			{
-				if (Unit* target = GetHitUnit())
+				if (auto target = GetHitUnit())
 				{
 					Position spawnPos;
 					caster->GetPosition(&spawnPos);
 					caster->GetNearPoint2D(spawnPos.m_positionX, spawnPos.m_positionY, 5.0f, caster->GetOrientation());
-					if (Creature* veh = caster->SummonCreature(987656, spawnPos.m_positionX, spawnPos.m_positionY, spawnPos.m_positionZ, caster->GetOrientation() + M_PI))
+					if (auto veh = caster->SummonCreature(987656, spawnPos.m_positionX, spawnPos.m_positionY, spawnPos.m_positionZ, caster->GetOrientation() + M_PI))
 					{
 						target->SetDisableGravity(true);
 						target->SendMovementDisableGravity(); 
@@ -517,7 +517,7 @@ public:
 
 		void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
 		{
-			if (Unit* target = GetTarget())
+			if (auto target = GetTarget())
 			{
 				if (Vehicle* veh = target->GetVehicle())
 					veh->RemoveAllPassengers();
@@ -547,8 +547,8 @@ public:
 
 		void HandleScript(SpellEffIndex effIndex)
 		{
-			if (Unit* caster = GetCaster())
-				if (Unit* target = GetHitUnit())
+			if (auto caster = GetCaster())
+				if (auto target = GetHitUnit())
 					target->CastSpell(caster, GetSpellInfo()->Effects[effIndex].TriggerSpell, true);
 		}
 
@@ -627,7 +627,7 @@ public:
 
 			if (point == 2)
 			{
-				if (Unit* passenger = me->GetVehicleKit()->GetPassenger(2))
+				if (auto passenger = me->GetVehicleKit()->GetPassenger(2))
 					if(Creature* azil = me->FindNearestCreature(BOSS_HIGH_PRIESTESS_AZIL, 100.f))
 						azil->CastSpell(passenger, SPELL_FORCE_GRIP_DAMAGE, true);
 				

@@ -184,7 +184,7 @@ class boss_venoxis : public CreatureScript
             void InitializeAI()
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = me->SummonCreature(NPC_GENERAL_BUNNY, TotemSP[i]))
+                    if (auto totem = me->SummonCreature(NPC_GENERAL_BUNNY, TotemSP[i]))
                     {
                         TotemGUID[i] = totem->GetGUID();
                         totem->CastSpell(totem, SPELL_POINSON_TOTEM, true);
@@ -219,9 +219,9 @@ class boss_venoxis : public CreatureScript
                 summons.DespawnEntry(NPC_VENOMOUS_EFFUSION_STALKER);
 
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* effusion_stalker = me->SummonCreature(NPC_VENOMOUS_EFFUSION_STALKER, EffusionSP[i]))
+                    if (auto effusion_stalker = me->SummonCreature(NPC_VENOMOUS_EFFUSION_STALKER, EffusionSP[i]))
                     {
-                        if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                        if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                             totem->CastSpell(effusion_stalker, TotemSpell[i], true);
 
                         effusion_stalker->CastSpell(effusion_stalker, SPELL_VENOMOUS_EFFUSION_STALKER_AURA, true, NULL, NULL, me->GetGUID());
@@ -267,7 +267,7 @@ class boss_venoxis : public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                         totem->CastStop();
             }
 
@@ -400,7 +400,7 @@ class boss_venoxis : public CreatureScript
                                 std::list<Creature*> stalker;
                                 me->GetCreatureListWithEntryInGrid(stalker, NPC_PULL_OF_ACRID_TEARS, 200.0f);
                                 for (std::list<Creature*>::iterator itr = stalker.begin(); itr != stalker.end(); itr++)
-                                    if (Creature* c = *itr)
+                                    if (auto c = *itr)
                                     {
                                         c->RemoveAura(SPELL_ACRID_TEARS_AURA);
                                         c->CastSpell(me, SPELL_VENOXIS_COSMETIC_MISSILE, false);
@@ -469,7 +469,7 @@ class boss_venoxis : public CreatureScript
                             else
                             {
                                 for (int i = 0; i < 2; ++i)
-                                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                                         totem->CastStop();
                             }
                             break;
@@ -502,7 +502,7 @@ class boss_venoxis : public CreatureScript
                                 events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 150.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 150.0f, true))
                                     me->CastSpell(target, SPELL_SUMMON_POOL_OF_ACRID_TEARS, false);
                                 events.ScheduleEvent(EVENT_POOL_OF_ACRID_TEARS, urand(8000, 12000), 0, PHASE_2);
                             }
@@ -565,7 +565,7 @@ class npc_venoxis_bloodvenom : public CreatureScript
             void IsSummonedBy(Unit* summoner)
             {
                 me->NearTeleportTo(summoner->GetPositionX(), summoner->GetPositionY(), summoner->GetPositionZ(), summoner->GetOrientation());
-                if (Creature* c = me->FindNearestCreature(NPC_HIGHPRIEST_VENOXIX, 200.0f))
+                if (auto c = me->FindNearestCreature(NPC_HIGHPRIEST_VENOXIX, 200.0f))
                 {
                     c->AI()->JustSummoned(me);
                     me->GetMotionMaster()->MoveChase(summoner, 1.f);
@@ -762,7 +762,7 @@ class spell_whispers_of_hethiss : public SpellScriptLoader
             {
                 PreventDefaultAction();
 
-                if (Unit* target = ObjectAccessor::GetUnit(*GetCaster(), GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
+                if (auto target = ObjectAccessor::GetUnit(*GetCaster(), GetCaster()->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
                     GetCaster()->CastSpell(target, GetSpellInfo()->Effects[EFFECT_1].TriggerSpell, true);
             }
 
@@ -792,7 +792,7 @@ class spell_venom_withdrawal : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->GetMotionMaster()->MoveJump(-12003.72f, -1688.24f, 32.30f, 20.0f, 20.0f);
             }
 

@@ -191,13 +191,13 @@ class boss_warbringer_omrogg : public CreatureScript
 
             void Reset()
             {
-                if (Unit* pLeftHead  = Unit::GetUnit(*me, LeftHeadGUID))
+                if (auto pLeftHead  = Unit::GetUnit(*me, LeftHeadGUID))
                 {
                     pLeftHead->setDeathState(JUST_DIED);
                     LeftHeadGUID = 0;
                 }
 
-                if (Unit* pRightHead  = Unit::GetUnit(*me, RightHeadGUID))
+                if (auto pRightHead  = Unit::GetUnit(*me, RightHeadGUID))
                 {
                     pRightHead->setDeathState(JUST_DIED);
                     RightHeadGUID = 0;
@@ -243,7 +243,7 @@ class boss_warbringer_omrogg : public CreatureScript
                 me->SummonCreature(NPC_LEFT_HEAD, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0);
                 me->SummonCreature(NPC_RIGHT_HEAD, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0);
 
-                if (Creature* pLeftHead = Creature::GetCreature(*me, LeftHeadGUID))
+                if (auto pLeftHead = Creature::GetCreature(*me, LeftHeadGUID))
                 {
                     iaggro = rand()%3;
 
@@ -384,7 +384,7 @@ class boss_warbringer_omrogg : public CreatureScript
 
                 if (ResetThreat_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         DoYellForThreat();
                         DoResetThreat();

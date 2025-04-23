@@ -43,7 +43,7 @@ public:
             return true;
         player->CastSpell(player, action, true);
 
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
             if (action == DRAKE_SANCTUM_AZUR && instance->GetData(DATA_FRAGMENTS) < 16)
                 instance->SetData(DATA_JAINA_PICKED_STATE, IN_PROGRESS);
 

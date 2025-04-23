@@ -486,7 +486,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 }
 
             bool isSoloQueueArena = false;
-            if (Battleground* bg = GetPlayer()->GetBattleground())
+            if (auto bg = GetPlayer()->GetBattleground())
                 isSoloQueueArena = bg->isSoloQueueArena();
 
             // if player is in battleground, he cannot say to battleground members by /p
@@ -528,7 +528,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 
             if (GetPlayer()->GetGuildId())
             {
-                if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+                if (auto guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
                 {
                     sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
@@ -548,7 +548,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 
             if (GetPlayer()->GetGuildId())
             {
-                if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
+                if (auto guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
                 {
                     sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
@@ -875,7 +875,7 @@ void WorldSession::HandleAddonMessagechatOpcode(WorldPacket& recvData)
         case CHAT_MSG_OFFICER:
         {
             if (sender->GetGuildId())
-                if (Guild* guild = sGuildMgr->GetGuildById(sender->GetGuildId()))
+                if (auto guild = sGuildMgr->GetGuildById(sender->GetGuildId()))
                     guild->BroadcastAddonToGuild(this, type == CHAT_MSG_OFFICER, message, prefix);
             break;
         }

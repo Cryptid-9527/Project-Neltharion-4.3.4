@@ -405,10 +405,10 @@ public:
             phase_two_rp = false;
             RemoveEncounterFrame();
             for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                     summon->AI()->RemoveEncounterFrame();
 
-            if (Creature* thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
+            if (auto thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
                 thrall->AI()->Reset();
             summons.DespawnAll();
             me->DespawnCreaturesInArea(NPC_MUTETED_CORRUPTION, 800.0f);
@@ -418,7 +418,7 @@ public:
             //me->DespawnCreaturesInArea(NPC_SUMMON_ENABLER_STALKER, 800.0f);
             me->DespawnCreaturesInArea(NPC_ELEMENTIUM_FRAGMENT, 800.0f);
             for (auto itr : aspectInfo)
-                if (Creature* aspect = instance->GetCreature(itr.first))
+                if (auto aspect = instance->GetCreature(itr.first))
                     aspect->GetMotionMaster()->MoveTargetedHome();
             instance->SetBossState(DATA_MADNESS_OF_DEATHWING, FAIL);
             Reset();
@@ -595,7 +595,7 @@ public:
                 me->DespawnCreaturesInArea(NPC_CONGAELING_BLOOD_TARGET, 800.f);
 
                     events.Reset();
-                    if (Creature* thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
+                    if (auto thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
                         thrall->AI()->DoAction(ACTION_OUTRO);
 
                     if (auto c = me->FindNearestCreature(NPC_DEATHWING_HEAD, 1000.f))
@@ -616,13 +616,13 @@ public:
                     me->DespawnCreaturesInArea(NPC_TIME_ZONE, 800.0f);
 
 
-                    if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+                    if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                         alex->DeleteThreatList();
-                    if (Creature* kalecgos = instance->GetCreature(NPC_KALECGOS))//3s
+                    if (auto kalecgos = instance->GetCreature(NPC_KALECGOS))//3s
                         kalecgos->DeleteThreatList();
-                    if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))//15s
+                    if (auto noz = instance->GetCreature(NPC_NOZDORMU))//15s
                         noz->DeleteThreatList();
-                    if (Creature* ysera = instance->GetCreature(NPC_YSERA))//5s
+                    if (auto ysera = instance->GetCreature(NPC_YSERA))//5s
                         ysera->DeleteThreatList();
 
                     
@@ -647,7 +647,7 @@ public:
             instance->CompleteGuildCriteriaForGuildGroup(18487);
 
             RemoveEncounterFrame();
-            if (GameObject* chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_MADNESS_CHEST_LFR : DATA_MADNESS_CHEST))
+            if (auto chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_MADNESS_CHEST_LFR : DATA_MADNESS_CHEST))
             {
                 chest->SetRespawnTime(chest->GetRespawnDelay());
                 chest->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE | GO_FLAG_IN_USE);
@@ -659,7 +659,7 @@ public:
                 Map::PlayerList const &playerList = me->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
                 {
-                    if (Player* player = i->getSource())
+                    if (auto player = i->getSource())
                     {
                         player->ModifyCurrency(CURRENCY_TYPE_VALOR_POINTS, Is25ManRaid() ? 13500 : 11500);
                         player->ModifyCurrency(CURRENCY_TYPE_ESSENCE_OF_CORRUPTED_DEATHWING, 1);
@@ -706,7 +706,7 @@ public:
                         Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
                         for (auto i = playerList.begin(); i != playerList.end(); ++i)
                         {
-                            if (Player* player = i->getSource())
+                            if (auto player = i->getSource())
                             {
                                 player->ModifyCurrency(CURRENCY_TYPE_VALOR_POINTS, Is25ManRaid() ? 13500 : 11500);
                                 player->ModifyCurrency(CURRENCY_TYPE_ESSENCE_OF_CORRUPTED_DEATHWING, 1);
@@ -727,7 +727,7 @@ public:
                     {
                         Talk(DW_CHAT_CATACLYSM, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                         DoCast(SPELL_CATACLYSM);
-                        if (Creature* currAspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
+                        if (auto currAspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
                         {
                             uint32 spell = 0;
                             int32 text = 0;
@@ -745,7 +745,7 @@ public:
                     case EVENT_ELEMENTIUM_BOLT:
                         Talk(DW_CHAT_ELEMENTIUM_BOLT, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                         TalkBroadcastGroup(DW_SAY_ELEMENTUIM_BOLT);
-                        if (Creature* aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
+                        if (auto aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
                             aspect->AI()->DoAction(ACTION_ELEMENTIUM_BOLT);
                         DoCast(SPELL_ELEMENTIUM_BOLT);
                         break;
@@ -765,7 +765,7 @@ public:
                         RemoveEncounterFrame();
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
                         {
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                             {
                                 if (summon->GetEntry() == NPC_DEATHWING_HEAD)
                                 {
@@ -794,7 +794,7 @@ public:
                         me->DespawnCreaturesInArea(NPC_SUMMON_ENABLER, 800.0f);
                         uint8 cnt = Is25ManRaid() ? 3 : 1;
                         for (int i = 0; i < 3; i++)
-                            if (Creature* summon = DoSummon(NPC_SUMMON_ENABLER, triggerPos[i], 30000, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto summon = DoSummon(NPC_SUMMON_ENABLER, triggerPos[i], 30000, TEMPSUMMON_MANUAL_DESPAWN))
                                 for (int i = 0; i < cnt; i++)
                                     summon->CastSpell(summon, SPELL_SUMMON_IMPALING_TENTACLE, false); // Elementium Fragment
                         events.ScheduleEvent(EVENT_PLAYER_DISTANCE_CHECK, 30500);
@@ -804,20 +804,20 @@ public:
 
                         Talk(SAY_PHASE_TWO_1);//16s
                         
-                        if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+                        if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                             alex->TalkWithDelay(18000, SAY_PHASE_TWO_2, NULL);//2s
 
-                        if (Creature* kalecgos = instance->GetCreature(NPC_KALECGOS))//3s
+                        if (auto kalecgos = instance->GetCreature(NPC_KALECGOS))//3s
                             kalecgos->AI()->TalkWithDelay(20000, SAY_PHASE_TWO_3, NULL);
 
-                        if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))//15s
+                        if (auto noz = instance->GetCreature(NPC_NOZDORMU))//15s
                             noz->AI()->TalkWithDelay(24000, SAY_PHASE_TWO_4);
 
-                        if (Creature* ysera = instance->GetCreature(NPC_YSERA))//5s
+                        if (auto ysera = instance->GetCreature(NPC_YSERA))//5s
                             ysera->AI()->TalkWithDelay(38000, SAY_PHASE_TWO_5);
 
 
-                        if (Creature* thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
+                        if (auto thrall = instance->GetCreature(NPC_DW_MADNESS_THRALL))
                         {
                             thrall->AI()->TalkWithDelay(42000, SAY_PHASE_TWO_6);//3s
                             thrall->AI()->TalkWithDelay(46000, SAY_PHASE_TWO_7);//8s
@@ -836,15 +836,15 @@ public:
                     {
                         uint8 cnt = Is25ManRaid() ? 3 : 1;
                         for (int i = 0; i < 3; i++)
-                            if (Creature* summon = DoSummon(NPC_SUMMON_ENABLER, triggerPos[i], 30000, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto summon = DoSummon(NPC_SUMMON_ENABLER, triggerPos[i], 30000, TEMPSUMMON_MANUAL_DESPAWN))
                                 for (int i = 0; i < cnt; i++)
                                     summon->CastSpell(summon, SPELL_SUMMON_IMPALING_TENTACLE, false);
                         events.ScheduleEvent(EVENT_ELEMENTIUM_TERROR, 90000);
                         break;
                     }
                     case EVENT_SUMMON_TIME_ZONE:
-                        if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))
-                            if (Creature* timeZoneTarget = noz->SummonCreature(NPC_TIME_ZONE_TARGET, -12094.860f, 12158.730f, -2.734f, 0.00f, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                        if (auto noz = instance->GetCreature(NPC_NOZDORMU))
+                            if (auto timeZoneTarget = noz->SummonCreature(NPC_TIME_ZONE_TARGET, -12094.860f, 12158.730f, -2.734f, 0.00f, TEMPSUMMON_TIMED_DESPAWN, 20000))
                                 noz->CastSpell(timeZoneTarget, SPELL_TIME_ZONE_MISSILE_PHASE_2, true);
                         events.ScheduleEvent(EVENT_SUMMON_TIME_ZONE, 90000);
                         break;
@@ -861,7 +861,7 @@ public:
                     {
                         Map::PlayerList const& players = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->GetAreaId() == 5893)
                                     if (player->GetExactDist2d(-12093.537f, 12159.299f) >= 49.00f)
                                         player->NearTeleportTo(-12093.537f, 12159.299f, -2.7339f, 1.0372f);
@@ -912,7 +912,7 @@ public:
 
         void JustDied(Unit* /*killer*/) override
         {
-            if (Creature* deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+            if (auto deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
                 deathwing->AI()->DoAction(ACTION_FINISH_FIGHT);
         }
 
@@ -932,7 +932,7 @@ public:
                 if (!targetList.empty() && targetList.size() > 1)
                     Trinity::Containers::RandomResizeList(targetList, 1);
 
-                if (Creature* bloodTarget = targetList.front())
+                if (auto bloodTarget = targetList.front())
                     bloodTarget->AddAura(SPELL_CONGAELING_BLOOD_SUMMON, bloodTarget);
             }
         }
@@ -962,7 +962,7 @@ public:
                 me->RemoveAllAuras();
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                 
-                if (Creature* deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+                if (auto deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
                     deathwing->AI()->DoAction(ACTION_FINISH_FIGHT);
                 summons.DespawnAll();
                 me->DeleteThreatList();
@@ -975,7 +975,7 @@ public:
                 {
                     below16PctCheck = true;
                     me->AI()->DoAction(ACTION_SUMMON_BLOOD);
-                    if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+                    if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                     {
                         alex->CastSpell(alex, SPELL_CAUTERIZE_DEATHWING_5_SEC, true);
                         me->SetPower(POWER_ALTERNATE_POWER, 10);
@@ -986,7 +986,7 @@ public:
                 {
                     below11PctCheck = true;
                     me->AI()->DoAction(ACTION_SUMMON_BLOOD);
-                    if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+                    if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                     {
                         alex->CastSpell(alex, SPELL_CAUTERIZE_DEATHWING_10_SEC, true);
                         me->SetPower(POWER_ALTERNATE_POWER, 20);
@@ -997,7 +997,7 @@ public:
                 {
                     below6PctCheck = true;
                     me->AI()->DoAction(ACTION_SUMMON_BLOOD);
-                    if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+                    if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                     {
                         alex->CastSpell(alex, SPELL_CAUTERIZE_DEATHWING_15_SEC, true);
                         me->SetPower(POWER_ALTERNATE_POWER, 30);
@@ -1048,13 +1048,13 @@ public:
             if (itr != aspectInfo.end())
                 index = itr->second.index;
 
-            if (Unit* target = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+            if (auto target = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
             {
                 if (MadnessAI* madnessAI = CAST_AI(MadnessAI, target->GetAI()))
                     guid = madnessAI->GetTentacle(index);
             }
 
-            if (Creature* limb = ObjectAccessor::GetCreature(*me, guid))
+            if (auto limb = ObjectAccessor::GetCreature(*me, guid))
                 return limb;
 
             return nullptr;
@@ -1105,7 +1105,7 @@ public:
                 Unit* temp = me;
                 creatureList.remove_if([temp](WorldObject* target)
                 {
-                    if (Unit* trigger = temp->FindNearestCreature(NPC_PLATFORM_TRIGGER, 150.0f, true))
+                    if (auto trigger = temp->FindNearestCreature(NPC_PLATFORM_TRIGGER, 150.0f, true))
                         if (target->IsInBetween(temp, trigger, 30))
                             return false;
                     return true;
@@ -1149,11 +1149,11 @@ public:
                 {
                     playerCnt = 0;
 
-                    if (Unit* trigger = me->FindNearestCreature(NPC_PLATFORM_TRIGGER, 150.0f, true))
+                    if (auto trigger = me->FindNearestCreature(NPC_PLATFORM_TRIGGER, 150.0f, true))
                     {
                         Map::PlayerList const& players = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->IsInBetween(me, trigger, 40.0f))
                                     ++playerCnt;
                     }
@@ -1163,11 +1163,11 @@ public:
                 {
                     me->DespawnCreaturesInArea(NPC_TIME_ZONE, 450.00f);
                     instance->SetData64(DATA_ACTIVE_PLATFORM, me->GetGUID());
-                    if (Creature* limb = GetLimbTentacle())
+                    if (auto limb = GetLimbTentacle())
                         limb->AI()->DoAction(ACTION_ACTIVATE_PLATFORM);
-                    if (Creature* madness = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+                    if (auto madness = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
                         madness->AI()->DoAction(ACTION_ACTIVATE_PLATFORM);
-                    if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))
+                    if (auto noz = instance->GetCreature(NPC_NOZDORMU))
                     {
                         if (noz->HasAura(SPELL_NOZDORMUS_PRESENCE_AURA))
                         {
@@ -1190,7 +1190,7 @@ public:
                                     break;
                             }
 
-                            if (Creature* timeZoneTarget = noz->SummonCreature(NPC_TIME_ZONE_TARGET, pos, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                            if (auto timeZoneTarget = noz->SummonCreature(NPC_TIME_ZONE_TARGET, pos, TEMPSUMMON_TIMED_DESPAWN, 20000))
                                 noz->CastWithDelay(5000, timeZoneTarget, SPELL_TIME_ZONE_MISSILE_PHASE_1, false);
                         }
                     }
@@ -1338,23 +1338,23 @@ public:
                     DoCast(SPELL_ASTRAL_RECALL_2);
                     DoCast(SPELL_TRIGGER_ASPECT_YELL_2);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    if (Creature* alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
+                    if (auto alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
                     {
                         alexstrasza->AI()->TalkWithDelay(1000, OUTRO_ALEXSTRASZA);
                         alexstrasza->CastWithDelay(1000, me, SPELL_ALEXSTRASZA_EXPOSE_WEAKNESS);
                     }
 
-                    if (Creature* kalecgos = instance->GetCreature(NPC_KALECGOS))
+                    if (auto kalecgos = instance->GetCreature(NPC_KALECGOS))
                     {
                         kalecgos->AI()->TalkWithDelay(10000, OUTRO_KALECGOS);
                         kalecgos->CastWithDelay(10000, me, SPELL_KALECGOS_EXPOSE_WEAKNESS);
                     }
-                    if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))
+                    if (auto noz = instance->GetCreature(NPC_NOZDORMU))
                     {
                         noz->AI()->TalkWithDelay(16000, OUTRO_NOZDORMU);
                         noz->CastWithDelay(16000, me, SPELL_NOZDORMU_EXPOSE_WEAKNESS);
                     }
-                    if (Creature* ysera = instance->GetCreature(NPC_YSERA))
+                    if (auto ysera = instance->GetCreature(NPC_YSERA))
                     {
                         ysera->AI()->TalkWithDelay(29000, OUTRO_YSERA);
                         ysera->CastWithDelay(29000, me, SPELL_YSARA_EXPOSE_WEAKNESS);//12 seconds
@@ -1388,19 +1388,19 @@ public:
                         events.ScheduleEvent(NPC_DW_MADNESS + 1, 10000);
                         break;
                     case NPC_DW_MADNESS+1:
-                        if (Creature* alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
+                        if (auto alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
                             alexstrasza->AI()->Talk(INTRO_ALEXSTRASZA_1, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         else TC_LOG_ERROR("sql.sql", "NPC_DW_MADNESS+1 : alex not found");
                         events.ScheduleEvent(NPC_DW_MADNESS + 2, 7000);
                         break;
                     case NPC_DW_MADNESS+2:
-                        if (Creature* alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
+                        if (auto alexstrasza = instance->GetCreature(NPC_ALEXSTRASZA))
                         alexstrasza->AI()->Talk(INTRO_ALEXSTRASZA_2, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         else TC_LOG_ERROR("sql.sql", "NPC_DW_MADNESS+2 : alex not found");
                         events.ScheduleEvent(NPC_DW_MADNESS + 3, 8000);
                         break;
                     case NPC_DW_MADNESS+3:
-                        if (Creature* noz = instance->GetCreature(NPC_NOZDORMU))
+                        if (auto noz = instance->GetCreature(NPC_NOZDORMU))
                             noz->AI()->Talk(INTRO_NOZDORMU, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         else TC_LOG_ERROR("sql.sql", "NPC_DW_MADNESS+3 : noz not found");
                         break;
@@ -1478,7 +1478,7 @@ public:
                     DoCast(SPELL_SPAWN_BLISTERING_TENTACLES);
                 me->GetVehicleKit()->RelocatePassengers();
                 Talk(TENTACLE_EMOTE_BLISTERING, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                if (Creature* alexstaza = instance->GetCreature(NPC_ALEXSTRASZA))
+                if (auto alexstaza = instance->GetCreature(NPC_ALEXSTRASZA))
                     if (alexstaza->HasAura(SPELL_ALEXSTRASZAS_PRESENCE_AURA))
                         alexstaza->CastSpell(alexstaza, SPELL_CAUTERIZE_BLISTERING, false);
             }
@@ -1559,7 +1559,7 @@ public:
                 {
                     case EVENT_HEMORRHAGE:
                         //TC_LOG_ERROR("sql.sql", "EVENT_HEMO");
-                        if (Creature* deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+                        if (auto deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
                             if (auto timeZone = me->FindNearestCreature(NPC_TIME_ZONE, 200.f))
                                 for (uint8 i = 0; i < 6; i++)
                                 {
@@ -1683,7 +1683,7 @@ public:
                         else
                         {
 
-                            if (Creature* nearest_aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
+                            if (auto nearest_aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
                                 DoCast(nearest_aspect, SPELL_IMPALE_ASPECT);
 
                             events.ScheduleEvent(EVENT_IMPALE, 7500);
@@ -1693,7 +1693,7 @@ public:
                     }
                     case EVENT_CRUSH:
                         DoCastRandom(SPELL_CRUSH_TARGET, 50.0f);
-                        if (Unit* trigger = me->FindNearestCreature(NPC_CRUSH_TARGET, 50.0f))
+                        if (auto trigger = me->FindNearestCreature(NPC_CRUSH_TARGET, 50.0f))
                         {
                             auto lock_orientation{ me->GetAngle(trigger) };
                             DoCast(trigger, SPELL_CRUSH);
@@ -1768,7 +1768,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_SHRAPNELL:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 800.0f, true, -SPELL_SHRAPNEL_MARK))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 800.0f, true, -SPELL_SHRAPNEL_MARK))
                         {
                             me->AddAura(SPELL_SHRAPNEL_MARK, target);
                             me->CastWithDelay(1000, target, SPELL_SHRAPNEL);
@@ -1816,7 +1816,7 @@ public:
             me->SetCanFly(true);
             me->SetDisableGravity(true);
             me->SetReactState(REACT_PASSIVE);
-            if (Creature* aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
+            if (auto aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
             {
                 Position pos;
                 switch (aspect->GetEntry())
@@ -1855,7 +1855,7 @@ public:
                     me->SetAIAnimKitId(0);
                     DoCast(me, SPELL_ELEMENTIUM_BLAST, true);
                     DoCast(me, SPELL_ELEMENTIUM_BLAST_PERIODIC, true);
-                    if (Creature* marker = me->FindNearestCreature(NPC_ELEMENTIUM_BOLT_TARGET, 800.0f))
+                    if (auto marker = me->FindNearestCreature(NPC_ELEMENTIUM_BOLT_TARGET, 800.0f))
                     {
                         marker->RemoveAurasDueToSpell(SPELL_ELEMENTIUM_BOLT_VIS);
                         DoCast(marker, SPELL_RIDE_VEHICLE_HARDCODED, true);
@@ -1868,7 +1868,7 @@ public:
 
         void JustDied(Unit* killer) override
         {
-            if (Creature* marker = me->FindNearestCreature(NPC_ELEMENTIUM_BOLT_TARGET, 800.0f))
+            if (auto marker = me->FindNearestCreature(NPC_ELEMENTIUM_BOLT_TARGET, 800.0f))
             {
                 marker->CastSpell(marker, SPELL_ELEMENTIUM_BLAST_TRANSFORM, true);
                 marker->CastSpell(marker, SPELL_CLAW_MARK, true);
@@ -1886,7 +1886,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_MOVE_EXPLOSION:
-                        if (Creature* aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
+                        if (auto aspect = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ACTIVE_PLATFORM)))
                         {
                             Position pos;
                             switch (aspect->GetEntry())
@@ -1907,7 +1907,7 @@ public:
                                     break;
                             }
                             float speed = (me->GetExactDist2d(pos.GetPositionX(), pos.GetPositionY()) / urand(8, 10)) / 7;
-                            if (Creature* timeZone = me->FindNearestCreature(NPC_TIME_ZONE, 200.00f))
+                            if (auto timeZone = me->FindNearestCreature(NPC_TIME_ZONE, 200.00f))
                                 me->SetSpeed(MOVE_FLIGHT, speed);
 
                             me->GetMotionMaster()->MovePoint(POINT_EXPLOSION, pos, false);
@@ -1956,11 +1956,11 @@ public:
             // vehicle_template_accessory dont work...
             Position pos(*me);
             for (int32 i = 0; i < 4; i++)
-                if (Creature* tentacle = me->SummonCreature(NPC_CORRUPTING_PARASITE_TENTACLE, pos, TEMPSUMMON_TIMED_DESPAWN, 11500))
+                if (auto tentacle = me->SummonCreature(NPC_CORRUPTING_PARASITE_TENTACLE, pos, TEMPSUMMON_TIMED_DESPAWN, 11500))
                     tentacle->CastCustomSpell(me, SPELL_RIDE_VEHICLE_HARDCODED, &i, NULL, NULL, TRIGGERED_FULL_MASK);
 
-            if (InstanceScript* instance = me->GetInstanceScript())
-                if (Creature* alexstaza = instance->GetCreature(NPC_ALEXSTRASZA))
+            if (auto instance = me->GetInstanceScript())
+                if (auto alexstaza = instance->GetCreature(NPC_ALEXSTRASZA))
                     if (alexstaza->HasAura(SPELL_ALEXSTRASZAS_PRESENCE_AURA))
                         alexstaza->CastWithDelay(3000, alexstaza, SPELL_CAUTERIZE_PARASITE);
         }
@@ -2008,7 +2008,7 @@ public:
             DoCast(me, SPELL_DEGENERATIVE_BITE, true);
             events.ScheduleEvent(EVENT_REGENERATE_BLOOD, 1000);
             events.ScheduleEvent(EVENT_PLATFORM_CHECK, 1000);
-            if (Unit* target = me->FindNearestPlayer(50.0f))
+            if (auto target = me->FindNearestPlayer(50.0f))
                 AttackStart(target);
         }
 
@@ -2152,7 +2152,7 @@ public:
         {
             for (auto const &itr : targets)
             {
-                if (Creature* target = itr->ToCreature())
+                if (auto target = itr->ToCreature())
                 {
                     target->AI()->DoAction(ACTION_GET_PLAYERS);
                     uint32 count = target->AI()->GetData(DATA_PLAYERS);
@@ -2168,9 +2168,9 @@ public:
                 [](const std::pair<uint64, uint32>& p1, const std::pair<uint64, uint32>& p2) {
                 return p1.second < p2.second; });
 
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
-                if (Creature* target = ObjectAccessor::GetCreature((*GetCaster()), pr->first))
+                if (auto target = ObjectAccessor::GetCreature((*GetCaster()), pr->first))
                 {
                     instance->SetData(DATA_MADNESS_PLATFORM_COUNT, instance->GetData(DATA_MADNESS_PLATFORM_COUNT) + 1);
                     target->AI()->DoAction(ACTION_ACTIVATE_PLATFORM);
@@ -2184,7 +2184,7 @@ public:
                     }
                     GetCaster()->ToCreature()->AI()->DoCast(spell);
 
-                    if (Creature* deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
+                    if (auto deathwing = instance->GetCreature(DATA_MADNESS_OF_DEATHWING))
                         deathwing->AI()->Talk(emote, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                 }
             }
@@ -2302,9 +2302,9 @@ public:
 
         void FilterTarget(std::list<WorldObject*>& targets)
         {
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                if (Creature* limb = ObjectAccessor::GetCreature((*GetCaster()), instance->GetData64(DATA_ACTIVE_PLATFORM)))
-                    if (Creature* trigger = limb->FindNearestCreature(NPC_CORRUPTION_TRIGGER, 200.0f))
+            if (auto instance = GetCaster()->GetInstanceScript())
+                if (auto limb = ObjectAccessor::GetCreature((*GetCaster()), instance->GetData64(DATA_ACTIVE_PLATFORM)))
+                    if (auto trigger = limb->FindNearestCreature(NPC_CORRUPTION_TRIGGER, 200.0f))
                     {
                         targets.clear();
                         targets.push_back(trigger);
@@ -2467,7 +2467,7 @@ public:
         void FilterTarget(WorldObject*& target)
         {
             if (AspectAI* aspectai = CAST_AI(AspectAI, GetCaster()->GetAI()))
-                if (Creature* tentacle = aspectai->GetLimbTentacle())
+                if (auto tentacle = aspectai->GetLimbTentacle())
                     target = tentacle;
         }
 
@@ -2496,8 +2496,8 @@ public:
         void FilterTarget(std::list<WorldObject*>& targets)
         {
             targets.clear();
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                if (Creature* aspect = ObjectAccessor::GetCreature((*GetCaster()), instance->GetData64(DATA_ACTIVE_PLATFORM)))
+            if (auto instance = GetCaster()->GetInstanceScript())
+                if (auto aspect = ObjectAccessor::GetCreature((*GetCaster()), instance->GetData64(DATA_ACTIVE_PLATFORM)))
                     targets.push_back(aspect);
         }
 
@@ -2649,8 +2649,8 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
-                if (Creature* alex = instance->GetCreature(NPC_ALEXSTRASZA))
+            if (auto instance = GetTarget()->GetInstanceScript())
+                if (auto alex = instance->GetCreature(NPC_ALEXSTRASZA))
                     if (!alex->HasAura(SPELL_CAUTERIZE_DEATHWING_5_SEC) && !alex->HasAura(SPELL_CAUTERIZE_DEATHWING_10_SEC) && !alex->HasAura(SPELL_CAUTERIZE_DEATHWING_15_SEC))
                         GetTarget()->SetPower(POWER_ALTERNATE_POWER, std::max(int32((21 - GetTarget()->GetHealthPct())), 1));
 

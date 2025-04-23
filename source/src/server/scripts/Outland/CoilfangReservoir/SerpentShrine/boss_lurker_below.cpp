@@ -349,7 +349,7 @@ public:
                     me->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                     // spawn adds
                     for (uint8 i = 0; i < 9; ++i)
-                        if (Creature* summoned = me->SummonCreature(i < 6 ? MOB_COILFANG_AMBUSHER : MOB_COILFANG_GUARDIAN, AddPos[i][0], AddPos[i][1], AddPos[i][2], 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                        if (auto summoned = me->SummonCreature(i < 6 ? MOB_COILFANG_AMBUSHER : MOB_COILFANG_GUARDIAN, AddPos[i][0], AddPos[i][1], AddPos[i][2], 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
                             Summons.Summon(summoned);
                     Spawned = true;
                 }
@@ -406,7 +406,7 @@ public:
             if (ShootBowTimer <= diff)
             {
                 int bp0 = 1100;
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     me->CastCustomSpell(target, SPELL_SHOOT, &bp0, NULL, NULL, true);
                 ShootBowTimer = 4000+rand()%5000;
                 MultiShotTimer += 1500; // add global cooldown
@@ -424,7 +424,7 @@ class go_strange_pool : public GameObjectScript
         bool OnGossipHello(Player* player, GameObject* go)
         {
             // 25%
-            if (InstanceScript* instanceScript = go->GetInstanceScript())
+            if (auto instanceScript = go->GetInstanceScript())
                 if (!urand(0, 3))
                 {
                     if (instanceScript->GetData(DATA_STRANGE_POOL) == NOT_STARTED)

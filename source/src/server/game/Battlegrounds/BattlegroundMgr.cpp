@@ -400,13 +400,13 @@ void BattlegroundMgr::BuildPvpLogDataPacket(WorldPacket* data, Battleground* bg)
                     uint8 hasRatedBGRating = bg->isRatedBattleground() ? 1 : 0;
                     uint32 RatedBGRating = 0;
 
-                    if (Player* player = ObjectAccessor::FindPlayer(playerGUID)) // Get the rating if player is online.
+                    if (auto player = ObjectAccessor::FindPlayer(playerGUID)) // Get the rating if player is online.
                         RatedBGRating = (bg->GetWinner() == bg->GetPlayerTeam(playerGUID) ? (player->GetRBGPersonalRating() - 20) :
                         (player->GetRBGPersonalRating() > 1500 ? (player->GetRBGPersonalRating() + 20) : player->GetRBGPersonalRating()));
 
                     int32 RatedBGRatingChange = 0;
 
-                    if (Player* player = ObjectAccessor::FindPlayer(playerGUID)) // Get the rating change if player is online.
+                    if (auto player = ObjectAccessor::FindPlayer(playerGUID)) // Get the rating change if player is online.
                         RatedBGRatingChange = (bg->GetWinner() == bg->GetPlayerTeam(playerGUID) ? 20 : (player->GetRBGPersonalRating() > 1500 ? -20 : 0));
 
                     data->WriteBit(0);                // Unk 1
@@ -1321,7 +1321,7 @@ void BattlegroundMgr::BuildBattlegroundListPacket(WorldPacket* data, uint64 guid
 
 void BattlegroundMgr::SendToBattleground(Player* player, uint32 instanceId, BattlegroundTypeId bgTypeId)
 {
-    if (Battleground* bg = GetBattleground(instanceId, bgTypeId))
+    if (auto bg = GetBattleground(instanceId, bgTypeId))
     {
         float x, y, z, O;
         uint32 mapid = bg->GetMapId();
@@ -1483,7 +1483,7 @@ void BattlegroundMgr::SetHolidayWeekends(uint32 mask)
 {
     for (uint32 bgtype = 1; bgtype < MAX_BATTLEGROUND_TYPE_ID; ++bgtype)
     {
-        if (Battleground* bg = GetBattlegroundTemplate(BattlegroundTypeId(bgtype)))
+        if (auto bg = GetBattlegroundTemplate(BattlegroundTypeId(bgtype)))
         {
             bg->SetHoliday(mask & (1 << bgtype));
         }

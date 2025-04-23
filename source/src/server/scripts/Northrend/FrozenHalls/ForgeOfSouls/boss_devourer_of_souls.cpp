@@ -166,7 +166,7 @@ class boss_devourer_of_souls : public CreatureScript
             {
                 if (mirroredSoulTarget && me->HasAura(SPELL_MIRRORED_SOUL))
                 {
-                    if (Player* player = Unit::GetPlayer(*me, mirroredSoulTarget))
+                    if (auto player = Unit::GetPlayer(*me, mirroredSoulTarget))
                     {
                         if (player->GetAura(SPELL_MIRRORED_SOUL))
                         {
@@ -222,7 +222,7 @@ class boss_devourer_of_souls : public CreatureScript
 
                 for (int8 i = 0; outroPositions[i].entry[entryIndex] != 0; ++i)
                 {
-                    if (Creature* summon = me->SummonCreature(outroPositions[i].entry[entryIndex], spawnPoint, TEMPSUMMON_DEAD_DESPAWN))
+                    if (auto summon = me->SummonCreature(outroPositions[i].entry[entryIndex], spawnPoint, TEMPSUMMON_DEAD_DESPAWN))
                     {
                         summon->GetMotionMaster()->MovePoint(0, outroPositions[i].movePosition);
                         if (summon->GetEntry() == NPC_JAINA_PART2)
@@ -267,7 +267,7 @@ class boss_devourer_of_souls : public CreatureScript
                             events.ScheduleEvent(EVENT_PHANTOM_BLAST, 5000);
                             break;
                         case EVENT_MIRRORED_SOUL:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
                             {
                                 mirroredSoulTarget = target->GetGUID();
                                 DoCast(target, SPELL_MIRRORED_SOUL);
@@ -276,12 +276,12 @@ class boss_devourer_of_souls : public CreatureScript
                             events.ScheduleEvent(EVENT_MIRRORED_SOUL, urand(15000, 30000));
                             break;
                         case EVENT_WELL_OF_SOULS:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_WELL_OF_SOULS);
                             events.ScheduleEvent(EVENT_WELL_OF_SOULS, 20000);
                             break;
                         case EVENT_UNLEASHED_SOULS:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_UNLEASHED_SOULS);
                             me->SetDisplayId(DISPLAY_SORROW);
                             Talk(SAY_FACE_UNLEASH_SOUL);
@@ -298,7 +298,7 @@ class boss_devourer_of_souls : public CreatureScript
                             Talk(SAY_FACE_WAILING_SOUL);
                             Talk(EMOTE_WAILING_SOUL);
                             DoCast(me, SPELL_WAILING_SOULS_STARTING);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             {
                                 me->SetFacingTo(me->GetAngle(target));
                                 DoCast(me, SPELL_WAILING_SOULS_BEAM);
@@ -377,7 +377,7 @@ class achievement_three_faced : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Devourer = target->ToCreature())
+            if (auto Devourer = target->ToCreature())
                 if (Devourer->AI()->GetData(DATA_THREE_FACED))
                     return true;
 

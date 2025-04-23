@@ -62,7 +62,7 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         return player;
                 }
             }
@@ -81,7 +81,7 @@ public:
         void Update(uint32 /*diff*/)
         {
             if (WardKeeperDeath == WARD_KEEPERS_NR)
-                if (GameObject* go = instance->GetGameObject(DoorWardGUID))
+                if (auto go = instance->GetGameObject(DoorWardGUID))
                 {
                     go->SetUInt32Value(GAMEOBJECT_FLAGS, 33);
                     go->SetGoState(GO_STATE_ACTIVE);

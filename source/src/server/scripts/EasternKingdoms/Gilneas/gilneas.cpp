@@ -377,7 +377,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 me->GetMotionMaster()->MoveFollow(player, 0.9f, 0.5f * M_PI);
@@ -391,7 +391,7 @@ public:
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->AI()->AttackStart(who);
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     player->Attack(who, true);
             }
         }
@@ -406,7 +406,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                         me->DespawnOrUnsummon();
@@ -500,7 +500,7 @@ public:
             me->SetRooted(true);
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->CastWithDelay(150, me, SPELL_RIDE_VEHICLE);
@@ -525,7 +525,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (auto krennan = Unit::GetCreature(*me, _savedKrennanGUID))
                     krennan->DespawnOrUnsummon();
@@ -572,7 +572,7 @@ public:
                 {
                     me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (auto krennan = Unit::GetCreature(*me, _savedKrennanGUID))
                         {
@@ -664,7 +664,7 @@ public:
                 {
                     auto krennan = player->SelectNearbyUnits(NPC_KRENNAN_ARANAS_STOCKS, 100.0f);
                     for (auto itr = krennan.begin(); itr != krennan.end(); ++itr)
-                        if (Unit* krennan = (*itr))
+                        if (auto krennan = (*itr))
                         {
                             if (krennan->GetOwnerGUID() == player->GetGUID())
                                 return;
@@ -764,13 +764,13 @@ public:
         {
             if (summoner->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = summoner->ToPlayer())
+                if (auto player = summoner->ToPlayer())
                     _playerGUID = player->GetGUID();
             }
             pathstep = 1;
             me->AI()->Talk(0);
 
-            if (Creature* crowley = me->SummonCreature(NPC_CROWLEY_PASSENGER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 5000))
+            if (auto crowley = me->SummonCreature(NPC_CROWLEY_PASSENGER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 5000))
             {
                 _crowleyGUID = crowley->GetGUID();
                 crowley->EnterVehicle(me, 1);
@@ -780,7 +780,7 @@ public:
         {
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Creature* crowley = Unit::GetCreature(*me, _crowleyGUID))
+                if (auto crowley = Unit::GetCreature(*me, _crowleyGUID))
                 {
                     crowley->AI()->Talk(0);
                     _events.ScheduleEvent(EVENT_START_HORSE_PATH_1, 1000);
@@ -791,7 +791,7 @@ public:
             {
                 me->DespawnOrUnsummon(1000);
 
-                if (Creature* crowley = Unit::GetCreature(*me, _crowleyGUID))
+                if (auto crowley = Unit::GetCreature(*me, _crowleyGUID))
                     crowley->DespawnOrUnsummon();
             }
         }
@@ -800,7 +800,7 @@ public:
         {
             me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
 
-            if (Creature* crowley = Unit::GetCreature(*me, _crowleyGUID))
+            if (auto crowley = Unit::GetCreature(*me, _crowleyGUID))
                 crowley->DespawnOrUnsummon();
         }
 
@@ -862,9 +862,9 @@ public:
                 case EVENT_END_PATH:
                     me->CastSpell(me, 50630);
                     me->DespawnOrUnsummon(200);
-                    if (Creature* crowley = Unit::GetCreature(*me, _crowleyGUID))
+                    if (auto crowley = Unit::GetCreature(*me, _crowleyGUID))
                         crowley->DespawnOrUnsummon();
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->CastSpell(player, 88467);
                         player->GetMotionMaster()->MoveJump(-1543.589f, 1572.651f, 29.202f, 10, 10);
@@ -878,7 +878,7 @@ public:
             if (me->isInCombat())
                 if (_sayInCombat <= diff)
                 {
-                    if (Creature* crowley = Unit::GetCreature(*me, _crowleyGUID))
+                    if (auto crowley = Unit::GetCreature(*me, _crowleyGUID))
                     {
                         _sayInCombat = urand(25000, 40000);
                         crowley->AI()->Talk(1);
@@ -924,7 +924,7 @@ public:
                 me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
                 _events.ScheduleEvent(EVENT_DELAY_1, 3000);
 
-                if (Creature* horse = who->SummonCreature(NPC_CROWLEY_HORSE, -1737.68f, 1655.10f, 20.56f, 1.64f, TEMPSUMMON_DEAD_DESPAWN, 5000))
+                if (auto horse = who->SummonCreature(NPC_CROWLEY_HORSE, -1737.68f, 1655.10f, 20.56f, 1.64f, TEMPSUMMON_DEAD_DESPAWN, 5000))
                 {
                     who->RemoveAura(SPELL_INVISIBILITY_DETECTION_2_MISC_8);
                     who->CastWithDelay(1000, horse, 46598);
@@ -1098,7 +1098,7 @@ public:
             {
                 _inUse = true;
 
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                     _playerGUID = player->GetGUID();
             }
 
@@ -1120,7 +1120,7 @@ public:
             _inUse = false;
             me->RemoveAura(SPELL_CUSTOM_AURA_1);
 
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 player->RemoveAura(SPELL_ROUND_UP_HORSE_STACK);
         }
 
@@ -1144,7 +1144,7 @@ public:
                 {
                     _inUse = false;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->CastSpell(me, SPELL_CUSTOM_AURA_1);
                         player->ExitVehicle();
@@ -1180,7 +1180,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 _events.ScheduleEvent(EVENT_MOUNTAIN_HORSE_1, 100);
@@ -1198,9 +1198,9 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
-                    if (Creature* veh = Unit::GetCreature(*me, _vehGUID))
+                    if (auto veh = Unit::GetCreature(*me, _vehGUID))
                     {
                         if (!player->GetVehicleBase())
                         {
@@ -1232,7 +1232,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_MOUNTAIN_HORSE_1:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->CastSpell(player, SPELL_ROPE_CHANNEL); // without visual rope (spell bug: channeling stucking horses and they do not follow)
                         me->GetMotionMaster()->MoveFollow(player, frand(1.0, 3.0f), frand(0.1f, 3.f) * M_PI);
@@ -1333,7 +1333,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1371,7 +1371,7 @@ public:
                 }
                 break;
             case 13:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
@@ -1391,7 +1391,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_TO_GREYMANE_MANOR) == QUEST_STATUS_NONE ||
                         player->GetQuestStatus(QUEST_TO_GREYMANE_MANOR) == QUEST_STATUS_REWARDED)
@@ -1495,7 +1495,7 @@ public:
             me->setActive(true);
             me->SetRooted(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1508,7 +1508,7 @@ public:
                     {
                         _carriageGUID = carriage->GetGUID();
 
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             player->KilledMonsterCredit(me->GetEntry());
                             player->CastWithDelay(300, carriage, SPELL_RIDE_STAGECOACH);
@@ -1534,8 +1534,8 @@ public:
                 case 34:
                     _step = 1;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
-                        if (Creature* carriage = Unit::GetCreature(*me, _carriageGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto carriage = Unit::GetCreature(*me, _carriageGUID))
                         {
                             player->ExitVehicle();
                             player->GetMotionMaster()->MoveJump(-2216.684f, 1817.42f, 12.416f, 15, 18);
@@ -1560,7 +1560,7 @@ public:
             {
                 _checkTimer = 2000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_EXODUS) == QUEST_STATUS_NONE ||
                         player->GetQuestStatus(QUEST_EXODUS) == QUEST_STATUS_REWARDED)
@@ -1682,7 +1682,7 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->SetRooted(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1708,7 +1708,7 @@ public:
             switch (point)
             {
             case 46:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
@@ -1722,7 +1722,7 @@ public:
 
         void UpdateAI(uint32 const diff)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (player->GetQuestStatus(QUEST_FLANK_THE_FORSAKEN) == QUEST_STATUS_NONE ||
                     player->GetQuestStatus(QUEST_FLANK_THE_FORSAKEN) == QUEST_STATUS_REWARDED)
@@ -1843,7 +1843,7 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->SetRooted(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1888,7 +1888,7 @@ public:
             case 10:
                 if (point == 7)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         player->ExitVehicle();
@@ -1908,7 +1908,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_SLOWING_THE_INEVITABLE) == QUEST_STATUS_NONE ||
                         player->GetQuestStatus(QUEST_SLOWING_THE_INEVITABLE) == QUEST_STATUS_REWARDED)
@@ -2030,7 +2030,7 @@ public:
         {
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
 
@@ -2072,11 +2072,11 @@ public:
             switch (point)
             {
             case 1:
-                if (Creature* camera = Unit::GetCreature(*me, _cameraGUID))
+                if (auto camera = Unit::GetCreature(*me, _cameraGUID))
                     camera->GetMotionMaster()->MovePoint(0, ActorLocations[5]);
                 break;
             case 3:
-                if (Creature* camera = Unit::GetCreature(*me, _cameraGUID))
+                if (auto camera = Unit::GetCreature(*me, _cameraGUID))
                     camera->GetMotionMaster()->MovePoint(1, ActorLocations[6]);
                 break;
             default:
@@ -2090,7 +2090,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_QUEST_PATRIARCHS_BLESSING) == QUEST_STATUS_NONE ||
                         player->GetQuestStatus(QUEST_QUEST_PATRIARCHS_BLESSING) == QUEST_STATUS_REWARDED)
@@ -2123,11 +2123,11 @@ public:
                     me->AI()->TalkWithDelay(39000, 4, _playerGUID);
                     _events.ScheduleEvent(EVENT_LIAM_SCENE_2, 47000, 0);
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         player->CastWithDelay(45500, player, 89147);
                     break;
                 case EVENT_LIAM_SCENE_2:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         player->ExitVehicle();
                     break;
                 default:

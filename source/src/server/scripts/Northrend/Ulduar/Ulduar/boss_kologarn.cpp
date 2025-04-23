@@ -351,7 +351,7 @@ public:
                 if (right && instance)
                 {
                     if (Vehicle *vehicle = me->GetVehicleKit())
-                        if (Unit* RightArm = vehicle->GetPassenger(1))
+                        if (auto RightArm = vehicle->GetPassenger(1))
                         {
                             me->MonsterTextEmote(EMOTE_STONE, 0, true);
                             Talk(SAY_GRAB_PLAYER);
@@ -477,7 +477,7 @@ public:
                 {
                     me->GetMotionMaster()->MovePoint(0, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
                     if (me->IsWithinDistInMap(target, 1.0f))
-                        if (Creature* pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
+                        if (auto pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
                             pKologarn->AI()->DoAction(42);
                 }
                 checkTimer = 500;
@@ -523,7 +523,7 @@ public:
                 me->SummonCreature(NPC_RUBBLE, RubbleLeft, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 3000);
 
             if (pInstance)
-                if (Creature* pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
+                if (auto pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
                     pKologarn->AI()->DoAction(ACTION_RESPAWN_LEFT);
 
             // Hack to disable corpse fall
@@ -595,7 +595,7 @@ public:
                 me->SummonCreature(NPC_RUBBLE, RubbleRight, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 3000);
 
             if (pInstance)
-                if (Creature* pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
+                if (auto pKologarn = me->GetCreature(*me, pInstance->GetData64(BOSS_KOLOGARN)))
                     pKologarn->AI()->DoAction(ACTION_RESPAWN_RIGHT);
 
             // Hack to disable corpse fall
@@ -643,7 +643,7 @@ public:
                 {
                     for (int n = 0; n < RAID_MODE(1, 3); ++n)
                     {
-                        if (Unit* GripTarget = Unit::GetUnit(*me, GripTargetGUID[n]))
+                        if (auto GripTarget = Unit::GetUnit(*me, GripTargetGUID[n]))
                         {
                             if (GripTarget && GripTarget->isAlive())
                             {

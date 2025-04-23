@@ -145,7 +145,7 @@ public:
 
             if (goConsole)
             {
-                if (GameObject* go = GameObject::GetGameObject(*me, goConsole))
+                if (auto go = GameObject::GetGameObject(*me, goConsole))
                     go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
             }
         }
@@ -282,7 +282,7 @@ public:
                         }
                         if (goConsole)
                         {
-                            if (GameObject* go = GameObject::GetGameObject(*me, goConsole))
+                            if (auto go = GameObject::GetGameObject(*me, goConsole))
                                 go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
                         }
                         ++Phase;
@@ -462,7 +462,7 @@ public:
         //Set them back to each other
         void Turn_to_eachother()
         {
-            if (Unit* ardonis = Unit::GetUnit(*me, ardonisGUID))
+            if (auto ardonis = Unit::GetUnit(*me, ardonisGUID))
             {
                 Player* player = Unit::GetPlayer(*me, PlayerGUID);
 
@@ -806,7 +806,7 @@ public:
 
                 for (std::list<HostileReference*>::const_iterator itr = AggroList.begin(); itr != AggroList.end(); ++itr)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         if (unit->GetCreateMana() > 0)
                             UnitsWithMana.push_back(unit);
@@ -821,7 +821,7 @@ public:
                     ManaBurnTimer = 3500;
             } else ManaBurnTimer -= diff;
 
-            if (Player* player = Unit::GetPlayer(*me, PlayerGUID)) // start: support for quest 10190
+            if (auto player = Unit::GetPlayer(*me, PlayerGUID)) // start: support for quest 10190
             {
                 if (!Weak && HealthBelowPct(WeakPercent)
                     && player->GetQuestStatus(QUEST_RECHARGING_THE_BATTERIES) == QUEST_STATUS_INCOMPLETE)
@@ -887,7 +887,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 player->FailQuest(Q_ALMABTRIEB);
         }
 
@@ -993,7 +993,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 player->FailQuest(QUEST_MARK_V_IS_ALIVE);
         }
 
@@ -1006,7 +1006,7 @@ public:
                 if (uiTakeTimer < uiDiff)
                 {
                     me->HandleEmoteCommand(EMOTE_STATE_NONE);
-                    if (GameObject* go = GetClosestGameObjectWithEntry(me, GO_DRAENEI_MACHINE, INTERACTION_DISTANCE))
+                    if (auto go = GetClosestGameObjectWithEntry(me, GO_DRAENEI_MACHINE, INTERACTION_DISTANCE))
                     {
                         SetEscortPaused(false);
                         bTake=false;
@@ -1053,7 +1053,7 @@ class go_captain_tyralius_prison : public GameObjectScript
         bool OnGossipHello(Player* player, GameObject* go)
         {
             go->UseDoorOrButton();
-            if (Creature* tyralius = go->FindNearestCreature(NPC_CAPTAIN_TYRALIUS, 1.0f))
+            if (auto tyralius = go->FindNearestCreature(NPC_CAPTAIN_TYRALIUS, 1.0f))
             {
                 player->KilledMonsterCredit(NPC_CAPTAIN_TYRALIUS, 0);
                 tyralius->AI()->Talk(SAY_FREE);

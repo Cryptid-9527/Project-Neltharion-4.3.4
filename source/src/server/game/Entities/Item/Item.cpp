@@ -793,7 +793,7 @@ bool Item::CanBeTraded(bool mail, bool trade) const
     if (IsBag() && (Player::IsBagPos(GetPos()) || !((Bag const*)this)->IsEmpty()))
         return false;
 
-    if (Player* owner = GetOwner())
+    if (auto owner = GetOwner())
     {
         if (owner->CanUnequipItem(GetPos(), false) != EQUIP_ERR_OK)
             return false;
@@ -1143,7 +1143,7 @@ bool Item::IsBindedNotWith(Player const* player) const
 
 void Item::BuildUpdate(UpdateDataMapType& data_map)
 {
-    if (Player* owner = GetOwner())
+    if (auto owner = GetOwner())
         BuildFieldsUpdate(owner, data_map);
     ClearUpdateMask(false);
 }

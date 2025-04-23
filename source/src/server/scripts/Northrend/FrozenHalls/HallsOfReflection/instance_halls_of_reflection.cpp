@@ -121,7 +121,7 @@ public:
             {
                 Map::PlayerList const& players = instance->GetPlayers();
                 if (!players.isEmpty())
-                    if (Player* player = players.begin()->getSource())
+                    if (auto player = players.begin()->getSource())
                         _teamInInstance = player->GetTeam();
             }
 
@@ -140,7 +140,7 @@ public:
                 case NPC_FROSTWORN_GENERAL:
                     _frostwornGeneralGUID = creature->GetGUID();
                     if (GetBossState(DATA_MARWYN_EVENT) == DONE)
-                        if (Creature* general = instance->GetCreature(_frostwornGeneralGUID))
+                        if (auto general = instance->GetCreature(_frostwornGeneralGUID))
                             general->SetPhaseMask(1, true);
                     break;
                 case NPC_JAINA_PART2:
@@ -243,7 +243,7 @@ public:
                         HandleGameObject(_entranceDoorGUID, true);
                         HandleGameObject(_frostwornDoorGUID, true);
                         DoUpdateWorldState(WORLD_STATE_HOR_WAVES_ENABLED, 0);
-                        if (Creature* general = instance->GetCreature(_frostwornGeneralGUID))
+                        if (auto general = instance->GetCreature(_frostwornGeneralGUID))
                             general->SetPhaseMask(1, true);
                     }
                     break;
@@ -288,12 +288,12 @@ public:
                     if (data == IN_PROGRESS)
                     {
                         if (!_escapeevent)
-                            if (Creature* jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
+                            if (auto jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
                                 jaina_or_sylvanas->AI()->DoAction(ACTION_START_ESCAPING);
                     }
                     else if (data == NOT_STARTED)
                     {
-                        if (Creature* jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
+                        if (auto jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
                             jaina_or_sylvanas->DespawnOrUnsummon(1);
                         if (_teamInInstance == ALLIANCE)
                             instance->SummonCreature(NPC_JAINA_PART2, JainaSpawnPos2);
@@ -309,7 +309,7 @@ public:
                         _mobsaticewall--;
                         if (_mobsaticewall == 0)
                         {
-                            if (Creature* jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
+                            if (auto jaina_or_sylvanas = instance->GetCreature(_jainaOrSylvanasPart2GUID))
                                 jaina_or_sylvanas->AI()->DoAction(ACTION_WALL_BROKEN);
                         }
                     }
@@ -407,9 +407,9 @@ public:
 
                             for (std::list<uint32>::const_iterator itr = tempList.begin(); itr != tempList.end(); ++itr)
                             {
-                                if (Creature* boss = instance->GetCreature(bossGuid))
+                                if (auto boss = instance->GetCreature(bossGuid))
                                 {
-                                    if (Creature* temp = boss->SummonCreature(*itr, SpawnPos[posIndex], TEMPSUMMON_DEAD_DESPAWN))
+                                    if (auto temp = boss->SummonCreature(*itr, SpawnPos[posIndex], TEMPSUMMON_DEAD_DESPAWN))
                                     {
                                         temp->AI()->SetData(0, i);
                                         waveGuidList[i].insert(temp->GetGUID());
@@ -432,7 +432,7 @@ public:
                         uint32 internalWaveId = _waveCount - ((_waveCount < 5) ? 1 : 2);
                         for (std::set<uint64>::const_iterator itr = waveGuidList[internalWaveId].begin(); itr != waveGuidList[internalWaveId].end(); ++itr)
                         {
-                            if (Creature* temp = instance->GetCreature(*itr))
+                            if (auto temp = instance->GetCreature(*itr))
                             {
                                 temp->CastSpell(temp, SPELL_SPIRIT_ACTIVATE, true);
                                 temp->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_IMMUNE_TO_NPC|UNIT_FLAG_NOT_SELECTABLE);
@@ -448,7 +448,7 @@ public:
                         uint32 bossIndex = (_waveCount / 5) - 1;
                         if (GetBossState(DATA_FALRIC_EVENT + bossIndex) != DONE)
                         {
-                            if (Creature* boss = instance->GetCreature(bossIndex ? _marwynGUID : _falricGUID))
+                            if (auto boss = instance->GetCreature(bossIndex ? _marwynGUID : _falricGUID))
                                 boss->AI()->DoAction(ACTION_ENTER_COMBAT);
                         }
                         else if (_waveCount != 10)
@@ -465,15 +465,15 @@ public:
                     DoUpdateWorldState(WORLD_STATE_HOR_WAVE_COUNT, _waveCount);
                     HandleGameObject(_entranceDoorGUID, true);
 
-                    if (Creature* falric = instance->GetCreature(_falricGUID))
+                    if (auto falric = instance->GetCreature(_falricGUID))
                         falric->SetVisible(false);
-                    if (Creature* marwyn = instance->GetCreature(_marwynGUID))
+                    if (auto marwyn = instance->GetCreature(_marwynGUID))
                         marwyn->SetVisible(false);
                     //despawn wave npcs
                     for (uint8 i = 0; i < 8; ++i)
                     {
                         for (std::set<uint64>::const_iterator itr = waveGuidList[i].begin(); itr != waveGuidList[i].end(); ++itr)
-                            if (Creature* creature = instance->GetCreature(*itr))
+                            if (auto creature = instance->GetCreature(*itr))
                                 creature->DespawnOrUnsummon(1);
                         waveGuidList[i].clear();
                     }

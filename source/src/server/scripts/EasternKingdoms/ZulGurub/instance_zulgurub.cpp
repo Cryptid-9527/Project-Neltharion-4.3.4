@@ -103,7 +103,7 @@ class instance_zulgurub : public InstanceMapScript
                 tikiMaskId = 0;
 
                 for (int i = 0; i < 6; ++i)
-                    if (Creature* torch = instance->SummonCreature(52419, TikiTorchSP[i]))
+                    if (auto torch = instance->SummonCreature(52419, TikiTorchSP[i]))
                         torch->GetAI()->SetData(DATA_POSITION_ID, i);
 
                 int d_roll = urand(0, 4);
@@ -133,7 +133,7 @@ class instance_zulgurub : public InstanceMapScript
             void CheckRecquirement()
             {
                 bool jind = IsDone(DATA_VENOXIS) && IsDone(DATA_MANDOKIR) && IsDone(DATA_KILNARA) && IsDone(DATA_ZANZIL);
-                if (Creature* jindo = instance->GetCreature(jindoGUID))
+                if (auto jindo = instance->GetCreature(jindoGUID))
                 {
                     jindo->SetVisible(jind);
                     jindo->SetReactState(jind ? REACT_AGGRESSIVE : REACT_PASSIVE);
@@ -183,7 +183,7 @@ class instance_zulgurub : public InstanceMapScript
                                         break;
                                 }
 
-                                if (Creature* boss = instance->SummonCreature(bossEntry, EdgeofMadnessSP))
+                                if (auto boss = instance->SummonCreature(bossEntry, EdgeofMadnessSP))
                                     boss->CastSpell(boss, SPELL_CACHE_OF_MADNESS_BOSS_SUMMON, false);
                                 break;
                             }

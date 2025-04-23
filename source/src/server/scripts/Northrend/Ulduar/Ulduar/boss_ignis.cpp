@@ -202,7 +202,7 @@ class boss_ignis : public CreatureScript
 
                 for (uint8 i = 0; i < CONSTRUCT_SPAWN_POINTS; i++)
                 {
-                    if (Creature* construct = me->SummonCreature(NPC_IRON_CONSTRUCT, ConstructSpawnPosition[i]))
+                    if (auto construct = me->SummonCreature(NPC_IRON_CONSTRUCT, ConstructSpawnPosition[i]))
                         summons.Summon(construct);
                 }
 
@@ -292,7 +292,7 @@ class boss_ignis : public CreatureScript
                             events.ScheduleEvent(EVENT_JET, urand(35000, 40000));
                             break;
                         case EVENT_SLAG_POT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                             {
                                 Talk(SAY_SLAG_POT);
                                 slagPotGUID = target->GetGUID();
@@ -303,7 +303,7 @@ class boss_ignis : public CreatureScript
                             events.ScheduleEvent(EVENT_SLAG_POT, RAID_MODE(30000, 15000));
                             break;
                         case EVENT_GRAB_POT:
-                            if (Unit* slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
+                            if (auto slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
                             {
                                 slagPotTarget->EnterVehicle(me, 0);
                                 //                                slagPotTarget->ClearUnitState(UNIT_STATE_ONVEHICLE);    // Hack, see LK - target should be healable
@@ -311,7 +311,7 @@ class boss_ignis : public CreatureScript
                             }
                             break;
                         case EVENT_CHANGE_POT:
-                            if (Unit* slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
+                            if (auto slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
                             {
                                 slagPotTarget->EnterVehicle(me, 1);
                                 //                                slagPotTarget->ClearUnitState(UNIT_STATE_ONVEHICLE);
@@ -320,7 +320,7 @@ class boss_ignis : public CreatureScript
                             }
                             break;
                         case EVENT_END_POT:
-                            if (Unit* slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
+                            if (auto slagPotTarget = ObjectAccessor::GetUnit(*me, slagPotGUID))
                             {
                                 slagPotTarget->ExitVehicle();
                                 /*if (Player *p = slagPotTarget->ToPlayer())
@@ -338,7 +338,7 @@ class boss_ignis : public CreatureScript
                             break;
                         case EVENT_SCORCH:
                             Talk(SAY_SCORCH);
-                            if (Unit* target = me->getVictim())
+                            if (auto target = me->getVictim())
                                 me->SummonCreature(NPC_GROUND_SCORCH, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 45000);
                             DoCast(SPELL_SCORCH);
                             events.ScheduleEvent(EVENT_SCORCH, 25000);
@@ -349,7 +349,7 @@ class boss_ignis : public CreatureScript
                             if (!summons.empty())
                             {
                                 uint64 selectedConstruct = Trinity::Containers::SelectRandomContainerElement(summons);
-                                if (Creature* construct = ObjectAccessor::GetCreature(*me, selectedConstruct))
+                                if (auto construct = ObjectAccessor::GetCreature(*me, selectedConstruct))
                                 {
                                     construct->RemoveAurasDueToSpell(SPELL_FREEZE_ANIM);
                                     construct->SetReactState(REACT_AGGRESSIVE);
@@ -418,7 +418,7 @@ class npc_iron_construct : public CreatureScript
                 if (me->HasAura(SPELL_BRITTLE) && damage >= 5000)
                 {
                     DoCast(SPELL_SHATTER);
-                    if (Creature* ignis = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IGNIS)))
+                    if (auto ignis = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IGNIS)))
                         if (ignis->AI())
                             ignis->AI()->DoAction(ACTION_REMOVE_BUFF);
 

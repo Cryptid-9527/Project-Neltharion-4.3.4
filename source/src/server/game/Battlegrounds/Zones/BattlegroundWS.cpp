@@ -257,7 +257,7 @@ void BattlegroundWS::RespawnFlagAfterDrop(uint32 team)
         return;
 
     RespawnFlag(team, false);
-    if (GameObject* obj = GetBgMap()->GetGameObject(GetDroppedFlagGUID(team)))
+    if (auto obj = GetBgMap()->GetGameObject(GetDroppedFlagGUID(team)))
         obj->Delete();
     else
         TC_LOG_ERROR("bg.battleground", "unknown droped flag bg, guid: %u", GUID_LOPART(GetDroppedFlagGUID(team)));
@@ -272,7 +272,7 @@ void BattlegroundWS::RespawnFlagAfterDrop(uint32 team)
 
         //check for Instant flag cap (ALLIANCE)
         for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp) {
-            if (Player* activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
+            if (auto activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
                 if (activeCarrier->GetTeam() == ALLIANCE) {
                     if (activeCarrier->GetDistance(1540.423f, 1481.325f, 351.8284f) <= 3.0f) { //exact duplicate of horde flag location
                         return EventPlayerCapturedFlag(activeCarrier);
@@ -294,7 +294,7 @@ void BattlegroundWS::RespawnFlagAfterDrop(uint32 team)
         SendMessageToAll(LANG_BG_WS_HORDE_FLAG_RESPAWNED, CHAT_MSG_BG_SYSTEM_NEUTRAL);
         //check for Instant flag cap (HORDE)
         for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp) {
-            if (Player* activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
+            if (auto activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
                 if (activeCarrier->GetTeam() == HORDE) {
                     if (activeCarrier->GetDistance(915.79207f, 1433.663789f, 345.413f) <= 3.0f) { //exact duplicate of horde flag location
                         return EventPlayerCapturedFlag(activeCarrier);
@@ -562,7 +562,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
             setup_ASSAULT_VALUES();
             //check for waiting flag carrier to execute instant return
             for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp) {
-                if (Player* activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
+                if (auto activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
                     if (activeCarrier->GetTeam() == ALLIANCE) {
                         if (activeCarrier->GetDistance(1540.423f, 1481.325f, 351.8284f) <= 3.0f) { //exact duplicate of horde flag location
                             return EventPlayerCapturedFlag(activeCarrier);
@@ -614,7 +614,7 @@ void BattlegroundWS::EventPlayerClickedOnFlag(Player* Source, GameObject* target
 //horde flag has been returned.
                 //check for waiting flag carrier to execute instant return
             for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp) {
-                if (Player* activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
+                if (auto activeCarrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
                     if (activeCarrier->GetTeam() == HORDE) {
                         if (activeCarrier->GetDistance(915.79207f, 1433.663789f, 345.413f) <= 3.0f) { //exact duplicate of horde flag location
                             return EventPlayerCapturedFlag(activeCarrier);
@@ -858,7 +858,7 @@ void BattlegroundWS::Reset()
 void BattlegroundWS::EndBattleground(uint32 winner)
 {
     for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-        if (Player* player = ObjectAccessor::FindPlayer(m_FlagKeepers[team]))
+        if (auto player = ObjectAccessor::FindPlayer(m_FlagKeepers[team]))
         {
             player->RemoveAurasDueToSpell(WS_SPELL_FOCUSED_ASSAULT);
             player->RemoveAurasDueToSpell(WS_SPELL_BRUTAL_ASSAULT);
@@ -1043,7 +1043,7 @@ void BattlegroundWS::apply_correct_ASSAULT(Player* target) {
 }
 void BattlegroundWS::update_ALL_ASSAULTS() {
     for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-        if (Player* carrier = ObjectAccessor::FindPlayer(m_FlagKeepers[team])) {
+        if (auto carrier = ObjectAccessor::FindPlayer(m_FlagKeepers[team])) {
             apply_correct_ASSAULT(carrier);
         }
     return;
@@ -1051,7 +1051,7 @@ void BattlegroundWS::update_ALL_ASSAULTS() {
 void BattlegroundWS::remove_REMAINING_ASSAULTS()
 {
     for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp)
-        if (Player* carrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
+        if (auto carrier = ObjectAccessor::FindPlayer(m_FlagKeepers[teamTemp])) {
             remove_ASSAULTS(carrier);
         }
 }

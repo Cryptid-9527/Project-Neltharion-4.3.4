@@ -588,7 +588,7 @@ public:
                     if (!me->HasUnitState(UNIT_STATE_CASTING) && v->IsWithinLOSInMap(v, spellInfo) && me->GetExactDist(v) <= 50000.f)
                     {
                         //DoCastRandom(my_spells[eventId].spell_id, 50000.f);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50000.0f, false))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50000.0f, false))
                         {
                             DoCastRandom(my_spells[eventId].spell_id, 50000.f);
                             _fixateTarget = target->GetGUID();
@@ -669,7 +669,7 @@ public:
                 case EVENT_FIXATE_CHECK:
                     if (_fixateTarget != 0)
                     {
-                        if (Unit* target = Unit::GetUnit(*me, _fixateTarget))
+                        if (auto target = Unit::GetUnit(*me, _fixateTarget))
                         {
                             if (target->HasAura(SPELL_FIXATE) && me->getVictim() != target)
                                 me->AddThreat(target, 50000000.0f);
@@ -966,7 +966,7 @@ public:
         {
             go->SetGoState(GO_STATE_ACTIVE);
             go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-            if (Unit* p = player->ToUnit())
+            if (auto p = player->ToUnit())
             {
                 if (instance->GetBossState(BOSS_FOE_REAPER_5000_DATA) != DONE)
                     if (!flee_rp_activated)

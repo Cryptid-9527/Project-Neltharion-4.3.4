@@ -190,7 +190,7 @@ public:
             events.ScheduleEvent(EVENT_WIPE_CHECK, 5000);
             Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                if (Player* player = itr->getSource())
+                if (auto player = itr->getSource())
                     if (player->GetAreaId() == 5792)
                         player->AddAura(SPELL_MOLTEN_FISTS_PERIODIC, player);
 
@@ -203,26 +203,26 @@ public:
         { 
             if (spell->Id == SPELL_PULVERIZE_DESTROY_PLATFORM)
             {
-                if (GameObject* east    = me->FindNearestGameObject(PLATFORM_EAST, 200.0f))
+                if (auto east    = me->FindNearestGameObject(PLATFORM_EAST, 200.0f))
                     UpdatePlatformTriggers(east->GetEntry(), east->GetDestructibleState() != GO_DESTRUCTIBLE_DESTROYED);
-                if (GameObject* south   = me->FindNearestGameObject(PLATFORM_SOUTH, 200.0f))
+                if (auto south   = me->FindNearestGameObject(PLATFORM_SOUTH, 200.0f))
                     UpdatePlatformTriggers(south->GetEntry(), south->GetDestructibleState() != GO_DESTRUCTIBLE_DESTROYED);
-                if (GameObject* west    = me->FindNearestGameObject(PLATFORM_WEST, 200.0f))
+                if (auto west    = me->FindNearestGameObject(PLATFORM_WEST, 200.0f))
                     UpdatePlatformTriggers(west->GetEntry(), west->GetDestructibleState() != GO_DESTRUCTIBLE_DESTROYED);
-                if (GameObject* north   = me->FindNearestGameObject(PLATFORM_NORTH, 200.0f))
+                if (auto north   = me->FindNearestGameObject(PLATFORM_NORTH, 200.0f))
                     UpdatePlatformTriggers(north->GetEntry(), north->GetDestructibleState() != GO_DESTRUCTIBLE_DESTROYED);
             }
         }
 
         void RebuiltPlatforms()
         {
-            if (GameObject* platform = me->FindNearestGameObject(PLATFORM_EAST, 100.0f))
+            if (auto platform = me->FindNearestGameObject(PLATFORM_EAST, 100.0f))
                 platform->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
-            if (GameObject* platform = me->FindNearestGameObject(PLATFORM_SOUTH, 100.0f))
+            if (auto platform = me->FindNearestGameObject(PLATFORM_SOUTH, 100.0f))
                 platform->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
-            if (GameObject* platform = me->FindNearestGameObject(PLATFORM_WEST, 100.0f))
+            if (auto platform = me->FindNearestGameObject(PLATFORM_WEST, 100.0f))
                 platform->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
-            if (GameObject* platform = me->FindNearestGameObject(PLATFORM_NORTH, 100.0f))
+            if (auto platform = me->FindNearestGameObject(PLATFORM_NORTH, 100.0f))
                 platform->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
             std::list<Creature*> trigList;
             me->GetCreatureListWithEntryInGrid(trigList, NPC_ROCK_ISLAND, 100.0f);

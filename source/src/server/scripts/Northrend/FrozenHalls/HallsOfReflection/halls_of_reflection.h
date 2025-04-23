@@ -166,7 +166,7 @@ struct boss_horAI : ScriptedAI
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                 me->SetReactState(REACT_AGGRESSIVE);
 
-                if (Unit* unit = me->SelectNearestTarget())
+                if (auto unit = me->SelectNearestTarget())
                     AttackStart(unit);
 
                 DoZoneInCombat();

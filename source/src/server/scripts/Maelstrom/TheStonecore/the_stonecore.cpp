@@ -84,7 +84,7 @@ public:
 
             if (rockboreTimer <= diff)
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                 {
                     if (Aura* aur = victim->GetAura(IsHeroic() ? SPELL_ROCK_BORE_HC : SPELL_ROCK_BORE))
                     {
@@ -760,10 +760,10 @@ public:
 
 		void UpdateAI(uint32 const diff)
 		{
-			if (Player* player = me->FindNearestPlayer(100.0f))
+			if (auto player = me->FindNearestPlayer(100.0f))
 				me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-			if (Player* player = me->FindNearestPlayer(5.0f))
+			if (auto player = me->FindNearestPlayer(5.0f))
 			{
 				if (player->GetQuestStatus(Quest0) == QUEST_STATUS_COMPLETE && !player->IsActiveQuest(Quest1))
 				{
@@ -976,7 +976,7 @@ public:
 
         void EffectHit(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (caster->isAlive())
                     caster->GetAI()->SetData(0, 1);
         }

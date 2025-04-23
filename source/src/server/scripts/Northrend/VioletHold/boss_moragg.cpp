@@ -66,7 +66,7 @@ public:
         {
             if (instance)
             {
-                if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MORAGG_CELL)))
+                if (auto pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_MORAGG_CELL)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                    {
                         EnterEvadeMode();
@@ -103,7 +103,7 @@ public:
 
             if (uiOpticLinkTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_OPTIC_LINK);
                 uiOpticLinkTimer = 15000;
             } else uiOpticLinkTimer -= diff;

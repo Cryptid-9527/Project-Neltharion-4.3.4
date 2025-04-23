@@ -332,7 +332,7 @@ public:
 
         void MoveNPCIfAlive(uint32 entry, float x, float y, float z, float o)
         {
-           if (Creature* npc = instance->GetCreature(GetData64(entry)))
+           if (auto npc = instance->GetCreature(GetData64(entry)))
            {
                if (npc->isAlive())
                {
@@ -366,7 +366,7 @@ public:
         {
             for (std::list<uint64>::iterator itr = addsAtBase.begin(); itr != addsAtBase.end(); ++itr)
             {
-                if (Creature* add = instance->GetCreature((*itr)))
+                if (auto add = instance->GetCreature((*itr)))
                 {
                     if (add->isAlive())
                         return false;
@@ -374,7 +374,7 @@ public:
             }
             for (std::list<uint64>::iterator itr = movedadds.begin(); itr != movedadds.end(); ++itr)
             {
-                if (Creature* add = instance->GetCreature(((*itr))))
+                if (auto add = instance->GetCreature(((*itr))))
                 {
                     if (add->isAlive())
                         return false;
@@ -388,7 +388,7 @@ public:
             //pop a add from list, send him up the stairs...
             for (uint32 addCount = 0; addCount<count && !addsAtBase.empty(); addCount++)
             {
-                if (Creature* add = instance->GetCreature(*addsAtBase.begin()))
+                if (auto add = instance->GetCreature(*addsAtBase.begin()))
                 {
                     if (add->isAlive()) {
                         add->GetMotionMaster()->MovePath(PATH_ADDS, false);

@@ -87,7 +87,7 @@ public:
             if (summon && summon->GetEntry() == ENTRY_SPORE_STRIDER)
             {
                 Striders.push_back(summon->GetGUID());
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     summon->AI()->AttackStart(target);
                 else
                     if (me->getVictim())
@@ -98,7 +98,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             for (std::list<uint64>::const_iterator i = Striders.begin(); i != Striders.end(); ++i)
-                if (Creature* strider = Unit::GetCreature(*me, *i))
+                if (auto strider = Unit::GetCreature(*me, *i))
                     strider->DisappearAndDie();
         }
 
@@ -132,7 +132,7 @@ public:
             {
                 if (LevitatedTarget_Timer <= diff)
                 {
-                    if (Unit* target = Unit::GetUnit(*me, LevitatedTarget))
+                    if (auto target = Unit::GetUnit(*me, LevitatedTarget))
                     {
                         if (!target->HasAura(SPELL_LEVITATE))
                         {
@@ -157,7 +157,7 @@ public:
             }
             if (Levitate_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                 {
                     DoCast(target, SPELL_LEVITATE);
                     LevitatedTarget = target->GetGUID();
@@ -170,7 +170,7 @@ public:
             // Chain Lightning
             if (ChainLightning_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_CHAIN_LIGHTNING);
                 ChainLightning_Timer = 7000;
             } else ChainLightning_Timer -= diff;
@@ -178,7 +178,7 @@ public:
             // Static Charge
             if (StaticCharge_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                     DoCast(target, SPELL_STATIC_CHARGE);
                 StaticCharge_Timer = 10000;
             } else StaticCharge_Timer -= diff;

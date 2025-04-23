@@ -116,7 +116,7 @@ void WorldSession::HandleMoveWorldportAckOpcode()
             _player->SetBattlegroundId(0, BATTLEGROUND_TYPE_NONE);
             _player->SetBGTeam(0);
         }
-        else if (Battleground* bg = _player->GetBattleground())
+        else if (auto bg = _player->GetBattleground())
         {
             if (_player->IsInvitedForBattlegroundInstance(_player->GetBattlegroundId()))
                 bg->AddPlayer(_player);

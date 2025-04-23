@@ -49,7 +49,7 @@ class spell_generic_quest_update_entry_SpellScript : public SpellScript
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* creatureTarget = GetHitCreature())
+            if (auto creatureTarget = GetHitCreature())
                 if (!creatureTarget->isPet() && creatureTarget->GetEntry() == _originalEntry)
                 {
                     creatureTarget->UpdateEntry(_newEntry);
@@ -164,7 +164,7 @@ class spell_q6124_6129_apply_salve : public SpellScriptLoader
             {
                 Player* caster = GetCaster()->ToPlayer();
                 if (GetCastItem())
-                    if (Creature* creatureTarget = GetHitCreature())
+                    if (auto creatureTarget = GetHitCreature())
                     {
                         uint32 uiNewEntry = 0;
                         switch (caster->GetTeam())
@@ -280,7 +280,7 @@ class spell_q11396_11399_scourging_crystal_controller : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                     if (target->GetTypeId() == TYPEID_UNIT && target->HasAura(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3))
                         // Make sure nobody else is channeling the same target
                         if (!target->HasAura(SPELL_SCOURGING_CRYSTAL_CONTROLLER))
@@ -318,7 +318,7 @@ class spell_q11396_11399_scourging_crystal_controller_dummy : public SpellScript
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     if (target->GetTypeId() == TYPEID_UNIT)
                         target->RemoveAurasDueToSpell(SPELL_FORCE_SHIELD_ARCANE_PURPLE_X3);
             }
@@ -382,7 +382,7 @@ class spell_q11587_arcane_prisoner_rescue : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     uint32 spellId = SPELL_SUMMON_ARCANE_PRISONER_MALE;
                     if (rand() % 2)
@@ -446,7 +446,7 @@ class spell_q11730_ultrasonic_screwdriver : public SpellScriptLoader
             {
                 Item* castItem = GetCastItem();
                 Unit* caster = GetCaster();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     uint32 spellId = 0;
                     switch (target->GetEntry())
@@ -502,7 +502,7 @@ class spell_q12459_seeds_of_natures_wrath : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* creatureTarget = GetHitCreature())
+                if (auto creatureTarget = GetHitCreature())
                 {
                     uint32 uiNewEntry = 0;
                     switch (creatureTarget->GetEntry())
@@ -638,14 +638,14 @@ class spell_q12851_going_bearback : public SpellScriptLoader
 
             void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     Unit* target = GetTarget();
                     // Already in fire
                     if (target->HasAura(SPELL_ABLAZE))
                         return;
 
-                    if (Player* player = caster->GetCharmerOrOwnerPlayerOrPlayerItself())
+                    if (auto player = caster->GetCharmerOrOwnerPlayerOrPlayerItself())
                     {
                         switch (target->GetEntry())
                         {
@@ -709,7 +709,7 @@ class spell_q12937_relief_for_the_fallen : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     caster->CastSpell(caster, SPELL_TRIGGER_AID_OF_THE_EARTHEN, true, NULL);
                     caster->KilledMonsterCredit(NPC_FALLEN_EARTHEN_DEFENDER, 0);
@@ -755,7 +755,7 @@ class spell_q10041_q10040_who_are_they : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                 {
                     target->CastSpell(target, target->getGender() == GENDER_MALE ? SPELL_MALE_DISGUISE : SPELL_FEMALE_DISGUISE, true);
                     target->CastSpell(target, SPELL_GENERIC_DISGUISE, true);
@@ -791,7 +791,7 @@ class spell_symbol_of_life_dummy : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     if (target->HasAura(SPELL_PERMANENT_FEIGN_DEATH))
                     {
@@ -840,7 +840,7 @@ class spell_q12659_ahunaes_knife : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     target->DespawnOrUnsummon();
                     caster->KilledMonsterCredit(NPC_SCALPS_KC_BUNNY, 0);
@@ -884,7 +884,7 @@ class spell_q9874_liquid_fire : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     if (target && target->HasAura(SPELL_FLAMES))
                     {
                         caster->KilledMonsterCredit(NPC_VILLAGER_KILL_CREDIT, 0);
@@ -929,7 +929,7 @@ class spell_q12805_lifeblood_dummy : public SpellScriptLoader
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     caster->KilledMonsterCredit(NPC_SHARD_KILL_CREDIT, 0);
                     target->CastSpell(target, uint32(GetEffectValue()), true);
@@ -973,7 +973,7 @@ class spell_q13280_13283_plant_battle_standard: public SpellScriptLoader
             {
                 Unit* caster = GetCaster();
                 if (caster->IsVehicle())
-                    if (Unit* player = caster->GetVehicleKit()->GetPassenger(0))
+                    if (auto player = caster->GetVehicleKit()->GetPassenger(0))
                          player->ToPlayer()->KilledMonsterCredit(NPC_KING_OF_THE_MOUNTAINT_KC, 0);
             }
 
@@ -1002,7 +1002,7 @@ public:
 		{
 			Unit* caster = GetCaster();
 			if (caster->IsVehicle())
-				if (Unit* player = caster->GetVehicleKit()->GetPassenger(0))
+				if (auto player = caster->GetVehicleKit()->GetPassenger(0))
 					player->ToPlayer()->ChangeSeat(-1);
 		}
 
@@ -1031,7 +1031,7 @@ public:
 		{
 			Unit* caster = GetCaster();
 			if (caster->IsVehicle())
-				if (Unit* player = caster->GetVehicleKit()->GetPassenger(0))
+				if (auto player = caster->GetVehicleKit()->GetPassenger(0))
 					player->ToPlayer()->ChangeSeat(+1);
 		}
 
@@ -1148,7 +1148,7 @@ public:
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             // player must cast kill credit and do emote text, according to sniff
-            if (Player* target = GetTarget()->ToPlayer())
+            if (auto target = GetTarget()->ToPlayer())
             {
                 target->MonsterWhisper(SAY_1, target->GetGUID(), true);
                 target->KilledMonsterCredit(NPC_KILLCREDIT, 0);
@@ -1188,13 +1188,13 @@ class spell_q12277_wintergarde_mine_explosion : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* unitTarget = GetHitCreature())
+                if (auto unitTarget = GetHitCreature())
                 {
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                     {
                         if (caster->GetTypeId() == TYPEID_UNIT)
                         {
-                            if (Unit* owner = caster->GetOwner())
+                            if (auto owner = caster->GetOwner())
                             {
                                 switch (unitTarget->GetEntry())
                                 {
@@ -1241,7 +1241,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* target = GetHitCreature())
+            if (auto target = GetHitCreature())
                 target->CastSpell(GetCaster(), SPELL_BUNNY_CREDIT_BEAM, false);
         }
 
@@ -1361,10 +1361,10 @@ class spell_q12372_destabilize_azure_dragonshrine_dummy : public SpellScriptLoad
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 if (GetHitCreature())
-                    if (Unit* caster = GetOriginalCaster())
+                    if (auto caster = GetOriginalCaster())
                         if (Vehicle* vehicle = caster->GetVehicleKit())
-                            if (Unit* passenger = vehicle->GetPassenger(0))
-                                if (Player* player = passenger->ToPlayer())
+                            if (auto passenger = vehicle->GetPassenger(0))
+                                if (auto player = passenger->ToPlayer())
                                     player->KilledMonsterCredit(NPC_WYRMREST_TEMPLE_CREDIT, 0);
             }
 
@@ -1392,7 +1392,7 @@ class spell_q12372_azure_on_death_force_whisper : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* defender = GetHitCreature())
+                if (auto defender = GetHitCreature())
                     defender->AI()->Talk(WHISPER_ON_HIT_BY_FORCE_WHISPER, defender->GetCharmerOrOwnerGUID());
             }
 
@@ -1431,7 +1431,7 @@ class spell_q11010_q11102_q11023_aggro_check_aura : public SpellScriptLoader
 
             void HandleTriggerSpell(AuraEffect const* /*aurEff*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     // On trigger proccing
                     target->CastSpell(target, SPELL_AGGRO_CHECK);
             }
@@ -1460,7 +1460,7 @@ class spell_q11010_q11102_q11023_aggro_check : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Player* playerTarget = GetHitPlayer())
+                if (auto playerTarget = GetHitPlayer())
                     // Check if found player target is on fly mount or using flying form
                     if (playerTarget->HasAuraType(SPELL_AURA_FLY) || playerTarget->HasAuraType(SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED))
                         playerTarget->CastSpell(playerTarget, SPELL_FLAK_CANNON_TRIGGER, TRIGGERED_IGNORE_CASTER_MOUNTED_OR_ON_VEHICLE);
@@ -1490,7 +1490,7 @@ class spell_q11010_q11102_q11023_aggro_burst : public SpellScriptLoader
 
             void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     // On each tick cast Choose Loc to trigger summon
                     target->CastSpell(target, SPELL_CHOOSE_LOC);
             }
@@ -1602,7 +1602,7 @@ class spell_q12527_zuldrak_rat : public SpellScriptLoader
                 if (GetHitAura() && GetHitAura()->GetStackAmount() >= GetSpellInfo()->StackAmount)
                 {
                     GetHitUnit()->CastSpell((Unit*) NULL, SPELL_SUMMON_GORGED_LURKING_BASILISK, true);
-                    if (Creature* basilisk = GetHitUnit()->ToCreature())
+                    if (auto basilisk = GetHitUnit()->ToCreature())
                         basilisk->DespawnOrUnsummon();
                 }
             }
@@ -1777,7 +1777,7 @@ public:
             if (caster->GetTypeId() != TYPEID_PLAYER)
                 return SPELL_FAILED_DONT_REPORT;
 
-            if (Creature* target = GetExplTargetUnit()->ToCreature())
+            if (auto target = GetExplTargetUnit()->ToCreature())
             {
                 if (target->GetHealthPct() >= 35)
                     return SPELL_FAILED_BAD_TARGETS;
@@ -1793,7 +1793,7 @@ public:
 
         void HandleDummy(SpellEffIndex /* effIndex */)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
                 if (caster->GetQuestStatus(28138) == QUEST_STATUS_INCOMPLETE)
                     caster->KilledMonsterCredit(47697, 0);
             GetHitCreature()->DespawnOrUnsummon();
@@ -1819,7 +1819,7 @@ public:
 
     bool operator() (WorldObject* obj)
     {
-        if (Unit* target = obj->ToUnit())
+        if (auto target = obj->ToUnit())
             if (target->GetEntry() == 53590)
                 return false;
         return true;
@@ -1838,8 +1838,8 @@ public:
         SpellCastResult CheckCast()
         {
             // Check if we have valid targets, otherwise skip spell casting here
-            if (Player* caster = GetCaster()->ToPlayer())
-                if (Unit* target = caster->GetSelectedUnit())
+            if (auto caster = GetCaster()->ToPlayer())
+                if (auto target = caster->GetSelectedUnit())
                     if (target->GetEntry() == 53590)
                         return SPELL_CAST_OK;
 
@@ -1853,10 +1853,10 @@ public:
 
         void HandleDummy()
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 caster->KilledMonsterCredit(53592, caster->GetGUID());
-                if (Unit* target = caster->GetSelectedUnit())
+                if (auto target = caster->GetSelectedUnit())
                 if (target->GetEntry() == 53590)
                     target->ToCreature()->DespawnOrUnsummon();
             }
@@ -1882,7 +1882,7 @@ class spell_quest29307_SpellScript : public SpellScript
 
     void HandleKillCredit()
     {
-        if (Player* caster = GetCaster()->ToPlayer())
+        if (auto caster = GetCaster()->ToPlayer())
         {
             int8 maxcount = 0;
             if (Map* map = caster->GetMap())

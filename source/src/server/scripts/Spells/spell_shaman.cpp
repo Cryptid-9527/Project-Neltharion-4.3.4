@@ -114,7 +114,7 @@ class spell_sha_ancestral_awakening_proc : public SpellScriptLoader
 
                 std::list<Unit*> temp;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                    if (Unit* unit = (*itr)->ToUnit())
+                    if (auto unit = (*itr)->ToUnit())
                         temp.push_back(unit);
 
                 targets.clear();
@@ -161,7 +161,7 @@ class spell_sha_fulmination : public SpellScriptLoader
                             int32 bonus  = caster->SpellBaseDamageBonusDone(spellInfo->GetSchoolMask()) * 0.267f;
                             // Unsure about the calculation
                             int32 basepoints0 = spellInfo->Effects[EFFECT_0].CalcValue(caster) + bonus;
-                            if (Player* modOwner = caster->GetSpellModOwner())
+                            if (auto modOwner = caster->GetSpellModOwner())
                                 modOwner->ApplySpellMod(spellInfo->Id, SPELLMOD_DAMAGE, basepoints0);
 
                             basepoints0 *= charges;
@@ -302,7 +302,7 @@ class spell_sha_earth_shield : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool & /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     amount = caster->SpellHealingBonusDone(GetUnitOwner(), GetSpellInfo(), amount, HEAL);
 
@@ -346,7 +346,7 @@ class spell_sha_earthbind_totem : public SpellScriptLoader
             {
                 if (!GetCaster())
                     return;
-                if (Player* owner = GetCaster()->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto owner = GetCaster()->GetCharmerOrOwnerPlayerOrPlayerItself())
                     if (AuraEffect* aur = owner->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 2289, 0))
                         if (roll_chance_i(aur->GetBaseAmount()))
                             GetTarget()->CastSpell((Unit*)NULL, SPELL_SHAMAN_TOTEM_EARTHEN_POWER, true);
@@ -469,7 +469,7 @@ class spell_sha_fire_nova : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (caster->HasAura(29000))
                     {
@@ -522,7 +522,7 @@ class spell_sha_flame_shock : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* /*dispelInfo*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Lava Flows
                     if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, SHAMAN_ICON_ID_SHAMAN_LAVA_FLOW, EFFECT_0))
@@ -536,7 +536,7 @@ class spell_sha_flame_shock : public SpellScriptLoader
             float GetSearingDistance()
             {
                 float value = sSpellMgr->GetSpellInfo(SPELL_SHAMAN_SEARING_BOLT)->GetMaxRange();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (AuraEffect* eff1 = caster->GetAuraEffect(86935, EFFECT_0, caster->GetGUID()))
                         AddPct(value, eff1->GetAmount());
@@ -563,9 +563,9 @@ class spell_sha_flame_shock : public SpellScriptLoader
 
                 for (std::list<Creature*>::iterator itr = MinionList.begin(); itr != MinionList.end(); itr++)
                 {
-                    if (Creature* searing_totem = (*itr))
+                    if (auto searing_totem = (*itr))
                         if (float searing_distance = GetSearingDistance())
-                            if (Unit* target = GetOwner()->ToUnit())
+                            if (auto target = GetOwner()->ToUnit())
                                 if (searing_totem->isAlive())
                                     if (searing_totem->GetDistance(target) <= searing_distance)
                                     {
@@ -600,7 +600,7 @@ class spell_sha_flame_shock : public SpellScriptLoader
                 for (std::list<Creature*>::iterator itr = MinionList.begin(); itr != MinionList.end(); itr++)
                 {
                     if (float searing_distance = GetSearingDistance())
-                        if (Unit* target = GetOwner()->ToUnit())
+                        if (auto target = GetOwner()->ToUnit())
                             if ((*itr)->isAlive())
                                 if ((*itr)->GetDistance(target) <= searing_distance)
                                 {
@@ -643,7 +643,7 @@ public:
         float GetSearingDistance()
         {
             float value = sSpellMgr->GetSpellInfo(SPELL_SHAMAN_SEARING_BOLT)->GetMaxRange();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect* eff1 = caster->GetAuraEffect(86935, EFFECT_0, caster->GetGUID()))
                     AddPct(value, eff1->GetAmount());
@@ -669,9 +669,9 @@ public:
 
             for (std::list<Creature*>::iterator itr = MinionList.begin(); itr != MinionList.end(); itr++)
             {
-                if (Creature* searing_totem = (*itr))
+                if (auto searing_totem = (*itr))
                     if (float searing_distance = GetSearingDistance())
-                        if (Unit* target = GetOwner()->ToUnit())
+                        if (auto target = GetOwner()->ToUnit())
                             if (searing_totem->isAlive())
                                 if (searing_totem->GetDistance(target) <= searing_distance)
                                 {
@@ -693,9 +693,9 @@ public:
 
             for (std::list<Creature*>::iterator itr = MinionList.begin(); itr != MinionList.end(); itr++)
             {
-                if (Creature* searing_totem = (*itr))
+                if (auto searing_totem = (*itr))
                     if (float searing_distance = GetSearingDistance())
-                        if (Unit* target = GetOwner()->ToUnit())
+                        if (auto target = GetOwner()->ToUnit())
                             if (searing_totem->isAlive())
                                 if (searing_totem->GetDistance(target) <= searing_distance)
                                 {
@@ -743,7 +743,7 @@ class spell_sha_lava_surge : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                 {
                     if (caster->HasSpellCooldown(51505))
                         caster->RemoveSpellCooldown(51505, true);
@@ -785,10 +785,10 @@ class spell_sha_healing_stream_totem : public SpellScriptLoader
             {
                 int32 damage = GetEffectValue();
                 SpellInfo const* triggeringSpell = GetTriggeringSpell();
-                if (Unit* target = GetHitUnit())
-                    if (Unit* caster = GetCaster())
+                if (auto target = GetHitUnit())
+                    if (auto caster = GetCaster())
                     {
-                        if (Unit* owner = caster->GetOwner())
+                        if (auto owner = caster->GetOwner())
                         {
                             if (triggeringSpell)
                                 damage = triggeringSpell->Effects[EFFECT_0].CalcValue(caster);;
@@ -843,8 +843,8 @@ class spell_sha_healing_stream_totem_triggered : public SpellScriptLoader
 
             void Apply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
-                    if (Unit* owner = caster->GetOwner())
+                if (auto caster = GetCaster())
+                    if (auto owner = caster->GetOwner())
                         if (owner->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 1647, EFFECT_0))
                             caster->CastSpell(caster, 8185, true);
             }
@@ -971,7 +971,7 @@ class spell_sha_healing_rain_trigger : public SpellScriptLoader
                 if (_targets > 6)
                     SetHitHeal((GetHitHeal() * 6) / _targets);
 
-                if (Unit* caster = GetOriginalCaster())
+                if (auto caster = GetOriginalCaster())
                 {
                     // Shaman t13 healing rain bonus
                     if (AuraEffect* aurEff = caster->GetAuraEffect(98067, EFFECT_0))                       
@@ -1036,10 +1036,10 @@ class spell_sha_lava_lash_trigger : public SpellScriptLoader
                 if(!GetCaster()->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 4780, EFFECT_0))
                     return;
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     if (Aura* flameShock = target->GetAura(8050, GetCaster()->GetGUID()))
                         for (std::list<WorldObject*>::const_iterator itr = targets.begin(); itr != targets.end(); ++itr)
-                            if (Unit* triggerTarget = (*itr)->ToUnit())
+                            if (auto triggerTarget = (*itr)->ToUnit())
                                 GetCaster()->AddAuraForTarget(flameShock, triggerTarget);
             }
 
@@ -1074,9 +1074,9 @@ class spell_sha_mana_tide_totem : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
-                    if (Unit* owner = caster->GetOwner())
+                    if (auto owner = caster->GetOwner())
                     {
                         uint32 baseSpirit = owner->GetStat(STAT_SPIRIT);
                         Unit::AuraEffectList const& auras = owner->GetAuraEffectsByType(SPELL_AURA_MOD_STAT);
@@ -1117,7 +1117,7 @@ class spell_sha_thunderstorm : public SpellScriptLoader
 
             void HandleKnockBack(SpellEffIndex effIndex)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Glyph of Thunderstorm
                     if (caster->HasAura(SPELL_SHAMAN_GLYPH_OF_THUNDERSTORM))
@@ -1185,7 +1185,7 @@ class spell_sha_searing_flames : public SpellScriptLoader
             {
                 Unit* caster = GetCaster();
                 // Searing Flames
-                if (Unit* owner = caster->GetOwner())
+                if (auto owner = caster->GetOwner())
                     if (AuraEffect* aur = owner->GetDummyAuraEffect(SPELLFAMILY_SHAMAN, 680, EFFECT_0))
                         if (roll_chance_i(aur->GetAmount()))
                         {
@@ -1224,7 +1224,7 @@ class spell_sha_unleash_elements : public SpellScriptLoader
                 if (!caster)
                     return SPELL_CAST_OK;
 
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                 {
                     bool isFriendly = caster->IsFriendlyTo(target);
                     bool anyEnchant = false;
@@ -1420,7 +1420,7 @@ class spell_sha_spirit_link : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (targets.find(target->GetGUID()) == targets.end())
                         return;
@@ -1507,7 +1507,7 @@ public:
         SpellCastResult CheckCast()
         {
             // "Wrath-Logo-Small Patch 3.2.2 (2009-09-22): Thunderstorm and Shamanistic Rage can no longer be used while Frozen, Cycloned, Sapped, or Incapacitated."
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (caster->HasAuraWithMechanic((1 << MECHANIC_BANISH) | (1 << MECHANIC_SAPPED) | (1 << MECHANIC_FREEZE)))
                     return SPELL_FAILED_DONT_REPORT;
 
@@ -1537,7 +1537,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 int32 cooldown = 2894;
                 int32 reducedCooldown = 4000;
@@ -1587,7 +1587,7 @@ public:
 
         void HandleCooldown(ProcEventInfo& /*eventInfo*/)
         {
-            if (Player* caster = GetTarget()->ToPlayer())
+            if (auto caster = GetTarget()->ToPlayer())
             {
                 if (AuraEffect* feedback = caster->GetAuraEffectOfRankedSpell(SPELL_SHAMAN_FEEDBACK_R1, EFFECT_0))
                 {
@@ -1874,8 +1874,8 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Player* flametongue_player = caster->ToPlayer())
+            if (auto caster = GetCaster())
+                if (auto flametongue_player = caster->ToPlayer())
                 {
                     Item* weapons[2];
                     weapons[1] = flametongue_player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
@@ -1911,7 +1911,7 @@ public:
         PrepareSpellScript(spell_sha_elemental_overload_SpellScript);
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Aura* overload = caster->GetAura(SPELL_SHAMAN_ELEMENTAL_OVERLOAD, caster->GetGUID()))
                     if (Aura* overload_set = caster->GetAura(SPELL_SHAMAN_ELEMENTAL_T13_4P, caster->GetGUID()))
                         if (overload->GetStackAmount() != 2)
@@ -1924,7 +1924,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Aura* overload = caster->GetAura(SPELL_SHAMAN_ELEMENTAL_OVERLOAD, caster->GetGUID()))
                     if (overload->GetStackAmount() == 2)
                     {
@@ -1947,7 +1947,7 @@ public:
         void OnUpdate(AuraEffect* /*aurEff*/, const uint32 diff)
         {
             if (GetSpellInfo()->Id == SPELL_SHAMAN_ELEMENTAL_OVERLOAD)
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (Aura* overload = GetAura())
                         if (overload->GetStackAmount() == 2)
                         {

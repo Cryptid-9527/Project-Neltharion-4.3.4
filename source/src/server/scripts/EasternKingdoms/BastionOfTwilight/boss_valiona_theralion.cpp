@@ -410,7 +410,7 @@ public:
             instance->SetBossState(DATA_VALIONA_THERALION, IN_PROGRESS);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me); // Add
             DoCast(me, SPELL_SUMMON_PORTAL, true);
-            if (Creature* Theralion = Creature::GetCreature(*me, instance->GetData64(NPC_THERALION_BOT)))
+            if (auto Theralion = Creature::GetCreature(*me, instance->GetData64(NPC_THERALION_BOT)))
                 if (Theralion && !Theralion->isInCombat())
                     Theralion->SetInCombatWithZone();
             if (IsHeroic())
@@ -616,14 +616,14 @@ public:
                         EnterPhaseAir();
                         break;
                     case EVENT_BLACKOUT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(true, me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(true, me)))
                             DoCast(target, SPELL_BLACKOUT);
                         Talk(SAY_VA_BOUT);
                         events.ScheduleEvent(EVENT_BLACKOUT, 40000, GROUP_GROUND, PHASE_GROUND);
                         break;
                     case EVENT_DEVOURING_FLAMES:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(true, me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(true, me)))
                         {
                             if (!target)
                                 target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(false, me));
@@ -635,7 +635,7 @@ public:
                             if (target)
                                 target->CastSpell(target, SPELL_DEVOURING_FLAME_TRACKER_SUMMON, true);
 
-                            if (Creature* flameHackfix = me->SummonCreature(987657, tracerPos, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                            if (auto flameHackfix = me->SummonCreature(987657, tracerPos, TEMPSUMMON_TIMED_DESPAWN, 10000))
                             {
                                 flameHackfix->SetFacingTo(me->GetAngle(target));
                                 flameHackfix->SetDisplayId(1060);
@@ -663,7 +663,7 @@ public:
                         EnterPhaseGround();
                         break;
                     case EVENT_TWILIGHT_METEOR:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(false, me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(false, me)))
                         {
                             me->AddAura(SPELL_TW_METEOR_TARGET, target);
                             DoCast(target, SPELL_TW_METEOR);
@@ -819,7 +819,7 @@ public:
                         break;
                     case EVENT_BERSERK:
                         DoCast(me, SPELL_BERSERK, true);
-                        if (Creature* Theralion = Creature::GetCreature(*me, instance->GetData64(NPC_THERALION_BOT)))
+                        if (auto Theralion = Creature::GetCreature(*me, instance->GetData64(NPC_THERALION_BOT)))
                             Theralion->CastSpell(Theralion, SPELL_BERSERK, true);
                         break;
                 }
@@ -879,7 +879,7 @@ public:
             me->LowerPlayerDamageReq(me->GetMaxHealth());
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me); // Add
             uiDazzlingDestructionCount = 0;
-            if (Creature* Valiona = Creature::GetCreature(*me, instance->GetData64(NPC_VALIONA_BOT)))
+            if (auto Valiona = Creature::GetCreature(*me, instance->GetData64(NPC_VALIONA_BOT)))
                 if(Valiona && !Valiona->isInCombat())
                     Valiona->SetInCombatWithZone();
 
@@ -1039,7 +1039,7 @@ public:
                         EnterPhaseGround();
                         break;
                     case EVENT_TWILIGHT_BLAST:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(false, me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, ShadowPhaseCheck(false, me)))
                             DoCast(target, SPELL_TWILIGHT_BLAST);
                         events.ScheduleEvent(EVENT_TWILIGHT_BLAST, urand(2000, 3000), GROUP_FLIGHT, PHASE_FLIGHT);
                         break;
@@ -1455,9 +1455,9 @@ public:
         void HandlePeriodic(AuraEffect const* aurEff)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Creature* tracker = caster->FindNearestCreature(987657, 100.f))
+                if (auto tracker = caster->FindNearestCreature(987657, 100.f))
                     tracker->CastSpell((Unit*)NULL, 86844, true);
             }
         }
@@ -1479,7 +1479,7 @@ class DestructionTargetFilter
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->GetEntry() != NPC_DAZZ_DESTRUCTION_STALKER;
         return false;
     }
@@ -1561,7 +1561,7 @@ public:
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->CastSpell(caster, SPELL_UNSTABLE_TWILIGHT, true);
                 caster->RemoveAllAuras();
@@ -1677,7 +1677,7 @@ public:
         if (target->GetPhaseMask() == PHASEMASK_SHADOW)
             return true;
 
-        if (Player* player = target->ToPlayer())
+        if (auto player = target->ToPlayer())
         {
             switch (player->GetPrimaryTalentTree(player->GetActiveSpec()))
             {
@@ -2007,7 +2007,7 @@ class ShadowPhaseFilter
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->GetPhaseMask() == PHASEMASK_SHADOW;
         return true;
     }
@@ -2188,7 +2188,7 @@ class NonShadowPhaseFilter
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->GetPhaseMask() == PHASEMASK_SHADOW;
         return true;
     }

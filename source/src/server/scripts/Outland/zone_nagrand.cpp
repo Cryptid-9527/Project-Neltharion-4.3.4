@@ -231,7 +231,7 @@ public:
                 case 7:
                     Talk(SAY_MAG_MORE);
 
-                    if (Creature* temp = me->SummonCreature(NPC_MURK_PUTRIFIER, m_afAmbushB[0], m_afAmbushB[1], m_afAmbushB[2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000))
+                    if (auto temp = me->SummonCreature(NPC_MURK_PUTRIFIER, m_afAmbushB[0], m_afAmbushB[1], m_afAmbushB[2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000))
                         temp->AI()->Talk(SAY_MAG_MORE_REPLY);
 
                     me->SummonCreature(NPC_MURK_PUTRIFIER, m_afAmbushB[0]-2.5f, m_afAmbushB[1]-2.5f, m_afAmbushB[2], 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
@@ -241,7 +241,7 @@ public:
                 case 16:
                     Talk(SAY_MAG_COMPLETE);
 
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                         player->GroupEventHappens(QUEST_TOTEM_KARDASH_H, me);
 
                     SetRun();
@@ -391,7 +391,7 @@ public:
       go->SetGoState(GO_STATE_READY);
       if (go->GetEntry() == GO_CORKIS_PRISON)
       {
-          if (Creature* corki = go->FindNearestCreature(NPC_CORKI, 25, true))
+          if (auto corki = go->FindNearestCreature(NPC_CORKI, 25, true))
           {
               corki->GetMotionMaster()->MovePoint(1, go->GetPositionX()+5, go->GetPositionY(), go->GetPositionZ());
               if (player)
@@ -401,7 +401,7 @@ public:
 
       if (go->GetEntry() == GO_CORKIS_PRISON_2)
       {
-          if (Creature* corki = go->FindNearestCreature(NPC_CORKI_2, 25, true))
+          if (auto corki = go->FindNearestCreature(NPC_CORKI_2, 25, true))
           {
               corki->GetMotionMaster()->MovePoint(1, go->GetPositionX()-5, go->GetPositionY(), go->GetPositionZ());
               if (player)
@@ -411,7 +411,7 @@ public:
 
       if (go->GetEntry() == GO_CORKIS_PRISON_3)
       {
-          if (Creature* corki = go->FindNearestCreature(NPC_CORKI_3, 25, true))
+          if (auto corki = go->FindNearestCreature(NPC_CORKI_3, 25, true))
           {
               corki->GetMotionMaster()->MovePoint(1, go->GetPositionX()+4, go->GetPositionY(), go->GetPositionZ());
               if (player)
@@ -559,7 +559,7 @@ public:
             if (!HasEscortState(STATE_ESCORT_ESCORTING))
                 return;
 
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 if (player->GetQuestStatus(QUEST_TOTEM_KARDASH_A) != QUEST_STATUS_COMPLETE)
                     player->FailQuest(QUEST_TOTEM_KARDASH_A);
@@ -586,7 +586,7 @@ public:
                 {
                     Talk(SAY_KUR_COMPLETE);
 
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                         player->GroupEventHappens(QUEST_TOTEM_KARDASH_A, me);
 
                     SetRun();
@@ -685,7 +685,7 @@ class go_warmaul_prison : public GameObjectScript
             if (player->GetQuestStatus(QUEST_FINDING_THE_SURVIVORS) != QUEST_STATUS_INCOMPLETE)
                 return false;
 
-            if (Creature* prisoner = go->FindNearestCreature(NPC_MAGHAR_PRISONER, 5.0f))
+            if (auto prisoner = go->FindNearestCreature(NPC_MAGHAR_PRISONER, 5.0f))
             {
                 player->KilledMonsterCredit(NPC_MAGHAR_PRISONER, 0);
 

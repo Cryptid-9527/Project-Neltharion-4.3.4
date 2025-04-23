@@ -110,7 +110,7 @@ public:
             creature->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
             creature->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
 
-            if (GameObject* chest = me->FindNearestGameObject(209547, 500.0f))
+            if (auto chest = me->FindNearestGameObject(209547, 500.0f))
                 chest->m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_ADMINISTRATOR);
         }
 
@@ -177,14 +177,14 @@ public:
             instance->DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_CREDIT);
             if (GameObject *go = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_HOURGLASS_OF_TIME_GUID)))
                 go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-            if (GameObject* chest = me->FindNearestGameObject(209547, 500.0f))
+            if (auto chest = me->FindNearestGameObject(209547, 500.0f))
                 chest->m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
             _JustDied();
 
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
             {
-                if (Player* player = (itr->getSource()))
+                if (auto player = (itr->getSource()))
                 {
                     sLFGMgr->InitializeLockedDungeons(player);
                     player->GetSession()->SendLfgPlayerLockInfo();
@@ -420,9 +420,9 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* target = GetExplTargetUnit())
-                if (InstanceScript* instance = target->GetInstanceScript())
-                    if (Creature* murozond = Unit::GetCreature(*target, instance->GetData64(DATA_MUROZOND_GUID)))
+            if (auto target = GetExplTargetUnit())
+                if (auto instance = target->GetInstanceScript())
+                    if (auto murozond = Unit::GetCreature(*target, instance->GetData64(DATA_MUROZOND_GUID)))
                     {
                         //TC_LOG_ERROR("sql.sql", "found murozond");
                         if (murozond->HasSpellCooldown(GetSpellInfo()->Id))
@@ -434,9 +434,9 @@ public:
 
         void HandleOnEffectHitTarget(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 if (InstanceScript *instance = target->GetInstanceScript())
-                    if (Creature* murozond = Unit::GetCreature(*target, instance->GetData64(DATA_MUROZOND_GUID)))
+                    if (auto murozond = Unit::GetCreature(*target, instance->GetData64(DATA_MUROZOND_GUID)))
                     {
                         murozond->AI()->DoAction(ACTION_REWIND_TIME);
                         murozond->AddSpellCooldown(GetSpellInfo()->Id, NULL, time(NULL) + 5000);

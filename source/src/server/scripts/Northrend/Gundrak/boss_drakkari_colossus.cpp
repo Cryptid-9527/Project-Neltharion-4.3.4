@@ -281,7 +281,7 @@ class boss_drakkari_elemental : public CreatureScript
 
                 if (instance)
                 {
-                    if (Creature* colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
+                    if (auto colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
                         killer->Kill(colossus);
                 }
             }
@@ -302,7 +302,7 @@ class boss_drakkari_elemental : public CreatureScript
                     {
                         case EVENT_SURGE:
                             DoCast(SPELL_SURGE_VISUAL);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_SURGE);
                             events.ScheduleEvent(EVENT_SURGE, urand(5000, 15000));
                             break;
@@ -320,7 +320,7 @@ class boss_drakkari_elemental : public CreatureScript
                         DoCast(SPELL_SURGE_VISUAL);
                         if (instance)
                         {
-                            if (Creature* colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
+                            if (auto colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
                                 DoCast(colossus, SPELL_MERGE, true);
                         }
                         break;
@@ -331,7 +331,7 @@ class boss_drakkari_elemental : public CreatureScript
             {
                 if (HealthBelowPct(50) && instance)
                 {
-                    if (Creature* colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
+                    if (auto colossus = Unit::GetCreature(*me, instance->GetData64(DATA_DRAKKARI_COLOSSUS)))
                     {
                         if (colossus->AI()->GetData(DATA_COLOSSUS_PHASE) ==  COLOSSUS_PHASE_FIRST_ELEMENTAL_SUMMON)
                         {
@@ -366,7 +366,7 @@ class boss_drakkari_elemental : public CreatureScript
             {
                 if (spell->Id == SPELL_MERGE)
                 {
-                    if (Creature* colossus = target->ToCreature())
+                    if (auto colossus = target->ToCreature())
                     {
                         colossus->AI()->DoAction(ACTION_UNFREEZE_COLOSSUS);
                         me->DespawnOrUnsummon();
@@ -416,7 +416,7 @@ public:
             {
                 for (std::list<Creature*>::const_iterator itr = mojosList.begin(); itr != mojosList.end(); ++itr)
                 {
-                    if (Creature* mojo = *itr)
+                    if (auto mojo = *itr)
                         mojo->GetMotionMaster()->MovePoint(1, boss->GetHomePosition().GetPositionX(), boss->GetHomePosition().GetPositionY(), boss->GetHomePosition().GetPositionZ());
                 }
             }
@@ -429,7 +429,7 @@ public:
 
             if (id == 1)
             {
-                if (Creature* colossus = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DRAKKARI_COLOSSUS) : 0))
+                if (auto colossus = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DRAKKARI_COLOSSUS) : 0))
                 {
                     colossus->AI()->DoAction(ACTION_UNFREEZE_COLOSSUS);
                     if (!colossus->AI()->GetData(DATA_INTRO_DONE))
@@ -446,7 +446,7 @@ public:
                 return;
 
             // we do this checks to see if the creature is one of the creatures that sorround the boss
-            if (Creature* colossus = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DRAKKARI_COLOSSUS) : 0))
+            if (auto colossus = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DRAKKARI_COLOSSUS) : 0))
             {
                 Position homePosition;
                 me->GetHomePosition().GetPosition(&homePosition);
@@ -504,7 +504,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Position pos;
                 caster->GetPosition(&pos);

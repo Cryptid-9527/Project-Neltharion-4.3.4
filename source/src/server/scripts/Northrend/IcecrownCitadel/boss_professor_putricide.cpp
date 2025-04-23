@@ -177,7 +177,7 @@ class AbominationDespawner
 
         bool operator()(uint64 guid)
         {
-            if (Unit* summon = ObjectAccessor::GetUnit(*_owner, guid))
+            if (auto summon = ObjectAccessor::GetUnit(*_owner, guid))
             {
                 if (summon->GetEntry() == NPC_MUTATED_ABOMINATION_10 || summon->GetEntry() == NPC_MUTATED_ABOMINATION_25)
                 {
@@ -369,7 +369,7 @@ class boss_professor_putricide : public CreatureScript
                         instance->SetBossState(DATA_FESTERGUT, IN_PROGRESS); // needed here for delayed gate close
                         me->SetSpeed(MOVE_RUN, _baseSpeed, true);
                         DoAction(ACTION_FESTERGUT_GAS);
-                        if (Creature* festergut = Unit::GetCreature(*me, instance->GetData64(DATA_FESTERGUT)))
+                        if (auto festergut = Unit::GetCreature(*me, instance->GetData64(DATA_FESTERGUT)))
                             festergut->CastSpell(festergut, SPELL_GASEOUS_BLIGHT_LARGE, false, NULL, NULL, festergut->GetGUID());
                         break;
                     case POINT_ROTFACE:
@@ -382,7 +382,7 @@ class boss_professor_putricide : public CreatureScript
                         // stop attack
                         me->GetMotionMaster()->MoveIdle();
                         me->SetSpeed(MOVE_RUN, _baseSpeed, true);
-                        if (GameObject* table = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_PUTRICIDE_TABLE)))
+                        if (auto table = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_PUTRICIDE_TABLE)))
                             me->SetFacingToObject(table);
                         // operating on new phase already
                         switch (_phase)
@@ -441,7 +441,7 @@ class boss_professor_putricide : public CreatureScript
                         if (IsHeroic())
                             events.ScheduleEvent(EVENT_ROTFACE_VILE_GAS, urand(15000, 20000), 0, PHASE_ROTFACE);
                         // init random sequence of floods
-                        if (Creature* rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
+                        if (auto rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
                         {
                             std::list<Creature*> list;
                             GetCreatureListWithEntryInGrid(list, rotface, NPC_PUDDLE_STALKER, 50.0f);
@@ -468,7 +468,7 @@ class boss_professor_putricide : public CreatureScript
                     }
                     case ACTION_ROTFACE_OOZE:
                         Talk(SAY_ROTFACE_OOZE_FLOOD);
-                        if (Creature* dummy = Unit::GetCreature(*me, _oozeFloodDummyGUIDs[_oozeFloodStage]))
+                        if (auto dummy = Unit::GetCreature(*me, _oozeFloodDummyGUIDs[_oozeFloodStage]))
                             dummy->CastSpell(dummy, oozeFloodSpells[_oozeFloodStage], true, NULL, NULL, me->GetGUID()); // cast from self for LoS (with prof's GUID for logs)
                         if (++_oozeFloodStage == 4)
                             _oozeFloodStage = 0;
@@ -578,7 +578,7 @@ class boss_professor_putricide : public CreatureScript
                             EnterEvadeMode();
                             break;
                         case EVENT_FESTERGUT_GOO:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                                 DoCast(target, SPELL_MALLABLE_GOO_H, true); // triggered, to skip LoS check
                             events.ScheduleEvent(EVENT_FESTERGUT_GOO, urand(15000, 20000), 0, PHASE_FESTERGUT);
                             break;
@@ -587,7 +587,7 @@ class boss_professor_putricide : public CreatureScript
                             EnterEvadeMode();
                             break;
                         case EVENT_ROTFACE_VILE_GAS:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                                 DoCast(target, SPELL_VILE_GAS_H, true); // triggered, to skip LoS check
                             events.ScheduleEvent(EVENT_ROTFACE_VILE_GAS, urand(15000, 20000), 0, PHASE_ROTFACE);
                             break;
@@ -642,7 +642,7 @@ class boss_professor_putricide : public CreatureScript
                             }
                             else
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, -7.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, -7.0f, true))
                                 {
                                     Talk(EMOTE_MALLEABLE_GOO);
                                     DoCast(target, SPELL_MALLEABLE_GOO);
@@ -656,7 +656,7 @@ class boss_professor_putricide : public CreatureScript
                             events.ScheduleEvent(EVENT_CHOKING_GAS_BOMB, urand(35000, 40000));
                             break;
                         case EVENT_UNBOUND_PLAGUE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                             {
                                 DoCast(target, SPELL_UNBOUND_PLAGUE);
                                 DoCast(target, SPELL_UNBOUND_PLAGUE_SEARCHER);
@@ -672,14 +672,14 @@ class boss_professor_putricide : public CreatureScript
                             switch (_phase)
                             {
                                 case PHASE_COMBAT_2:
-                                    if (Creature* face = me->FindNearestCreature(NPC_TEAR_GAS_TARGET_STALKER, 50.0f))
+                                    if (auto face = me->FindNearestCreature(NPC_TEAR_GAS_TARGET_STALKER, 50.0f))
                                         me->SetFacingToObject(face);
                                     me->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
                                     Talk(SAY_TRANSFORM_1);
                                     events.ScheduleEvent(EVENT_RESUME_ATTACK, 5500, 0, PHASE_COMBAT_2);
                                     break;
                                 case PHASE_COMBAT_3:
-                                    if (Creature* face = me->FindNearestCreature(NPC_TEAR_GAS_TARGET_STALKER, 50.0f))
+                                    if (auto face = me->FindNearestCreature(NPC_TEAR_GAS_TARGET_STALKER, 50.0f))
                                         me->SetFacingToObject(face);
                                     me->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
                                     Talk(SAY_TRANSFORM_2);
@@ -844,7 +844,7 @@ class spell_putricide_gaseous_bloat : public SpellScriptLoader
             void HandleExtraEffect(AuraEffect const* /*aurEff*/)
             {
                 Unit* target = GetTarget();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     target->RemoveAuraFromStack(GetSpellInfo()->Id, GetCasterGUID());
                     if (!target->HasAura(GetId()))
@@ -892,7 +892,7 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
 
             void SelectTarget(std::list<WorldObject*>& targets)
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                 {
                     targets.remove_if(Trinity::ObjectGUIDCheck(instance->GetData64(DATA_ADD_TARGET)));
                 }
@@ -905,7 +905,7 @@ class spell_putricide_ooze_channel : public SpellScriptLoader
                 }
 
                 WorldObject* target = Trinity::Containers::SelectRandomContainerElement(targets);
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                     instance->SetData64(DATA_ADD_TARGET, target->GetGUID());
                 targets.clear();
                 targets.push_back(target);
@@ -999,7 +999,7 @@ class spell_putricide_slime_puddle_aura : public SpellScriptLoader
 
             void ReplaceAura()
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     GetCaster()->AddAura((GetCaster()->GetMap()->GetSpawnMode() & 1) ? 72456 : 70346, target);
             }
 
@@ -1172,7 +1172,7 @@ class spell_putricide_unbound_plague : public SpellScriptLoader
 
                 if (!GetHitUnit()->HasAura(plagueId))
                 {
-                    if (Creature* professor = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                    if (auto professor = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
                     {
                         if (Aura* oldPlague = GetCaster()->GetAura(plagueId, professor->GetGUID()))
                         {
@@ -1446,7 +1446,7 @@ class spell_putricide_mutated_transformation : public SpellScriptLoader
                     return;
                 if (putricide->AI()->GetData(DATA_ABOMINATION))
                 {
-                    if (Player* player = caster->ToPlayer())
+                    if (auto player = caster->ToPlayer())
                         Spell::SendCastResult(player, GetSpellInfo(), 0, SPELL_FAILED_CUSTOM_ERROR, SPELL_CUSTOM_ERROR_TOO_MANY_ABOMINATIONS);
                     return;
                 }
@@ -1493,7 +1493,7 @@ class spell_putricide_mutated_transformation_dmg : public SpellScriptLoader
 
             void FilterTargetsInitial(std::list<WorldObject*>& targets)
             {
-                if (Unit* owner = ObjectAccessor::GetUnit(*GetCaster(), GetCaster()->GetCreatorGUID()))
+                if (auto owner = ObjectAccessor::GetUnit(*GetCaster(), GetCaster()->GetCreatorGUID()))
                     targets.remove(owner);
             }
 
@@ -1521,7 +1521,7 @@ class spell_putricide_regurgitated_ooze : public SpellScriptLoader
             // the only purpose of this hook is to fail the achievement
             void ExtraEffect(SpellEffIndex /*effIndex*/)
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                     instance->SetData(DATA_NAUSEA_ACHIEVEMENT, uint32(false));
             }
 

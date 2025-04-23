@@ -135,7 +135,7 @@ public:
 
             if (Saw_Blade_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                     DoCast(target, SPELL_SAW_BLADE);
                 else
                     DoCastVictim(SPELL_SAW_BLADE);
@@ -229,7 +229,7 @@ public:
             {
                 if (instance && instance->GetData64(DATA_MEKGINEERSTEAMRIGGER) && instance->GetData(TYPE_MEKGINEER_STEAMRIGGER) == IN_PROGRESS)
                 {
-                    if (Unit* pMekgineer = Unit::GetUnit(*me, instance->GetData64(DATA_MEKGINEERSTEAMRIGGER)))
+                    if (auto pMekgineer = Unit::GetUnit(*me, instance->GetData64(DATA_MEKGINEERSTEAMRIGGER)))
                     {
                         if (me->IsWithinDistInMap(pMekgineer, MAX_REPAIR_RANGE))
                         {

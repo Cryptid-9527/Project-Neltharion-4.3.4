@@ -338,7 +338,7 @@ class boss_daakara : public CreatureScript
                         case EVENT_CHANGE_FORM_LYNX:
                             me->SetReactState(REACT_PASSIVE);
                             me->GetMotionMaster()->MovePoint(0, CENTER_X, CENTER_Y, CENTER_Z);
-                            if (Creature* lynxSpirit = me->GetCreature(*me, instance->GetData64(NPC_LYNX_SPIRIT)))
+                            if (auto lynxSpirit = me->GetCreature(*me, instance->GetData64(NPC_LYNX_SPIRIT)))
                                 lynxSpirit->CastSpell(me, SPELL_SPIRIT_BEAM, false);
                             events.ScheduleEvent(EVENT_LYNX, 2000);
                             break;
@@ -406,7 +406,7 @@ class boss_daakara : public CreatureScript
                         case EVENT_CHANGE_FORM_BEAR:
                             me->GetMotionMaster()->MovePoint(0, CENTER_X, CENTER_Y, CENTER_Z);
 
-                            if (Creature* bearSpirit = me->GetCreature(*me, instance->GetData64(NPC_BEAR_SPIRIT)))
+                            if (auto bearSpirit = me->GetCreature(*me, instance->GetData64(NPC_BEAR_SPIRIT)))
                                 bearSpirit->CastSpell(me, SPELL_SPIRIT_BEAM, false);
 
                             events.ScheduleEvent(EVENT_BEAR, 2000);
@@ -431,7 +431,7 @@ class boss_daakara : public CreatureScript
                             events.ScheduleEvent(EVENT_OVERPOWER, urand(5000, 8000));
                             break;
                         case EVENT_SURGE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
                                 me->CastSpell(target, SPELL_SURGE, false);
                             events.ScheduleEvent(EVENT_SURGE, 8000);
                             break;
@@ -441,7 +441,7 @@ class boss_daakara : public CreatureScript
                             me->RemoveAura(SPELL_SHAPE_OF_THE_BEAR);
                             me->GetMotionMaster()->MovePoint(0, CENTER_X, CENTER_Y, CENTER_Z);
 
-                            if (Creature* dragonhawkSpirit = me->GetCreature(*me, instance->GetData64(NPC_DRAGONHAWK_SPIRIT)))
+                            if (auto dragonhawkSpirit = me->GetCreature(*me, instance->GetData64(NPC_DRAGONHAWK_SPIRIT)))
                                 dragonhawkSpirit->CastSpell(me, SPELL_SPIRIT_BEAM, false);
 
                             events.ScheduleEvent(EVENT_DRAGONHAWK, 2000);
@@ -476,7 +476,7 @@ class boss_daakara : public CreatureScript
                             me->RemoveAura(SPELL_SHAPE_OF_THE_LYNX);
                             me->GetMotionMaster()->MovePoint(0, CENTER_X, CENTER_Y, CENTER_Z);
 
-                            if (Creature* eagleSpirit = me->GetCreature(*me, instance->GetData64(NPC_EAGLE_SPIRIT)))
+                            if (auto eagleSpirit = me->GetCreature(*me, instance->GetData64(NPC_EAGLE_SPIRIT)))
                                 eagleSpirit->CastSpell(me, SPELL_SPIRIT_BEAM, false);
 
                             events.ScheduleEvent(EVENT_EAGLE, 2000);

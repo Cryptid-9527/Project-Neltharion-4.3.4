@@ -406,7 +406,7 @@ public:
                 case 94:
                     if (uint64 TarethaGUID = instance->GetData64(DATA_TARETHA))
                     {
-                        if (Creature* Taretha = Creature::GetCreature(*me, TarethaGUID))
+                        if (auto Taretha = Creature::GetCreature(*me, TarethaGUID))
                             Taretha->AI()->Talk(SAY_TA_ESCAPED, me->GetGUID());
                     }
                     break;
@@ -429,9 +429,9 @@ public:
                 case 106:
                     {
                         //trigger taretha to run down outside
-                        if (Creature* Taretha = instance->instance->GetCreature(instance->GetData64(DATA_TARETHA)))
+                        if (auto Taretha = instance->instance->GetCreature(instance->GetData64(DATA_TARETHA)))
                         {
-                            if (Player* player = GetPlayerForEscort())
+                            if (auto player = GetPlayerForEscort())
                                 CAST_AI(npc_escortAI, (Taretha->AI()))->Start(false, true, player->GetGUID());
                         }
 
@@ -442,7 +442,7 @@ public:
                         {
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                     player->KilledMonsterCredit(20156, 0);
                             }
                         }

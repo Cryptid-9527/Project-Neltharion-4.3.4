@@ -231,7 +231,7 @@ class ValithriaDespawner : public BasicEvent
             switch (creature->GetEntry())
             {
                 case NPC_VALITHRIA_DREAMWALKER:
-                    if (InstanceScript* instance = creature->GetInstanceScript())
+                    if (auto instance = creature->GetInstanceScript())
                         instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, creature);
                     break;
                 case NPC_BLAZING_SKELETON:
@@ -348,7 +348,7 @@ class boss_valithria_dreamwalker : public CreatureScript
                     DoCast(me, SPELL_ACHIEVEMENT_CHECK);
                     DoCastAOE(SPELL_DREAMWALKERS_RAGE);
                     _events.ScheduleEvent(EVENT_DREAM_SLIP, 3500);
-                    if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
+                    if (auto lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
                         lichKing->AI()->EnterEvadeMode();
                 }
                 else if (!_over75PercentTalkDone && me->HealthAbovePctHealed(75, heal))
@@ -357,7 +357,7 @@ class boss_valithria_dreamwalker : public CreatureScript
                     Talk(SAY_VALITHRIA_75_PERCENT);
                 }
                 else if (_instance->GetBossState(DATA_VALITHRIA_DREAMWALKER) == NOT_STARTED)
-                if (Creature* archmage = me->FindNearestCreature(NPC_RISEN_ARCHMAGE, 30.0f))
+                if (auto archmage = me->FindNearestCreature(NPC_RISEN_ARCHMAGE, 30.0f))
                     archmage->AI()->DoZoneInCombat();   // call EnterCombat on one of them, that will make it all start
             }
 
@@ -380,7 +380,7 @@ class boss_valithria_dreamwalker : public CreatureScript
                             Talk(SAY_VALITHRIA_DEATH);
                             _instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                             DoCast(me, SPELL_CLEAR_ALL);
-                            if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
+                            if (auto trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
                                 trigger->AI()->DoAction(ACTION_DEATH);
                         }
                     }
@@ -397,10 +397,10 @@ class boss_valithria_dreamwalker : public CreatureScript
                     me->SetDisplayId(11686);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->DespawnOrUnsummon(4000);
-                    if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
+                    if (auto lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
                         lichKing->CastSpell(lichKing, SPELL_SPAWN_CHEST, false);
 
-                    if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
+                    if (auto trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
                         me->Kill(trigger);
                 }
             }
@@ -518,7 +518,7 @@ class npc_green_dragon_combat_trigger : public CreatureScript
                 me->setActive(true);
                 DoZoneInCombat();
                 instance->SetBossState(DATA_VALITHRIA_DREAMWALKER, IN_PROGRESS);
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     valithria->AI()->DoAction(ACTION_ENTER_COMBAT);
             }
 
@@ -567,7 +567,7 @@ class npc_green_dragon_combat_trigger : public CreatureScript
 
                 // check if there is any player on threatlist, if not - evade
                 for (std::list<HostileReference*>::const_iterator itr = threatList.begin(); itr != threatList.end(); ++itr)
-                if (Unit* target = (*itr)->getTarget())
+                if (auto target = (*itr)->getTarget())
                 if (target->GetTypeId() == TYPEID_PLAYER)
                     return; // found any player, return
 
@@ -623,7 +623,7 @@ class npc_the_lich_king_controller : public CreatureScript
                 // must not be in dream phase
                 summon->SetPhaseMask((summon->GetPhaseMask() & ~0x10), true);
                 if (summon->GetEntry() != NPC_SUPPRESSER)
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                     summon->AI()->AttackStart(target);
             }
 
@@ -710,7 +710,7 @@ class npc_risen_archmage : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     me->GetMotionMaster()->MoveChase(valithria);
             }
 
@@ -726,10 +726,10 @@ class npc_risen_archmage : public CreatureScript
                     for (std::list<Creature*>::iterator itr = archmages.begin(); itr != archmages.end(); ++itr)
                         (*itr)->AI()->DoAction(ACTION_ENTER_COMBAT);
 
-                    if (Creature* lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
+                    if (auto lichKing = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_LICH_KING)))
                         lichKing->AI()->DoZoneInCombat();
 
-                    if (Creature* trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
+                    if (auto trigger = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_TRIGGER)))
                         trigger->AI()->DoZoneInCombat();
                 }
             }
@@ -776,12 +776,12 @@ class npc_risen_archmage : public CreatureScript
                         _events.ScheduleEvent(EVENT_FROSTBOLT_VOLLEY, urand(8000, 15000));
                         break;
                     case EVENT_MANA_VOID:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, ManaVoidSelector(me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, ManaVoidSelector(me)))
                             DoCast(target, SPELL_MANA_VOID);
                         _events.ScheduleEvent(EVENT_MANA_VOID, urand(20000, 25000));
                         break;
                     case EVENT_COLUMN_OF_FROST:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, -10.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, -10.0f, true))
                             DoCast(target, SPELL_COLUMN_OF_FROST);
                         _events.ScheduleEvent(EVENT_COLUMN_OF_FROST, urand(15000, 25000));
                         break;
@@ -825,7 +825,7 @@ class npc_blazing_skeleton : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     AttackStart(valithria);
             }
 
@@ -892,7 +892,7 @@ class npc_suppresser : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     AttackStart(valithria);
             }
 
@@ -921,7 +921,7 @@ class npc_suppresser : public CreatureScript
                 }
 
                 // this creature has REACT_PASSIVE so it does not always have victim here
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                 if (victim->GetEntry() != NPC_VALITHRIA_DREAMWALKER)
                     DoMeleeAttackIfReady();
             }
@@ -955,7 +955,7 @@ class npc_blistering_zombie : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     AttackStart(valithria);
             }
 
@@ -995,7 +995,7 @@ class npc_gluttonous_abomination : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (Creature* valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
+                if (auto valithria = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VALITHRIA_DREAMWALKER)))
                     AttackStart(valithria);
             }
 
@@ -1452,7 +1452,7 @@ class spell_dreamwalker_twisted_nightmares : public SpellScriptLoader
                 //if (!GetHitUnit())
                 //    return;
 
-                if (InstanceScript* instance = GetHitUnit()->GetInstanceScript())
+                if (auto instance = GetHitUnit()->GetInstanceScript())
                     GetHitUnit()->CastSpell((Unit*)NULL, GetSpellInfo()->Effects[effIndex].TriggerSpell, true, NULL, NULL, instance->GetData64(DATA_VALITHRIA_DREAMWALKER));
             }
 

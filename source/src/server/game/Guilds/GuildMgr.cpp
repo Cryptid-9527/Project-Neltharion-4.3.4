@@ -93,7 +93,7 @@ Guild* GuildMgr::GetGuildByName(const std::string& guildName) const
 
 std::string GuildMgr::GetGuildNameById(uint32 guildId) const
 {
-    if (Guild* guild = GetGuildById(guildId))
+    if (auto guild = GetGuildById(guildId))
         return guild->GetName();
 
     return "";
@@ -182,7 +182,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadRankFromDB(fields);
 
                 ++count;
@@ -226,7 +226,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadMemberFromDB(fields);
 
                 ++count;
@@ -260,7 +260,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadBankRightFromDB(fields);
 
                 ++count;
@@ -293,7 +293,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadEventLogFromDB(fields);
 
                 ++count;
@@ -327,7 +327,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadBankEventLogFromDB(fields);
 
                 ++count;
@@ -358,7 +358,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadGuildNewsLogFromDB(fields);
 
                 ++count;
@@ -393,7 +393,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[0].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadBankTabFromDB(fields);
 
                 ++count;
@@ -429,7 +429,7 @@ void GuildMgr::LoadGuilds()
                 Field* fields = result->Fetch();
                 uint32 guildId = fields[11].GetUInt32();
 
-                if (Guild* guild = GetGuildById(guildId))
+                if (auto guild = GetGuildById(guildId))
                     guild->LoadBankItemFromDB(fields);
 
                 ++count;
@@ -589,6 +589,6 @@ void GuildMgr::ResetTimes(bool week)
         CharacterDatabase.Execute(CharacterDatabase.GetPreparedStatement(CHAR_RESET_OLD_GUILD_WEEK_REPUTATION));
 
     for (GuildContainer::const_iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
-        if (Guild* guild = itr->second)
+        if (auto guild = itr->second)
             guild->ResetTimes(week);
 }

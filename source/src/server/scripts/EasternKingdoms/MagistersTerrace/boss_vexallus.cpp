@@ -120,7 +120,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            if (Unit* temp = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (auto temp = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 summoned->GetMotionMaster()->MoveFollow(temp, 0, 0);
 
             //spells are SUMMON_TYPE_GUARDIAN, so using setOwner should be ok
@@ -166,7 +166,7 @@ public:
 
                 if (ChainLightningTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_CHAIN_LIGHTNING);
 
                     ChainLightningTimer = 8000;
@@ -174,7 +174,7 @@ public:
 
                 if (ArcaneShockTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     if (target)
                         DoCast(target, SPELL_ARCANE_SHOCK);
 
@@ -217,7 +217,7 @@ public:
 
         void JustDied(Unit* slayer)
         {
-            if (Unit* temp = me->GetOwner())
+            if (auto temp = me->GetOwner())
             {
                 if (temp && temp->isAlive())
                     slayer->CastSpell(slayer, SPELL_ENERGY_FEEDBACK, true, 0, 0, temp->GetGUID());

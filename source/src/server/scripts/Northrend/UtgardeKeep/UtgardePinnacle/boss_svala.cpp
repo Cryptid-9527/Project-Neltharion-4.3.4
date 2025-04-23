@@ -206,10 +206,10 @@ public:
                 Phase = INTRO;
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-                if (GameObject* mirror = GetClosestGameObjectWithEntry(me, OBJECT_UTGARDE_MIRROR, 100.0f))
+                if (auto mirror = GetClosestGameObjectWithEntry(me, OBJECT_UTGARDE_MIRROR, 100.0f))
                     mirror->SetGoState(GO_STATE_READY);
 
-                if (Creature* arthas = me->SummonCreature(CREATURE_ARTHAS, ArthasPos, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto arthas = me->SummonCreature(CREATURE_ARTHAS, ArthasPos, TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     arthas->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                     arthasGUID = arthas->GetGUID();
@@ -245,7 +245,7 @@ public:
                 Phase = NORMAL;
                 SetCombatMovement(true);
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 300.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 300.0f, true))
                     me->GetMotionMaster()->MoveChase(target);
             }
         }
@@ -342,7 +342,7 @@ public:
                             introTimer = 3000;
                             break;
                         case 9:
-                            if (GameObject* mirror = GetClosestGameObjectWithEntry(me, OBJECT_UTGARDE_MIRROR, 100.0f))
+                            if (auto mirror = GetClosestGameObjectWithEntry(me, OBJECT_UTGARDE_MIRROR, 100.0f))
                                 mirror->SetGoState(GO_STATE_ACTIVE);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                             arthas->DespawnOrUnsummon();
@@ -373,7 +373,7 @@ public:
 
                 if (callFlamesTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                     {
                         DoCast(target, SPELL_CALL_FLAMES);
                         callFlamesTimer = urand(10 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
@@ -385,7 +385,7 @@ public:
                 {
                     if (HealthBelowPct(50))
                     {
-                        if (Unit* sacrificeTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
+                        if (auto sacrificeTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
                         {
                             if (instance)
                                 instance->SetData64(DATA_SACRIFICED_PLAYER, sacrificeTarget->GetGUID());
@@ -484,7 +484,7 @@ public:
             if (paralyzeTimer <= diff)
             {
                 if (instance)
-                    if (Unit* victim = me->GetUnit(*me, instance->GetData64(DATA_SACRIFICED_PLAYER)))
+                    if (auto victim = me->GetUnit(*me, instance->GetData64(DATA_SACRIFICED_PLAYER)))
                         DoCast(victim, SPELL_PARALYZE, false);
 
                 paralyzeTimer = 200;
@@ -531,7 +531,7 @@ class RitualTargetCheck
 
         bool operator() (WorldObject* unit) const
         {
-            if (InstanceScript* instance = caster->GetInstanceScript())
+            if (auto instance = caster->GetInstanceScript())
                 if (instance->GetData64(DATA_SACRIFICED_PLAYER) == unit->GetGUID())
                     return false;
 
@@ -605,7 +605,7 @@ class npc_scourge_hulk : public CreatureScript
 
                 if (mightyBlow <= diff)
                 {
-                    if (Unit* victim = me->getVictim())
+                    if (auto victim = me->getVictim())
                         if (!victim->HasUnitState(UNIT_STATE_STUNNED))    // Prevent knocking back a ritual player
                             DoCast(victim, SPELL_MIGHTY_BLOW);
                     mightyBlow = urand(12000, 17000);

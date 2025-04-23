@@ -163,7 +163,7 @@ public:
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* zealot = ObjectAccessor::GetCreature(*me, *itr))
+                if (auto zealot = ObjectAccessor::GetCreature(*me, *itr))
                     if (zealot->isAlive() && (zealot->GetEntry() == NPC_TWILIGHT_ZEALOT_CORLA))
                         zealot->SetInCombatWithZone();
         }
@@ -295,7 +295,7 @@ public:
         void spawnZealots()
         {
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* zealot = ObjectAccessor::GetCreature(*me, *itr))
+                if (auto zealot = ObjectAccessor::GetCreature(*me, *itr))
                 {
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, zealot);
                     if (zealot->isAlive() && (zealot->GetEntry() == NPC_TWILIGHT_ZEALOT_CORLA))
@@ -334,7 +334,7 @@ public:
         {
             if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_CASTING))
                 return;
-			if (Player* player = me->FindNearestPlayer(20.00f))
+			if (auto player = me->FindNearestPlayer(20.00f))
 				if(player->HasAura(SPELL_TWILIGHT_EVOLUTION))
 					me->SetMaxHealth(me->GetMaxHealth());
 				
@@ -392,11 +392,11 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                if (Creature* essence = ObjectAccessor::GetCreature(*me, *itr))
+                if (auto essence = ObjectAccessor::GetCreature(*me, *itr))
                     if (essence->isAlive() && (essence->GetEntry() == NPC_NETHER_ESSENCE_TRIGGER))
                         essence->AI()->DoAction(ACTION_TRIGGER_START_CHANNELING);
 
-            if (Creature* corla = Creature::GetCreature(*me, instance->GetData64(DATA_CORLA)))
+            if (auto corla = Creature::GetCreature(*me, instance->GetData64(DATA_CORLA)))
                 corla->SetInCombatWithZone();
         }
 
@@ -442,7 +442,7 @@ public:
             {
 
                 for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                    if (Creature* essence = ObjectAccessor::GetCreature(*me, *itr))
+                    if (auto essence = ObjectAccessor::GetCreature(*me, *itr))
                         essence->AI()->DoAction(ACTION_DESPAWN_ESSENCE);
 
                 summons.DespawnAll();
@@ -475,7 +475,7 @@ public:
                     case EVENT_FORCE_BLAST:
                         if (me->isInCombat() && !me->HasAura(SPELL_KNEELING_IN_SUPPLICATION))
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
                                 DoCast(target, SPELL_FORCE_BLAST);
                         }
                         events.ScheduleEvent(EVENT_FORCE_BLAST, 10000);
@@ -497,7 +497,7 @@ public:
                     case EVENT_SHADOW_STRIKE:
                         if (me->isInCombat() && !me->HasAura(SPELL_KNEELING_IN_SUPPLICATION))
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.f, true))
                             DoCast(target, SPELL_SHADOW_STRIKE);
                         }
                         events.ScheduleEvent(EVENT_SHADOW_STRIKE, 14000);
@@ -603,22 +603,22 @@ public:
 
 
 
-                        if (Creature* corla = Creature::GetCreature(*me, instance->GetData64(DATA_CORLA)))
+                        if (auto corla = Creature::GetCreature(*me, instance->GetData64(DATA_CORLA)))
                         {
                             //TC_LOG_ERROR("sql.sql", "DATA_CORLA_BEAM_TARGETING = %u", GetData(DATA_CORLA_BEAM_TARGETING));
 
                             switch (GetData(DATA_CORLA_BEAM_TARGETING))
                             {
                             case DATA_SPAWN_LEFT:
-                                if (Creature* target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_LEFT)))
+                                if (auto target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_LEFT)))
                                     zealot = target;
                                 break;
                             case DATA_SPAWN_CENTER:
-                                if (Creature* target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_CENTER)))
+                                if (auto target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_CENTER)))
                                     zealot = target;
                                 break;
                             case DATA_SPAWN_RIGHT:
-                                if (Creature* target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_RIGHT)))
+                                if (auto target = Creature::GetCreature(*me, corla->AI()->GetGUID(DATA_ZEALOT_RIGHT)))
                                     zealot = target;
                                 break;
                             }
@@ -738,7 +738,7 @@ public:
             if (!instance || !target)
                 return;
 
-            if (Creature* corla = Creature::GetCreature(*GetCaster(), instance->GetData64(DATA_CORLA)))
+            if (auto corla = Creature::GetCreature(*GetCaster(), instance->GetData64(DATA_CORLA)))
             {
                 if(target->GetAuraCount(SPELL_EVOLUTION_AURA) == 100 || target->GetAuraCount(SPELL_EVOLUTION_AURA_HC) == 100)
                 {
@@ -757,7 +757,7 @@ public:
                             target->SetDisplayId(31705);
                             target->SetMaxHealth(target->GetMaxHealth() / 100 * 300);
                             target->SetHealth(target->GetMaxHealth());
-                            if (Unit* attackTarget = target->ToCreature()->SelectNearestPlayer(200.0f))
+                            if (auto attackTarget = target->ToCreature()->SelectNearestPlayer(200.0f))
                                 target->ToCreature()->AI()->AttackStart(attackTarget);
 
                             if (corla->AI()->GetGUID(DATA_ZEALOT_LEFT) == target->GetGUID())

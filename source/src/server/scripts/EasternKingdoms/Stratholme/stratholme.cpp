@@ -58,7 +58,7 @@ public:
 
         if (Group* group = player->GetGroup())
         {
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* pGroupie = itr->getSource();
                 if (!pGroupie)
@@ -187,9 +187,9 @@ public:
             {
                 if (Die_Timer <= diff)
                 {
-                    if (Unit* temp = Unit::GetUnit(*me, Tagger))
+                    if (auto temp = Unit::GetUnit(*me, Tagger))
                     {
-                        if (Player* player = temp->ToPlayer())
+                        if (auto player = temp->ToPlayer())
                             player->KilledMonsterCredit(NPC_RESTLESS, me->GetGUID());
                         me->Kill(me);
                     }

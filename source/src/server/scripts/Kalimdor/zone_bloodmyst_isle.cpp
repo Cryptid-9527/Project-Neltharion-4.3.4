@@ -66,7 +66,7 @@ public:
             {
                 case 0:
                     spawnCreatureID = 17681;
-                    if (Player* player = killer->ToPlayer())
+                    if (auto player = killer->ToPlayer())
                         player->KilledMonsterCredit(spawnCreatureID, 0);
                     break;
                 case 1:
@@ -169,7 +169,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* go)
     {
         go->SetGoState(GO_STATE_READY);
-        if (Creature* stillpine = go->FindNearestCreature(NPC_PRINCESS_STILLPINE, 25, true))
+        if (auto stillpine = go->FindNearestCreature(NPC_PRINCESS_STILLPINE, 25, true))
         {
             stillpine->GetMotionMaster()->MovePoint(1, go->GetPositionX(), go->GetPositionY()-15, go->GetPositionZ());
             player->CastedCreatureOrGO(NPC_PRINCESS_STILLPINE, 0, SPELL_OPENING_PRINCESS_STILLPINE_CREDIT);

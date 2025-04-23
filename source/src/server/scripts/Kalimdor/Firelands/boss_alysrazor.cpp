@@ -630,9 +630,9 @@ public:
                 instance->SetBossState(DATA_ALYSRAZOR, FAIL);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me); // Remove
 
-                if (GameObject* volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
+                if (auto volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
                     volcano->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
-                if (GameObject* ground =  me->FindNearestGameObject(GO_GROUND_ALYS, 1000.0f))
+                if (auto ground =  me->FindNearestGameObject(GO_GROUND_ALYS, 1000.0f))
                 {
                     instance->SetData(DATA_GROUND_STATE, BUILDING_STATE_INTACT);
                     ground->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
@@ -1064,7 +1064,7 @@ public:
                             events.ScheduleEvent(EVENT_SUMMON_HERALD_OF_THE_BURNING_END, 20000, GROUP_GROUND);
 
                         for (auto itr : summons)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, itr))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, itr))
                                 if (summon->GetEntry() == NPC_BLAZING_TALON_INITIATE)
                                     summon->AI()->DoAction(ACTION_FIRESTORM);
                         break;
@@ -1176,7 +1176,7 @@ public:
                         Position pos;
                         me->GetRandomPoint(FallPos[0], 30, pos);
                         pos.m_positionZ = instance->GetData(DATA_GROUND_STATE) == BUILDING_STATE_INTACT ? 56.5f : 52.0f;
-                        if (Creature* c = me->SummonCreature(NPC_BLAZING_POWER, pos, TEMPSUMMON_TIMED_DESPAWN, 4500))
+                        if (auto c = me->SummonCreature(NPC_BLAZING_POWER, pos, TEMPSUMMON_TIMED_DESPAWN, 4500))
                             c->SetFacingTo(c->GetAngle(FallPos[0].m_positionX, FallPos[0].m_positionY) + M_PI / 2);
                         events.ScheduleEvent(EVENT_BLAZING_POWER_GROUND, 4000);
                         break;
@@ -1342,7 +1342,7 @@ public:
 
         void OnSpellClick(Unit* player, bool& result) override
         {
-            if (Creature* alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+            if (auto alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
             {
                 player->CastSpell(player, SPELL_CAST_ON_MOVE_VISUAL, true);
                 castFeatherCastWhileWalkingOnPlayerClass(player->ToPlayer());
@@ -1353,7 +1353,7 @@ public:
             else
             {
                 me->SummonCreature(BOSS_ALYSRAZOR, SpawnPos[0], TEMPSUMMON_MANUAL_DESPAWN);
-                if (GameObject* volcano = me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
+                if (auto volcano = me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
                     volcano->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
             }
 
@@ -1448,7 +1448,7 @@ public:
 
         void UpdateAI(const uint32 diff) override
         {
-            if (Unit* victim = ObjectAccessor::GetUnit(*me, targetGUID))
+            if (auto victim = ObjectAccessor::GetUnit(*me, targetGUID))
             {
                 if (victim != me->getVictim() && victim->isAlive())
                     victim->CastSpell(me, SPELL_IMPRINTED_TAUNT, true);
@@ -1492,7 +1492,7 @@ public:
                     }
                     case EVENT_EAT_WORM:
                     {
-                        if (Creature* worm = me->FindNearestCreature(NPC_PLUMB_LAVA_WORMS, 5.0f, true))
+                        if (auto worm = me->FindNearestCreature(NPC_PLUMB_LAVA_WORMS, 5.0f, true))
                         {
                             me->SetFacingToObject(worm);
                             me->Kill(worm);
@@ -1570,7 +1570,7 @@ public:
 
         void UpdateAI(const uint32 diff) override
         {
-            if (Unit* victim = ObjectAccessor::GetUnit(*me, targetGUID))
+            if (auto victim = ObjectAccessor::GetUnit(*me, targetGUID))
             {
                 if (victim != me->getVictim() && victim->isAlive())
                     victim->CastSpell(me, SPELL_IMPRINTED_TAUNT_2, true);
@@ -1614,7 +1614,7 @@ public:
                     }
                     case EVENT_EAT_WORM:
                     {
-                        if (Creature* worm = me->FindNearestCreature(NPC_PLUMB_LAVA_WORMS, 5.0f, true))
+                        if (auto worm = me->FindNearestCreature(NPC_PLUMB_LAVA_WORMS, 5.0f, true))
                         {
                             me->SetFacingToObject(worm);
                             me->Kill(worm);
@@ -1824,7 +1824,7 @@ public:
                     else
                         pos.m_positionZ = 48.0f;
 
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = me->GetVehicleKit()->GetPassenger(0))
                         passenger->ExitVehicle(&pos);
                     break;
                 }
@@ -1918,7 +1918,7 @@ public:
                     case EVENT_START_IGNITION:
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
-                            if (Creature* alysrazor = Creature::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+                            if (auto alysrazor = Creature::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
                                 if (alysrazor->GetPower(POWER_ENERGY) < 50)
                                 {
                                     if (castIgnition)
@@ -1938,7 +1938,7 @@ public:
                     }
                     case EVENT_CHECK_ENERGY:
                     {
-                        if (Creature* alysrazor = Creature::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+                        if (auto alysrazor = Creature::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
                         {
                             if (alysrazor->GetPower(POWER_ENERGY) >= 50)
                             {
@@ -2107,7 +2107,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_START_COMBAT:
-                        if (Unit* nearTarget = me->SelectNearestTarget(5000.0f))
+                        if (auto nearTarget = me->SelectNearestTarget(5000.0f))
                             me->AI()->AttackStart(nearTarget);
                         events.ScheduleEvent(EVENT_START_FIEROBLAST, 1);
                         break;
@@ -2117,7 +2117,7 @@ public:
                         {
                             if (urand(0, 1) == 1)
                             {
-                                if (Unit* tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
+                                if (auto tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
                                 {
                                     me->SetFacingTo(me->GetAngle(tempTarget));
                                     DoCast(tempTarget, SPELL_BRUSHFIRE);
@@ -2314,7 +2314,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_EGG_EXPLOSION:
-                        if (Creature* alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+                        if (auto alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
                             alysrazor->AI()->TalkToMap(EMOTE_MOLTEN_EGGS);
                         DoCast(me, SPELL_EGG_EXPLOSION);
                         events.ScheduleEvent(EVENT_SUMMON_HATCHING, 5000);
@@ -2377,7 +2377,7 @@ public:
                             count = count + 15.0f;
                             float ori = 0.0f;
                             for (int i = 0; i < maxTornado; i++)
-                                if (Creature* tornado = me->SummonCreature(NPC_FIERY_TORNADO, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto tornado = me->SummonCreature(NPC_FIERY_TORNADO, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     float x, y, z;
                                     me->GetNearPoint(me, x, y, z, 0.0f, count, ori);
@@ -2430,7 +2430,7 @@ public:
     {
         npc_majordomo_alysAI(Creature* c) : ScriptedAI(c)
         {
-            if (GameObject* volcano = c->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
+            if (auto volcano = c->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
                 volcano->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
             if (instance->GetBossState(DATA_ALYSRAZOR) == NOT_STARTED)
             if (me->isDead())
@@ -2443,7 +2443,7 @@ public:
 
         void Reset() override
         {
-            if (GameObject* volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
+            if (auto volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
                 volcano->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
 
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -2459,7 +2459,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
             me->RemoveUnitMovementFlag(MOVEMENTFLAG_CAN_FLY | MOVEMENTFLAG_FLYING);
             events.ScheduleEvent(EVENT_START, 100);
-            if (Player* player = me->FindNearestPlayer(50.0f))
+            if (auto player = me->FindNearestPlayer(50.0f))
                 me->SetFacingToObject(player);
         }
 
@@ -2491,7 +2491,7 @@ public:
                         break;
                     }
                     case EVENT_START_KILLING:
-                        if (Creature* druid = me->FindNearestCreature(54019, 20.0f, true))
+                        if (auto druid = me->FindNearestCreature(54019, 20.0f, true))
                             me->CastSpell(druid, 100557, true);
 
                         if (!me->FindNearestCreature(54019, 20.0f, true))
@@ -2520,7 +2520,7 @@ public:
                         break;
 
                     case EVENT_ALYS:
-                        if (GameObject* volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
+                        if (auto volcano =  me->FindNearestGameObject(GO_VOLCANO_ALYS, 1000.0f))
                             volcano->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
 
                         me->SummonCreature(BOSS_ALYSRAZOR, SpawnPos[0], TEMPSUMMON_MANUAL_DESPAWN);
@@ -2547,7 +2547,7 @@ public:
         void IsSummonedBy(Unit* /*summoner*/) override
         {
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            if (Creature* alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+            if (auto alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
                 alysrazor->AI()->JustSummoned(me);
             me->GetMotionMaster()->MovePoint(POINT_START_TOP, wallPos[rand() % 8]);
             rockCount = 0;
@@ -2560,7 +2560,7 @@ public:
 
         void JustSummoned(Creature* summon) override
         {
-            if (Creature* alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
+            if (auto alysrazor = Unit::GetCreature(*me, instance->GetData64(DATA_ALYSRAZOR)))
                 alysrazor->AI()->JustSummoned(summon);
             if (summon->GetEntry() == NPC_FUSION_ROCK)
             {
@@ -2713,7 +2713,7 @@ class spell_fieroblast : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->AddAura(SPELL_FIREITUP, caster);
             }
 
@@ -2740,7 +2740,7 @@ class spell_hatchling_debuff : public SpellScriptLoader
 
             void PeriodicTick(AuraEffect const* /*aurEff*/)
             {
-                if (Unit* target = GetUnitOwner())
+                if (auto target = GetUnitOwner())
                     if (target->HealthBelowPct(50))
                         Remove(AURA_REMOVE_BY_DEFAULT);
             }
@@ -2798,8 +2798,8 @@ public:
         {
             PreventDefaultAction();
             if (eventInfo.GetDamageInfo() && eventInfo.GetDamageInfo()->GetSpellInfo())
-                if (Unit* target = eventInfo.GetDamageInfo()->GetAttacker())
-                    if (Unit* alysrazor = GetCaster())
+                if (auto target = eventInfo.GetDamageInfo()->GetAttacker())
+                    if (auto alysrazor = GetCaster())
                         alysrazor->CastSpell(target, SPELL_ESSENCE_OF_THE_GREEN, true, NULL, aurEff);
         }
 
@@ -2822,7 +2822,7 @@ public:
 
     bool operator()(WorldObject* unit) const
     {
-        if (Unit* target = unit->ToUnit())
+        if (auto target = unit->ToUnit())
             if (target->GetTypeId() == TYPEID_PLAYER)
                 if (target->GetExactDist2d(_caster) <= 8.0f)
                     return false;
@@ -2896,7 +2896,7 @@ public:
         void HandleForceCast(SpellEffIndex effIndex)
         {
             PreventHitDefaultEffect(effIndex);
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastSpell(target, GetSpellInfo()->Effects[effIndex].TriggerSpell, true);
         }
 
@@ -2927,7 +2927,7 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (Aura* flying = caster->GetAura(SPELL_FLY))
                     flying->RefreshDuration();
@@ -2961,9 +2961,9 @@ public:
 
         void HandleExtraEffect(SpellEffIndex effIndex)
         {
-            if (Creature* caster = GetCaster()->ToCreature())
+            if (auto caster = GetCaster()->ToCreature())
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     caster->AI()->AttackStart(target);
                     caster->AI()->SetGUID(target->GetGUID());
@@ -3075,7 +3075,7 @@ public:
 
         void EnterCombat(Unit* /*target*/) override
         {
-            if (Creature* bird = ObjectAccessor::GetCreature(*me, me->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
+            if (auto bird = ObjectAccessor::GetCreature(*me, me->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
                 DoZoneInCombat(bird, 200.0f);
             me->InterruptSpell(CURRENT_CHANNELED_SPELL);
             _events.Reset();
@@ -3108,7 +3108,7 @@ public:
         {
             if (!me->isInCombat())
                 if (!me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
-                    if (Creature* fireBird = me->FindNearestCreature((me->GetHomePosition().GetPositionY() > -275.0f ? NPC_BLAZING_MONSTROSITY_LEFT : NPC_BLAZING_MONSTROSITY_RIGHT), 100.0f))
+                    if (auto fireBird = me->FindNearestCreature((me->GetHomePosition().GetPositionY() > -275.0f ? NPC_BLAZING_MONSTROSITY_LEFT : NPC_BLAZING_MONSTROSITY_RIGHT), 100.0f))
                         DoCast(fireBird, SPELL_FIRE_CHANNELING);
 
             if (!UpdateVictim())
@@ -3124,7 +3124,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_FIEROBLAST:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, -SPELL_RIDE_MONSTROSITY))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, -SPELL_RIDE_MONSTROSITY))
                             DoCast(target, SPELL_FIEROBLAST_TRASH);
                         _events.RescheduleEvent(EVENT_FIEROBLAST, 500);
                         break;
@@ -3224,12 +3224,12 @@ public:
                 switch (eventId)
                 {
                     case EVENT_START_SPITTING:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, -SPELL_RIDE_MONSTROSITY))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, -SPELL_RIDE_MONSTROSITY))
                             DoCast(target, SPELL_MOLTEN_BARRAGE);
                         break;
                     case EVENT_CONTINUE_SPITTING:
                         DoCastAOE(SPELL_MOLTEN_BARRAGE_EFFECT);
-                        if (Creature* egg = me->FindNearestCreature(NPC_EGG_PILE, 100.0f))
+                        if (auto egg = me->FindNearestCreature(NPC_EGG_PILE, 100.0f))
                             egg->AI()->DoAction(me->GetEntry());
                         break;
                 }
@@ -3419,7 +3419,7 @@ public:
         {
             PreventHitDefaultEffect(effIndex);
             GetHitUnit()->SetDisplayId(MODEL_INVISIBLE_STALKER);
-            if (Creature* creature = GetHitCreature())
+            if (auto creature = GetHitCreature())
                 creature->DespawnOrUnsummon(4000);
         }
 
@@ -3464,12 +3464,12 @@ public:
             PreventHitDefaultEffect(effIndex);
             GetHitUnit()->GetMotionMaster()->MoveIdle();
             if (TempSummon* summ = GetHitUnit()->ToTempSummon())
-                if (Unit* summoner = summ->GetSummoner())
+                if (auto summoner = summ->GetSummoner())
                     GetHitUnit()->CastSpell(summoner, SPELL_GENERIC_DUMMY_CAST, TRIGGERED_FULL_MASK);
 
             float angle = 0.0f;
 
-            if (Unit* bird = GetCaster()->GetVehicleBase())
+            if (auto bird = GetCaster()->GetVehicleBase())
             {
                 bird->SetInFront(GetHitUnit());
                 angle = bird->GetOrientation();

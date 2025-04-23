@@ -282,7 +282,7 @@ class boss_halazzi : public CreatureScript
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_FIXATE);
                 Talk(YELL_DEATH);
                 summons.DespawnAll();
-                if (Creature* kasha = me->FindNearestCreature(52945, 200.f, true))
+                if (auto kasha = me->FindNearestCreature(52945, 200.f, true))
                     kasha->AI()->DoAction(2);
             }
 
@@ -351,7 +351,7 @@ class mob_halazzi_lynx : public CreatureScript
                     {
                         case EVENT_FIXATE:
                             pInstance->DoRemoveAurasDueToSpellOnPlayers(SPELL_FIXATE);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             {
                                 DoResetThreat();
                                 me->CastSpell(target, SPELL_FIXATE, true);
@@ -423,7 +423,7 @@ public:
 
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes mode)
         {
-            if (Unit* owner = GetOwner()->ToUnit())
+            if (auto owner = GetOwner()->ToUnit())
             {
                 owner->StopMoving();
             }

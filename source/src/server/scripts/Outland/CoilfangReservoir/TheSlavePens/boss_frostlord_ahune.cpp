@@ -172,7 +172,7 @@ class npc_frostlord_ahune : public CreatureScript
                 me->SetInCombatWithZone();
                 _events.ScheduleEvent(EVENT_EMERGE, 10000);
 
-                if (GameObject* chest = me->FindNearestGameObject(GO_ICE_CHEST, 100.0f))
+                if (auto chest = me->FindNearestGameObject(GO_ICE_CHEST, 100.0f))
                     chest->Delete();
             }
 
@@ -222,7 +222,7 @@ class npc_frostlord_ahune : public CreatureScript
                             }
                             else
                             {
-                                if (Creature* totem = me->FindNearestCreature(NPC_EARTHEN_RING_TOTEM, 150.0f))
+                                if (auto totem = me->FindNearestCreature(NPC_EARTHEN_RING_TOTEM, 150.0f))
                                     totem->CastSpell(me, SPELL_BEAM_ATTACK_BEAM, false);
                                 _events.ScheduleEvent(EVENT_EARTHEN_RING_ATTACK, 10000);
                             }
@@ -238,7 +238,7 @@ class npc_frostlord_ahune : public CreatureScript
                             _events.ScheduleEvent(EVENT_SUMMON_COLDWAVE, 7000);
                             break;
                         case EVENT_ICE_SPEAR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 150.0f, true))
                                 DoCast(target, SPELL_SUMMON_ICE_SPEAR_BUNNY);
                             _events.ScheduleEvent(EVENT_ICE_SPEAR, 7000);
                             break;
@@ -282,7 +282,7 @@ class npc_ahune_ice_spear : public CreatureScript
                     GameObject* spike = me->FindNearestGameObject(GO_ICE_SPEAR, 10.0f);
                     if (spike && !_spiked)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 3.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0, 3.0f, true))
                             target->CastSpell(target, SPELL_ICE_SPEAR_KNOCKBACK, true);
                         spike->UseDoorOrButton();
                         _spiked = true;
@@ -328,7 +328,7 @@ class go_ahune_ice_stone : public GameObjectScript
 
             if (action == GOSSIP_ACTION_INFO_DEF)
             {
-                if (Creature* ahune = go->FindNearestCreature(NPC_FROSTLORD_AHUNE, 100.0f, true))
+                if (auto ahune = go->FindNearestCreature(NPC_FROSTLORD_AHUNE, 100.0f, true))
                 {
                     ahune->AI()->DoAction(ACTION_START_EVENT);
                     go->Delete();

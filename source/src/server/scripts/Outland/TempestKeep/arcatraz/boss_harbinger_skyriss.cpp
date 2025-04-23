@@ -122,7 +122,7 @@ class boss_harbinger_skyriss : public CreatureScript
                 else
                     summon->SetHealth(summon->CountPctFromMaxHealth(66));
                 if (me->getVictim())
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         summon->AI()->AttackStart(target);
             }
 
@@ -164,7 +164,7 @@ class boss_harbinger_skyriss : public CreatureScript
                             break;
                         case 2:
                             Talk(SAY_AGGRO);
-                            if (Unit* mellic = ObjectAccessor::GetUnit(*me, instance->GetData64(DATA_MELLICHAR)))
+                            if (auto mellic = ObjectAccessor::GetUnit(*me, instance->GetData64(DATA_MELLICHAR)))
                             {
                                 //should have a better way to do this. possibly spell exist.
                                 mellic->setDeathState(JUST_DIED);
@@ -199,7 +199,7 @@ class boss_harbinger_skyriss : public CreatureScript
 
                 if (MindRend_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         DoCast(target, SPELL_MIND_REND);
                     else
                         DoCastVictim(SPELL_MIND_REND);
@@ -216,7 +216,7 @@ class boss_harbinger_skyriss : public CreatureScript
 
                     Talk(SAY_FEAR);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         DoCast(target, SPELL_FEAR);
                     else
                         DoCastVictim(SPELL_FEAR);
@@ -233,7 +233,7 @@ class boss_harbinger_skyriss : public CreatureScript
 
                     Talk(SAY_MIND);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         DoCast(target, SPELL_DOMINATION);
                     else
                         DoCastVictim(SPELL_DOMINATION);
@@ -250,7 +250,7 @@ class boss_harbinger_skyriss : public CreatureScript
                         if (me->IsNonMeleeSpellCasted(false))
                             return;
 
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                             DoCast(target, H_SPELL_MANA_BURN);
 
                         ManaBurn_Timer = 16000+rand()%16000;

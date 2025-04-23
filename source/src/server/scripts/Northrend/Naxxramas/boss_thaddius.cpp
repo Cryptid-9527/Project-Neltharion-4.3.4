@@ -314,9 +314,9 @@ public:
                         //    pTesla->AI()->Talk(EMOTE_TESLA_OVERLOAD);
                         if (instance)
                         {
-                            if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA05)))
+                            if (auto go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA05)))
                                 go->UseDoorOrButton();
-                            if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA06)))
+                            if (auto go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA06)))
                                 go->UseDoorOrButton();
                         }
                         break;
@@ -381,7 +381,7 @@ public:
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_STALAGG_RESET);
 
-                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA06)))
+                if (auto go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA06)))
                     go->ResetDoorOrButton();
             }
             powerSurgeTimer = urand(20000, 25000);
@@ -526,7 +526,7 @@ public:
                     if (pThaddius->AI())
                         pThaddius->AI()->DoAction(ACTION_FEUGEN_RESET);
 
-                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA05)))
+                if (auto go = GameObject::GetGameObject(*me, instance->GetData64(DATA_THADDIUS_TESLA05)))
                     go->ResetDoorOrButton();
             }
             staticFieldTimer = 5000;
@@ -623,7 +623,7 @@ public:
             uint8 count = 0;
             for (std::list<WorldObject*>::iterator ihit = targets.begin(); ihit != targets.end(); ++ihit)
                 if ((*ihit)->GetGUID() != GetCaster()->GetGUID())
-                    if (Unit* target = (*ihit)->ToUnit())
+                    if (auto target = (*ihit)->ToUnit())
                         if (target->HasAura(GetTriggeringSpell()->Id))
                             ++count;
 
@@ -673,10 +673,10 @@ public:
         void HandleAfterHit()
         {
             if (Unit * pCaster = GetCaster())
-                if (InstanceScript* instance = pCaster->GetInstanceScript())
-                    if (Creature* pThadius = CAST_CRE(Unit::GetUnit(*pCaster, instance->GetData64(DATA_THADDIUS))))
+                if (auto instance = pCaster->GetInstanceScript())
+                    if (auto pThadius = CAST_CRE(Unit::GetUnit(*pCaster, instance->GetData64(DATA_THADDIUS))))
                         if (boss_thaddius::boss_thaddiusAI* pThadiusAI = CAST_AI(boss_thaddius::boss_thaddiusAI, pThadius->AI()))
-                            if (Unit* target = GetHitUnit())
+                            if (auto target = GetHitUnit())
                             {
                                 if (GetSpellInfo()->Id == 28062 || GetSpellInfo()->Id == 39090)
                                     if (target->HasAura(39091) || target->HasAura(28084))
@@ -721,7 +721,7 @@ public:
         void HandleDummy(SpellEffIndex /* effIndex */)
         {
             Unit* caster = GetCaster();
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastSpell(target, roll_chance_i(50) ? SPELL_POSITIVE_POLARITY : SPELL_NEGATIVE_POLARITY, true, NULL, NULL, caster->GetGUID());
         }
 

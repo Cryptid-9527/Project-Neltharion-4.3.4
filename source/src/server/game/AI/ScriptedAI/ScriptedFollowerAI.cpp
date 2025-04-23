@@ -123,13 +123,13 @@ void FollowerAI::JustDied(Unit* /*killer*/)
         return;
 
     //TODO: need a better check for quests with time limit.
-    if (Player* player = GetLeaderForFollower())
+    if (auto player = GetLeaderForFollower())
     {
         if (Group* group = player->GetGroup())
         {
-            for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+            for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
             {
-                if (Player* member = groupRef->getSource())
+                if (auto member = groupRef->getSource())
                 {
                     if (member->GetQuestStatus(m_pQuestForFollow->GetQuestId()) == QUEST_STATUS_INCOMPLETE)
                         member->FailQuest(m_pQuestForFollow->GetQuestId());
@@ -199,7 +199,7 @@ void FollowerAI::UpdateAI(const uint32 uiDiff)
 
             bool bIsMaxRangeExceeded = true;
 
-            if (Player* player = GetLeaderForFollower())
+            if (auto player = GetLeaderForFollower())
             {
                 if (HasFollowState(STATE_FOLLOW_RETURNING))
                 {
@@ -212,7 +212,7 @@ void FollowerAI::UpdateAI(const uint32 uiDiff)
 
                 if (Group* group = player->GetGroup())
                 {
-                    for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                    for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                     {
                         Player* member = groupRef->getSource();
 
@@ -311,7 +311,7 @@ void FollowerAI::StartFollow(Player* player, uint32 factionForFollower, const Qu
 
 Player* FollowerAI::GetLeaderForFollower()
 {
-    if (Player* player = Unit::GetPlayer(*me, m_uiLeaderGUID))
+    if (auto player = Unit::GetPlayer(*me, m_uiLeaderGUID))
     {
         if (player->isAlive())
             return player;
@@ -319,7 +319,7 @@ Player* FollowerAI::GetLeaderForFollower()
         {
             if (Group* group = player->GetGroup())
             {
-                for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
+                for (auto groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                 {
                     Player* member = groupRef->getSource();
 
@@ -382,7 +382,7 @@ void FollowerAI::SetFollowPaused(bool paused)
     {
         RemoveFollowState(STATE_FOLLOW_PAUSED);
 
-        if (Player* leader = GetLeaderForFollower())
+        if (auto leader = GetLeaderForFollower())
             me->GetMotionMaster()->MoveFollow(leader, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
     }
 }

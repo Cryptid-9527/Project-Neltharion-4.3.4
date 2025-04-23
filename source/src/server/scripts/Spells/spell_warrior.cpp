@@ -86,7 +86,7 @@ class spell_warr_bloodthirst : public SpellScriptLoader
                 int32 damage = GetEffectValue();
                 ApplyPct(damage, GetCaster()->GetTotalAttackPowerValue(BASE_ATTACK));
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     damage = GetCaster()->SpellDamageBonusDone(target, GetSpellInfo(), uint32(damage), SPELL_DIRECT_DAMAGE);
                     damage = target->SpellDamageBonusTaken(GetSpellInfo(), uint32(damage), SPELL_DIRECT_DAMAGE, 1, GetCaster()->GetGUID());
@@ -237,7 +237,7 @@ class spell_warr_intercept : public SpellScriptLoader
 
             void HandleChargeCooldown(SpellEffIndex /*effIndex*/)
             {
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                 {
                     if (caster->HasAura(SPELL_WARRIOR_JUGGERNAUT_CRIT_BONUS_TALENT))
                     {
@@ -315,7 +315,7 @@ class spell_warr_deep_wounds : public SpellScriptLoader
             {
                 int32 damage = GetEffectValue();
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     // apply percent damage mods
                     damage = caster->SpellDamageBonusDone(target, GetSpellInfo(), damage, SPELL_DIRECT_DAMAGE);
@@ -478,7 +478,7 @@ class spell_warr_last_stand : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 healthModSpellBasePoints0 = int32(caster->CountPctFromMaxHealth(GetEffectValue()));
                     caster->CastCustomSpell(caster, SPELL_WARRIOR_LAST_STAND_TRIGGERED, &healthModSpellBasePoints0, NULL, NULL, true, NULL);
@@ -510,7 +510,7 @@ class spell_warr_rend : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // $0.25 * (($MWB + $mwb) / 2 + $AP / 14 * $MWS) bonus per tick
                     float ap = caster->GetTotalAttackPowerValue(BASE_ATTACK);
@@ -546,9 +546,9 @@ class spell_warr_second_wind : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
-                    if (Player* modOwner = caster->GetSpellModOwner())
+                    if (auto modOwner = caster->GetSpellModOwner())
                         modOwner->ApplySpellMod(GetId(), SPELLMOD_DOT, amount);
 
                     amount = caster->CountPctFromMaxHealth(amount) / GetSpellInfo()->GetMaxTicks();
@@ -582,7 +582,7 @@ class spell_warr_shattering_throw : public SpellScriptLoader
                 PreventHitDefaultEffect(effIndex);
 
                 // remove shields, will still display immune to damage part
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     target->RemoveAurasWithMechanic(1 << MECHANIC_IMMUNE_SHIELD, AURA_REMOVE_BY_ENEMY_SPELL);
             }
 
@@ -620,7 +620,7 @@ class spell_warr_slam : public SpellScriptLoader
                 if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                     return;
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     Unit* caster = GetCaster();                   
                     // Check for Single-minded fury and Titan's grip
@@ -655,7 +655,7 @@ public:
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return;
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 Unit* caster = GetCaster();
                 if (AuraEffect* aur = GetCaster()->GetAuraEffect(46916, EFFECT_0))//bloodsurge
@@ -689,7 +689,7 @@ public:
         {
             if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                 return;
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 Unit* caster = GetCaster();
                 if (AuraEffect* aur = GetCaster()->GetAuraEffect(46916, EFFECT_0))//bloodsurge
@@ -760,8 +760,8 @@ public:
 
         void HandleProc(AuraEffect const* aurEff, ProcEventInfo& /*eventInfo*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Player* Pcaster = caster->ToPlayer())
+            if (auto caster = GetCaster())
+                if (auto Pcaster = caster->ToPlayer())
                     if (!Pcaster->HasSpell(34428))
                         PreventDefaultAction();
         }
@@ -800,7 +800,7 @@ class spell_warr_thunder_clap : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& unitList)
             {
                 for (std::list<WorldObject*>::const_iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
-                    if (Unit* target = (*itr)->ToUnit())
+                    if (auto target = (*itr)->ToUnit())
                         if (target->HasAura(94009, GetCaster()->GetGUID()))
                         {
                             rendTarget = true;
@@ -813,8 +813,8 @@ class spell_warr_thunder_clap : public SpellScriptLoader
                 if (!rendTarget)
                     return;
 
-                if (Unit* target = GetHitUnit())
-                    if (Unit* caster = GetCaster())
+                if (auto target = GetHitUnit())
+                    if (auto caster = GetCaster())
                         caster->CastSpell(target, 94009, true);
             }
 
@@ -961,13 +961,13 @@ class spell_warr_vigilance : public SpellScriptLoader
                 if (!target)
                     return;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     target->CastSpell(caster, SPELL_WARRIOR_VIGILANCE_REDIRECT_THREAT, true);
             }
 
             void HandleRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     target->ResetRedirectThreat();
             }
 
@@ -981,7 +981,7 @@ class spell_warr_vigilance : public SpellScriptLoader
             {
                 PreventDefaultAction();
 
-                if (Player* caster = _procTarget->ToPlayer())
+                if (auto caster = _procTarget->ToPlayer())
                 {
                     if (caster->GetPrimaryTalentTree(caster->GetActiveSpec()) != TALENT_TREE_WARRIOR_PROTECTION)
                     {
@@ -1066,7 +1066,7 @@ class spell_warr_vigilance_trigger : public SpellScriptLoader
                 PreventHitDefaultEffect(effIndex);
 
                 // Remove Taunt cooldown
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                     target->RemoveSpellCooldown(SPELL_WARRIOR_TAUNT, true);
             }
 
@@ -1138,7 +1138,7 @@ class spell_warr_colossus_smash : public SpellScriptLoader
 
             void CalcAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* target = GetUnitOwner())
+                if (auto target = GetUnitOwner())
                     if (target->GetTypeId() == TYPEID_PLAYER)
                         amount = 50;
             }
@@ -1214,7 +1214,7 @@ public:
         {
             if (reset)
             {
-                if (Player* pl = GetCaster()->ToPlayer())
+                if (auto pl = GetCaster()->ToPlayer())
                 {
                     int32 cooldown = GetSpellInfo()->Id;
                     int32 reducedCooldown = 1000 * GetSpellInfo()->Effects[EFFECT_2].BasePoints;
@@ -1357,10 +1357,10 @@ public:
 
         void HandleGlyph(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-                if (Unit* caster = GetCaster())
+            if (auto target = GetHitUnit())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(58387))
-                        if (Unit* newTarget = caster->SelectNearbyTarget(target))
+                        if (auto newTarget = caster->SelectNearbyTarget(target))
                             caster->CastSpell(newTarget, 58567, true);
         }
 
@@ -1392,7 +1392,7 @@ public:
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             // Warrior T12 Protection 4P Bonus
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (caster->HasAura(99242) && caster->isAlive())
                     caster->CastSpell(caster, 99243, true);
         }
@@ -1422,7 +1422,7 @@ public:
         {
             // Warrior T12 dd 2P Bonus
             float multiplier = 2.0f;
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasAura(12835)) // Booming Voice R2
                     multiplier = 1.0f;
@@ -1463,7 +1463,7 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = eventInfo.GetActor())
+            if (auto caster = eventInfo.GetActor())
             {
                 int32 absorb = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), aurEff->GetAmount());
                 caster->CastCustomSpell(caster, SPELL_WARRIOR_SHIELD_OF_FURY, &absorb, NULL, NULL, true);
@@ -1500,7 +1500,7 @@ public:
 
         void OnApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 // Warrior T13 Protection 4P Bonus (Shield Wall)
                 if (AuraEffect* t13_4p = caster->GetAuraEffect(105911, EFFECT_0, GetCasterGUID()))

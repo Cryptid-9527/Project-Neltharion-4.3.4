@@ -63,23 +63,23 @@ public:
                 {
                     for (std::list<uint64>::const_iterator itr_trigger = portalTriggers.begin(); itr_trigger != portalTriggers.end(); ++itr_trigger)
                     {
-                        if (Creature* trigger = instance->GetCreature(*itr_trigger))
+                        if (auto trigger = instance->GetCreature(*itr_trigger))
                         {
                             // just in case
                             trigger->RemoveAllAuras();
                             trigger->AI()->Reset();
                         }
                     }
-                    if (GameObject* portal = instance->GetGameObject(exitPortalGUID))
+                    if (auto portal = instance->GetGameObject(exitPortalGUID))
                         portal->Delete();
                     SpawnGameObject(GO_EXIT_PORTAL, exitPortalPosition);
 
-                    if (GameObject* platform = instance->GetGameObject(platformGUID))
+                    if (auto platform = instance->GetGameObject(platformGUID))
                         platform->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
                 }
                 else if (state == DONE)
                 {
-                    if (GameObject* portal = instance->GetGameObject(exitPortalGUID))
+                    if (auto portal = instance->GetGameObject(exitPortalGUID))
                         portal->Delete();
                     SpawnGameObject(GO_EXIT_PORTAL, exitPortalPosition);
                 }
@@ -187,23 +187,23 @@ public:
         {
             if (eventId == EVENT_FOCUSING_IRIS)
             {
-                if (Creature* alexstraszaBunny = instance->GetCreature(alexstraszaBunnyGUID))
+                if (auto alexstraszaBunny = instance->GetCreature(alexstraszaBunnyGUID))
                 {
                     alexstraszaBunny->CastSpell(alexstraszaBunny, SPELL_IRIS_OPENED);
                     instance->GetGameObject(irisGUID)->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
                 }
 
-                if (Creature* malygos = instance->GetCreature(malygosGUID))
+                if (auto malygos = instance->GetCreature(malygosGUID))
                     malygos->AI()->DoAction(0); // ACTION_LAND_ENCOUNTER_START
 
-                if (GameObject* exitPortal = instance->GetGameObject(exitPortalGUID))
+                if (auto exitPortal = instance->GetGameObject(exitPortalGUID))
                     exitPortal->SetPhaseMask(2, true);
             }
         }
 
         void VortexHandling()
         {
-            if (Creature* malygos = instance->GetCreature(malygosGUID))
+            if (auto malygos = instance->GetCreature(malygosGUID))
             {
                 std::list<HostileReference*> m_threatlist = malygos->getThreatManager().getThreatList();
                 for (std::list<uint64>::const_iterator itr_vortex = vortexTriggers.begin(); itr_vortex != vortexTriggers.end(); ++itr_vortex)
@@ -212,7 +212,7 @@ public:
                         return;
 
                     uint8 counter = 0;
-                    if (Creature* trigger = instance->GetCreature(*itr_vortex))
+                    if (auto trigger = instance->GetCreature(*itr_vortex))
                     {
                         // each trigger have to cast the spell to 5 players.
                         for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
@@ -220,7 +220,7 @@ public:
                             if (counter >= 5)
                                 break;
 
-                            if (Unit* target = (*itr)->getTarget())
+                            if (auto target = (*itr)->getTarget())
                             {
                                 Player* player = target->ToPlayer();
 
@@ -244,7 +244,7 @@ public:
             {
                 if (next)
                 {
-                    if (Creature* trigger = instance->GetCreature(*itr_trigger))
+                    if (auto trigger = instance->GetCreature(*itr_trigger))
                     {
                         lastPortalGUID = trigger->GetGUID();
                         trigger->CastSpell(trigger, SPELL_PORTAL_OPENED, true);
@@ -268,7 +268,7 @@ public:
                     PowerSparksHandling();
                     break;
                 case DATA_RESPAWN_IRIS:
-                    if (GameObject* iris = instance->GetGameObject(irisGUID))
+                    if (auto iris = instance->GetGameObject(irisGUID))
                         iris->Delete();
                     SpawnGameObject(instance->GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL ? GO_FOCUSING_IRIS_10 : GO_FOCUSING_IRIS_25, focusingIrisPosition);
                     break;

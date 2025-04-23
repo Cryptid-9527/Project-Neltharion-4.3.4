@@ -114,7 +114,7 @@ public:
             if (!HasEscortState(STATE_ESCORT_ESCORTING))
                 return;
 
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 if (player->GetQuestStatus(QUEST_FORTUNATE_MISUNDERSTANDINGS) != QUEST_STATUS_COMPLETE)
                     player->FailQuest(QUEST_FORTUNATE_MISUNDERSTANDINGS);
@@ -309,7 +309,7 @@ public:
                 return;
 
             if (TempSummon* summ = me->ToTempSummon())
-                if (Unit* summoner = summ->GetSummoner())
+                if (auto summoner = summ->GetSummoner())
                     me->GetMotionMaster()->MovePoint(0, summoner->GetPositionX(), summoner->GetPositionY(), summoner->GetPositionZ());
 
             Reset();
@@ -409,7 +409,7 @@ public:
         {
             if (HasEscortState(STATE_ESCORT_ESCORTING))
             {
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                     player->FailQuest(QUEST_DISASTER);
             }
         }
@@ -514,7 +514,7 @@ public:
         void MoveInLineOfSight(Unit* who)
         {
             if (!phase && who && who->GetDistance2d(me) < 10.0f)
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                     if (player->GetQuestStatus(QUEST_THE_MIGHTY_HEMET_NESINGWARY) == QUEST_STATUS_INCOMPLETE)
                     {
                         playerGUID = player->GetGUID();
@@ -809,9 +809,9 @@ public:
         {
             PreventHitDefaultEffect(effIndex);
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Creature* presence = caster->FindNearestCreature(NPC_PRESENCE, 50.0f))
+                if (auto presence = caster->FindNearestCreature(NPC_PRESENCE, 50.0f))
                 {
                     presence->AI()->Talk(WHISPER_ACTIVATE, caster->GetGUID());
                     presence->CastSpell(presence, SPELL_FREYA_DUMMY, true); // will target plants
@@ -830,7 +830,7 @@ public:
                         (*itr)->CastSpell(*itr, SPELL_LASHER_EMERGE, false);
                         (*itr)->CastSpell(*itr, SPELL_WILD_GROWTH, false);
 
-                        if (Unit* target = (*itr)->SelectNearestTarget(150.0f))
+                        if (auto target = (*itr)->SelectNearestTarget(150.0f))
                             (*itr)->AI()->AttackStart(target);
                     }
 
@@ -895,7 +895,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* target = GetExplTargetUnit())
+            if (auto target = GetExplTargetUnit())
                 if (target->GetEntry() == NPC_LUCKY_WILHELM)
                     return SPELL_CAST_OK;
 
@@ -959,7 +959,7 @@ public:
                     shooter->CastSpell(apple, SPELL_HIT_APPLE);
                     apple->CastSpell(apple, SPELL_APPLE_FALL);
                     wilhelm->AI()->Talk(SAY_WILHELM_HIT);
-                    if (Player* player = shooter->ToPlayer())
+                    if (auto player = shooter->ToPlayer())
                         player->KilledMonsterCredit(NPC_APPLE, 0);
                     apple->DespawnOrUnsummon();
 
@@ -1070,7 +1070,7 @@ public:
             if (type != WAYPOINT_MOTION_TYPE)
                 return;
 
-            if (Creature* pilot = GetClosestCreatureWithEntry(me, NPC_PILOT, 10))
+            if (auto pilot = GetClosestCreatureWithEntry(me, NPC_PILOT, 10))
                 switch (id)
                 {
                     case 5:

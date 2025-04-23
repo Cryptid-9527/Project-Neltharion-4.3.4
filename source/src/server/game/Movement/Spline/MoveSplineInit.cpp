@@ -208,7 +208,7 @@ namespace Movement
     {
         if (args.TransformForTransport)
         {
-            if (Unit* vehicle = unit->GetVehicleBase())
+            if (auto vehicle = unit->GetVehicleBase())
                 angle -= vehicle->GetOrientation();
             else if (Transport* transport = unit->GetTransport())
                 angle -= transport->GetOrientation();

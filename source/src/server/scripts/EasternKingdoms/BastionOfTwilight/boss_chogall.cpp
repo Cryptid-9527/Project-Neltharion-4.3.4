@@ -245,7 +245,7 @@ void AddCorruption(Unit* pPlayer, uint32 value)
         {
             pPlayer->CastSpell(pPlayer, SPELL_CORRUPTION_MALFORMATION_DUMMY, true);
             pPlayer->CastSpell(pPlayer, SPELL_CORRUPTION_MALFORMATION_VEHICLE, true);
-            if (Creature* pMalformation = pPlayer->SummonCreature(NPC_MALFORMATION, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pMalformation = pPlayer->SummonCreature(NPC_MALFORMATION, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN))
                 pMalformation->EnterVehicle(pPlayer);
         }
     }
@@ -349,7 +349,7 @@ public:
             _elementaryCharge = 0;
             me->AddUnitState(UNIT_STATE_IGNORE_PATHFINDING);
             phase = PHASE_INTRO;
-            if (Creature* corruption = me->FindNearestCreature(NPC_CORRUPTION, 100))
+            if (auto corruption = me->FindNearestCreature(NPC_CORRUPTION, 100))
                 corruption->RemoveAllAuras();
             me->RemoveAllAuras();
             instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_CHOGAL_VICIATED_BLOOD_TRIGGER);
@@ -509,7 +509,7 @@ public:
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool /*apply*/)
         {
-            if (Creature* creature = who->ToCreature())
+            if (auto creature = who->ToCreature())
             {
                 switch (who->GetEntry())
                 {
@@ -675,7 +675,7 @@ public:
                     events.ScheduleEvent(EVENT_DARKNESS_CREATION, 30000, 0, PHASE_2);
                     break;
                 case EVENT_HEROIC_TENTACLE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, 100.0f, true))
                         me->CastCustomSpell(SPELL_HEROIC_TENTACLE_SUMMON_PRE_EFF, SPELLVALUE_MAX_TARGETS, 1, me, false);
                     events.ScheduleEvent(EVENT_HEROIC_TENTACLE, urand(12000, 15000), 0, PHASE_2);
                     break;
@@ -723,7 +723,7 @@ public:
         {
             if (instance)
             {
-                if (Creature* chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
+                if (auto chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
                 {
                     chogall->AI()->JustSummoned(me);
                     me->ToTempSummon()->SetSummonerGUID(chogall->GetGUID());
@@ -769,7 +769,7 @@ public:
         {
             if (instance)
             {
-                if (Creature* chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
+                if (auto chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
                 {
                     chogall->AI()->JustSummoned(me);
                     me->ToTempSummon()->SetSummonerGUID(chogall->GetGUID());
@@ -812,7 +812,7 @@ public:
             me->setActive(true);
             me->SetInCombatWithZone();
 
-            if (Player* player = me->FindNearestPlayer(500.0f))
+            if (auto player = me->FindNearestPlayer(500.0f))
                 AttackStart(player);
         }
 
@@ -847,7 +847,7 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 me->SetControlled(true, UNIT_STATE_ROOT);
 
-                if (Creature* chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
+                if (auto chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
                     chogall->AI()->SetData(1, 0);
 
                 deathVisual = true;
@@ -876,7 +876,7 @@ public:
                     events.ScheduleEvent(EVENT_DEPRAVATION, (Is25ManRaid() ? 6000 : 12000));
                     break;
                 case EVENT_CORRUPTING_CRASH:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         DoCast(target, SPELL_CORRUPTING_CRASH);
                     events.ScheduleEvent(EVENT_CORRUPTING_CRASH, 9000);
                     break;
@@ -886,7 +886,7 @@ public:
             }
 
             if(!me->getVictim())
-                if (Player* player = me->FindNearestPlayer(500.0f))
+                if (auto player = me->FindNearestPlayer(500.0f))
                     AttackStart(player);
 
             if (!deathVisual)
@@ -914,7 +914,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/)
         {
-            if (Creature* chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
+            if (auto chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
                 chogall->AI()->JustSummoned(me);
             me->SetDisplayId(11686);
         }
@@ -997,7 +997,7 @@ public:
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            if (Player* player = GetHitPlayer())
+            if (auto player = GetHitPlayer())
             {
                 player->SetClientControl(player, 0);
                 player->CastWithDelay(500, player, SPELL_CHOGALL_VENERATION, true);
@@ -1028,13 +1028,13 @@ public:
 
         void HandleWorshippingApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
-                if (Player* player = target->ToPlayer())
+                if (auto player = target->ToPlayer())
                     if (WorldSession* session = player->GetSession())
                         session->SendNotification("You are not in control of your actions");
 
-                if (Creature* chogall = target->FindNearestCreature(NPC_CHOGALL, 500.0f))
+                if (auto chogall = target->FindNearestCreature(NPC_CHOGALL, 500.0f))
                     target->SetCharmedBy(chogall, CHARM_TYPE_CHARM);
 
                 target->CastSpell(target, SPELL_CHOGALL_LINK_VENERATION, true);
@@ -1047,7 +1047,7 @@ public:
 
         void HandleWorshippingRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 target->SetControlled(false, UNIT_STATE_ROOT);
 
@@ -1056,7 +1056,7 @@ public:
 
                 target->RemoveAurasDueToSpell(SPELL_CHOGALL_LINK_VENERATION);
 
-                if (Creature* chogall = target->FindNearestCreature(NPC_CHOGALL, 500.0f))
+                if (auto chogall = target->FindNearestCreature(NPC_CHOGALL, 500.0f))
                 {
                     if (target->isCharmed())
                     {
@@ -1126,7 +1126,7 @@ public:
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1146,7 +1146,7 @@ public:
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            if (Player* player = GetHitPlayer())
+            if (auto player = GetHitPlayer())
             {
                 switch (GetSpellInfo()->Id)
                 {
@@ -1211,7 +1211,7 @@ public:
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1233,7 +1233,7 @@ public:
         {
             if (!GetCaster())
                 return;
-            if (Player* player = GetHitPlayer())
+            if (auto player = GetHitPlayer())
             {
                 if (GetCaster()->GetTypeId() != TYPEID_PLAYER)
                     GetCaster()->ToCreature()->DespawnOrUnsummon(600);
@@ -1274,7 +1274,7 @@ public:
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1295,7 +1295,7 @@ public:
         void HandleEffectPeriodicUpdate(AuraEffect* /*aurEff*/)
         {
             if (WorldObject* play = GetOwner())
-                if (Player* player = play->ToPlayer())
+                if (auto player = play->ToPlayer())
                 {
                     AddPower(player, 2);
                 }
@@ -1334,7 +1334,7 @@ public:
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1356,7 +1356,7 @@ public:
         {
             if (!GetCaster())
                 return;
-            if (Unit* player = GetCaster())
+            if (auto player = GetCaster())
             {
                 if (player->ToPlayer())
                     AddPower(player->ToPlayer(), 2);
@@ -1401,7 +1401,7 @@ public:
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1421,7 +1421,7 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* player = GetCaster())
+            if (auto player = GetCaster())
                 if (player->ToPlayer())
                     AddPower(player->ToPlayer(), 5);
         }
@@ -1506,8 +1506,8 @@ public:
 
     bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
     {
-        if (InstanceScript* instance = player->GetInstanceScript())
-            if (Creature* chogall = Creature::GetCreature(*player, instance->GetData64(NPC_CHOGALL)))
+        if (auto instance = player->GetInstanceScript())
+            if (auto chogall = Creature::GetCreature(*player, instance->GetData64(NPC_CHOGALL)))
                 chogall->AI()->Talk(TALK_INTRO);
         return true;
     }
@@ -1521,8 +1521,8 @@ class spell_elementary_damage : public SpellScriptLoader // 93227 93228
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Creature* chogall = caster->ToCreature())
+            if (auto caster = GetCaster())
+                if (auto chogall = caster->ToCreature())
                 {
                     int32 damage = GetHitDamage();
                     SetHitDamage(damage + (damage * chogall->AI()->GetData(DATA_ELEMNTARY_CHARGE) / 100));
@@ -1552,8 +1552,8 @@ class spell_chogall_corruption_of_the_ancient_god : public SpellScriptLoader
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetHitUnit())
+            if (auto caster = GetCaster())
+                if (auto target = GetHitUnit())
                 {
                     int32 damage = GetHitDamage();
                     int32 currPower = target->GetPower(POWER_ALTERNATE_POWER);
@@ -1573,7 +1573,7 @@ class spell_chogall_corruption_of_the_ancient_god : public SpellScriptLoader
                 player->CastSpell(player, CORRUPTION_MALFORMATION_SET_VEHICLEID, true);
                 Position pos;
                 player->GetPosition(&pos);
-                if (Creature* c = player->SummonCreature(NPC_MALFORMATION, pos))
+                if (auto c = player->SummonCreature(NPC_MALFORMATION, pos))
                 {
                     c->m_Events.AddEvent(new ShadowBoltEvent(c), c->m_Events.CalculateTime(2000));
                     c->CastSpell(c, CORRUPTION_MALFORMATION_DUMMY, true);
@@ -1593,7 +1593,7 @@ class spell_chogall_corruption_of_the_ancient_god : public SpellScriptLoader
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            if (Player* player = GetHitPlayer())
+            if (auto player = GetHitPlayer())
                 AddPower(player, 1);
         }
 
@@ -1627,7 +1627,7 @@ public:
         void IsSummonedBy(Unit* /*summoner*/) override
         {
             if (instance)
-                if (Creature* chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
+                if (auto chogall = Creature::GetCreature(*me, instance->GetData64(NPC_CHOGALL)))
                 {
                     chogall->AI()->JustSummoned(me);
                     me->ToTempSummon()->SetSummonerGUID(instance->GetData64(NPC_CHOGALL));
@@ -1673,7 +1673,7 @@ public:
         {
             PreventHitDefaultEffect(effIndex);
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (!caster->ToCreature())
                     return;
@@ -1737,7 +1737,7 @@ public:
         {
             me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 500.0f, true))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 500.0f, true))
                 AttackStart(target);
         }
 
@@ -1753,11 +1753,11 @@ public:
             if (!me->FindNearestCreature(NPC_CHOGALL, 200.0f, true))
                 me->DespawnOrUnsummon(); // Is dead.
 
-            if (Unit* chogall = me->FindNearestCreature(NPC_CHOGALL, 200.0f, true))
+            if (auto chogall = me->FindNearestCreature(NPC_CHOGALL, 200.0f, true))
                 if (!chogall->isInCombat()) // evaded.
                     me->DespawnOrUnsummon();
 
-            if (Unit* chogall = me->FindNearestCreature(NPC_CHOGALL, 200.0f, true))
+            if (auto chogall = me->FindNearestCreature(NPC_CHOGALL, 200.0f, true))
                 if (chogall->isInCombat())
                 {              
                     me->SetSpeed(MOVE_WALK, 0.55f, true);
@@ -1769,7 +1769,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_MELEE_INCR_CORRUPTION:
-                    if (Unit* target = me->getVictim())
+                    if (auto target = me->getVictim())
                         if (me->IsWithinMeleeRange(target))
                             target->SetPower(POWER_ALTERNATE_POWER, target->GetPower(POWER_ALTERNATE_POWER) + 10);
                     events.ScheduleEvent(EVENT_MELEE_INCR_CORRUPTION, 2000);
@@ -1778,7 +1778,7 @@ public:
             }
 
             if(!me->getVictim())
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 500.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 500.0f, true))
                     AttackStart(target);
 
             DoMeleeAttackIfReady();
@@ -1948,7 +1948,7 @@ public:
         {
             PreventDefaultAction();
             if (auto caster = GetCaster())
-            if (Unit* target = eventInfo.GetProcTarget())
+            if (auto target = eventInfo.GetProcTarget())
                 if (auto id = GetSpellInfo()->Effects[EFFECT_2].TriggerSpell)
                 {
                     //TC_LOG_ERROR("sql.sql", "triggering %u on target %u", id, target->GetGUID());

@@ -210,7 +210,7 @@ class boss_majordomo_staghelm : public CreatureScript
                 ThreatContainer::StorageType::const_iterator itr = threatlist.begin();
                 for (itr = threatlist.begin(); itr != threatlist.end(); ++itr)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         if (unit->isAlive())
                         {
@@ -314,7 +314,7 @@ class boss_majordomo_staghelm : public CreatureScript
         {
             if (type == EFFECT_MOTION_TYPE && id == EVENT_JUMP)
             {
-                if (Unit* target = me->FindNearestCreature(NPC_DESTINATION_STALKER, 30.0f))
+                if (auto target = me->FindNearestCreature(NPC_DESTINATION_STALKER, 30.0f))
                     DoCast(target, SPELL_LEAPING_FLAMES_GROUND, true);
                 else
                     DoCast(me, SPELL_LEAPING_FLAMES_GROUND, true);
@@ -397,7 +397,7 @@ class boss_majordomo_staghelm : public CreatureScript
                     {
                         Map::PlayerList const& players = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 player->SendCinematicStart(MOVIE_ID_BRIDGE_INTRO);
 
                         events.ScheduleEvent(EVENT_INTRO_CINEMATIC_BRIDGE, 3000);
@@ -405,7 +405,7 @@ class boss_majordomo_staghelm : public CreatureScript
                         break;
                     }
                     case EVENT_INTRO_CINEMATIC_BRIDGE:
-                        if (Creature* trigger = me->SummonCreature(NPC_INVISIBLE_STALKER, 250.753f, -64.0087f, 66.0648f, 0, TEMPSUMMON_TIMED_DESPAWN, 120000))
+                        if (auto trigger = me->SummonCreature(NPC_INVISIBLE_STALKER, 250.753f, -64.0087f, 66.0648f, 0, TEMPSUMMON_TIMED_DESPAWN, 120000))
                         {
                             trigger->SetCanFly(true);
                             trigger->SetDisableGravity(true);
@@ -413,7 +413,7 @@ class boss_majordomo_staghelm : public CreatureScript
                         }
                         break;
                     case EVENT_INTRO_CINEMATIC_END:
-                        if (GameObject* go = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_SULFURON_BRIDGE)))
+                        if (auto go = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_SULFURON_BRIDGE)))
                             go->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
                         introDone = true;
                         break;
@@ -527,7 +527,7 @@ class npc_burning_orb : public CreatureScript //53216
                 switch (eventId)
                 {
                     case EVENT_ORB_DAMAGE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 200, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0, 200, true))
                             DoCast(target, SPELL_BURNING_ORBS_DMG);
                         events.ScheduleEvent(EVENT_ORB_DAMAGE, 2000);
                         break;
@@ -568,7 +568,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetUnitOwner())
+            if (auto target = GetUnitOwner())
                 target->CastSpell(target, SPELL_SEARING_SEEDS_DMG, true);
         }
 
@@ -625,7 +625,7 @@ public:
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* caster = GetCaster()->ToCreature())
+            if (auto caster = GetCaster()->ToCreature())
             {
                 if (scorpionForm)
                     caster->AI()->DoAction(ACTION_START_SCORPION_PHASE);
@@ -673,7 +673,7 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 target->SetPower(POWER_ALTERNATE_POWER, 0);
                 target->RemoveAurasDueToSpell(SPELL_UNCOMMON_CONCENTRATION);
@@ -685,7 +685,7 @@ public:
 
         void onPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 uint8 newPower = std::min(target->GetPower(POWER_ALTERNATE_POWER) + 5, 100);
                 target->SetPower(POWER_ALTERNATE_POWER, newPower);
@@ -735,7 +735,7 @@ public:
 
         void HandleOnCast()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(caster, GetSpellInfo()->Effects[EFFECT_0].BasePoints, true);
         }
 
@@ -762,7 +762,7 @@ public:
 
         void HandleEffectCalcAmount(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (AuraEffect* fury = caster->GetAuraEffect(SPELL_FURY, EFFECT_0))
                     AddPct(amount, fury->GetAmount());
 
@@ -800,7 +800,7 @@ public:
         {
             if (!targets.empty())
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     uint8 hitCount = targets.size();
                     uint8 minCount = caster->GetMap()->Is25ManRaid() ? 18 : 7;
@@ -816,7 +816,7 @@ public:
         void RewardExtraEnergy()
         {
             if (energizeAmount > 0)
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastCustomSpell(caster, SPELL_REVITALIZE, &energizeAmount, 0, 0, true);
         }
 

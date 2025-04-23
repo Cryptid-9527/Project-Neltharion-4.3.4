@@ -176,7 +176,7 @@ public:
                     TalkCount = 0;
                     SetEscortPaused(true);
 
-                    if (Creature* pSpotlight = me->SummonCreature(CREATURE_SPOTLIGHT,
+                    if (auto pSpotlight = me->SummonCreature(CREATURE_SPOTLIGHT,
                         me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f,
                         TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 60000))
                     {
@@ -255,7 +255,7 @@ public:
                 uint32 entry = ((uint32)Spawns[index][0]);
                 float PosX = Spawns[index][1];
 
-                if (Creature* creature = me->SummonCreature(entry, PosX, SPAWN_Y, SPAWN_Z, SPAWN_O, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, HOUR*2*IN_MILLISECONDS))
+                if (auto creature = me->SummonCreature(entry, PosX, SPAWN_Y, SPAWN_Z, SPAWN_O, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, HOUR*2*IN_MILLISECONDS))
                 {
                     // In case database has bad flags
                     creature->SetUInt32Value(UNIT_FIELD_FLAGS, 0);
@@ -276,7 +276,7 @@ public:
                 {
                     if (TalkCount > 3)
                     {
-                        if (Creature* pSpotlight = Unit::GetCreature(*me, m_uiSpotlightGUID))
+                        if (auto pSpotlight = Unit::GetCreature(*me, m_uiSpotlightGUID))
                             pSpotlight->DespawnOrUnsummon();
 
                         SetEscortPaused(false);
@@ -363,7 +363,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             // Check for death of Moroes and if opera event is not done already
             if (instance->GetData(TYPE_MOROES) == DONE && instance->GetData(TYPE_OPERA) != DONE)
@@ -427,7 +427,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             // Check if Shade of Aran event is done
             if (instance->GetData(TYPE_ARAN) == DONE)

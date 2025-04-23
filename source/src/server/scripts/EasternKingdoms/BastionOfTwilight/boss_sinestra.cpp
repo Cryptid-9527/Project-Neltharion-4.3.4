@@ -252,7 +252,7 @@ public:
                 _owner->CastSpell(_target, SPELL_TWILIGHT_BEAM, true);
         }
         else
-            if (Unit* newTarget = _owner->SelectNearbyTarget())
+            if (auto newTarget = _owner->SelectNearbyTarget())
             {
                 _target = newTarget;
                 if (!_first)
@@ -393,7 +393,7 @@ public:
                     summon->SetSpeed(MOVE_FLIGHT, 4.0f, true, true);
                     summon->SetSpeed(MOVE_WALK, 4.0f, true, true);
                     summon->SetInCombatWithZone();
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 200.0f, true))
                         summon->AI()->AttackStart(target);
                     //summon->GetMotionMaster()->MovePoint(0, -984.030f, -776.368f, 438.594f, true);
                     summon->SetReactState(REACT_AGGRESSIVE);
@@ -420,7 +420,7 @@ public:
                     eggCounter++;
                     if (eggCounter == 2)
                     {
-                        if (Creature* calen = me->FindNearestCreature(NPC_CALEN, 300.0f, true))
+                        if (auto calen = me->FindNearestCreature(NPC_CALEN, 300.0f, true))
                             calen->AI()->DoAction(ACTION_PHASE_2_WIN);
                         me->RemoveAurasDueToSpell(SPELL_DRAINED);
                         me->RemoveAurasDueToSpell(SPELL_MANA_BARRIER);
@@ -433,7 +433,7 @@ public:
                         me->RemoveAurasDueToSpell(SPELL_TWILIGHT_POWER);
                         me->CastWithDelay(1000, me, SPELL_CALL_FLAMES, true);
                         summons.DespawnEntry(NPC_BEAM_CHANNEL_TARGET);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO))
+                        if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO))
                             me->AI()->AttackStart(target);
                         me->resetAttackTimer();
                     }
@@ -644,7 +644,7 @@ public:
                     }
                     case EVENT_TWILIGHT_EXTINCTION:
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                                 if (summon->GetEntry() == NPC_FIRE_STALKER)
                                     summon->RemoveAllAuras();
 
@@ -659,7 +659,7 @@ public:
                         break;
                     case EVENT_CHANNEL_START:
                         me->SetReactState(REACT_AGGRESSIVE);
-                        if (Creature* channelTarget = me->FindNearestCreature(NPC_BEAM_CHANNEL_TARGET, 100.0f, true))
+                        if (auto channelTarget = me->FindNearestCreature(NPC_BEAM_CHANNEL_TARGET, 100.0f, true))
                             DoCast(channelTarget, SPELL_TWILIGHT_POWER);
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
                         {
@@ -680,7 +680,7 @@ public:
                         break;
                     case EVENT_RECAST_PROTECTION:
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                                 if (summon && summon->GetEntry() == NPC_PULSING_TWILIGHT_EGG)
                                 {
                                     summon->CastStop();
@@ -700,7 +700,7 @@ public:
                         {
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
-                                if (Player* target = itr->getSource())
+                                if (auto target = itr->getSource())
                                 {
                                     if (target->isAlive() && me->GetDistance2d(target) < 100.0f && !target->isGameMaster())
                                     {
@@ -836,7 +836,7 @@ public:
                         {
                             die = true;
                             Talk(SAY_CALEN_DIE);
-                            if (Creature* sinestra = Creature::GetCreature(*me, instance->GetData64(NPC_SINESTRA)))
+                            if (auto sinestra = Creature::GetCreature(*me, instance->GetData64(NPC_SINESTRA)))
                             {
                                 sinestra->AI()->DoAction(ACTION_PHASE_2_FAIL);
                                 sinestra->Kill(me, false);
@@ -852,7 +852,7 @@ public:
                         break;
                     case EVENT_CHANNEL_START:
                         instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
-                        if (Creature* channelTarget = me->FindNearestCreature(NPC_BEAM_CHANNEL_TARGET, 100.0f, true))
+                        if (auto channelTarget = me->FindNearestCreature(NPC_BEAM_CHANNEL_TARGET, 100.0f, true))
                             DoCast(channelTarget, SPELL_FIERY_RESOLVE);
                         me->RemoveAurasDueToSpell(SPELL_FIERY_BARRIER_INITIAL);
                         events.ScheduleEvent(EVENT_HEALTH_DEGENERATE, 1000);
@@ -895,7 +895,7 @@ public:
             me->SetHealth(me->GetMaxHealth());
             me->SetReactState(REACT_AGGRESSIVE);
             me->SetInCombatWithZone();
-            if (Unit* target = summoner->ToCreature()->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+            if (auto target = summoner->ToCreature()->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                 me->AI()->AttackStart(target);
         }
 
@@ -1092,7 +1092,7 @@ class WrackAuraCheck
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             if (unit->HasAura(SPELL_WRACK_INITIAL) || unit->HasAura(SPELL_WRACK_JUMP))
                 return true;
 
@@ -1117,8 +1117,8 @@ public:
 
             GetAura()->GetEffect(EFFECT_1)->SetAmount(GetDuration());
 
-            if (Unit* target = GetTarget())
-                if (InstanceScript* instance = target->GetInstanceScript())
+            if (auto target = GetTarget())
+                if (auto instance = target->GetInstanceScript())
                     instance->SetData(DATA_WRACK_DURATION, GetDuration());
         }
 
@@ -1126,7 +1126,7 @@ public:
         {
             if (GetTargetApplication()->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     int32 damage = 2000;
                     int32 duration = GetAura()->GetEffect(EFFECT_1)->GetAmount();
@@ -1196,8 +1196,8 @@ public:
 
             GetAura()->GetEffect(EFFECT_1)->SetAmount(GetDuration());
 
-            if (Unit* target = GetTarget())
-                if (InstanceScript* instance = target->GetInstanceScript())
+            if (auto target = GetTarget())
+                if (auto instance = target->GetInstanceScript())
                     instance->SetData(DATA_WRACK_DURATION, GetDuration());
         }
 
@@ -1205,7 +1205,7 @@ public:
         {
             if (GetTargetApplication()->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     int32 damage = 2000;
                     int32 duration = GetAura()->GetEffect(EFFECT_1)->GetAmount();
@@ -1222,9 +1222,9 @@ public:
 
             if (GetDuration() >= 59000)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
-                    if (InstanceScript* instance = target->GetInstanceScript())
+                    if (auto instance = target->GetInstanceScript())
                     {
                         uint32 duration = instance->GetData(DATA_WRACK_DURATION);
                         if (duration)
@@ -1262,7 +1262,7 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(caster, GetSpellInfo()->Effects[EFFECT_1].BasePoints, true);
         }
 
@@ -1283,7 +1283,7 @@ class FlamesTargetFilter
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->GetEntry() != NPC_FIRE_STALKER;
         return false;
     }
@@ -1328,11 +1328,11 @@ public:
 
     bool operator()(WorldObject* object)
     {
-        if (Unit* unit = object->ToUnit())
+        if (auto unit = object->ToUnit())
         {
-            if (Creature* ShadowOrb = unit->FindNearestCreature(NPC_SHADOW_ORB_1, 200.0f, true))
+            if (auto ShadowOrb = unit->FindNearestCreature(NPC_SHADOW_ORB_1, 200.0f, true))
             {
-                if (Creature* ShadowOrb2 = unit->FindNearestCreature(NPC_SHADOW_ORB_2, 200.0f, true))
+                if (auto ShadowOrb2 = unit->FindNearestCreature(NPC_SHADOW_ORB_2, 200.0f, true))
                 {
                     if (unit->IsInBetween(ShadowOrb, ShadowOrb2, 1.5f))
                         return false;
@@ -1376,7 +1376,7 @@ public:
 
     bool operator()(WorldObject* unit)
     {
-        if (Unit* target = unit->ToUnit())
+        if (auto target = unit->ToUnit())
             if (target->GetEntry() == NPC_TWILIGHT_HATCHLING || target->GetEntry() == NPC_TWILIGHT_DRAGON)
             {
                 if (target->GetEntry() == NPC_TWILIGHT_DRAGON && !target->isAlive())
@@ -1432,13 +1432,13 @@ public:
         {
             if (!GetCaster() || !GetHitUnit())
                 return;
-            if (Creature* target = GetHitUnit()->ToCreature())
+            if (auto target = GetHitUnit()->ToCreature())
             {
                 if (target->GetEntry() == NPC_TWILIGHT_HATCHLING)
                     target->AI()->DoAction(ACTION_WHELP_REVIVE);
                 else if (target->GetEntry() == NPC_TWILIGHT_DRAGON && target->isAlive())
                 {
-                    if (Creature* caster = GetCaster()->ToCreature())
+                    if (auto caster = GetCaster()->ToCreature())
                     {
                         if (Aura* essence = caster->GetAura(SPELL_TWILIGHT_ESSENCE_INCREASE, caster->GetGUID()))
                         {

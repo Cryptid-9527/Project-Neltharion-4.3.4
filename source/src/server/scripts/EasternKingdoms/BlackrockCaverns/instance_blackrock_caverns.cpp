@@ -166,7 +166,7 @@ class npc_finkle_einhornq : public CreatureScript
 			{
 				Map::PlayerList const& player = me->GetMap()->GetPlayers();
 				for (Map::PlayerList::const_iterator itr = player.begin(); itr != player.end(); ++itr)
-					if (Player* player = itr->getSource())
+					if (auto player = itr->getSource())
 					{
 						if (me->FindNearestPlayer(150.0f) && player->GetQuestStatus(28732) == QUEST_STATUS_INCOMPLETE)
 						{
@@ -203,10 +203,10 @@ public:
 
         void UpdateAI(uint32 const diff)
         {
-            if (Player* player = me->FindNearestPlayer(100.0f))
+            if (auto player = me->FindNearestPlayer(100.0f))
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-            if (Player* player = me->FindNearestPlayer(5.0f))
+            if (auto player = me->FindNearestPlayer(5.0f))
             {
                 if (player->GetQuestStatus(Quest0) == QUEST_STATUS_COMPLETE && !player->IsActiveQuest(Quest1))
                 {
@@ -266,7 +266,7 @@ public:
         {
             if (passenger->isInCombat())
             {
-                if (Player* passPlayer = passenger->ToPlayer())
+                if (auto passPlayer = passenger->ToPlayer())
                     if (passPlayer->GetSession())
                         passPlayer->GetSession()->SendNotification(passPlayer->GetSession()->GetTrinityString(LANG_YOU_IN_COMBAT));
                 return;
@@ -336,8 +336,8 @@ public:
         if (player->isGameMaster() || !player->isGMVisible())
             return false;
 
-        if (InstanceScript* instance = player->GetInstanceScript())
-            if (Creature* corla = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CORLA)))
+        if (auto instance = player->GetInstanceScript())
+            if (auto corla = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CORLA)))
                 corla->AI()->DoAction(99);//respawn zealot if they haven't been yet. this fixes a client issue where one of the zealots doesn't show kneeling or the aura.
 
         return false;

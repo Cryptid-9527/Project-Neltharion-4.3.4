@@ -219,7 +219,7 @@ public:
                 // Cave In
                 if (m_uiCaveIn_Timer <= uiDiff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_CAVE_IN);
 
                     if (m_uiCaveIn_StaticTimer >= 4000)
@@ -271,7 +271,7 @@ class spell_gruul_shatter : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     target->RemoveAurasDueToSpell(SPELL_STONED);
                     target->CastSpell((Unit*)NULL, SPELL_SHATTER_EFFECT, true);

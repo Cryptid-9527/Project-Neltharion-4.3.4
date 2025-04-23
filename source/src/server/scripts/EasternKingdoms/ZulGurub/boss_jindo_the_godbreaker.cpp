@@ -313,10 +313,10 @@ class boss_jindo_the_godbreaker : public CreatureScript
                         summons.DespawnEntry(NPC_TWISTED_SPIRIT);
                         summons.DespawnEntry(NPC_SPIRIT_PORTAL);
 
-                        if (Creature* jindo = ObjectAccessor::GetCreature(*me, JindoSpiritGUID))
+                        if (auto jindo = ObjectAccessor::GetCreature(*me, JindoSpiritGUID))
                             jindo->AI()->DoAction(ACTION_HAKKAR_FREE);
 
-                        if (Creature* hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
+                        if (auto hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
                         {
                             hakkar->AI()->Talk(HAKKAR_YELL_OVERSTEPPED);
                             hakkar->CastSpell(hakkar, SPELL_HAKKAR_BREAKS_FREE, true);
@@ -435,12 +435,12 @@ class boss_jindo_the_godbreaker : public CreatureScript
                             events.ScheduleEvent(EVENT_SPIRIT_WORLD_SUMMON, 3000);
                             instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
 
-                            if (Creature* c = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY() + 5.f, me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto c = me->SummonCreature(54638, me->GetPositionX(), me->GetPositionY() + 5.f, me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 c->setFaction(35);
                                 c->CastSpell(c, SPELL_SPIRIT_WORLD, true);
                             }
-                            if (Creature* c = me->FindNearestCreature(NPC_SHADOW_OF_HAKKAR, 100.f, true))
+                            if (auto c = me->FindNearestCreature(NPC_SHADOW_OF_HAKKAR, 100.f, true))
                                 c->SetVisible(false);
                             break;
                         case EVENT_SPIRIT_WORLD_SUMMON:
@@ -455,7 +455,7 @@ class boss_jindo_the_godbreaker : public CreatureScript
                             for (int i = 0; i < 4; ++i)
                                 me->SummonCreature(SpiritTrollSpawMask & 1 << i ? NPC_GURUBASHI_SPIRIT : NPC_GURUBASHI_SHADOW, SpiritWarriorSP[i]);
                             */
-                            if (Creature* hakkar = me->SummonCreature(NPC_SPIRIT_OF_HAKKAR, HakkarSP))
+                            if (auto hakkar = me->SummonCreature(NPC_SPIRIT_OF_HAKKAR, HakkarSP))
                                 hakkar->AI()->Talk(HAKKAR_YELL_SPIT);
 
                             set_spirit_world(true);
@@ -463,14 +463,14 @@ class boss_jindo_the_godbreaker : public CreatureScript
                         }
                         case EVENT_HAKKAR_SET_FACING:
                         {
-                            if (Creature* hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
+                            if (auto hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
                                 hakkar->SetFacingTo(4.712389f);
                             events.ScheduleEvent(EVENT_HAKKAR_KILL_JINDO, 17000);
                             break;
                         }
                         case EVENT_HAKKAR_KILL_JINDO:
                         {
-                            if (Creature* hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
+                            if (auto hakkar = ObjectAccessor::GetCreature(*me, HakkarGUID))
                                 hakkar->HandleEmoteCommand(EMOTE_ONESHOT_ATTACK1H);
                             me->RemoveAura(SPELL_SPIRIT_WORLD);
                             events.ScheduleEvent(EVENT_HAKKAR_YELL_BYE, 2500);
@@ -478,7 +478,7 @@ class boss_jindo_the_godbreaker : public CreatureScript
                         }
                         case EVENT_HAKKAR_YELL_BYE:
                         {
-                            if (Creature* hakkar = ObjectAccessor::GetCreature(*me, HakkarSpiritGUID))
+                            if (auto hakkar = ObjectAccessor::GetCreature(*me, HakkarSpiritGUID))
                             {
                                 hakkar->AI()->Talk(HAKKAR_SPIRIT_YELL_INSECTS);
                                 hakkar->DespawnOrUnsummon(5000);
@@ -491,7 +491,7 @@ class boss_jindo_the_godbreaker : public CreatureScript
                             me->RemoveAllAuras();
                             me->CastSpell(me, SPELL_TRANSFORM, false);
                             if (!me->getThreatManager().getThreatList().empty())
-                                if (Unit* killer = ObjectAccessor::GetUnit(*me, (*me->getThreatManager().getThreatList().begin())->getUnitGuid()))
+                                if (auto killer = ObjectAccessor::GetUnit(*me, (*me->getThreatManager().getThreatList().begin())->getUnitGuid()))
                                     killer->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                             break;
                         }
@@ -756,7 +756,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_BODY_SLAM:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.f, true))
                         DoCast(target, SPELL_GAZE_LEAP_TARGETING, false);
                     events.ScheduleEvent(EVENT_BODY_SLAM, 20000);
                     break;
@@ -860,7 +860,7 @@ class npc_hakkars_chains : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
+                if (auto jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
                     jindo->AI()->DoAction(ACTION_CHAIN_DIED);
 
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
@@ -890,7 +890,7 @@ public:
 
         void IsSummonedBy(Unit *)
         {
-            if (Creature* jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
+            if (auto jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
                 jindo->AI()->JustSummoned(me);
         }
 

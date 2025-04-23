@@ -60,7 +60,7 @@ public:
 
 	bool OnGossipHello(Player* player, Creature* creature)
 	{
-		if (InstanceScript* instance = creature->GetInstanceScript())
+		if (auto instance = creature->GetInstanceScript())
 		{
 			if (player->isInCombat())
 			{
@@ -72,7 +72,7 @@ public:
             {
                 creature->CastSpell(creature, SPELL_WARDEN_RING_YELLOW);
 
-                if (Creature* t = player->SummonCreature(57474, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
+                if (auto t = player->SummonCreature(57474, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
                     player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300 * IN_MILLISECONDS))
                     player->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, t, true);
             }
@@ -90,7 +90,7 @@ public:
 
 	bool OnGossipHello(Player* player, Creature* creature)
 	{
-		if (InstanceScript* instance = creature->GetInstanceScript())
+		if (auto instance = creature->GetInstanceScript())
 		{
 
 			if (player->isInCombat())
@@ -103,7 +103,7 @@ public:
             {
                 creature->CastSpell(creature, SPELL_WARDEN_RING_GREEN);
 
-                if (Creature* t = player->SummonCreature(57475, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
+                if (auto t = player->SummonCreature(57475, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
                     player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300 * IN_MILLISECONDS))
                     player->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, t, true);
             }
@@ -121,7 +121,7 @@ public:
 
 	bool OnGossipHello(Player* player, Creature* creature)
 	{
-		if (InstanceScript* instance = creature->GetInstanceScript())
+		if (auto instance = creature->GetInstanceScript())
 		{
 
 			if (player->isInCombat())
@@ -132,7 +132,7 @@ public:
 
             if (instance->GetBossState(DATA_YORSAHJ) == DONE && instance->GetBossState(DATA_WARLORD_ZONOZZ == DONE))
             {
-                if (Creature* t = player->SummonCreature(57473, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
+                if (auto t = player->SummonCreature(57473, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(),
                     player->GetOrientation(), TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300 * IN_MILLISECONDS))
                     player->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, t, true);
             }
@@ -681,7 +681,7 @@ public:
             if (menuId == MENU_ID_RAID_NERF)
             {
                 Talk(TALK_WE_WILL_SEE_CLASS, player->GetGUID());
-                if (InstanceScript* instance = me->GetInstanceScript())
+                if (auto instance = me->GetInstanceScript())
                     instance->SetData(DATA_RAID_NERF, RAID_NERF_INACTIVE);
                 player->PlayerTalkClass->SendCloseGossip();
             }
@@ -1534,7 +1534,7 @@ public:
         if (player->isGameMaster() || !player->isGMVisible())
             return false;
 
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
         {
             if (auto tyrygosa = instance->GetCreature(NPC_TYRYGOSA))
             {

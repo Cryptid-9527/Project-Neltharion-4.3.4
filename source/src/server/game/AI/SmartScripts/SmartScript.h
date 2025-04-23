@@ -184,7 +184,7 @@ class SmartScript
         {
             if (meOrigGUID)
             {
-                if (Creature* m = HashMapHolder<Creature>::Find(meOrigGUID))
+                if (auto m = HashMapHolder<Creature>::Find(meOrigGUID))
                 {
                     me = m;
                     go = NULL;
@@ -192,7 +192,7 @@ class SmartScript
             }
             if (goOrigGUID)
             {
-                if (GameObject* o = HashMapHolder<GameObject>::Find(goOrigGUID))
+                if (auto o = HashMapHolder<GameObject>::Find(goOrigGUID))
                 {
                     me = NULL;
                     go = o;

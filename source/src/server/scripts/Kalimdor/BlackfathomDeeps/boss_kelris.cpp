@@ -86,7 +86,7 @@ public:
 
             if (sleepTimer < diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                 {
                     Talk(SAY_SLEEP);
                     DoCast(target, SPELL_SLEEP);

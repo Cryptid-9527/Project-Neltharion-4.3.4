@@ -709,7 +709,7 @@ void Guild::Member::ChangeRank(uint8 newRank)
     m_rankId = newRank;
 
     // Update rank information in player's field, if he is online.
-    if (Player* player = FindPlayer())
+    if (auto player = FindPlayer())
         player->SetRank(newRank);
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_GUILD_MEMBER_RANK);
@@ -1799,7 +1799,7 @@ void Guild::BroadcastPacketIfTrackingAchievement(WorldPacket* packet, uint32 cri
 {
     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
         if (itr->second->IsTrackingCriteriaId(criteriaId))
-            if (Player* player = itr->second->FindPlayer())
+            if (auto player = itr->second->FindPlayer())
                 player->GetSession()->SendPacket(packet);
 }
 
@@ -2887,7 +2887,7 @@ void Guild::BroadcastToGuild(WorldSession* session, bool officerOnly, std::strin
                             p->CarbonCopy(officerOnly ? CARBON_COPY_OFFICER_TEXT : CARBON_COPY_GUILD_TEXT, officerOnly ? "Officer" : "Guild", msg);
 
                     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
-                        if (Player* player = itr->second->FindPlayer())
+                        if (auto player = itr->second->FindPlayer())
                             if (player->GetSession() && _HasRankRight(player, officerOnly ? GR_RIGHT_OFFCHATLISTEN : GR_RIGHT_GCHATLISTEN) &&
                                 !player->GetSocial()->HasIgnore(session->GetPlayer()->GetGUIDLow()))
                                 player->GetSession()->SendPacket(&data);
@@ -2909,7 +2909,7 @@ void Guild::BroadcastAddonToGuild(WorldSession* session, bool officerOnly, std::
                     s->SendPacket(&data);
                 else
         for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
-            if (Player* player = itr->second->FindPlayer())
+            if (auto player = itr->second->FindPlayer())
                 if (player->GetSession() && _HasRankRight(player, officerOnly ? GR_RIGHT_OFFCHATLISTEN : GR_RIGHT_GCHATLISTEN) &&
                     !player->GetSocial()->HasIgnore(session->GetPlayer()->GetGUIDLow()) &&
                     player->GetSession()->IsAddonRegistered(prefix))
@@ -2921,14 +2921,14 @@ void Guild::BroadcastPacketToRank(WorldPacket* packet, uint8 rankId) const
 {
     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
         if (itr->second->IsRank(rankId))
-            if (Player* player = itr->second->FindPlayer())
+            if (auto player = itr->second->FindPlayer())
                 player->GetSession()->SendPacket(packet);
 }
 
 void Guild::BroadcastPacket(WorldPacket* packet) const
 {
     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
-        if (Player* player = itr->second->FindPlayer())
+        if (auto player = itr->second->FindPlayer())
             player->GetSession()->SendPacket(packet);
 }
 
@@ -2944,7 +2944,7 @@ void Guild::MassInviteToEvent(WorldSession* session, uint32 minLevel, uint32 max
         // not sure if needed, maybe client checks it as well
         if (count >= CALENDAR_MAX_INVITES)
         {
-            if (Player* player = session->GetPlayer())
+            if (auto player = session->GetPlayer())
                 sCalendarMgr->SendCalendarCommandResult(player->GetGUID(), CALENDAR_ERROR_INVITES_EXCEEDED);
             return;
         }
@@ -3119,7 +3119,7 @@ void Guild::DeleteMember(uint64 guid, bool isDisbanding, bool isKicked, bool can
         _SetLeaderGUID(newLeader);
 
         // If player not online data in data field will be loaded from guild tabs no need to update it !!
-        if (Player* newLeaderPlayer = newLeader->FindPlayer())
+        if (auto newLeaderPlayer = newLeader->FindPlayer())
             newLeaderPlayer->SetRank(GR_GUILDMASTER);
 
         // If leader does not exist (at guild loading with deleted leader) do not send broadcasts
@@ -3750,7 +3750,7 @@ void Guild::_SendBankContentUpdate(uint8 tabId, SlotIds slots) const
 
         for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
             if (_MemberHasTabRights(itr->second->GetGUID(), tabId, GUILD_BANK_RIGHT_VIEW_TAB))
-                if (Player* player = itr->second->FindPlayer())
+                if (auto player = itr->second->FindPlayer())
                 {
                     data.put<uint32>(rempos, uint32(_GetMemberRemainingSlots(itr->second, tabId)));
                     player->GetSession()->SendPacket(&data);
@@ -4045,7 +4045,7 @@ void Guild::GiveXP(uint32 xp, Player* source, bool challenge)
     }
 
     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
-        if (Player* player = itr->second->FindPlayer())
+        if (auto player = itr->second->FindPlayer())
             SendGuildXP(player->GetSession());
 }
 
@@ -4062,7 +4062,7 @@ void Guild::LevelUp(uint32 oldLevel, Player *source)
         // Notify all online players that guild level changed and learn perks
         for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
         {
-            if (Player* player = itr->second->FindPlayer())
+            if (auto player = itr->second->FindPlayer())
             {
                 player->SetGuildLevel(GetLevel());
                 for (size_t i = 0; i < perksToLearn.size(); ++i)
@@ -4126,7 +4126,7 @@ void Guild::ResetTimes(bool weekly)
     for (auto itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
         itr->second->ResetValues(weekly);
-        if (Player* player = itr->second->FindPlayer())
+        if (auto player = itr->second->FindPlayer())
         {
             SendGuildXP(player->GetSession());
             WorldPacket data(SMSG_GUILD_MEMBER_DAILY_RESET, 0);  // tells the client to request bank withdrawal limit
@@ -4244,7 +4244,7 @@ void Guild::ReplaceGuildLeader(Player* newleader)
     {
         _SetLeaderGUID(newLead);
 
-        if (Player* newLeaderPlayer = newLead->FindPlayer())
+        if (auto newLeaderPlayer = newLead->FindPlayer())
             newLeaderPlayer->SetRank(GR_GUILDMASTER);
 
         oldLead->ChangeRank(GR_MEMBER);

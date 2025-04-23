@@ -239,7 +239,7 @@ void DynamicObject::RemoveAura()
 
 void DynamicObject::SetCasterViewpoint()
 {
-    if (Player* caster = _caster->ToPlayer())
+    if (auto caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, true);
         _isViewpoint = true;
@@ -248,7 +248,7 @@ void DynamicObject::SetCasterViewpoint()
 
 void DynamicObject::RemoveCasterViewpoint()
 {
-    if (Player* caster = _caster->ToPlayer())
+    if (auto caster = _caster->ToPlayer())
     {
         caster->SetViewpoint(this, false);
         _isViewpoint = false;

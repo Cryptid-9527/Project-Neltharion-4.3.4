@@ -103,7 +103,7 @@ class boss_romogg_bonecrusher : public CreatureScript
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                 _JustDied();
 
-                if (Creature* pRaz = GetClosestCreatureWithEntry(me, NPC_RAZ_THE_CRAZED, 100.0f))
+                if (auto pRaz = GetClosestCreatureWithEntry(me, NPC_RAZ_THE_CRAZED, 100.0f))
                 {
                     pRaz->RemoveAurasDueToSpell(SPELL_SHADOW_PRISON);
                     pRaz->AI()->DoAction(ACTION_RAZ_START_EVENT);
@@ -144,7 +144,7 @@ class boss_romogg_bonecrusher : public CreatureScript
                     Map::PlayerList const& players = me->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (auto itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->isAlive())
                                     player->CastSpell(summon, SPELL_CHAINS_OF_WOE_TELEPORT, true);
 

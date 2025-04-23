@@ -894,7 +894,7 @@ bool AuthSocket::_HandleRealmList()
 
     Field* fields = result->Fetch();
     uint32 id = fields[0].GetUInt32();
-
+    TC_LOG_INFO("server.authserver","Account Connection Attempt: %u (%s)", id, _login);
     // Update realm list if need
     sRealmList->UpdateIfNeed();
 
@@ -905,7 +905,7 @@ bool AuthSocket::_HandleRealmList()
     ByteBuffer pkt;
 
     size_t RealmListSize = 0;
-    for (RealmList::RealmMap::const_iterator i = sRealmList->begin(); i != sRealmList->end(); ++i)
+    for (auto i = sRealmList->begin(); i != sRealmList->end(); ++i)
     {
         // don't work with realms which not compatible with the client
         bool okBuild = ((_expversion & POST_BC_EXP_FLAG) && i->second.gamebuild == _build) || ((_expversion & PRE_BC_EXP_FLAG) && !AuthHelper::IsPreBCAcceptedClientBuild(i->second.gamebuild));

@@ -339,7 +339,7 @@ public:
                     {
                         SaveToDB();
                         uiMainEventPhase = DONE;
-                        if (GameObject* pMainDoor = instance->GetGameObject(uiMainDoor))
+                        if (auto pMainDoor = instance->GetGameObject(uiMainDoor))
                             pMainDoor->SetGoState(GO_STATE_ACTIVE);
                     }
                     break;
@@ -366,7 +366,7 @@ public:
                         NpcAtDoorCastingList.pop_back();
                     break;
                 case DATA_MAIN_DOOR:
-                    if (GameObject* pMainDoor = instance->GetGameObject(uiMainDoor))
+                    if (auto pMainDoor = instance->GetGameObject(uiMainDoor))
                     {
                         switch (data)
                         {
@@ -400,7 +400,7 @@ public:
                     uiMainEventPhase = data;
                     if (data == IN_PROGRESS) // Start event
                     {
-                        if (GameObject* pMainDoor = instance->GetGameObject(uiMainDoor))
+                        if (auto pMainDoor = instance->GetGameObject(uiMainDoor))
                             pMainDoor->SetGoState(GO_STATE_READY);
                         uiWaveCount = 1;
                         bActive = true;
@@ -477,8 +477,8 @@ public:
         void SpawnPortal()
         {
             SetData(DATA_PORTAL_LOCATION, (GetData(DATA_PORTAL_LOCATION) + urand(1, 5))%6);
-            if (Creature* pSinclari = instance->GetCreature(uiSinclari))
-                if (Creature* portal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, PortalLocation[GetData(DATA_PORTAL_LOCATION)], TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pSinclari = instance->GetCreature(uiSinclari))
+                if (auto portal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, PortalLocation[GetData(DATA_PORTAL_LOCATION)], TEMPSUMMON_CORPSE_DESPAWN))
                     uiTeleportationPortal = portal->GetGUID();
         }
 
@@ -504,7 +504,7 @@ public:
                     if (pBoss)
                         pBoss->GetMotionMaster()->MovePoint(0, BossStartMove2);
 
-                    if (Creature* pGuard1 = instance->GetCreature(uiErekemGuard[0]))
+                    if (auto pGuard1 = instance->GetCreature(uiErekemGuard[0]))
                     {
                         if (bForceRespawn)
                             pGuard1->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_NON_ATTACKABLE);
@@ -513,7 +513,7 @@ public:
                         pGuard1->GetMotionMaster()->MovePoint(0, BossStartMove21);
                     }
 
-                    if (Creature* pGuard2 = instance->GetCreature(uiErekemGuard[1]))
+                    if (auto pGuard2 = instance->GetCreature(uiErekemGuard[1]))
                     {
                         if (bForceRespawn)
                             pGuard2->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_NON_ATTACKABLE);
@@ -578,11 +578,11 @@ public:
                 case 6:
                     if (uiFirstBoss == 0)
                         uiFirstBoss = urand(1, 6);
-                    if (Creature* pSinclari = instance->GetCreature(uiSinclari))
+                    if (auto pSinclari = instance->GetCreature(uiSinclari))
                     {
-                        if (Creature* pPortal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, MiddleRoomPortalSaboLocation, TEMPSUMMON_CORPSE_DESPAWN))
+                        if (auto pPortal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, MiddleRoomPortalSaboLocation, TEMPSUMMON_CORPSE_DESPAWN))
                             uiSaboteurPortal = pPortal->GetGUID();
-                        if (Creature* pAzureSaboteur = pSinclari->SummonCreature(CREATURE_SABOTEOUR, MiddleRoomLocation, TEMPSUMMON_DEAD_DESPAWN))
+                        if (auto pAzureSaboteur = pSinclari->SummonCreature(CREATURE_SABOTEOUR, MiddleRoomLocation, TEMPSUMMON_DEAD_DESPAWN))
                             pAzureSaboteur->CastSpell(pAzureSaboteur, SABOTEUR_SHIELD_EFFECT, false);
                     }
                     break;
@@ -592,11 +592,11 @@ public:
                         {
                             uiSecondBoss = urand(1, 6);
                         } while (uiSecondBoss == uiFirstBoss);
-                    if (Creature* pSinclari = instance->GetCreature(uiSinclari))
+                    if (auto pSinclari = instance->GetCreature(uiSinclari))
                     {
-                        if (Creature* pPortal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, MiddleRoomPortalSaboLocation, TEMPSUMMON_CORPSE_DESPAWN))
+                        if (auto pPortal = pSinclari->SummonCreature(CREATURE_TELEPORTATION_PORTAL, MiddleRoomPortalSaboLocation, TEMPSUMMON_CORPSE_DESPAWN))
                             uiSaboteurPortal = pPortal->GetGUID();
-                        if (Creature* pAzureSaboteur = pSinclari->SummonCreature(CREATURE_SABOTEOUR, MiddleRoomLocation, TEMPSUMMON_DEAD_DESPAWN))
+                        if (auto pAzureSaboteur = pSinclari->SummonCreature(CREATURE_SABOTEOUR, MiddleRoomLocation, TEMPSUMMON_DEAD_DESPAWN))
                             pAzureSaboteur->CastSpell(pAzureSaboteur, SABOTEUR_SHIELD_EFFECT, false);
                     }
                     break;
@@ -609,7 +609,7 @@ public:
                 }
                 case 1:
                 {
-                    if (GameObject* pMainDoor = instance->GetGameObject(uiMainDoor))
+                    if (auto pMainDoor = instance->GetGameObject(uiMainDoor))
                         pMainDoor->SetGoState(GO_STATE_READY);
                     DoUpdateWorldState(WORLD_STATE_VH_PRISON_STATE, 100);
                 }
@@ -713,7 +713,7 @@ public:
                 SetData(DATA_WAVE_COUNT, 0);
                 uiMainEventPhase = NOT_STARTED;
 
-                if (Creature* pSinclari = instance->GetCreature(uiSinclari))
+                if (auto pSinclari = instance->GetCreature(uiSinclari))
                 {
                     pSinclari->SetVisible(true);
 
@@ -723,7 +723,7 @@ public:
                     {
                         for (std::list<Creature*>::const_iterator itr = GuardList.begin(); itr != GuardList.end(); ++itr)
                         {
-                            if (Creature* pGuard = *itr)
+                            if (auto pGuard = *itr)
                             {
                                 pGuard->SetVisible(true);
                                 pGuard->SetReactState(REACT_AGGRESSIVE);

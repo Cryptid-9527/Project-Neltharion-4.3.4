@@ -229,7 +229,7 @@ public:
                 {
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                     {
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             if (player->GetAuraCount(SPELL_LIGHTNING_CHARGE_AURA) == 3)
                                 player->CompletedAchievement(headedSouth);
                     }
@@ -477,7 +477,7 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            if (Creature* siamat = Creature::GetCreature(*me, instance->GetData64(DATA_SIAMAT)))
+            if (auto siamat = Creature::GetCreature(*me, instance->GetData64(DATA_SIAMAT)))
                 siamat->AI()->JustSummoned(summon);
 
             if (summon->GetEntry() == NPC_SERVANT_OF_SIAMAT || summon->GetEntry() == NPC_MINION_OF_SIAMAT)
@@ -899,25 +899,25 @@ public:
         }
         void DamageTaken(Unit* attacker, uint32& damage)
         {
-            if (Creature* axemaster = me->FindNearestCreature(NPC_OATHSWORN_AXEMASTER, 5.0f))
+            if (auto axemaster = me->FindNearestCreature(NPC_OATHSWORN_AXEMASTER, 5.0f))
                 if (axemaster->GetHealth() > me->GetHealth())
                     axemaster->SetHealth(axemaster->GetHealth() - damage);
-            if (Creature* captain = me->FindNearestCreature(NPC_OATHSWORN_CAPTAIN, 5.0f))
+            if (auto captain = me->FindNearestCreature(NPC_OATHSWORN_CAPTAIN, 5.0f))
                 if (captain->GetHealth() > me->GetHealth())
                     captain->SetHealth(captain->GetHealth() - damage);
-            if (Creature* myrmidon = me->FindNearestCreature(NPC_OATHSWORN_MYRMIDON, 5.0f))
+            if (auto myrmidon = me->FindNearestCreature(NPC_OATHSWORN_MYRMIDON, 5.0f))
                 if (myrmidon->GetHealth() > me->GetHealth())
                     myrmidon->SetHealth(myrmidon->GetHealth() - damage);
-            if (Creature* pathfinder = me->FindNearestCreature(NPC_OATHSWORN_PATHFINDER, 5.0f))
+            if (auto pathfinder = me->FindNearestCreature(NPC_OATHSWORN_PATHFINDER, 5.0f))
                 if (pathfinder->GetHealth() > me->GetHealth())
                     pathfinder->SetHealth(pathfinder->GetHealth() - damage);
-            if (Creature* scorpidkeeper = me->FindNearestCreature(NPC_OATHSWORN_SCORPID_KEEPER, 5.0f))
+            if (auto scorpidkeeper = me->FindNearestCreature(NPC_OATHSWORN_SCORPID_KEEPER, 5.0f))
                 if (scorpidkeeper->GetHealth() > me->GetHealth())
                     scorpidkeeper->SetHealth(scorpidkeeper->GetHealth() - damage);
-            if (Creature* skinner = me->FindNearestCreature(NPC_OATHSWORN_SKINNER, 5.0f))
+            if (auto skinner = me->FindNearestCreature(NPC_OATHSWORN_SKINNER, 5.0f))
                 if (skinner->GetHealth() > me->GetHealth())
                     skinner->SetHealth(skinner->GetHealth() - damage);
-            if (Creature* darkcaster = me->FindNearestCreature(NPC_NEFERSET_DARKCASTER, 5.0f))
+            if (auto darkcaster = me->FindNearestCreature(NPC_NEFERSET_DARKCASTER, 5.0f))
                 if (darkcaster->GetHealth() > me->GetHealth())
                     darkcaster->SetHealth(darkcaster->GetHealth() - damage);
         }

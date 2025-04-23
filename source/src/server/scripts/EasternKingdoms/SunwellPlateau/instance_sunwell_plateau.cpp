@@ -142,7 +142,7 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (!player->HasAura(45839,0))
                             return player;
                 }
@@ -310,7 +310,7 @@ public:
                     modus80 = data ? true : false;
                     for (std::vector<uint64>::iterator itr = deceiverList.begin(); itr != deceiverList.end(); ++itr)
                     {
-                        if (Creature* deceiver = instance->GetCreature(*itr))
+                        if (auto deceiver = instance->GetCreature(*itr))
                             deceiver->AI()->Reset();
                     }
 

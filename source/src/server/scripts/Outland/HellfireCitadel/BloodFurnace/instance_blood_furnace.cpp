@@ -281,7 +281,7 @@ class instance_blood_furnace : public InstanceMapScript
                         ResetPrisons();
                         HandleGameObject(Door5GUID, false);
                         HandleGameObject(Door4GUID, true);
-                        if (GameObject* lever = instance->GetGameObject(BroggokLeverGUID))
+                        if (auto lever = instance->GetGameObject(BroggokLeverGUID))
                             lever->Respawn();
                         break;
                 }
@@ -309,7 +309,7 @@ class instance_blood_furnace : public InstanceMapScript
             void ResetPrisoners(std::set<uint64> prisoners)
             {
                 for (std::set<uint64>::iterator i = prisoners.begin(); i != prisoners.end(); ++i)
-                    if (Creature* prisoner = instance->GetCreature(*i))
+                    if (auto prisoner = instance->GetCreature(*i))
                         ResetPrisoner(prisoner);
             }
 
@@ -394,7 +394,7 @@ class instance_blood_furnace : public InstanceMapScript
                         break;
                     case DATA_DOOR5:
                         HandleGameObject(Door5GUID, true);
-                        if (Creature* broggok = instance->GetCreature(BroggokGUID))
+                        if (auto broggok = instance->GetCreature(BroggokGUID))
                             broggok->AI()->DoAction(ACTION_ACTIVATE_BROGGOK);
                         break;
                 }
@@ -403,7 +403,7 @@ class instance_blood_furnace : public InstanceMapScript
             void ActivatePrisoners(std::set<uint64> prisoners)
             {
                 for (std::set<uint64>::iterator i = prisoners.begin(); i != prisoners.end(); ++i)
-                    if (Creature* prisoner = instance->GetCreature(*i))
+                    if (auto prisoner = instance->GetCreature(*i))
                     {
                         prisoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);
                         prisoner->SetInCombatWithZone();

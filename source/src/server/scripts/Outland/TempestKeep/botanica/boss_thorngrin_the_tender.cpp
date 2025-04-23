@@ -110,7 +110,7 @@ class boss_thorngrin_the_tender : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_SACRIFICE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                             {
                                 Talk(SAY_CAST_SACRIFICE);
                                 DoCast(target, SPELL_SACRIFICE, true);

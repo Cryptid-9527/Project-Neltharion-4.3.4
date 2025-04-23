@@ -235,10 +235,10 @@ class npc_zulaman_kasha : public CreatureScript
             void Reset() 
             {
 
-                if (GameObject* cage = me->FindNearestGameObject(GOBJ_KASHA_CAGE, 10.0f))
+                if (auto cage = me->FindNearestGameObject(GOBJ_KASHA_CAGE, 10.0f))
                     cage->SetGoState(GO_STATE_READY);
 
-                if (GameObject* bag = me->FindNearestGameObject(186672, 200.0f))
+                if (auto bag = me->FindNearestGameObject(186672, 200.0f))
                     bag->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
             }
 
@@ -289,8 +289,8 @@ class npc_zulaman_kasha : public CreatureScript
                         break;
                     case EVENT_KASHA_ATTACK_VASE_2:
                         //TC_LOG_ERROR("sql.sql", "UpdateAI: EVENT_KASHA_ATTACK_VASE_2");
-                        if (Creature* c = me->SummonCreature(54638, ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionX(), ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionY(), ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
-                            if (GameObject* vase = c->FindNearestGameObject(GOBJ_KASHA_VASE, 5.0f))
+                        if (auto c = me->SummonCreature(54638, ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionX(), ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionY(), ZA_HOSTAGE_KASHA[KASHA_VASE_2].GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                            if (auto vase = c->FindNearestGameObject(GOBJ_KASHA_VASE, 5.0f))
                             {
                             me->SetOrientation(me->GetAngle(c)); //preps orientation?
                             me->SetInFront(c);  //preps orientation?
@@ -334,10 +334,10 @@ class npc_zulaman_kasha : public CreatureScript
                     if (target->GetGUID() == vases[0]->GetGUID())
                     {
                         //TC_LOG_ERROR("sql.sql", "Vase 1 hit");
-                        if (GameObject* vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
+                        if (auto vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
                         {
                             for (auto i = 0; i <= 3; ++i)
-                                if (GameObject* pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
+                                if (auto pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
                                 {
                                     Loot* loot = &pile->loot;
                                     loot->clear();
@@ -360,10 +360,10 @@ class npc_zulaman_kasha : public CreatureScript
                     {
                         //TC_LOG_ERROR("sql.sql", "Vase 2 hit");
                         vases[1] = nullptr;
-                        if (GameObject* vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
+                        if (auto vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
                         {
                             for (auto i = 4; i <= 7; ++i)
-                                if (GameObject* pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
+                                if (auto pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
                                 {
                                     Loot* loot = &pile->loot;
                                     loot->clear();
@@ -387,10 +387,10 @@ class npc_zulaman_kasha : public CreatureScript
                     if (target->GetGUID() == vases[2]->GetGUID())
                     {
                         //TC_LOG_ERROR("sql.sql", "Vase 3 hit");
-                        if (GameObject* vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
+                        if (auto vase = target->FindNearestGameObject(GOBJ_KASHA_VASE, 3.0f))
                         {
                             for (auto i = 8; i <= 11; ++i)
-                                if (GameObject* pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
+                                if (auto pile = target->ToCreature()->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), KASHA_GOLD[i].GetPositionX(), KASHA_GOLD[i].GetPositionY(), KASHA_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
                                 {
                                     Loot* loot = &pile->loot;
                                     loot->clear();
@@ -399,7 +399,7 @@ class npc_zulaman_kasha : public CreatureScript
                             vase->SetPhaseMask(2, true);
                         }
 
-                        if (GameObject* bag = target->FindNearestGameObject(186672, 3.0f))
+                        if (auto bag = target->FindNearestGameObject(186672, 3.0f))
                         {
                             if (instance->GetDeadBossTotal(true) < 4)
                             {
@@ -440,8 +440,8 @@ class npc_zulaman_kasha : public CreatureScript
                             break;
                         case MOVEMENT_KASHA_3:
                             //TC_LOG_ERROR("sql.sql", "Movement KASHA_3");
-                            if (GameObject* vase = me->FindNearestGameObject(186671, 30.0f))
-                                if (Creature* c = me->SummonCreature(54638, vase->GetPositionX(), vase->GetPositionY(), vase->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                            if (auto vase = me->FindNearestGameObject(186671, 30.0f))
+                                if (auto c = me->SummonCreature(54638, vase->GetPositionX(), vase->GetPositionY(), vase->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
                                 {
                                     me->SetOrientation(me->GetAngle(c)); //preps orientation?
                                     me->SetInFront(c);  //preps orientation?
@@ -458,8 +458,8 @@ class npc_zulaman_kasha : public CreatureScript
                             break;
                         case MOVEMENT_KASHA_5:
                             //TC_LOG_ERROR("sql.sql", "Movement KASHA_5");
-                            if (GameObject* vase = me->FindNearestGameObject(186671, 30.0f))
-                                if (Creature* c = me->SummonCreature(54638, vase->GetPositionX(), vase->GetPositionY(), vase->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                            if (auto vase = me->FindNearestGameObject(186671, 30.0f))
+                                if (auto c = me->SummonCreature(54638, vase->GetPositionX(), vase->GetPositionY(), vase->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
                                 {
                                     me->SetOrientation(me->GetAngle(c)); //preps orientation?
                                     me->SetInFront(c);  //preps orientation?
@@ -536,13 +536,13 @@ class npc_zulaman_kasha : public CreatureScript
                     return true;
 
 
-                if (InstanceScript* instance = creature->GetInstanceScript())
+                if (auto instance = creature->GetInstanceScript())
                 {
                     instance->SetData(DATA_CHESTLOOTED, 0);
                     //uint8 progress = instance->GetData(DATA_CHESTLOOTED);
                     Map::PlayerList const& players = creature->GetMap()->GetPlayers();
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             player->KilledMonsterCredit(creature->GetEntry());
                     float x, y, z;
                     creature->GetPosition(x, y, z);
@@ -551,7 +551,7 @@ class npc_zulaman_kasha : public CreatureScript
                     switch (creature->GetEntry())
                     {
                     case NPC_HOSTAGE_KASHA:
-                        if (GameObject* cage = creature->FindNearestGameObject(187380, 10.0f))
+                        if (auto cage = creature->FindNearestGameObject(187380, 10.0f))
                             cage->SetGoState(GO_STATE_ACTIVE);
                         creature->HandleEmoteCommand(EMOTE_ONESHOT_KICK);
                         creature->AI()->DoAction(3);
@@ -605,10 +605,10 @@ public:
 
         void Reset()
         {
-            if (GameObject* cage = me->FindNearestGameObject(GOBJ_BAKKALZU_CAGE, 10.0f))
+            if (auto cage = me->FindNearestGameObject(GOBJ_BAKKALZU_CAGE, 10.0f))
                 cage->SetGoState(GO_STATE_READY);
 
-            if (GameObject* bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 100.0f))
+            if (auto bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 100.0f))
                 bag->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
         }
 
@@ -627,14 +627,14 @@ public:
                     break;
                 case EVENT_OPEN_BOX:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_NONE);
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
                     {
                         box->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                     }
                    
-                    if (GameObject* bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 10.0f))
+                    if (auto bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 10.0f))
                     {
-                        if (Creature* c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                        if (auto c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
                             c->AddAura(SPELL_LOOT_VISUAL, c);
 
                         bag->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -662,7 +662,7 @@ public:
             switch (action)
             {
             case 2:
-                if (GameObject* bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 100.0f))
+                if (auto bag = me->FindNearestGameObject(GOBJ_BAKKALZU_BAG, 100.0f))
                     bag->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                 events.ScheduleEvent(EVENT_BAKKALZU_CALL_FOR_HELP, 8000);
                 break;
@@ -688,7 +688,7 @@ public:
                     events.ScheduleEvent(MOVEMENT_BAKKALZU_2, 5000);
                     break;
                 case MOVEMENT_BAKKALZU_2:
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
                     {
                         me->SetOrientation(me->GetAngle(box)); //preps orientation?
                         me->SetFacingTo(me->GetOrientation()); //force-updates orientation
@@ -697,7 +697,7 @@ public:
                     events.ScheduleEvent(MOVEMENT_BAKKALZU_3, 3000);
                     break;
                 case MOVEMENT_BAKKALZU_3:
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_BAKKALZU_BOX, 10.0f))
                     {
                         me->SetOrientation(me->GetAngle(box)); //preps orientation?
                         me->SetFacingTo(me->GetOrientation()); //force-updates orientation
@@ -755,12 +755,12 @@ public:
                 return true;
 
 
-            if (InstanceScript* instance = creature->GetInstanceScript())
+            if (auto instance = creature->GetInstanceScript())
             {
                 instance->SetData(DATA_CHESTLOOTED, 0);
                 Map::PlayerList const& players = creature->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         player->KilledMonsterCredit(creature->GetEntry());
                 float x, y, z;
                 creature->GetPosition(x, y, z);
@@ -769,7 +769,7 @@ public:
                 switch (creature->GetEntry())
                 {
                 case NPC_HOSTAGE_BAKKALZU:
-                    if (GameObject* cage = creature->FindNearestGameObject(GOBJ_BAKKALZU_CAGE, 10.0f))
+                    if (auto cage = creature->FindNearestGameObject(GOBJ_BAKKALZU_CAGE, 10.0f))
                     {
                         cage->SetGoState(GO_STATE_ACTIVE);
                     }
@@ -828,10 +828,10 @@ public:
 
         void Reset()
         {
-            if (GameObject* bag = me->FindNearestGameObject(GOBJ_hazlek_BAG, 100.0f))
+            if (auto bag = me->FindNearestGameObject(GOBJ_hazlek_BAG, 100.0f))
                 bag->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
-            if (GameObject* cage = me->FindNearestGameObject(GOBJ_hazlek_CAGE, 10.0f))
+            if (auto cage = me->FindNearestGameObject(GOBJ_hazlek_CAGE, 10.0f))
                 cage->SetGoState(GO_STATE_READY);
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
@@ -852,9 +852,9 @@ public:
                 case EVENT_OPEN_BOX_HAZLEK:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_NONE);
 
-                    if (GameObject* bag = me->FindNearestGameObject(GOBJ_hazlek_BAG, 10.0f))
+                    if (auto bag = me->FindNearestGameObject(GOBJ_hazlek_BAG, 10.0f))
                     {
-                        if (Creature* c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                        if (auto c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
                             c->AddAura(SPELL_LOOT_VISUAL, c);
 
                         bag->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -907,7 +907,7 @@ public:
                     events.ScheduleEvent(MOVEMENT_hazlek_2, 5000);
                     break;
                 case MOVEMENT_hazlek_2:
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_hazlek_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_hazlek_BOX, 10.0f))
                     {
                         me->SetOrientation(me->GetAngle(box)); //preps orientation?
                         me->SetFacingTo(me->GetOrientation()); //force-updates orientation
@@ -917,7 +917,7 @@ public:
                     events.ScheduleEvent(MOVEMENT_hazlek_3, 3000);
                     break;
                 case MOVEMENT_hazlek_3:
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_hazlek_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_hazlek_BOX, 10.0f))
                     {
                         me->SetOrientation(me->GetAngle(box)); //preps orientation?
                         me->SetFacingTo(me->GetOrientation()); //force-updates orientation
@@ -975,12 +975,12 @@ public:
                 return true;
 
 
-            if (InstanceScript* instance = creature->GetInstanceScript())
+            if (auto instance = creature->GetInstanceScript())
             {
                 instance->SetData(DATA_CHESTLOOTED, 0);
                 Map::PlayerList const& players = creature->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         player->KilledMonsterCredit(creature->GetEntry());
                 float x, y, z;
                 creature->GetPosition(x, y, z);
@@ -989,7 +989,7 @@ public:
                 switch (creature->GetEntry())
                 {
                 case NPC_HOSTAGE_HAZLEK:
-                    if (GameObject* cage = creature->FindNearestGameObject(GOBJ_hazlek_CAGE, 10.0f))
+                    if (auto cage = creature->FindNearestGameObject(GOBJ_hazlek_CAGE, 10.0f))
                     {
                         cage->SetGoState(GO_STATE_ACTIVE);
                     }
@@ -1065,10 +1065,10 @@ public:
         void Reset()
         {
             me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            if (GameObject* cage = me->FindNearestGameObject(GOBJ_norkani_CAGE, 10.0f))
+            if (auto cage = me->FindNearestGameObject(GOBJ_norkani_CAGE, 10.0f))
                 cage->SetGoState(GO_STATE_READY);
 
-            if (GameObject* bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 100.0f))
+            if (auto bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 100.0f))
                 bag->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
         }
 
@@ -1117,19 +1117,19 @@ public:
                     me->RemoveAllAuras();
                     summons.DespawnAll();
 
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_norkani_BOX, 20.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_norkani_BOX, 20.0f))
                     {
                         box->SetPhaseMask(2, true);
                     }
 
-                    if (GameObject* bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 20.0f))
+                    if (auto bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 20.0f))
                     {
-                        if (Creature* c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
+                        if (auto c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN, 5000))
                         {
                             c->CastSpell(c, 30934, true);
                             c->AddAura(SPELL_LOOT_VISUAL, c);
                             for (auto i = 0; i <= 3; ++i)
-                                if (GameObject* pile = c->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), NORKANI_GOLD[i].GetPositionX(), NORKANI_GOLD[i].GetPositionY(), NORKANI_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
+                                if (auto pile = c->SummonGameObject(urand(GOBJ_COIN_PILE_SMALL, GOBJ_COIN_PILE_LARGE), NORKANI_GOLD[i].GetPositionX(), NORKANI_GOLD[i].GetPositionY(), NORKANI_GOLD[i].GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 2147000000))
                                 {
                                     Loot* loot = &pile->loot;
                                     loot->clear();
@@ -1198,8 +1198,8 @@ public:
                     events.ScheduleEvent(MOVEMENT_norkani_3_pt1, 3000);
                     me->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
                     me->AI()->Talk(3);
-                    if (GameObject* bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 10.0f))
-                        if (Creature* c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                    if (auto bag = me->FindNearestGameObject(GOBJ_norkani_BAG, 10.0f))
+                        if (auto c = me->SummonCreature(54638, bag->GetPositionX(), bag->GetPositionY(), bag->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
                             if (Aura* a = c->AddAura(SPELL_FUSE_SMOKE, c))
                             {
                                 a->SetMaxDuration(10000);
@@ -1219,7 +1219,7 @@ public:
                     //TC_LOG_ERROR("sql.sql", "MovementInform: MOVEMENT_norkani_3"); //needs a kneel
                     me->AddAura(68442, me);
                     /*
-                    if (GameObject* box = me->FindNearestGameObject(GOBJ_norkani_BOX, 10.0f))
+                    if (auto box = me->FindNearestGameObject(GOBJ_norkani_BOX, 10.0f))
                     {
                         me->SetOrientation(me->GetAngle(box)); //preps orientation?
                         me->SetFacingTo(me->GetOrientation()); //force-updates orientation
@@ -1287,12 +1287,12 @@ public:
                 return true;
 
 
-            if (InstanceScript* instance = creature->GetInstanceScript())
+            if (auto instance = creature->GetInstanceScript())
             {
                 instance->SetData(DATA_CHESTLOOTED, 0);
                 Map::PlayerList const& players = creature->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         player->KilledMonsterCredit(creature->GetEntry());
                 float x, y, z;
                 creature->GetPosition(x, y, z);
@@ -1301,7 +1301,7 @@ public:
                 switch (creature->GetEntry())
                 {
                 case NPC_HOSTAGE_NORKANI:
-                    if (GameObject* cage = creature->FindNearestGameObject(GOBJ_norkani_CAGE, 10.0f))
+                    if (auto cage = creature->FindNearestGameObject(GOBJ_norkani_CAGE, 10.0f))
                     {
                         cage->SetGoState(GO_STATE_ACTIVE);
                     }
@@ -1418,7 +1418,7 @@ class npc_harrison_jones : public CreatureScript
                 }
                 else
                 {
-                    if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_MASSIVE_GATE)))
+                    if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_MASSIVE_GATE)))
                         gate->SetGoState(GO_STATE_ACTIVE);
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 }
@@ -1475,7 +1475,7 @@ class npc_harrison_jones : public CreatureScript
                                 _gongTimer = 4000;
                                 break;
                             case GONG_EVENT_3:
-                                if (GameObject* gong = me->GetMap()->GetGameObject(instance->GetData64(GO_STRANGE_GONG)))
+                                if (auto gong = me->GetMap()->GetGameObject(instance->GetData64(GO_STRANGE_GONG)))
                                     gong->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                                 _gongEvent = GONG_EVENT_4;
                                 instance->SetBossState(DATA_GONGEVENT, IN_PROGRESS);
@@ -1484,7 +1484,7 @@ class npc_harrison_jones : public CreatureScript
                                 break;
                             case GONG_EVENT_4:
                                 me->RemoveAura(SPELL_BANGING_THE_GONG);
-                                if (GameObject* gong = me->GetMap()->GetGameObject(instance->GetData64(GO_STRANGE_GONG)))
+                                if (auto gong = me->GetMap()->GetGameObject(instance->GetData64(GO_STRANGE_GONG)))
                                     gong->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                                 if (instance->GetBossState(DATA_GONGEVENT) == IN_PROGRESS)
                                 {
@@ -1513,7 +1513,7 @@ class npc_harrison_jones : public CreatureScript
                                 break;
                             case GONG_EVENT_7:
                             {
-                                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_MASSIVE_GATE)))
+                                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_MASSIVE_GATE)))
                                     gate->SetGoState(GO_STATE_ACTIVE);
                                 _gongTimer = 2000;
                                 _gongEvent = GONG_EVENT_8;
@@ -1528,7 +1528,7 @@ class npc_harrison_jones : public CreatureScript
                                 {
                                     for (std::list<Creature*>::const_iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                                     {
-                                        if (Creature* ptarget = *itr)
+                                        if (auto ptarget = *itr)
                                         {
                                             ptarget->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 0, uint32(WEAPON_SPEAR));
                                             ptarget->CastWithDelay(2000, me, SPELL_COSMETIC_SPEAR_THROW, true);
@@ -1596,7 +1596,7 @@ public:
         {
             EstablishTriggerID();
 
-            if (Creature* hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
+            if (auto hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
             {
                 //Hexlord has not been spawned yet.
             }
@@ -1638,7 +1638,7 @@ public:
         {
             if (action == ACTION_RECOGNIZE_GONG)
             {
-                if (Creature* hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
+                if (auto hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
                     hexlord->AI()->DoAction(1);
                 events.ScheduleEvent(EVENT_TONIGHT_WE_FEAST, 8000);
 
@@ -1662,7 +1662,7 @@ public:
         void MoveInLineOfSight(Unit* who) 
         {
 
-            if (Player* player = me->FindNearestPlayer(10.0f))
+            if (auto player = me->FindNearestPlayer(10.0f))
                 if (!event_triggered)
                 {
                     event_triggered = true;
@@ -1672,7 +1672,7 @@ public:
                     case 126263:
                         break;
                     case 312375:
-                        if (Creature* lookout = me->FindNearestCreature(NPC_AMANASHI_LOOKOUT, 45.0f))
+                        if (auto lookout = me->FindNearestCreature(NPC_AMANASHI_LOOKOUT, 45.0f))
                             lookout->AI()->EnterCombat(player->ToUnit());
                         break;
                     default:
@@ -1689,7 +1689,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_TONIGHT_WE_FEAST:
-                    if (Creature* hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
+                    if (auto hexlord = Creature::GetCreature(*me, instance->GetData64(NPC_HEXLORD)))
                         hexlord->AI()->DoAction(2);
                     break;
                 default:
@@ -1829,7 +1829,7 @@ public:
                     events.ScheduleEvent(EVENT_START_GONG, 3000);
                     break;
                 case EVENT_START_GONG:
-                    if (GameObject* gong = me->FindNearestGameObject(187359, 15.0f))
+                    if (auto gong = me->FindNearestGameObject(187359, 15.0f))
                     {
                         gong->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                         //gong->Use(me->ToUnit());
@@ -1845,7 +1845,7 @@ public:
                     events.ScheduleEvent(EVENT_POST_GONG_3, 4000);
                     break;
                 case EVENT_POST_GONG_3:
-                    if (GameObject* gate = me->FindNearestGameObject(186728, 80.0f))
+                    if (auto gate = me->FindNearestGameObject(186728, 80.0f))
                     {
                         gate->Use(me->ToUnit());
                     }

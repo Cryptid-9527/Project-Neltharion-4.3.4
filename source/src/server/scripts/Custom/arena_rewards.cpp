@@ -408,7 +408,7 @@ public:
 
 	static bool HandleFlushArenaCommand(ChatHandler* handler, char const* /*args*/)
 	{
-		if (Player* player = handler->GetSession()->GetPlayer())
+		if (auto player = handler->GetSession()->GetPlayer())
 		{
 			if (player->GetGUID() == 1)
 			{
@@ -425,7 +425,7 @@ public:
 
 	//static bool HandleDummyTeams3Command(ChatHandler* handler, char const* /*args*/)
 	/*{
-		if (Player* player = handler->GetSession()->GetPlayer())
+		if (auto player = handler->GetSession()->GetPlayer())
 		{
 			if (player->GetGUID() == 1)
 			{

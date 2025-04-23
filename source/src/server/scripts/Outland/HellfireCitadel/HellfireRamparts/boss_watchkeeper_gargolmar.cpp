@@ -129,7 +129,7 @@ class boss_watchkeeper_gargolmar : public CreatureScript
                 {
                     Talk(SAY_SURGE);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_SURGE);
 
                     Surge_Timer = 5000+rand()%8000;

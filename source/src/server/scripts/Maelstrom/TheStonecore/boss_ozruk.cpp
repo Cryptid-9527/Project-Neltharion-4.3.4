@@ -244,7 +244,7 @@ public:
                 float z = caster->GetMap()->GetStaticHeight(x, y, caster->GetPositionZ() + 3.0f);
                 if (std::abs(z) < caster->GetPositionZ() + 5.0f)
                 {
-                    if (Creature* creature = caster->SummonCreature(NPC_RUPTURE, x, y, z, 0.f, TEMPSUMMON_TIMED_DESPAWN, 1000))
+                    if (auto creature = caster->SummonCreature(NPC_RUPTURE, x, y, z, 0.f, TEMPSUMMON_TIMED_DESPAWN, 1000))
                     {
                         creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
                         creature->CastSpell(creature, SPELL_RUPTURE_DAM, false);

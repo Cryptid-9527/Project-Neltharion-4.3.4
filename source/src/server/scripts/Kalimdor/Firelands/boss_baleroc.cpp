@@ -191,14 +191,14 @@ public:
             instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             if (instance->IsDone(DATA_SHANNOX) && instance->IsDone(DATA_LORD_RHYOLITH) && instance->IsDone(DATA_BETHTILAC) && instance->IsDone(DATA_ALYSRAZOR))
             {
-                if (Creature* orb = Creature::GetCreature(*me, instance->GetData64(NPC_MAGMA_ORB)))
+                if (auto orb = Creature::GetCreature(*me, instance->GetData64(NPC_MAGMA_ORB)))
                 {
                     orb->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
                     orb->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 }
             }
 
-            if (Creature* majordomo = Creature::GetCreature(*me, instance->GetData64(DATA_MAJORDOMO_STAGHELM)))
+            if (auto majordomo = Creature::GetCreature(*me, instance->GetData64(DATA_MAJORDOMO_STAGHELM)))
                 majordomo->AI()->DoAction(ACTION_START_INTRO);
 
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
@@ -396,7 +396,7 @@ public:
     {
         if (action == 1)
         {
-            if (InstanceScript* instance = creature->GetInstanceScript())
+            if (auto instance = creature->GetInstanceScript())
             {
                 if (instance->IsDone(DATA_SHANNOX)
                     && instance->IsDone(DATA_LORD_RHYOLITH)
@@ -404,7 +404,7 @@ public:
                     && instance->IsDone(DATA_BALOROC)
                     && !instance->IsDone(DATA_MAJORDOMO_STAGHELM))
                 {
-                    if (Creature* majordomo = Creature::GetCreature(*creature, instance->GetData64(DATA_MAJORDOMO_STAGHELM)))
+                    if (auto majordomo = Creature::GetCreature(*creature, instance->GetData64(DATA_MAJORDOMO_STAGHELM)))
                     {
                         majordomo->AI()->DoAction(ACTION_START_INTRO2);
                         creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -441,7 +441,7 @@ public:
 
         void HandleOnEffectHitTarget(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 GetCaster()->CastSpell(target, SPELL_COUNTDOWN_PERIODIC, true);
         }
 
@@ -532,10 +532,10 @@ public:
 
         void HandleOnEffectHitTarget(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(SPELL_COUNTDOWN_PERIODIC);
 
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->RemoveAurasDueToSpell(SPELL_COUNTDOWN_PERIODIC);
         }
 
@@ -563,7 +563,7 @@ public:
 
         void SetFinalDamage(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 uint32 damage = target->CountPctFromMaxHealth(GetEffectValue());
                 int32 minDamage = GetSpellInfo()->Effects[EFFECT_2].CalcValue();
@@ -691,7 +691,7 @@ public:
         void FilterTargets(std::list<WorldObject*>& targets)
         {
             targets.sort(Trinity::ObjectDistanceOrderPred(GetCaster()));
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 targets.remove_if([caster](WorldObject* target) { return target->GetDistance2d(caster) > 15.0f; });
             if (!targets.empty())
                 targets.resize(1);
@@ -702,17 +702,17 @@ public:
         void CheckExplosion(SpellEffIndex /*effIndex*/)
         {
             if (_castExplosion)
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell((Unit*)NULL, SPELL_WAVE_OF_TORMENT, true);
         }
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 uint64 channelGuid = caster->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT);
-                if (Unit* channelTarget = ObjectAccessor::GetUnit(*caster, channelGuid))
+                if (auto channelTarget = ObjectAccessor::GetUnit(*caster, channelGuid))
                     if (channelTarget == target)
                         return;
                 caster->CastSpell(target, SPELL_TORMENT_PERIODIC, true);
@@ -747,7 +747,7 @@ public:
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 if (Aura* aura = target->GetAura(GetSpellInfo()->Id))
                     SetHitDamage(GetHitDamage() * aura->GetStackAmount());
         }
@@ -783,7 +783,7 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = eventInfo.GetActor())
+            if (auto caster = eventInfo.GetActor())
             {
                 if (!caster->HasAura(SPELL_VITAL_FLAME))
                 {
@@ -819,8 +819,8 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
-                if (Creature* baleroc = ObjectAccessor::GetCreature(*GetTarget(), instance->GetData64(DATA_BALOROC)))
+            if (auto instance = GetTarget()->GetInstanceScript())
+                if (auto baleroc = ObjectAccessor::GetCreature(*GetTarget(), instance->GetData64(DATA_BALOROC)))
                     baleroc->AI()->SetGUID(GetTarget()->GetGUID(), GUID_TORMENTED);
         }
 
@@ -888,9 +888,9 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = GetTarget())
+            if (auto caster = GetTarget())
             {
-                if (Unit* target = eventInfo.GetActionTarget())
+                if (auto target = eventInfo.GetActionTarget())
                 {
                     if (!caster->HasAura(SPELL_VITAL_FLAME) && target->HasAura(SPELL_BLAZE_OF_GLORY))
                     {
@@ -957,7 +957,7 @@ public:
             if (GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_DEATH)
                 return;
 
-            if (Creature* baleroc = GetTarget()->ToCreature())
+            if (auto baleroc = GetTarget()->ToCreature())
                 baleroc->AI()->DoAction(ACTION_RESTORE_WEAPONS);
         }
 

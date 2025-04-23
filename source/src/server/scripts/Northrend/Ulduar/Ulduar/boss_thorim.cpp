@@ -302,14 +302,14 @@ class npc_thorim_controller : public CreatureScript
                 {
                     uint64 attackTarget = 0;
                     if (killer != 0)
-                        if (Player* player = killer->ToPlayer())
+                        if (auto player = killer->ToPlayer())
                             attackTarget = player->GetGUID();
 
                     if (attackTarget == 0)
-                        if (Player* target = me->SelectNearestPlayer(30.0f))
+                        if (auto target = me->SelectNearestPlayer(30.0f))
                             attackTarget = target->GetGUID();
 
-                    if (Creature* thorim = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_THORIM)))
+                    if (auto thorim = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_THORIM)))
                         thorim->AI()->SetGUID(attackTarget, ACTION_PREPHASE_ADDS_DIED);
                     instance->HandleGameObject(instance->GetData64(GO_THORIM_LIGHTNING_FIELD), false); // Close the entrance door.
                     instance->HandleGameObject(instance->GetData64(GO_THORIM_DARK_IRON_PROTCULLIS), true); // Open the up-way door.
@@ -411,7 +411,7 @@ class boss_thorim : public CreatureScript
                 gotBerserkedAndOrbSummoned = false;
                 summonChampion = false;
                 checkTargetTimer = 7000;
-                if (Creature* ctrl = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_THORIM_CTRL)))
+                if (auto ctrl = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_THORIM_CTRL)))
                 {
                     ctrl->Respawn();
                     ctrl->AI()->DoAction(42);
@@ -419,10 +419,10 @@ class boss_thorim : public CreatureScript
                 }
                 // Respawn Mini Bosses
                 for (uint8 i = DATA_RUNIC_COLOSSUS; i <= DATA_RUNE_GIANT; i++)  // TODO: Check if we can move this, it's a little bit crazy.
-                    if (Creature* MiniBoss = ObjectAccessor::GetCreature(*me, instance->GetData64(i)))
+                    if (auto MiniBoss = ObjectAccessor::GetCreature(*me, instance->GetData64(i)))
                         MiniBoss->Respawn(true);
 
-                if (GameObject* go = me->FindNearestGameObject(GO_LEVER, 500.0f))
+                if (auto go = me->FindNearestGameObject(GO_LEVER, 500.0f))
                     go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                 //                me->GetMotionMaster()->Clear();
@@ -446,7 +446,7 @@ class boss_thorim : public CreatureScript
                 if (sif)
                     sif->DespawnOrUnsummon();
                 bool hf4 = false;
-                if (Creature* ctrl = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_THORIM_CTRL)))
+                if (auto ctrl = ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_THORIM_CTRL)))
                 {
                     if (ctrl->HasAura(62320))
                         hf4 = true;
@@ -499,13 +499,13 @@ class boss_thorim : public CreatureScript
                 events.ScheduleEvent(EVENT_BERSERK_PHASE_1, 360000, 0, phase);
                 events.ScheduleEvent(EVENT_SAY_AGGRO_2, 10000, 0, phase);
 
-                if (Creature* runic = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_RUNIC_COLOSSUS)))
+                if (auto runic = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_RUNIC_COLOSSUS)))
                 {
                     runic->setActive(true);
                     runic->AI()->DoAction(ACTION_DOSCHEDULE_RUNIC_SMASH);  // Signals runic smash rotation
                 }
 
-                if (GameObject* go = me->FindNearestGameObject(GO_LEVER, 500.0f))
+                if (auto go = me->FindNearestGameObject(GO_LEVER, 500.0f))
                     go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                 me->SetFacingToObject(who);
@@ -603,17 +603,17 @@ class boss_thorim : public CreatureScript
                             events.ScheduleEvent(EVENT_UNBALANCING_STRIKE, 26000, 0, PHASE_2);
                             break;
                         case EVENT_CHAIN_LIGHTNING:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 DoCast(target, SPELL_CHAIN_LIGHTNING);
                             events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(7, 15) *IN_MILLISECONDS, 0, PHASE_2);
                             break;
                         case EVENT_TRANSFER_ENERGY:
-                            if (Creature* source = me->SummonCreature(NPC_THORIM_COMBAT_TRIGGER, PosCharge[urand(0, 6)], TEMPSUMMON_TIMED_DESPAWN, 10000))
+                            if (auto source = me->SummonCreature(NPC_THORIM_COMBAT_TRIGGER, PosCharge[urand(0, 6)], TEMPSUMMON_TIMED_DESPAWN, 10000))
                                 source->CastSpell(source, SPELL_LIGHTNING_PILLAR, true);
                             events.ScheduleEvent(EVENT_RELEASE_LIGHTNING_CHARGE, 8000, 0, PHASE_2);
                             break;
                         case EVENT_RELEASE_LIGHTNING_CHARGE:
-                            if (Creature* source = me->FindNearestCreature(NPC_THORIM_COMBAT_TRIGGER, 100.0f))
+                            if (auto source = me->FindNearestCreature(NPC_THORIM_COMBAT_TRIGGER, 100.0f))
                                 DoCast(source, SPELL_LIGHTNING_RELEASE);
                             DoCast(me, SPELL_LIGHTNING_CHARGE, true);
                             events.ScheduleEvent(EVENT_TRANSFER_ENERGY, 8000, 0, PHASE_2);
@@ -874,7 +874,7 @@ class npc_thorim_pre_phase_add : public CreatureScript
 
             void JustDied(Unit* /*victim*/)
             {
-                if (Creature* pThorim = ObjectAccessor::GetCreature(*me, pInstance->GetData64(BOSS_THORIM)))
+                if (auto pThorim = ObjectAccessor::GetCreature(*me, pInstance->GetData64(BOSS_THORIM)))
                     pThorim->AI()->DoAction(ACTION_PREPHASE_ADDS_DIED);
             }
 
@@ -911,7 +911,7 @@ class npc_thorim_pre_phase_add : public CreatureScript
                             }
                             break;
                         case EVENT_PRIMARY_SKILL:
-                            if (Unit* target = amIHealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
+                            if (auto target = amIHealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
                             {
                                 DoCast(target, myHelper(myIndex, PrePhaseAddHelper::INDEX_PRIMARY));
                                 events.ScheduleEvent(EVENT_PRIMARY_SKILL, urand(10000, 15000));
@@ -1101,7 +1101,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
             // might be called by mind control release or controllers death
             void EnterEvadeMode()
             {
-                if (Creature* thorim = me->GetCreature(*me, _instance ? _instance->GetData64(BOSS_THORIM) : 0))
+                if (auto thorim = me->GetCreature(*me, _instance ? _instance->GetData64(BOSS_THORIM) : 0))
                     thorim->AI()->DoAction(ACTION_BERSERK);
                 _EnterEvadeMode();
             }
@@ -1124,7 +1124,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
                     switch (event)
                     {
                         case EVENT_PRIMARY_SKILL:
-                            if (Unit* target = amIhealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
+                            if (auto target = amIhealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
                             {
                                 if (myIndex != INDEX_DARK_RUNE_EVOKER)  // Specialize
                                     DoCast(target, SPELL_RUNIC_MENDING);
@@ -1137,7 +1137,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
                                 events.ScheduleEvent(EVENT_PRIMARY_SKILL, urand(1000, 2000));
                             break;
                         case EVENT_SECONDARY_SKILL:
-                            if (Unit* target = amIhealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
+                            if (auto target = amIhealer ? (me->GetHealthPct() > 40 ? DoSelectLowestHpFriendly(40) : me) : me->getVictim())
                             {
                                 DoCast(target, myHelper(myIndex, ArenaPhaseAddHelper::INDEX_SECONDARY));
                                 events.ScheduleEvent(EVENT_SECONDARY_SKILL, urand(12000, 16000));
@@ -1146,7 +1146,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
                                 events.ScheduleEvent(EVENT_SECONDARY_SKILL, urand(2000, 4000));
                             break;
                         case EVENT_CHARGE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
                                 DoCast(target, SPELL_CHARGE);
                             events.ScheduleEvent(EVENT_CHARGE, 12000);
                             break;
@@ -1253,11 +1253,11 @@ class npc_runic_colossus : public CreatureScript
             void DoRunicSmash()
             {
                 for (uint8 i = 0; i < 9; i++)
-                    if (Creature* bunny = me->SummonCreature(NPC_THORIM_GOLEM_RH_BUNNY, Side ? 2236.0f : 2219.0f, i * 10 - 380.0f, 412.2f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                    if (auto bunny = me->SummonCreature(NPC_THORIM_GOLEM_RH_BUNNY, Side ? 2236.0f : 2219.0f, i * 10 - 380.0f, 412.2f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
                         bunny->AI()->SetData(1, (i + 1)* 200);
 
                 for (uint8 i = 0; i < 9; i++)
-                    if (Creature* bunny = me->SummonCreature(NPC_THORIM_GOLEM_LH_BUNNY, Side ? 2246.0f : 2209.0f, i * 10 - 380.0f, 412.2f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                    if (auto bunny = me->SummonCreature(NPC_THORIM_GOLEM_LH_BUNNY, Side ? 2246.0f : 2209.0f, i * 10 - 380.0f, 412.2f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
                         bunny->AI()->SetData(1, (i + 1)* 200);
             }
 
@@ -1320,7 +1320,7 @@ class npc_runic_colossus : public CreatureScript
                             events.ScheduleEvent(EVENT_SMASH, urand(15000, 18000));
                             break;
                         case EVENT_CHARGE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -8.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, -8.0f, true))
                             {
                                 DoCast(target, SPELL_RUNIC_CHARGE);
                                 events.ScheduleEvent(EVENT_CHARGE, 20000);
@@ -1483,7 +1483,7 @@ class npc_ancient_rune_giant : public CreatureScript
                             events.ScheduleEvent(EVENT_STOMP, urand(10000, 12000));
                             break;
                         case EVENT_DETONATION:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
                             {
                                 DoCast(target, SPELL_RUNE_DETONATION);
                                 events.ScheduleEvent(EVENT_DETONATION, urand(10000, 12000));
@@ -1555,7 +1555,7 @@ class npc_sif : public CreatureScript
                                 me->DespawnOrUnsummon();
                                 return;
                             }
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60, true))
                                 DoCast(target, SPELL_FROSTBOLT);
                             events.ScheduleEvent(EVENT_FROSTBOLT, 4000);
                             break;
@@ -1565,7 +1565,7 @@ class npc_sif : public CreatureScript
                                 me->DespawnOrUnsummon();
                                 return;
                             }
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40, true))
                             {
                                 DoResetThreat();
                                 me->AddThreat(target, std::numeric_limits<float>::max());

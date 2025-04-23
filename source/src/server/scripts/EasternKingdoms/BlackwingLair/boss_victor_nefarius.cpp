@@ -281,7 +281,7 @@ public:
                 //ShadowBoltTimer
                 if (ShadowBoltTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_SHADOWBOLT);
 
                     ShadowBoltTimer = urand(3000, 10000);
@@ -290,7 +290,7 @@ public:
                 //FearTimer
                 if (FearTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_FEAR);
 
                     FearTimer = 10000 + (rand()%10000);

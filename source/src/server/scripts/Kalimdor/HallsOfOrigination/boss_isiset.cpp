@@ -184,7 +184,7 @@ public:
                 }
 
                 for (int i = 0; i < 3; ++i)
-                    if (Creature* avatar = Creature::GetCreature(*me, instance->GetData64(DATA_AVATAR[i])))
+                    if (auto avatar = Creature::GetCreature(*me, instance->GetData64(DATA_AVATAR[i])))
                     {
                         instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, avatar);
                         avatar->DespawnOrUnsummon();
@@ -288,7 +288,7 @@ public:
         void Reset()
         {
             DoCast(SPELL_ENERGY_FLUX_DAMAGE);
-            if (Unit* victim = me->FindNearestPlayer(20.0f))
+            if (auto victim = me->FindNearestPlayer(20.0f))
             {
                 me->SetDisplayId(DISPLAYID_INVISIBLE);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);

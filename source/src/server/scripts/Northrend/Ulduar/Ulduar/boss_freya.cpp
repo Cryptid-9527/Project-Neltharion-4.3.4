@@ -326,7 +326,7 @@ class npc_iron_roots : public CreatureScript
 
             void JustDied(Unit* /*who*/)
             {
-                if (Player* target = ObjectAccessor::GetPlayer(*me, summonerGUID))
+                if (auto target = ObjectAccessor::GetPlayer(*me, summonerGUID))
                 {
                     target->RemoveAurasDueToSpell(SPELL_IRON_ROOTS);
                     target->RemoveAurasDueToSpell(SPELL_ROOTS_FREYA);
@@ -338,7 +338,7 @@ class npc_iron_roots : public CreatureScript
             {
                 if (checkTimer <= diff)
                 {
-                    if (Player* victim = ObjectAccessor::GetPlayer(*me, summonerGUID))
+                    if (auto victim = ObjectAccessor::GetPlayer(*me, summonerGUID))
                         if (!victim->HasAura(SPELL_IRON_ROOTS) && !victim->HasAura(SPELL_ROOTS_FREYA))
                             me->DespawnOrUnsummon(2*IN_MILLISECONDS);
                     checkTimer = 3*IN_MILLISECONDS;
@@ -404,7 +404,7 @@ class boss_freya : public CreatureScript
 
                     for (uint8 n = 0; n < 3; ++n)
                     {
-                        if (Creature* elder = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF + n)))
+                        if (auto elder = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF + n)))
                             if (elder->isAlive())
                             {
                                 elder->ResetLootMode();
@@ -564,7 +564,7 @@ class boss_freya : public CreatureScript
                             DoCast(me, SPELL_BERSERK);
                             break;
                         case EVENT_SUNBEAM:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                                 DoCast(target, SPELL_SUNBEAM);
                             events.ScheduleEvent(EVENT_SUNBEAM, urand(10000, 15000));
                             break;
@@ -588,7 +588,7 @@ class boss_freya : public CreatureScript
                             break;
                         }
                     case EVENT_UNSTABLE_ENERGY:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             DoCast(target, SPELL_FREYA_UNSTABLE_SUNBEAM, true);
                         events.ScheduleEvent(EVENT_UNSTABLE_ENERGY, urand(15000, 20000));
                         break;
@@ -607,7 +607,7 @@ class boss_freya : public CreatureScript
                         events.ScheduleEvent(EVENT_EONAR_GIFT, urand(40000, 50000));
                         break;
                     case EVENT_STRENGTHENED_IRON_ROOTS:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_ROOTS_FREYA))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_ROOTS_FREYA))
                             target->CastSpell(target, SPELL_ROOTS_FREYA, true); // This must be casted by Target self
                         events.ScheduleEvent(EVENT_STRENGTHENED_IRON_ROOTS, urand(12000, 20000));
                         break;
@@ -766,7 +766,7 @@ class boss_freya : public CreatureScript
                 }
 
                 // Need to have it there, or summoned units would do nothing until attacked
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250.0f, true))
                 {
                     summoned->AI()->AttackStart(target);
                     summoned->AddThreat(target, 250.0f);
@@ -828,7 +828,7 @@ class boss_freya : public CreatureScript
                 switch (id)
                 {
                     case ACTION_ELEMENTAL_DEAD:
-                        if (Creature* c = ObjectAccessor::GetCreature(*me, guid))
+                        if (auto c = ObjectAccessor::GetCreature(*me, guid))
                         {
                             switch (c->GetEntry())
                             {
@@ -848,7 +848,7 @@ class boss_freya : public CreatureScript
                         break;
                     case ACTION_ELDER_DEATH:    // For each dying elder, Freya looses one ability.
                         --elderCount;
-                        if (Creature* c = ObjectAccessor::GetCreature(*me, guid))
+                        if (auto c = ObjectAccessor::GetCreature(*me, guid))
                         {
                             switch (c->GetEntry())
                             {
@@ -934,13 +934,13 @@ class boss_elder_brightleaf : public CreatureScript
                 if (who && who->GetTypeId() == TYPEID_PLAYER)
                 {
                     // Inform the others that I died
-                    if (Creature* Ironbranch = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IRONBRANCH)))
+                    if (auto Ironbranch = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IRONBRANCH)))
                         Ironbranch->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* Stonebark = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_STONEBARK)))
+                    if (auto Stonebark = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_STONEBARK)))
                         Stonebark->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         freya->AI()->SetGUID(me->GetGUID(), ACTION_ELDER_DEATH);
                 }
             }
@@ -1068,13 +1068,13 @@ class boss_elder_stonebark : public CreatureScript
                 if (who && who->GetTypeId() == TYPEID_PLAYER)
                 {
                     // Inform the others that I died
-                    if (Creature* Ironbranch = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IRONBRANCH)))
+                    if (auto Ironbranch = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_IRONBRANCH)))
                         Ironbranch->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* Brightleaf = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF)))
+                    if (auto Brightleaf = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF)))
                         Brightleaf->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         freya->AI()->SetGUID(me->GetGUID(), ACTION_ELDER_DEATH);
                 }
             }
@@ -1202,13 +1202,13 @@ class boss_elder_ironbranch : public CreatureScript
 
                 if (who && who->GetTypeId() == TYPEID_PLAYER)
                 {
-                    if (Creature* Brightleaf = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF)))
+                    if (auto Brightleaf = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_BRIGHTLEAF)))
                         Brightleaf->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* Stonebark = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_STONEBARK)))
+                    if (auto Stonebark = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_STONEBARK)))
                         Stonebark->AI()->DoAction(ACTION_ELDER_DEATH);
 
-                    if (Creature* freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         freya->AI()->SetGUID(me->GetGUID(), ACTION_ELDER_DEATH);
                 }
             }
@@ -1239,7 +1239,7 @@ class boss_elder_ironbranch : public CreatureScript
                             events.ScheduleEvent(EVENT_IMPALE, urand(15000, 25000));
                             break;
                         case EVENT_IRON_ROOTS:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_IRON_ROOTS))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_IRON_ROOTS))
                                 target->CastSpell(target, SPELL_IRON_ROOTS, true);
                             events.ScheduleEvent(EVENT_IRON_ROOTS, urand(10000, 20000));
                             break;
@@ -1301,7 +1301,7 @@ class npc_detonating_lasher : public CreatureScript
 
             void Reset()
             {
-                if (Unit* target = me->SelectNearbyTarget(0, 100.0f))   // Try to find another target
+                if (auto target = me->SelectNearbyTarget(0, 100.0f))   // Try to find another target
                     AttackStart(target);
 
                 events.ScheduleEvent(EVENT_LASH, 5000);
@@ -1312,8 +1312,8 @@ class npc_detonating_lasher : public CreatureScript
             {
                 if (damage >= me->GetHealth())
                 {
-                    if (InstanceScript* instance = me->GetInstanceScript())
-                        if (Creature* freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto instance = me->GetInstanceScript())
+                        if (auto freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                             freya->AI()->SetGUID(me->GetGUID(), ACTION_ELEMENTAL_DEAD);
 
                     me->DespawnOrUnsummon(1);
@@ -1336,7 +1336,7 @@ class npc_detonating_lasher : public CreatureScript
                             events.ScheduleEvent(EVENT_LASH, urand(5000, 10000));
                             break;
                         case EVENT_CHANGE_TARGET:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             {
                                 // Switching to other target - modify aggro of new target by 20% from current target's aggro
                                 me->AddThreat(target, me->getThreatManager().getThreat(me->getVictim(), false) * 1.2f);
@@ -1370,14 +1370,14 @@ class npc_ancient_water_spirit : public CreatureScript
 
             void InitializeAI()
             {
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (Creature* Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                if (auto instance = me->GetInstanceScript())
+                    if (auto Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         waveCount = Freya->AI()->GetData(DATA_TRIO_WAVE_COUNT);
             }
 
             void Reset()
             {
-                if (Unit* target = me->SelectNearbyTarget(NULL,100.0f))
+                if (auto target = me->SelectNearbyTarget(NULL,100.0f))
                     AttackStart(target);
                 tidalWaveTimer = 10000;
             }
@@ -1386,8 +1386,8 @@ class npc_ancient_water_spirit : public CreatureScript
             {
                 if (damage >= me->GetHealth())
                 {
-                    if (InstanceScript* instance = me->GetInstanceScript())
-                        if (Creature* freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto instance = me->GetInstanceScript())
+                        if (auto freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         {
                             freya->AI()->SetGUID(me->GetGUID(), ACTION_ELEMENTAL_DEAD);
                             freya->AI()->SetData(DATA_ELEMENTAL_DIED, waveCount);
@@ -1404,7 +1404,7 @@ class npc_ancient_water_spirit : public CreatureScript
 
                 if (tidalWaveTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                     {
                         DoCast(target, SPELL_TIDAL_WAVE);
                         DoCast(target, SPELL_TIDAL_WAVE_EFFECT, true);
@@ -1441,14 +1441,14 @@ class npc_storm_lasher : public CreatureScript
 
             void InitializeAI()
             {
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (Creature* Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                if (auto instance = me->GetInstanceScript())
+                    if (auto Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         waveCount = Freya->AI()->GetData(DATA_TRIO_WAVE_COUNT);
             }
 
             void Reset()
             {
-                if (Unit* target = me->SelectNearbyTarget(NULL,100.0f))
+                if (auto target = me->SelectNearbyTarget(NULL,100.0f))
                     AttackStart(target);
                 events.ScheduleEvent(EVENT_LIGHTNING_LASH, 10000);
                 events.ScheduleEvent(EVENT_STORMBOLT, 5000);
@@ -1458,8 +1458,8 @@ class npc_storm_lasher : public CreatureScript
             {
                 if (damage >= me->GetHealth())
                 {
-                    if (InstanceScript* instance = me->GetInstanceScript())
-                        if (Creature* freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto instance = me->GetInstanceScript())
+                        if (auto freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         {
                             freya->AI()->SetGUID(me->GetGUID(), ACTION_ELEMENTAL_DEAD);
                             freya->AI()->SetData(DATA_ELEMENTAL_DIED, waveCount);
@@ -1485,7 +1485,7 @@ class npc_storm_lasher : public CreatureScript
                             events.ScheduleEvent(EVENT_LIGHTNING_LASH, urand(7000, 14000));
                             break;
                         case EVENT_STORMBOLT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                                 DoCast(target, SPELL_STORMBOLT);
                             events.ScheduleEvent(EVENT_STORMBOLT, urand(8000, 12000));
                             break;
@@ -1517,14 +1517,14 @@ class npc_snaplasher : public CreatureScript
 
             void InitializeAI()
             {
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (Creature* Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                if (auto instance = me->GetInstanceScript())
+                    if (auto Freya = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         waveCount = Freya->AI()->GetData(DATA_TRIO_WAVE_COUNT);
             }
 
             void Reset()
             {
-                if (Unit* target = me->SelectNearbyTarget(NULL,100.0f))
+                if (auto target = me->SelectNearbyTarget(NULL,100.0f))
                     AttackStart(target);
             }
 
@@ -1532,8 +1532,8 @@ class npc_snaplasher : public CreatureScript
             {
                 if (damage >= me->GetHealth())
                 {
-                    if (InstanceScript* instance = me->GetInstanceScript())
-                        if (Creature* freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto instance = me->GetInstanceScript())
+                        if (auto freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                         {
                             freya->AI()->SetGUID(me->GetGUID(), ACTION_ELEMENTAL_DEAD);
                             freya->AI()->SetData(DATA_ELEMENTAL_DIED, waveCount);
@@ -1598,8 +1598,8 @@ class npc_ancient_conservator : public CreatureScript
             {
                 if (damage >= me->GetHealth())
                 {
-                    if (InstanceScript* instance = me->GetInstanceScript())
-                        if (Creature* freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
+                    if (auto instance = me->GetInstanceScript())
+                        if (auto freya = me->GetCreature(*me, instance->GetData64(BOSS_FREYA)))
                             freya->AI()->SetGUID(me->GetGUID(), ACTION_ELEMENTAL_DEAD);
                         me->DespawnOrUnsummon(1);
                 }
@@ -1627,7 +1627,7 @@ class npc_ancient_conservator : public CreatureScript
                             events.ScheduleEvent(EVENT_HEALTHY_SPORE, urand(15000, 17500));
                             break;
                         case EVENT_NATURES_FURY:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_NATURES_FURY))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, -SPELL_NATURES_FURY))
                                 DoCast(target, SPELL_NATURES_FURY);
                             me->AddAura(SPELL_CONSERVATOR_GRIP, me);
                             events.ScheduleEvent(EVENT_NATURES_FURY, 5000);
@@ -1821,7 +1821,7 @@ public:
     {
         if (bombTimer <= diff)
         {
-            if (GameObject* go = me->FindNearestGameObject(GAMEOBJECT_NATURE_BOMB, 1.0f))
+            if (auto go = me->FindNearestGameObject(GAMEOBJECT_NATURE_BOMB, 1.0f))
             {
                 go->SetGoState(GO_STATE_ACTIVE);
                 DoCast(me, SPELL_NATURE_BOMB);
@@ -1865,7 +1865,7 @@ class npc_unstable_sun_beam : public CreatureScript
             void MoveInLineOfSight(Unit* target)
             {
                 if (target)
-                    if (Creature* c = target->ToCreature())
+                    if (auto c = target->ToCreature())
                         if (c->GetEntry() == NPC_ELDER_BRIGHTLEAF)
                             if (me->IsWithinDist2d(c, 4))
                   {
@@ -2113,7 +2113,7 @@ class spell_freya_iron_roots : public SpellScriptLoader
                 Position pos;
                 GetCaster()->GetPosition(&pos);
                 // Not good at all, but this prevents having roots in a different position then player
-                if (Creature* Roots = GetCaster()->SummonCreature(entry, pos))
+                if (auto Roots = GetCaster()->SummonCreature(entry, pos))
                     GetCaster()->NearTeleportTo(Roots->GetPositionX(), Roots->GetPositionY(), Roots->GetPositionZ(), GetCaster()->GetOrientation());
             }
 
@@ -2140,7 +2140,7 @@ class spell_freya_natural_bomb_spell : public SpellScriptLoader
 
             void OnHitEffect()
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     target->CastSpell(target, SPELL_SUMMON_NATURE_BOMB, true);
             }
 
@@ -2166,7 +2166,7 @@ class achievement_getting_back_to_nature : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Freya = target->ToCreature())
+            if (auto Freya = target->ToCreature())
                 if (Freya->AI()->GetData(DATA_GETTING_BACK_TO_NATURE) >= 25)
                     return true;
 
@@ -2184,7 +2184,7 @@ class achievement_knock_on_wood : public AchievementCriteriaScript
            if (!target)
                return false;
 
-           if (Creature* Freya = target->ToCreature())
+           if (auto Freya = target->ToCreature())
                if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) >= 1)
                    return true;
 
@@ -2202,7 +2202,7 @@ class achievement_knock_knock_on_wood : public AchievementCriteriaScript
            if (!target)
                return false;
 
-           if (Creature* Freya = target->ToCreature())
+           if (auto Freya = target->ToCreature())
                if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) >= 2)
                    return true;
 
@@ -2220,7 +2220,7 @@ class achievement_knock_knock_knock_on_wood : public AchievementCriteriaScript
            if (!target)
                return false;
 
-           if (Creature* Freya = target->ToCreature())
+           if (auto Freya = target->ToCreature())
                if (Freya->AI()->GetData(DATA_KNOCK_ON_WOOD) == 3)
                    return true;
 

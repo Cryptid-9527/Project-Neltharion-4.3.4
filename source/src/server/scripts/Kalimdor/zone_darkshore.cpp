@@ -156,10 +156,10 @@ public:
                     switch (spellInfo->Id)
                     {
                     case SPELL_DUMMY_PING:
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             _inProgress = true;
-                            if (Creature* sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7434.94f, 89.5416f, 1.9454f, 1.23f, TEMPSUMMON_TIMED_DESPAWN, 60000))
+                            if (auto sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7434.94f, 89.5416f, 1.9454f, 1.23f, TEMPSUMMON_TIMED_DESPAWN, 60000))
                             {
                                 sentinel->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
                                 _sentinelGUID = sentinel->GetGUID();
@@ -172,10 +172,10 @@ public:
                         }
                         break;
                     case SPELL_DUMMY_PING_2:
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             _inProgress = true;
-                            if (Creature* sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7352.65f, 158.228f, 8.526f, 5.25f, TEMPSUMMON_TIMED_DESPAWN, 60000))
+                            if (auto sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7352.65f, 158.228f, 8.526f, 5.25f, TEMPSUMMON_TIMED_DESPAWN, 60000))
                             {
                                 sentinel->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
                                 _sentinelGUID = sentinel->GetGUID();
@@ -188,10 +188,10 @@ public:
                         }
                         break;
                     case SPELL_DUMMY_PING_3:
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             _inProgress = true;
-                            if (Creature* sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7429.82f, 159.077f, 0.2754f, 0.16f, TEMPSUMMON_TIMED_DESPAWN, 60000))
+                            if (auto sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7429.82f, 159.077f, 0.2754f, 0.16f, TEMPSUMMON_TIMED_DESPAWN, 60000))
                             {
                                 sentinel->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
                                 _sentinelGUID = sentinel->GetGUID();
@@ -204,10 +204,10 @@ public:
                         }
                         break;
                     case SPELL_DUMMY_PING_4:
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             _inProgress = true;
-                            if (Creature* sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7286.927f, 265.107f, -1.77f, 5.07266f, TEMPSUMMON_TIMED_DESPAWN, 60000))
+                            if (auto sentinel = me->SummonCreature(NPC_LORDANEL_SENTINEL, 7286.927f, 265.107f, -1.77f, 5.07266f, TEMPSUMMON_TIMED_DESPAWN, 60000))
                             {
                                 sentinel->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
                                 _sentinelGUID = sentinel->GetGUID();
@@ -241,7 +241,7 @@ public:
 
                 else if (eventId == EVENT_SENTINEL_1)
                 {
-                    if (Creature* sentinel = Unit::GetCreature(*me, _sentinelGUID))
+                    if (auto sentinel = Unit::GetCreature(*me, _sentinelGUID))
                     {
                         sentinel->SetByteFlag(UNIT_FIELD_BYTES_1, 0, 8);
                         sentinel->AI()->Talk(0);
@@ -254,7 +254,7 @@ public:
 
                 else if (eventId == EVENT_SENTINEL_2)
                 {
-                    if (Creature* sentinel = Unit::GetCreature(*me, _sentinelGUID))
+                    if (auto sentinel = Unit::GetCreature(*me, _sentinelGUID))
                     {
                         sentinel->SetByteFlag(UNIT_FIELD_BYTES_1, 0, 8);
                         sentinel->AI()->Talk(3);
@@ -266,7 +266,7 @@ public:
 
                 else if (eventId == EVENT_SENTINEL_3)
                 {
-                    if (Creature* sentinel = Unit::GetCreature(*me, _sentinelGUID))
+                    if (auto sentinel = Unit::GetCreature(*me, _sentinelGUID))
                     {
                         sentinel->SetByteFlag(UNIT_FIELD_BYTES_1, 0, 8);
                         sentinel->AI()->Talk(5);
@@ -278,7 +278,7 @@ public:
 
                 else if (eventId == EVENT_SENTINEL_4)
                 {
-                    if (Creature* sentinel = Unit::GetCreature(*me, _sentinelGUID))
+                    if (auto sentinel = Unit::GetCreature(*me, _sentinelGUID))
                     {
                         sentinel->SetByteFlag(UNIT_FIELD_BYTES_1, 0, 8);
                         sentinel->AI()->Talk(7);
@@ -312,8 +312,8 @@ public:
     {
         if (player->GetQuestStatus(13562) == QUEST_STATUS_INCOMPLETE) // quest=13562/the-final-flame-of-bashalaran
         {
-            if (Creature* writhing = player->SummonCreature(33180, 6741.375000f, 25.167830f, 44.261974f, 1.10492f, TEMPSUMMON_TIMED_DESPAWN, 45000))
-                if (Creature* cursed = player->SummonCreature(33179, 6736.222168f, 30.065144f, 45.586834f, 1.10492f, TEMPSUMMON_TIMED_DESPAWN, 45000))
+            if (auto writhing = player->SummonCreature(33180, 6741.375000f, 25.167830f, 44.261974f, 1.10492f, TEMPSUMMON_TIMED_DESPAWN, 45000))
+                if (auto cursed = player->SummonCreature(33179, 6736.222168f, 30.065144f, 45.586834f, 1.10492f, TEMPSUMMON_TIMED_DESPAWN, 45000))
                 {
                     writhing->AI()->AttackStart(player);
                     cursed->AI()->AttackStart(player);
@@ -394,7 +394,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -413,7 +413,7 @@ public:
                 {
                     me->AI()->Talk(1);
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         player->CastSpell(player, SPELL_AURA_NO_COMBAT);
                 }
 
@@ -421,7 +421,7 @@ public:
                 {
                     _sayTextCounter = 0;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         player->ExitVehicle();
                 }
             }
@@ -451,7 +451,7 @@ public:
                     }
                 }
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_OCEAN_NOT_SO_DEEP) == QUEST_STATUS_NONE)
                     {
@@ -469,7 +469,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ROBOT_DESPAWN:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
                         me->DespawnOrUnsummon(100);
@@ -515,7 +515,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->KilledMonsterCredit(NPC_BUILD_STRUCTURES_CREDIT);
                 }
@@ -524,7 +524,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -557,7 +557,7 @@ public:
                     }
                 }
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_THE_ANCIENTS_IRE) == QUEST_STATUS_NONE || player->GetQuestStatus(QUEST_THE_ANCIENTS_IRE) == QUEST_STATUS_REWARDED)
                     {
@@ -619,7 +619,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
             else
                 return;
@@ -633,7 +633,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (me->GetEntry() == NPC_SPIRIT_CAYLAIS)
                     {
@@ -765,7 +765,7 @@ public:
             {
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     _events.ScheduleEvent(EVENT_ESCORT_HOLLEE_1, 2000);
@@ -796,7 +796,7 @@ public:
                 _events.ScheduleEvent(EVENT_ESCORT_HOLLEE_4, 1000);
                 break;
             case 66:
-                if (Creature* steelhand = me->FindNearestCreature(NPC_STEELHAND, 25.f))
+                if (auto steelhand = me->FindNearestCreature(NPC_STEELHAND, 25.f))
                 {
                     steelhand->AI()->Talk(0);
                 }
@@ -846,7 +846,7 @@ public:
                         if ((*it)->GetQuestStatus(QUEST_THE_LAST_REFUGEE) == QUEST_STATUS_INCOMPLETE)
                             (*it)->AreaExploredOrEventHappens(QUEST_THE_LAST_REFUGEE);
 
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                     {
                         me->SetFacingToObject(player);
                         me->AI()->TalkWithDelay(1000, 8, _playerGUID);
@@ -858,7 +858,7 @@ public:
                 }
 
                 case EVENT_ESCORT_HOLLEE_6:
-                    if (Creature* steelhand = me->FindNearestCreature(NPC_STEELHAND, 25.f))
+                    if (auto steelhand = me->FindNearestCreature(NPC_STEELHAND, 25.f))
                     {
                         me->AI()->Talk(9);
                         steelhand->AI()->TalkWithDelay(5500, 1);
@@ -920,7 +920,7 @@ public:
 
             _events.ScheduleEvent(EVENT_SOOTHING_TOTEM_1, 4000);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
             else
                 return;
@@ -971,7 +971,7 @@ public:
             if (_checkTimer <= diff)
             {
                 _checkTimer = 1000;
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                         me->DespawnOrUnsummon();
@@ -987,7 +987,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_SOOTHING_TOTEM_1:
-                    if (Creature* enemy1 = me->SummonCreature(NPC_REMNANT, spawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy1 = me->SummonCreature(NPC_REMNANT, spawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy1);
                         enemy1->AI()->AttackStart(me);
@@ -996,8 +996,8 @@ public:
                     break;
                 case EVENT_SOOTHING_TOTEM_2:
 
-                    if (Creature* enemy2 = me->SummonCreature(NPC_REMNANT, spawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* enemy3 = me->SummonCreature(NPC_REMNANT, spawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy2 = me->SummonCreature(NPC_REMNANT, spawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto enemy3 = me->SummonCreature(NPC_REMNANT, spawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _summons.Summon(enemy2);
                             enemy2->AI()->AttackStart(me);
@@ -1008,7 +1008,7 @@ public:
                         }
                     break;
                 case EVENT_SOOTHING_TOTEM_3:
-                    if (Creature* enemy4 = me->SummonCreature(NPC_RAGER, spawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy4 = me->SummonCreature(NPC_RAGER, spawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy4);
                         enemy4->AI()->AttackStart(me);
@@ -1096,7 +1096,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1116,7 +1116,7 @@ public:
             switch (point)
             {
             case 32:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
                     me->DespawnOrUnsummon(1000);
@@ -1176,7 +1176,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_SPELLCLICK)
             {
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     player->CastSpell(player, SPELL_DISMOUNT_AND_CANCEL_ALL_SHAPESHIFTS);
@@ -1290,7 +1290,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1363,7 +1363,7 @@ public:
             //{
             //    _checkTimer = 1000;
             //
-            //     if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            //     if (auto player = Unit::GetPlayer(*me, _playerGUID))
             //     {
             //         if (player->GetQuestStatus(QUEST_THE_EYE_OF_ALL_STORMS) == QUEST_STATUS_COMPLETE)
             //             GoBack();
@@ -1651,13 +1651,13 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->EnterVehicle(me, 1);
             }
 
-            if (Creature* kathrena = me->SummonCreature(NPC_KATHRENA_WINTERWISP_PASSENGER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (auto kathrena = me->SummonCreature(NPC_KATHRENA_WINTERWISP_PASSENGER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 _kathrenaGUID = kathrena->GetGUID();
                 _summons.Summon(kathrena);
@@ -1669,7 +1669,7 @@ public:
         {
             _summons.DespawnAll();
 
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 player->ExitVehicle();
         }
 
@@ -1691,7 +1691,7 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Creature* kathrena = Unit::GetCreature(*me, _kathrenaGUID))
+            if (auto kathrena = Unit::GetCreature(*me, _kathrenaGUID))
             {
                 switch (point)
                 {
@@ -1711,7 +1711,7 @@ public:
                     kathrena->AI()->TalkWithDelay(1000, 7, _playerGUID);
                     break;
                 case 81:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (player->GetQuestStatus(QUEST_IN_DEFENSE_OF_DARKSHORE) == QUEST_STATUS_INCOMPLETE)
                         {
@@ -1722,7 +1722,7 @@ public:
                     }
                     break;
                 case 85:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         _summons.DespawnAll();
@@ -1743,7 +1743,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -1767,7 +1767,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_GROVE_HIPPO_1:
-                    if (Creature* kathrena = Unit::GetCreature(*me, _kathrenaGUID))
+                    if (auto kathrena = Unit::GetCreature(*me, _kathrenaGUID))
                     {
                         me->GetMotionMaster()->MoveSmoothPath(GroveHipoPath1, GroveHipoPath1Size);
                         kathrena->AI()->TalkWithDelay(4500, 1, _playerGUID);
@@ -1827,7 +1827,7 @@ public:
             {
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     _events.ScheduleEvent(EVENT_PROSPECTOR_1, 1000);
@@ -1862,7 +1862,7 @@ public:
                 me->SetFacingTo(5.7f);
                 me->AI()->Talk(5);
 
-                if (Creature* groff = me->FindNearestCreature(NPC_GROFF, 25.f))
+                if (auto groff = me->FindNearestCreature(NPC_GROFF, 25.f))
                     groff->AI()->TalkWithDelay(6000, 0);
                 break;
             }
@@ -1945,7 +1945,7 @@ public:
         void MoveInLineOfSight(Unit* who)
         {
             if (me->IsWithinDistInMap(who, 50.0f))
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                     if (!_areSpawned)
                     {
                         if (player->GetQuestStatus(QUEST_THE_BATTLE_OF_DARKSHORE) == QUEST_STATUS_REWARDED)
@@ -2262,7 +2262,7 @@ public:
         {
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                 }
@@ -2305,7 +2305,7 @@ public:
             {
                 if (point == 25)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2319,7 +2319,7 @@ public:
             {
                 if (point == 19)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2333,7 +2333,7 @@ public:
             {
                 if (point == 23)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2347,7 +2347,7 @@ public:
             {
                 if (point == 20)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2361,7 +2361,7 @@ public:
             {
                 if (point == 28)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2375,7 +2375,7 @@ public:
             {
                 if (point == 28)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2389,7 +2389,7 @@ public:
             {
                 if (point == 47)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
@@ -2408,7 +2408,7 @@ public:
             {
                 _checkTimer = 2000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -2565,8 +2565,8 @@ public:
                     _events.ScheduleEvent(EVENT_AYNASHA_2, 4500);
                     break;
                 case EVENT_AYNASHA_2:
-                    if (Creature* enemy1 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* enemy2 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy1 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto enemy2 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _summons.Summon(enemy1);
                             enemy1->GetMotionMaster()->MoveChase(me);
@@ -2577,8 +2577,8 @@ public:
                         }
                     break;
                 case EVENT_AYNASHA_3:
-                    if (Creature* enemy3 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* enemy4 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy3 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto enemy4 = me->SummonCreature(NPC_BLACKWOOD_TRACKER, OneKillSpawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _summons.Summon(enemy3);
                             enemy3->GetMotionMaster()->MoveChase(me);
@@ -2589,7 +2589,7 @@ public:
                         }
                     break;
                 case EVENT_AYNASHA_4:
-                    if (Creature* enemy5 = me->SummonCreature(NPC_MAROSH_THE_DEVIOUS, OneKillSpawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy5 = me->SummonCreature(NPC_MAROSH_THE_DEVIOUS, OneKillSpawnPosition[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy5);
                         enemy5->GetMotionMaster()->MoveChase(me);
@@ -2696,7 +2696,7 @@ public:
             {
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     _events.ScheduleEvent(EVENT_AYNASHA_ESCORT_2, 1000);

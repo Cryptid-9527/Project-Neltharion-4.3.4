@@ -258,7 +258,7 @@ public:
                         events.ScheduleEvent(EVENT_WOE_STRIKE, urand(10, 14)*IN_MILLISECONDS, 0, PHASE_UNDEAD);
                         break;
                     case EVENT_SHADOW_AXE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
+                        if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
                         {
                             DoCast(target, SPELL_SHADOW_AXE_SUMMON);
                         }
@@ -377,7 +377,7 @@ public:
                     }
                     else if (uiResurectPhase == 2)
                     {
-                        if (Creature* ingvar = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_INGVAR) : 0))
+                        if (auto ingvar = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_INGVAR) : 0))
                         {
                             ingvar->RemoveAurasDueToSpell(SPELL_SCOURG_RESURRECTION_DUMMY);
 
@@ -421,7 +421,7 @@ public:
 
         void Reset()
         {
-            if (Creature* target = me->FindNearestCreature(ENTRY_THROW_TARGET, 50.0f))
+            if (auto target = me->FindNearestCreature(ENTRY_THROW_TARGET, 50.0f))
             {
                 float x, y, z;
                 target->GetPosition(x, y, z);

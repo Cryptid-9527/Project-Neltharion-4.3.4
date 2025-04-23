@@ -208,7 +208,7 @@ class npc_tarecgosa_nexus : public CreatureScript
                         events.ScheduleEvent(EVENT_ARCANE_MISSILE, 22800);
                         break;
                     case EVENT_ARCANE_MISSILE:
-                        if (Creature* sentinel = me->FindNearestCreature(NPC_ICEBOUND_SENTINEL, 60.5f))
+                        if (auto sentinel = me->FindNearestCreature(NPC_ICEBOUND_SENTINEL, 60.5f))
                         {
                             me->SetInCombatWith(sentinel);
                             DoCast(sentinel, SPELL_ARCANE_MISSILE, false);
@@ -216,7 +216,7 @@ class npc_tarecgosa_nexus : public CreatureScript
                         events.ScheduleEvent(EVENT_FROSTBOLT, 3200);
                         break;
                     case EVENT_FROSTBOLT:
-                        if (Creature* sentinel = me->FindNearestCreature(NPC_ICEBOUND_SENTINEL, 60.5f))
+                        if (auto sentinel = me->FindNearestCreature(NPC_ICEBOUND_SENTINEL, 60.5f))
                             DoCast(sentinel, SPELL_FROST_BOLT, false);
                         events.ScheduleEvent(EVENT_RESET, 320000);
                         break;
@@ -248,12 +248,12 @@ class npc_tarecgosa_nexus : public CreatureScript
                         break;
                     case EVENT_CHECK_NEXT_TARGETS:
                         Talk(SAY_PRISON);
-                        if (Unit* prisonplayer = me->FindNearestPlayer(500.0f))
+                        if (auto prisonplayer = me->FindNearestPlayer(500.0f))
                             DoCast(prisonplayer, SPELL_ICE_BLOCK);
                         events.ScheduleEvent(EVENT_CHECK_NEXT_TARGETS_2, 5000);
                         break;
                     case EVENT_CHECK_NEXT_TARGETS_2:
-                        if (Creature* sentinel = me->FindNearestCreature(53383, 100.0f))
+                        if (auto sentinel = me->FindNearestCreature(53383, 100.0f))
                         {
                             sentinel->GetMotionMaster()->MovePoint(0, TarecgosaNexusRoutes[7]);
                             sentinel->DespawnOrUnsummon(10000);
@@ -262,7 +262,7 @@ class npc_tarecgosa_nexus : public CreatureScript
                         break;
                     case EVENT_NEXT_EVENT:
                     {
-                        if (Unit* prisonplayer = me->FindNearestPlayer(500.0f))
+                        if (auto prisonplayer = me->FindNearestPlayer(500.0f))
                             prisonplayer->RemoveAura(SPELL_ICE_BLOCK);
                         me->NearTeleportTo(4116.0f, 7453.0f, 271.0f, 3.17f);
                         events.ScheduleEvent(EVENT_ARCANE_MISSILE, 20000);
@@ -347,7 +347,7 @@ public:
             events.ScheduleEvent(EVENT_ERUPTING_ICE, 10000);
             events.ScheduleEvent(EVENT_RETURN_FIRE, 3000);
 
-            if (Creature* tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 60.0f, true))
+            if (auto tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 60.0f, true))
             {
                 AttackStart(tarecgosa);
                 me->getThreatManager().addThreat(tarecgosa, 100.0f);
@@ -358,7 +358,7 @@ public:
 
         void JustDied(Unit* /*Killer*/)
         {
-            if (Creature* tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 60.0f, true))
+            if (auto tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 60.0f, true))
                 tarecgosa->AI()->DoAction(ACTION_GO_AHEAD);
         }
 
@@ -372,7 +372,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            if (Creature* tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 34))
+            if (auto tarecgosa = me->FindNearestCreature(NPC_TARECGOSA, 34))
                 AttackStart(tarecgosa);
 
             if (uint32 eventId = events.ExecuteEvent())

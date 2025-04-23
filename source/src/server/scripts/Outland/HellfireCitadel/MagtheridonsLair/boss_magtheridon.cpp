@@ -401,7 +401,7 @@ class boss_magtheridon : public CreatureScript
 
                 if (Blaze_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         float x, y, z;
                         target->GetPosition(x, y, z);
@@ -435,7 +435,7 @@ class boss_magtheridon : public CreatureScript
                 {
                     if (Debris_Timer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             float x, y, z;
                             target->GetPosition(x, y, z);
@@ -552,7 +552,7 @@ class mob_hellfire_channeler : public CreatureScript
 
                 if (Fear_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         DoCast(target, SPELL_FEAR);
                     Fear_Timer = urand(25000, 40000);
                 }
@@ -561,7 +561,7 @@ class mob_hellfire_channeler : public CreatureScript
 
                 if (Infernal_Timer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_BURNING_ABYSSAL, true);
                     Infernal_Timer = urand(30000, 40000);
                 }

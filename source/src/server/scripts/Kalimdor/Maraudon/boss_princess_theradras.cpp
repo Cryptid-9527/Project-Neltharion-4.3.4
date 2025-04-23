@@ -85,7 +85,7 @@ public:
             //BoulderTimer
             if (BoulderTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_BOULDER);
                 BoulderTimer = 10000;
             }

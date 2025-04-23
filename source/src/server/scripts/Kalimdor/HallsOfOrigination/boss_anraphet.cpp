@@ -151,7 +151,7 @@ struct boss_anraphet : public BossAI
         instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_CRUMBLING_RUIN);
         if (instance->GetData(DATA_DEAD_ELEMENTALS) == 4)
         {
-            if (GameObject* door = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_ANRAPHET_DOOR)))
+            if (auto door = ObjectAccessor::GetGameObject(*me, instance->GetData64(DATA_ANRAPHET_DOOR)))
                 door->SetGoState(GO_STATE_ACTIVE);
 
             // Set to combat automatically, Brann's event won't repeat
@@ -188,7 +188,7 @@ struct boss_anraphet : public BossAI
         me->DeleteThreatList();
         instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
         instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_CRUMBLING_RUIN);
-        if (Creature* brann = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BRANN_0_GUID)))
+        if (auto brann = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BRANN_0_GUID)))
             brann->AI()->DoAction(ACTION_ANRAPHET_DIED);
         instance->SetBossState(DATA_ANRAPHET, DONE);
         _JustDied();
@@ -416,7 +416,7 @@ class npc_brann_bronzebeard_anraphet : public CreatureScript
                         if (dead == 4)
                         {
                             _instance->DoCastSpellOnPlayers(SPELL_VAULT_OF_LIGHTS_CREDIT);
-                            if (Creature* anraphet = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ANRAPHET_GUID)))
+                            if (auto anraphet = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ANRAPHET_GUID)))
                                 anraphet->AI()->DoAction(ACTION_ANRAPHET_INTRO);
                         }
                         break;
@@ -583,7 +583,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/)
         {
-            if (Creature* anraphet = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ANRAPHET_GUID)))
+            if (auto anraphet = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ANRAPHET_GUID)))
                 anraphet->AI()->JustSummoned(me);
         }
 
@@ -862,7 +862,7 @@ struct npc_water_warden_water_bubble : public Scripted_NoMovementAI
     {
         if (TempSummon* meTmp = me->ToTempSummon())
         {
-            if (Unit* summoner = meTmp->GetSummoner())
+            if (auto summoner = meTmp->GetSummoner())
             {
                 summoner->RemoveAurasDueToSpell(SPELL_BUBBLE_BOUND);
                 summoner->RemoveAurasDueToSpell(SPELL_BUBBLE_BOUND_H);
@@ -1036,15 +1036,15 @@ class spell_hoo_destruction_protocol : public SpellScript
 
     void HandleDamage(SpellEffIndex /*effIndex*/)
     {
-        if (Unit* target = GetHitUnit())
+        if (auto target = GetHitUnit())
         {
-            if (InstanceScript* script = GetCaster()->GetInstanceScript())
+            if (auto script = GetCaster()->GetInstanceScript())
             {
                 float damageMultiplier = sChallengeModeMgr->GetDamageMultiplier(script->GetChallengeModeLevel());
                 SetHitDamage(target->CountPctFromMaxHealth(GetHitDamage()) / damageMultiplier);
             }
 
-            if (Creature* c = target->ToCreature())
+            if (auto c = target->ToCreature())
                 if (c->GetEntry() == NPC_VAULT_TROGG_BRUTE || c->GetEntry() == NPC_VAULT_TROGG_ROCKFLINGER || c->GetEntry() == NPC_VAULT_TROGG_PILLAGER)
                 {
                     //c->SetRespawnTime(2147000000);
@@ -1154,7 +1154,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 for (std::list<WorldObject*>::const_iterator itr = unitList.begin(); itr != unitList.end();)
                 {

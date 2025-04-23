@@ -88,7 +88,7 @@ class instance_blackwing_descent : public InstanceMapScript
                     creature->SetDisableGravity(true);
                     break;
                 case NPC_DRAKONID_DRUDGE:
-                    if (Creature* magmaw = this->instance->GetCreature(magmawGUID))
+                    if (auto magmaw = this->instance->GetCreature(magmawGUID))
                     {
                         if (drakonidCnt < 2)
                         {
@@ -185,7 +185,7 @@ class instance_blackwing_descent : public InstanceMapScript
                         ++drakonidCnt;
                         if (drakonidCnt >= 2)
                         {
-                            if (Creature* magmaw = instance->GetCreature(magmawGUID))
+                            if (auto magmaw = instance->GetCreature(magmawGUID))
                             {
                                 magmaw->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                                 magmaw->SetReactState(REACT_AGGRESSIVE);
@@ -193,7 +193,7 @@ class instance_blackwing_descent : public InstanceMapScript
                         }
                         break;
                     case DATA_ATRAMEDES_INTRO:
-                        if (GameObject* go = instance->GetGameObject(bellGUID))
+                        if (auto go = instance->GetGameObject(bellGUID))
                             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
                         break;
                     case DATA_ATRAMEDES_SUMMON:
@@ -202,7 +202,7 @@ class instance_blackwing_descent : public InstanceMapScript
                         break;
                     case DATA_NEFARIAN_ELEVATOR:
                     {
-                        if (GameObject* go = instance->GetGameObject(nefarian_elevatorGUID))
+                        if (auto go = instance->GetGameObject(nefarian_elevatorGUID))
                             go->SetGoState((GOState)data);
                         break;
                     }
@@ -252,14 +252,14 @@ class instance_blackwing_descent : public InstanceMapScript
                     case DATA_MAGMAW:
                     case DATA_OMNOTRON_DEFENSE_SYSTEM:
                         if (IsDone(DATA_MAGMAW) && IsDone(DATA_OMNOTRON_DEFENSE_SYSTEM))
-                            if (GameObject* door = instance->GetGameObject(wingDoorGUID))
+                            if (auto door = instance->GetGameObject(wingDoorGUID))
                                 if (door->GetGoState() != GO_STATE_ACTIVE)
                                 door->SetGoState(GO_STATE_ACTIVE);
                         break;
                     case DATA_CHIMAERON:
                     case DATA_MALORIAK:
                         if (IsDone(DATA_CHIMAERON) && IsDone(DATA_MALORIAK))
-                            if (GameObject* door = instance->GetGameObject(atramedes_door_GUID))
+                            if (auto door = instance->GetGameObject(atramedes_door_GUID))
                                 door->SetGoState(GO_STATE_ACTIVE);
                         break;
                     default:

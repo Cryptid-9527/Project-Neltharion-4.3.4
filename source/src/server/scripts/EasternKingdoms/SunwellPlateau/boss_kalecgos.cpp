@@ -147,7 +147,7 @@ public:
                 instance->SetData(DATA_KALECGOS_EVENT, NOT_STARTED);
             }
 
-            if (Creature* Sath = Unit::GetCreature(*me, SathGUID))
+            if (auto Sath = Unit::GetCreature(*me, SathGUID))
                 Sath->AI()->EnterEvadeMode();
 
             me->setFaction(14);
@@ -246,13 +246,13 @@ public:
                     }
                     if (HealthBelowPct(10) && !isEnraged && !me->IsNonMeleeSpellCasted(false))
                     {
-                        if (Creature* Sath = Unit::GetCreature(*me, SathGUID))
+                        if (auto Sath = Unit::GetCreature(*me, SathGUID))
                             Sath->AI()->DoAction(DO_ENRAGE);
                         DoAction(DO_ENRAGE);
                     }
                     if (!isBanished && HealthBelowPct(5))
                     {
-                        if (Creature* Sath = Unit::GetCreature(*me, SathGUID))
+                        if (auto Sath = Unit::GetCreature(*me, SathGUID))
                         {
                             if (Sath->HasAura(SPELL_BANISH))
                             {
@@ -602,7 +602,7 @@ public:
             }
             if (KalecGUID)
             {
-                if (Creature* Kalec = Unit::GetCreature(*me, KalecGUID))
+                if (auto Kalec = Unit::GetCreature(*me, KalecGUID))
                     Kalec->setDeathState(JUST_DIED);
                 KalecGUID = 0;
             }
@@ -621,7 +621,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            if (Creature* Kalec = me->SummonCreature(MOB_KALEC, me->GetPositionX() + 10, me->GetPositionY() + 5, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0))
+            if (auto Kalec = me->SummonCreature(MOB_KALEC, me->GetPositionX() + 10, me->GetPositionY() + 5, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0))
             {
                 KalecGUID = Kalec->GetGUID();
                 me->CombatStart(Kalec);
@@ -642,7 +642,7 @@ public:
             if (target->GetGUID() == KalecGUID)
             {
                 TeleportAllPlayersBack();
-                if (Creature* Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
+                if (auto Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
                 {
                     CAST_AI(boss_kalecgos::boss_kalecgosAI, Kalecgos->AI())->TalkTimer = 1;
                     CAST_AI(boss_kalecgos::boss_kalecgosAI, Kalecgos->AI())->isFriendly = false;
@@ -658,7 +658,7 @@ public:
             Talk(SAY_SATH_DEATH);
             me->SetPosition(me->GetPositionX(), me->GetPositionY(), DRAGON_REALM_Z, me->GetOrientation());
             TeleportAllPlayersBack();
-            if (Creature* Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
+            if (auto Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
             {
                 CAST_AI(boss_kalecgos::boss_kalecgosAI, Kalecgos->AI())->TalkTimer = 1;
                 CAST_AI(boss_kalecgos::boss_kalecgosAI, Kalecgos->AI())->isFriendly = true;
@@ -712,13 +712,13 @@ public:
                 Creature* Kalec = Unit::GetCreature(*me, KalecGUID);
                 if (!Kalec || (Kalec && !Kalec->isAlive()))
                 {
-                    if (Creature* Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
+                    if (auto Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
                         Kalecgos->AI()->EnterEvadeMode();
                         return;
                 }
                 if (HealthBelowPct(10) && !isEnraged)
                 {
-                    if (Creature* Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
+                    if (auto Kalecgos = Unit::GetCreature(*me, KalecgosGUID))
                         Kalecgos->AI()->DoAction(DO_ENRAGE);
                     DoAction(DO_ENRAGE);
                 }
@@ -757,7 +757,7 @@ public:
             {
                 for (std::list<HostileReference*>::const_iterator itr = me->getThreatManager().getThreatList().begin(); itr != me->getThreatManager().getThreatList().end(); ++itr)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         if (unit->GetPositionZ() > me->GetPositionZ()+5)
                         {
@@ -831,7 +831,7 @@ public:
                         }
                     }
                     if (!targets.empty())
-                        if (Unit* newTarget = Trinity::Containers::SelectRandomContainerElement(targets))
+                        if (auto newTarget = Trinity::Containers::SelectRandomContainerElement(targets))
                             caster->AddAura(SPELL_AGONY_CURSE, newTarget);
                 }
         }

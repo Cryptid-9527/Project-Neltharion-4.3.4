@@ -63,7 +63,7 @@ class boss_gatewatcher_gyrokill : public CreatureScript
             {
                 _JustDied();
                 Talk(SAY_DEATH);
-                if (GameObject* cache = me->FindNearestGameObject(GO_CACHE_OF_THE_LEGION, 200.0f))
+                if (auto cache = me->FindNearestGameObject(GO_CACHE_OF_THE_LEGION, 200.0f))
                     cache->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
             }
 

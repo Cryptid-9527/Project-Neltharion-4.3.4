@@ -194,8 +194,8 @@ class spell_heigan_eruption : public SpellScriptLoader
                     return;
 
                 if (GetHitDamage() >= int32(GetHitPlayer()->GetHealth()))
-                    if (InstanceScript* instance = caster->GetInstanceScript())
-                        if (Creature* Heigan = ObjectAccessor::GetCreature(*caster, instance->GetData64(DATA_HEIGAN)))
+                    if (auto instance = caster->GetInstanceScript())
+                        if (auto Heigan = ObjectAccessor::GetCreature(*caster, instance->GetData64(DATA_HEIGAN)))
                             Heigan->AI()->SetData(DATA_SAFETY_DANCE, 0);
             }
 
@@ -223,7 +223,7 @@ class achievement_safety_dance : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Heigan = target->ToCreature())
+            if (auto Heigan = target->ToCreature())
                 if (Heigan->AI()->GetData(DATA_SAFETY_DANCE))
                     return true;
 

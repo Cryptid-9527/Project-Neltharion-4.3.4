@@ -581,7 +581,7 @@ public:
 
         void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
                 target->CastSpell(target, 23426, true);
         }
 

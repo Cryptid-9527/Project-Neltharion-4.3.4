@@ -176,7 +176,7 @@ class instance_culling_of_stratholme : public InstanceMapScript
                                 break;
                             case DONE:
                                 HandleGameObject(_exitGateGUID, true);
-                                if (GameObject* go = instance->GetGameObject(_malGanisChestGUID))
+                                if (auto go = instance->GetGameObject(_malGanisChestGUID))
                                     go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
                                 break;
                         }
@@ -193,7 +193,7 @@ class instance_culling_of_stratholme : public InstanceMapScript
                             }
                             case IN_PROGRESS: //make visible
                             {
-                                if (Creature* pCreature = instance->GetCreature(_infiniteGUID))
+                                if (auto pCreature = instance->GetCreature(_infiniteGUID))
                                 {
                                     pCreature->AI()->Talk(2); // SAY_FAIL
                                     pCreature->SetVisible(true);
@@ -214,13 +214,13 @@ class instance_culling_of_stratholme : public InstanceMapScript
                         _crateCount = data;
                         if (_crateCount == 5)
                         {
-                            if (Creature* bunny = instance->GetCreature(_genericBunnyGUID))
+                            if (auto bunny = instance->GetCreature(_genericBunnyGUID))
                                 bunny->CastSpell(bunny, SPELL_CRATES_CREDIT, true);
 
                             // Summon Chromie and global whisper
-                            if (Creature* chromie = instance->SummonCreature(NPC_CHROMIE_2, ChromieSummonPos))
+                            if (auto chromie = instance->SummonCreature(NPC_CHROMIE_2, ChromieSummonPos))
                                 if (!instance->GetPlayers().isEmpty())
-                                    if (Player* player = instance->GetPlayers().getFirst()->getSource())
+                                    if (auto player = instance->GetPlayers().getFirst()->getSource())
                                         sCreatureTextMgr->SendChat(chromie, SAY_CRATES_COMPLETED, player->GetGUID(), CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_MAP);
                         }
                         DoUpdateWorldState(WORLDSTATE_CRATES_REVEALED, _crateCount);
@@ -340,7 +340,7 @@ class instance_culling_of_stratholme : public InstanceMapScript
                                 DoUpdateWorldState(WORLDSTATE_TIME_GUARDIAN, uiCountdownMinute);
                             else
                             {
-                                if (Creature* pCreature = instance->GetCreature(_infiniteGUID))
+                                if (auto pCreature = instance->GetCreature(_infiniteGUID))
                                 {
                                     pCreature->SetVisible(false);
                                     pCreature->SetReactState(REACT_PASSIVE);

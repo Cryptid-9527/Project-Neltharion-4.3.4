@@ -414,9 +414,9 @@ void BattlegroundBFG::_NodeOccupied(uint8 node, Team team)
                 );
                 SetEmoteAndWeapon(team, i, newcreature);
             }
-    if (Creature* mover = GetBGCreature(BG_BFG_NPC_LH_17))
+    if (auto mover = GetBGCreature(BG_BFG_NPC_LH_17))
         mover->GetMotionMaster()->MovePath(30724000, true);
-    if (Creature* mover = GetBGCreature(BG_BFG_NPC_LH_18))
+    if (auto mover = GetBGCreature(BG_BFG_NPC_LH_18))
         mover->GetMotionMaster()->MovePath(30724100, true);
 
     if (node == BG_BFG_NODE_MINE) //eventually, you will want to do a switch for this to work for every base.
@@ -433,11 +433,11 @@ void BattlegroundBFG::_NodeOccupied(uint8 node, Team team)
                 );
                 SetEmoteAndWeapon(team, i, newcreature);
             }
-    if (Creature* mover = GetBGCreature(BG_BFG_NPC_MINE_12))
+    if (auto mover = GetBGCreature(BG_BFG_NPC_MINE_12))
         mover->GetMotionMaster()->MovePath(30726900, true);
-    if (Creature* mover = GetBGCreature(BG_BFG_NPC_MINE_13))
+    if (auto mover = GetBGCreature(BG_BFG_NPC_MINE_13))
         mover->GetMotionMaster()->MovePath(30727000, true);
-    if (Creature* mover = GetBGCreature(BG_BFG_NPC_MINE_20))
+    if (auto mover = GetBGCreature(BG_BFG_NPC_MINE_20))
         mover->GetMotionMaster()->MovePath(30727700, true);
 
     if (node == BG_BFG_NODE_WATERWORKS) //eventually, you will want to do a switch for this to work for every base.

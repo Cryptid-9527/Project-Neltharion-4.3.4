@@ -563,7 +563,7 @@ void Object::DestroyForPlayer(Player* target, bool onDeath) const
 
     if (isType(TYPEMASK_UNIT) || isType(TYPEMASK_PLAYER))
     {
-        if (Battleground* bg = target->GetBattleground())
+        if (auto bg = target->GetBattleground())
         {
             if (bg->isArena())
             {
@@ -2727,7 +2727,7 @@ bool WorldObject::canSeeOrDetect(WorldObject const* obj, bool ignoreStealth, boo
 
     // Forbid seeing enemies before arena starts
     if (Player const* player = ToPlayer())
-        if (Battleground* bg = player->GetBattleground())
+        if (auto bg = player->GetBattleground())
             if (bg->isArena() && bg->GetStatus() == STATUS_WAIT_JOIN && obj->ToUnit() && !player->IsFriendlyTo(obj->ToUnit()))
             {
                 return false;
@@ -2804,7 +2804,7 @@ bool WorldObject::CanDetect(WorldObject const* obj, bool ignoreStealth) const
     if (Unit const* thisUnit = ToUnit())
         if(thisUnit->GetTypeId() == TYPEID_UNIT)
             if (thisUnit->GetEntry() != 45322 && thisUnit->GetEntry() != 44214)
-                if (Unit* controller = thisUnit->GetCharmerOrOwner())
+                if (auto controller = thisUnit->GetCharmerOrOwner())
                     seer = controller;
 
     if (obj->IsAlwaysDetectableFor(seer))
@@ -2884,7 +2884,7 @@ bool WorldObject::CanDetectStealthOf(WorldObject const* obj) const
         // Apply modifiers
         detectionValue += m_stealthDetect.GetValue(StealthType(i));
         if (obj->isType(TYPEMASK_GAMEOBJECT))
-            if (Unit* owner = ((GameObject*)obj)->GetOwner())
+            if (auto owner = ((GameObject*)obj)->GetOwner())
                 detectionValue -= int32(owner->getLevelForTarget(this) - 1) * 5;
 
         detectionValue -= obj->m_stealth.GetValue(StealthType(i));
@@ -4247,7 +4247,7 @@ void WorldObject::DestroyForNearbyPlayers()
     VisitNearbyWorldObject(GetVisibilityRange(), searcher);
     if (targets.size())
     for (auto iter = targets.begin(); iter != targets.end(); ++iter)
-    if (Player* player = (*iter))
+    if (auto player = (*iter))
     {
 
         if (player == this)
@@ -4329,7 +4329,7 @@ struct WorldObjectChangeAccumulator
             if (IS_PLAYER_GUID(guid))
             {
                 //Caster may be NULL if DynObj is in removelist
-                if (Player* caster = ObjectAccessor::FindPlayer(guid))
+                if (auto caster = ObjectAccessor::FindPlayer(guid))
                     if (caster->GetUInt64Value(PLAYER_FARSIGHT) == source->GetGUID())
                         BuildPacket(caster);
             }

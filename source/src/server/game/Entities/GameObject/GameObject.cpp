@@ -115,7 +115,7 @@ void GameObject::RemoveFromOwner()
     if (!ownerGUID)
         return;
 
-    if (Unit* owner = ObjectAccessor::GetUnit(*this, ownerGUID))
+    if (auto owner = ObjectAccessor::GetUnit(*this, ownerGUID))
     {
         owner->RemoveGameObject(this, false);
         ASSERT(!GetOwnerGUID());
@@ -384,7 +384,7 @@ void GameObject::Update(uint32 diff)
                     // Bombs
                     if (goInfo->trap.type == 2)
                         m_cooldownTime = getMSTime() + 10000;   // Hardcoded tooltip value
-                    else if (Unit* owner = GetOwner())
+                    else if (auto owner = GetOwner())
                         m_cooldownTime = getMSTime() + goInfo->trap.startDelay * IN_MILLISECONDS;
                     m_lootState = GO_READY;
                     break;
@@ -623,7 +623,7 @@ void GameObject::Update(uint32 diff)
                         {
                             //Battleground gameobjects case
                             if (ok->ToPlayer()->InBattleground())
-                                if (Battleground* bg = ok->ToPlayer()->GetBattleground())
+                                if (auto bg = ok->ToPlayer()->GetBattleground())
                                     bg->HandleTriggerBuff(GetGUID());
                         }
 
@@ -695,7 +695,7 @@ void GameObject::Update(uint32 diff)
                 {
                     for (std::set<uint64>::const_iterator it = m_unique_users.begin(); it != m_unique_users.end(); ++it)
                         // m_unique_users can contain only player GUIDs
-                        if (Player* owner = ObjectAccessor::GetPlayer(*this, *it))
+                        if (auto owner = ObjectAccessor::GetPlayer(*this, *it))
                             owner->CastSpell(owner, spellId, false);
 
                     m_unique_users.clear();
@@ -1154,7 +1154,7 @@ bool GameObject::ActivateToQuest(Player* target) const
                 //TODO: fix this hack
                 //look for battlegroundAV for some objects which are only activated after mine gots captured by own team
                 if (GetEntry() == BG_AV_OBJECTID_MINE_N || GetEntry() == BG_AV_OBJECTID_MINE_S)
-                    if (Battleground* bg = target->GetBattleground())
+                    if (auto bg = target->GetBattleground())
                         if (bg->GetTypeID(true) == BATTLEGROUND_AV && !(((BattlegroundAV*)bg)->PlayerCanDoMineQuest(GetEntry(), target->GetTeam())))
                             return false;
                 return true;
@@ -1293,7 +1293,7 @@ void GameObject::Use(Unit* user)
     uint32 spellId = 0;
     bool triggered = false;
 
-    if (Player* playerUser = user->ToPlayer())
+    if (auto playerUser = user->ToPlayer())
     {
         if (playerUser->IsSpectator())
             return;
@@ -1390,7 +1390,7 @@ void GameObject::Use(Unit* user)
 
                 if (itr->second)
                 {
-                    if (Player* ChairUser = ObjectAccessor::FindPlayer(itr->second))
+                    if (auto ChairUser = ObjectAccessor::FindPlayer(itr->second))
                     {
                         if (ChairUser->IsSitState() && ChairUser->getStandState() != UNIT_STAND_STATE_SIT && ChairUser->GetExactDist2d(x_i, y_i) < 0.1f)
                             continue;        // This seat is already occupied by ChairUser. NOTE: Not sure if the ChairUser->getStandState() != UNIT_STAND_STATE_SIT check is required.
@@ -1443,7 +1443,7 @@ void GameObject::Use(Unit* user)
         {
             GameObjectTemplate const* info = GetGOInfo();
 
-            if (Player* player = user->ToPlayer())
+            if (auto player = user->ToPlayer())
             {
                 if (info->goober.pageId)                    // show page...
                 {
@@ -1472,7 +1472,7 @@ void GameObject::Use(Unit* user)
                         break;
                 }
 
-                if (Battleground* bg = player->GetBattleground())
+                if (auto bg = player->GetBattleground())
                     bg->EventPlayerUsedGO(player, this);
 
                 player->CastedCreatureOrGO(info->entry, GetGUID(), 0);
@@ -1671,7 +1671,7 @@ void GameObject::Use(Unit* user)
                 if (info->summoningRitual.casterTargetSpell && info->summoningRitual.casterTargetSpell != 1) // No idea why this field is a bool in some cases
                     for (uint32 i = 0; i < info->summoningRitual.casterTargetSpellTargets; i++)
                         // m_unique_users can contain only player GUIDs
-                        if (Player* target = ObjectAccessor::GetPlayer(*this, Trinity::Containers::SelectRandomContainerElement(m_unique_users)))
+                        if (auto target = ObjectAccessor::GetPlayer(*this, Trinity::Containers::SelectRandomContainerElement(m_unique_users)))
                             spellCaster->CastSpell(target, info->summoningRitual.casterTargetSpell, true);
 
                 // finish owners spell
@@ -1936,7 +1936,7 @@ void GameObject::CastSpell(Unit* target, uint32 spellId)
 
     trigger->SetGoType(GetGoType());
 
-    if (Unit* owner = GetOwner())
+    if (auto owner = GetOwner())
     {
         if (owner->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE))
             trigger->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
@@ -2158,7 +2158,7 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             EventInform(m_goInfo->building.damagedEvent);
             sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
             if (eventInvoker)
-                if (Battleground* bg = eventInvoker->GetBattleground())
+                if (auto bg = eventInvoker->GetBattleground())
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.damagedEvent);
 
             RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
@@ -2187,7 +2187,7 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             EventInform(m_goInfo->building.destroyedEvent);
             if (eventInvoker)
             {
-                if (Battleground* bg = eventInvoker->GetBattleground())
+                if (auto bg = eventInvoker->GetBattleground())
                 {
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.destroyedEvent);
                     bg->DestroyGate(eventInvoker, this);

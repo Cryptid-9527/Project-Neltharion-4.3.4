@@ -88,7 +88,7 @@ public:
         npc_frost_tombAI(Creature* creature) : ScriptedAI(creature)
         {
             if (me->isSummon())
-                if (Unit* summon = me->ToTempSummon()->GetSummoner())
+                if (auto summon = me->ToTempSummon()->GetSummoner())
                     DoCast(summon, SPELL_FROST_TOMB, true);
 
             instance = creature->GetInstanceScript();
@@ -99,7 +99,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (instance)
-                if (Unit* boss = me->GetUnit(*me, instance->GetData64(DATA_PRINCEKELESETH)))
+                if (auto boss = me->GetUnit(*me, instance->GetData64(DATA_PRINCEKELESETH)))
                     if (boss->ToCreature() && boss->ToCreature()->AI())
                         boss->ToCreature()->AI()->SetData(DATA_ON_THE_ROCKS, false);
         }
@@ -216,7 +216,7 @@ public:
                     events.ScheduleEvent(EVENT_SHADOWBOLT, urand(2, 3)*IN_MILLISECONDS);
                     break;
                 case EVENT_FROST_TOMB:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true, -SPELL_FROST_TOMB))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true, -SPELL_FROST_TOMB))
                     {
                         Talk(SAY_FROST_TOMB);
                         Talk(SAY_FROST_TOMB_EMOTE, target->GetGUID());
@@ -317,7 +317,7 @@ public:
                         DoCast(me, SPELL_SHADOW_FISSURE, true);
                         if (TempSummon* temp = me->ToTempSummon())
                         {
-                            if (Unit* summoner = temp->GetSummoner())
+                            if (auto summoner = temp->GetSummoner())
                             {
                                 DoCast(summoner, SPELL_BONE_ARMOR);
                             }
@@ -350,7 +350,7 @@ class spell_frost_tomb : public SpellScriptLoader
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 if (GetTargetApplication()->GetRemoveMode() != AURA_REMOVE_BY_DEATH)
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                         if (caster->ToCreature() && caster->isAlive())
                             caster->ToCreature()->DespawnOrUnsummon(1000);
             }

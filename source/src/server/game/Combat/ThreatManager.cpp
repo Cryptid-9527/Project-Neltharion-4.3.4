@@ -48,7 +48,7 @@ float ThreatCalcHelper::calcThreat(Unit* hatedUnit, Unit* /*hatingUnit*/, float 
             if (threatSpell->Effects[i].Effect == SPELL_EFFECT_ENERGIZE || threatSpell->Effects[i].ApplyAuraName == SPELL_AURA_PERIODIC_ENERGIZE)
                 return threat;
 
-        if (Player* modOwner = hatedUnit->GetSpellModOwner())
+        if (auto modOwner = hatedUnit->GetSpellModOwner())
             modOwner->ApplySpellMod(threatSpell->Id, SPELLMOD_THREAT, threat);
     }
 
@@ -171,7 +171,7 @@ void HostileReference::updateOnlineStatus()
     bool accessible = false;
 
     if (!isValid())
-        if (Unit* target = ObjectAccessor::GetUnit(*getSourceUnit(), getUnitGuid()))
+        if (auto target = ObjectAccessor::GetUnit(*getSourceUnit(), getUnitGuid()))
             link(target, getSource());
 
     // only check for online status if

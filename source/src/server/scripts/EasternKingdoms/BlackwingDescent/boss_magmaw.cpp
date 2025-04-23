@@ -219,14 +219,14 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             SetPincers(false);
-            if (Unit* head = vehicle->GetPassenger(SEAT_HEAD))
+            if (auto head = vehicle->GetPassenger(SEAT_HEAD))
             {
                 head->ToCreature()->AI()->EnterEvadeMode();
                 head->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                 me->CastSpell(head, SPELL_POINT_OF_VULNERABILITY, true);
             }
             if (IsHeroic())
-                if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+                if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                     nefarian->DespawnOrUnsummon();
 
             if (!instance->IsDone(DATA_MAGMAW))
@@ -325,25 +325,25 @@ public:
                 init.SetFacing(me->GetHomePosition().GetOrientation());
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                if (Unit* passenger = vehicle->GetPassenger(SEAT_MANGLE)) // Eject the tank
+                if (auto passenger = vehicle->GetPassenger(SEAT_MANGLE)) // Eject the tank
                 {
                     passenger->RemoveAurasDueToSpell(RAID_MODE(89773, 91912, 94616, 94617));
                     passenger->RemoveAurasDueToSpell(SPELL_MANGLE_PERIODIC);
                     passenger->ExitVehicle(&ejectPos);
                 }
 
-                if (Unit* head = vehicle->GetPassenger(SEAT_HEAD)) // Make the head Visible
+                if (auto head = vehicle->GetPassenger(SEAT_HEAD)) // Make the head Visible
                 {
                     head->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                     if (!head->isInCombat())
-                        if (Unit* victim = me->getVictim())
+                        if (auto victim = me->getVictim())
                             head->SetInCombatWith(victim);
                     me->CastSpell(head, SPELL_POINT_OF_VULNERABILITY, true);
                     head->CastSpell(head, SPELL_POINT_OF_VULNERABILITY2, true);
                     head->SetHealth(me->GetHealth());
                 }
 
-                if (Unit* stalker = me->FindNearestCreature(NPC_SPIKE_STALKER, 100.0f)) // Cast Arrow Visual
+                if (auto stalker = me->FindNearestCreature(NPC_SPIKE_STALKER, 100.0f)) // Cast Arrow Visual
                     me->CastSpell(stalker, SPELL_LOCATION_MARKER, true);
 
                 DoCast(SPELL_IMPALE_SELF);
@@ -388,7 +388,7 @@ public:
 
             if (auto v = me->GetVehicleKit())
             {
-                if (Unit* head = v->GetPassenger(SEAT_HEAD))
+                if (auto head = v->GetPassenger(SEAT_HEAD))
                     if (auto head_cr = head->ToCreature())
                         head_cr->SetVisible(false);
 
@@ -471,7 +471,7 @@ public:
                 }
                 else if (pincer)
                 {
-                    if (Unit* passenger = pincer->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = pincer->GetVehicleKit()->GetPassenger(0))
                     {
                         passenger->ExitVehicle(&ejectPos);
                     }
@@ -488,7 +488,7 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                     {
                         if (player->CreateVehicleKit(497, 0))
                         {
@@ -578,7 +578,7 @@ public:
                         events.RescheduleEvent(EVENT_MAGMA_SPIT, urand(8000, 10000));
                         events.RescheduleEvent(EVENT_PILLAR_OF_FLAME, urand(8000, 12000));
                         events.RescheduleEvent(EVENT_MANGLE, urand(25000, 30000));
-                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO))
+                        if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO))
                             me->AI()->AttackStart(target);
                     case EVENT_MASSIVE_CRASH_END:
                         for (uint8 i = 0; i <= 1; ++i)
@@ -602,8 +602,8 @@ public:
                         SetPincers(false);
                         break;
                     case EVENT_BLAZING_INFERNO:
-                        if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                        if (auto nefarian = me->GetCreature(*me, nefarianGUID))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                                 nefarian->CastSpell(target, SPELL_BLAZING_INFERNO, true);
                         events.ScheduleEvent(EVENT_BLAZING_INFERNO, urand(20000, 25000));
                         break;
@@ -611,9 +611,9 @@ public:
                         DoCast(SPELL_BERSERK);
                         break;
                     case EVENT_SHADOWFLAME_BARRAGE:
-                        if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+                        if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                                 nefarian->CastSpell(target, SPELL_SHADOW_BREATH, true);
                             nefarian->CastSpell(nefarian, SPELL_SHADOW_BREATH_DUMMY, false);
                             events.ScheduleEvent(EVENT_SHADOWFLAME_BARRAGE, 1000);
@@ -683,7 +683,7 @@ public:
                 if (hookCounter == 2)
                 {
                     hookCounter = 0;
-                    if (Creature* magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
+                    if (auto magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
                     {
                         magmaw->AI()->DoAction(DATA_CHAINS);
                         DoCast(magmaw, SPELL_CHAIN_R, true);
@@ -780,7 +780,7 @@ public:
 
     bool operator() (WorldObject* object) const
     {
-        if (Player* player = object->ToPlayer())
+        if (auto player = object->ToPlayer())
             if (Aura const* aur = player->GetAura(AuraId))
                 if (aur->GetStackAmount() <= 3)
                     return true;
@@ -824,14 +824,14 @@ public:
             {
                 summonerGUID = summoner->GetGUID();
                 me->AddAura(SPELL_LAVA_PARASITE_AURA, me);
-                if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM,0, ParasiteSelectorPredicate(RAID_MODE(78941, 91913, 94678, 94679))))
+                if (auto victim = SelectTarget(SELECT_TARGET_RANDOM,0, ParasiteSelectorPredicate(RAID_MODE(78941, 91913, 94678, 94679))))
                 {
                     me->SetInCombatWithZone();
                     me->AddThreat(victim, 5000.0f);
                     me->AI()->AttackStart(victim);
                 }
 
-                if (Creature* magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
+                if (auto magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
                     magmaw->AI()->JustSummoned(me);
             } else me->DespawnOrUnsummon();
         }
@@ -845,7 +845,7 @@ public:
                 me->CombatStop(true);
                 me->RemoveAurasDueToSpell(SPELL_LAVA_PARASITE_AURA);
                 me->DespawnOrUnsummon(10000);
-                if (Creature* magmaw = instance->instance->GetCreature(instance->GetData64(DATA_MAGMAW_GUID)))
+                if (auto magmaw = instance->instance->GetCreature(instance->GetData64(DATA_MAGMAW_GUID)))
                     magmaw->AI()->DoAction(ACTION_FAIL_ACHIEVEMENT);
             }
         }
@@ -911,7 +911,7 @@ public:
 
             if (chargeTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 80.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 80.0f, true))
                 {
                     me->getThreatManager().resetAllAggro();
                     me->TauntApply(target);
@@ -961,7 +961,7 @@ public:
 
     void OnAddPassenger(Vehicle* veh, Unit* /*passenger*/, int8 /*seatId*/)
     {
-        if (Unit* unit = veh->GetBase())
+        if (auto unit = veh->GetBase())
         {
             unit->SetDisplayId(11686);
             unit->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 0.5f);
@@ -981,7 +981,7 @@ class spell_magmaw_parasitic_infection_aura : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* target = GetUnitOwner())
+                if (auto target = GetUnitOwner())
                     target->CastSpell((Unit*)NULL, GetSpellInfo()->Effects[EFFECT_0].TriggerSpell, true);
             }
 
@@ -1013,7 +1013,7 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(GetHitUnit(), SPELL_PARASITIC_INFECTION, true);
         }
 
@@ -1157,7 +1157,7 @@ public:
             }
             me->CastSpell(me, SPELL_IGNITION_DUMMY, true);
             me->CastSpell(me, SPELL_IGNITION_DUMMY_2, true);
-            if (Creature* magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
+            if (auto magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
                 magmaw->AI()->JustSummoned(me);
         }
 
@@ -1168,7 +1168,7 @@ public:
                 summon->CastSpell(summon, SPELL_IGNITION_AURA, true);
                 summon->m_Events.AddEvent(new RandomMoveIgnition(summon), summon->m_Events.CalculateTime(3000));
             }
-            if (Creature* magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
+            if (auto magmaw = Creature::GetCreature(*me, instance->GetData64(DATA_MAGMAW_GUID)))
                 magmaw->AI()->JustSummoned(summon);
         }
 

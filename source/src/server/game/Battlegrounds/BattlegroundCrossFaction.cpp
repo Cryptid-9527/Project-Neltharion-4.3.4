@@ -380,14 +380,14 @@ bool Player::SendBattleGroundChat(uint32 msgtype, std::string message)
     // Select distance to broadcast to.
     float distance = msgtype == CHAT_MSG_SAY ? sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY) : sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_YELL);
 
-    if (Battleground* pBattleGround = GetBattleground())
+    if (auto pBattleGround = GetBattleground())
     {
         if (pBattleGround->isArena()) // Only fake chat in BG's. CFBG should not interfere with arenas.
             return false;
 
         for (Battleground::BattlegroundPlayerMap::const_iterator itr = pBattleGround->GetPlayers().begin(); itr != pBattleGround->GetPlayers().end(); ++itr)
         {
-            if (Player* pPlayer = ObjectAccessor::FindPlayer(itr->first))
+            if (auto pPlayer = ObjectAccessor::FindPlayer(itr->first))
             {
                 {
                     if (GetDistance2d(pPlayer->GetPositionX(), pPlayer->GetPositionY()) <= distance)
@@ -837,7 +837,7 @@ void Player::DoForgetPlayersInList()
         WorldPacket data(SMSG_INVALIDATE_PLAYER, 8);
         data << *itr;
         GetSession()->SendPacket(&data);
-        if (Player* pPlayer = ObjectAccessor::FindPlayer(*itr))
+        if (auto pPlayer = ObjectAccessor::FindPlayer(*itr))
             GetSession()->SendNameQueryOpcode(pPlayer->GetGUID());
     }
     m_FakePlayers.clear();
@@ -852,7 +852,7 @@ void Player::DoForgetPlayersInBG(Battleground* pBattleGround)
         data1 << itr->first;
         GetSession()->SendPacket(&data1);
 
-        if (Player* pPlayer = ObjectAccessor::FindPlayer(itr->first))
+        if (auto pPlayer = ObjectAccessor::FindPlayer(itr->first))
         {
             GetSession()->SendNameQueryOpcode(pPlayer->GetGUID()); // Send namequery answer instantly if player is available
             // Here we invalidate the player added to players in the bg

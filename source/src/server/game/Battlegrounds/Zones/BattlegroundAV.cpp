@@ -495,7 +495,7 @@ Creature* BattlegroundAV::AddAVCreature(uint16 cinfoid, uint16 type)
     }
     if (triggerSpawnID && newFaction)
     {
-        if (Creature* trigger = AddCreature(WORLD_TRIGGER,
+        if (auto trigger = AddCreature(WORLD_TRIGGER,
                                             triggerSpawnID,
                                             BG_AV_CreatureInfo[creature->GetEntry()][1],
                                             BG_AV_CreaturePos[triggerSpawnID][0],
@@ -914,7 +914,7 @@ void BattlegroundAV::ChangeMineOwner(uint8 mine, uint32 team, bool initial)
     {
         if (mine == AV_SOUTH_MINE) //i think this gets called all the time
         {
-            if (Creature* creature = GetBGCreature(AV_CPLACE_MINE_S_3))
+            if (auto creature = GetBGCreature(AV_CPLACE_MINE_S_3))
                 YellToAll(creature, LANG_BG_AV_S_MINE_BOSS_CLAIMS, LANG_UNIVERSAL);
         }
     }

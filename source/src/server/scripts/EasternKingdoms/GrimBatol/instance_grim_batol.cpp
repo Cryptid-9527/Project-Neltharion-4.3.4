@@ -95,14 +95,14 @@ public:
                     bool playerVeh = false;
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->isAlive() && player->GetVehicle())
                                     {playerVeh = true; break;}
 
                     if (playerVeh)
                     {
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 player->KilledMonsterCredit(51184);
                     }
                     break;

@@ -301,11 +301,11 @@ void BattlegroundSA::StartShips()
         return;
 
     for (int i = BG_SA_BOAT_ONE; i <= BG_SA_BOAT_TWO; i++)
-        if (GameObject* ship = GetBGObject(i))
+        if (auto ship = GetBGObject(i))
         {
             ship->SetGoState(GOState(GO_STATE_TRANSPORT_SPEC + 1));
             for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
-                if (Player* p = ObjectAccessor::FindPlayer(itr->first))
+                if (auto p = ObjectAccessor::FindPlayer(itr->first))
                     SendTransportUpdate(p);
         }
 
@@ -824,13 +824,13 @@ void BattlegroundSA::OverrideGunFaction()
 
     for (uint8 i = BG_SA_GUN_1; i <= BG_SA_GUN_10; i++)
     {
-        if (Creature* gun = GetBGCreature(i))
+        if (auto gun = GetBGCreature(i))
             gun->setFaction(BG_SA_Factions[Attackers ? TEAM_ALLIANCE : TEAM_HORDE]);
     }
 
     for (uint8 i = BG_SA_DEMOLISHER_1; i <= BG_SA_DEMOLISHER_4; i++)
     {
-        if (Creature* dem = GetBGCreature(i))
+        if (auto dem = GetBGCreature(i))
             dem->setFaction(BG_SA_Factions[Attackers]);
     }
 }
@@ -843,7 +843,7 @@ void BattlegroundSA::DemolisherStartState(bool start)
     // set flags only for the demolishers on the beach, factory ones dont need it
     for (uint8 i = BG_SA_DEMOLISHER_1; i <= BG_SA_DEMOLISHER_4; i++)
     {
-        if (Creature* dem = GetBGCreature(i))
+        if (auto dem = GetBGCreature(i))
         {
             if (start)
                 dem->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -859,7 +859,7 @@ void BattlegroundSA::DestroyGate(Player* player, GameObject* go)
     if (!GateStatus[i])
         return;
 
-    if (GameObject* g = GetBGObject(i))
+    if (auto g = GetBGObject(i))
     {
         if (g->GetGOValue()->Building.Health == 0)
         {
@@ -1046,7 +1046,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
                     BG_SA_NpcSpawnlocs[j][0], BG_SA_NpcSpawnlocs[j][1],
                     BG_SA_NpcSpawnlocs[j][2], BG_SA_NpcSpawnlocs[j][3], 600);
 
-                if (Creature* dem = GetBGCreature(j))
+                if (auto dem = GetBGCreature(j))
                     dem->setFaction(BG_SA_Factions[Attackers]);
             }
 
@@ -1077,7 +1077,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
                     BG_SA_NpcSpawnlocs[j][0], BG_SA_NpcSpawnlocs[j][1],
                     BG_SA_NpcSpawnlocs[j][2], BG_SA_NpcSpawnlocs[j][3], 600);
 
-                if (Creature* dem = GetBGCreature(j))
+                if (auto dem = GetBGCreature(j))
                     dem->setFaction(BG_SA_Factions[Attackers]);
             }
 
@@ -1196,7 +1196,7 @@ void BattlegroundSA::UpdateDemolisherSpawns()
 {
     for (uint8 i = BG_SA_DEMOLISHER_1; i <= BG_SA_DEMOLISHER_8; i++)
         if (BgCreatures[i])
-            if (Creature* Demolisher = GetBGCreature(i))
+            if (auto Demolisher = GetBGCreature(i))
                 if (Demolisher->isDead())
                     if (DemoliserRespawnList.find(i) == DemoliserRespawnList.end())
                         DemoliserRespawnList[i] = getMSTime()+30000;
@@ -1302,7 +1302,7 @@ bool BattlegroundSA::CanInteractWithObject(uint32 objectId)
 
 void BattlegroundSA::UpdateObjectInteractionFlags(uint32 objectId)
 {
-    if (GameObject* go = GetBGObject(objectId))
+    if (auto go = GetBGObject(objectId))
     {
         if (CanInteractWithObject(objectId))
             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);

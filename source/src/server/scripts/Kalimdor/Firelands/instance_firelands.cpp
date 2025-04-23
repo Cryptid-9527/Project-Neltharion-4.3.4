@@ -353,7 +353,7 @@ class instance_firelands : public InstanceMapScript
                     }
                     else if (slaintrash >= 60)
                     {
-                        if (Creature* shannox = controller->SummonCreature(BOSS_SHANNOX, shannoxspawn, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3600000))
+                        if (auto shannox = controller->SummonCreature(BOSS_SHANNOX, shannoxspawn, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3600000))
                             sCreatureTextMgr->SendChat(shannox, 0, 0, CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_MAP);
 
                         HandleGameObject(balorocDoorGUID, true);
@@ -374,16 +374,16 @@ class instance_firelands : public InstanceMapScript
                     case DATA_ALYSRAZOR:
                         if (IsDone(DATA_SHANNOX) && IsDone(DATA_LORD_RHYOLITH) && IsDone(DATA_BETHTILAC) && IsDone(DATA_ALYSRAZOR) && IsDone(DATA_BALOROC))
                         {
-                            if (Creature* orb = instance->GetCreature(magmaOrbGUID))
+                            if (auto orb = instance->GetCreature(magmaOrbGUID))
                             {
                                 orb->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
                                 orb->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             }
 
-                            if (Creature* teleportShannox = instance->GetCreature(shannoxTeleporterGUID))
+                            if (auto teleportShannox = instance->GetCreature(shannoxTeleporterGUID))
                                 teleportShannox->AI()->DoAction(ACTION_ENABLE_TELEPORT);
 
-                            if (Creature* teleportMajor = instance->GetCreature(majordomoTeleporterGUID))
+                            if (auto teleportMajor = instance->GetCreature(majordomoTeleporterGUID))
                                 teleportMajor->AI()->DoAction(ACTION_ENABLE_TELEPORT);
                         }
                         break;
@@ -396,7 +396,7 @@ class instance_firelands : public InstanceMapScript
                         if (state == DONE)
                         {
                             DoRespawnGameObject(cacheOfTheFirelordGUID, 7 * DAY);
-                            if (GameObject* cache = instance->GetGameObject(cacheOfTheFirelordGUID))
+                            if (auto cache = instance->GetGameObject(cacheOfTheFirelordGUID))
                                 cache->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                         }
                         break;

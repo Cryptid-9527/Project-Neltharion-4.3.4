@@ -129,7 +129,7 @@ public:
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             if (!players.isEmpty())
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (player->GetAreaId() == AREA_TOMB_OF_THE_EARTHRAGER)
                             player->GetSession()->SendPacket(data);
         }
@@ -233,7 +233,7 @@ public:
                 Map::PlayerList const& players = me->GetMap()->GetPlayers();
                 if (!players.isEmpty())
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             if (player->GetAreaId() == AREA_TOMB_OF_THE_EARTHRAGER)
                                 if (player->GetVehicle() && player->GetVehicleCreatureBase()->GetEntry() == NPC_CAMEL)
                                     if (AchievementEntry const* camel = sAchievementMgr->GetAchievement(ACHIEVEMENT_STRAW_THAT_BROKE_THE_CAMELS_BACK))
@@ -252,7 +252,7 @@ public:
             instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             _JustReachedHome();
             for (std::list<uint64>::iterator itr = _camels.begin(); itr != _camels.end(); ++itr)
-                if (Creature* camel = ObjectAccessor::GetCreature(*me, *itr))
+                if (auto camel = ObjectAccessor::GetCreature(*me, *itr))
                     camel->Respawn(false);
 
             _camels.clear();
@@ -288,7 +288,7 @@ public:
                         events.ScheduleEvent(EVENT_FLAME_BOLT, 25000, 0, PHASE_NORMAL);
                         break;
                     case EVENT_EARTH_SPIKE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             DoCast(target, SPELL_EARTH_SPIKE_WARN);
                         events.ScheduleEvent(EVENT_EARTH_SPIKE, urand(16000, 21000), 0, PHASE_NORMAL);
                         break;
@@ -298,8 +298,8 @@ public:
                         break;
                     case EVENT_QUICKSAND:
                         // Spell not in DBC, it is not cast either, according to sniffs
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
-                            if (Creature* quicksand = me->SummonCreature(NPC_QUICKSAND, *target))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto quicksand = me->SummonCreature(NPC_QUICKSAND, *target))
                             {
                                 quicksand->SetUInt32Value(UNIT_CREATED_BY_SPELL, SPELL_SUMMON_QUICKSAND);
                                 quicksand->SetReactState(REACT_PASSIVE);
@@ -359,7 +359,7 @@ public:
 
         void SetFlags(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* ptah = GetCaster())
+            if (auto ptah = GetCaster())
             {
                 ptah->SetFlag(UNIT_FIELD_FLAGS, uint32(UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_29 | UNIT_FLAG_UNK_31));
                 ptah->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
@@ -368,7 +368,7 @@ public:
 
         void RemoveFlags(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* ptah = GetCaster())
+            if (auto ptah = GetCaster())
             {
                 ptah->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_29 | UNIT_FLAG_UNK_31);
                 ptah->RemoveFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);

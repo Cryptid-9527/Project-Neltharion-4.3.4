@@ -160,7 +160,7 @@ class boss_halfus : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 200.0f, true))
+                if (auto behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 200.0f, true))
                     behemoth->DespawnOrUnsummon();
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                 _JustDied();
@@ -218,7 +218,7 @@ class boss_halfus : public CreatureScript
                 Talk(SAY_AGGRO);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
                 events.ScheduleEvent(EVENT_BERSERK, 6 * MINUTE * IN_MILLISECONDS);
-                if (Creature* behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 500.0f, true))
+                if (auto behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 500.0f, true))
                     behemoth->SetInCombatWith(who);
 
                 std::list<GameObject*> CageList;
@@ -232,7 +232,7 @@ class boss_halfus : public CreatureScript
                     if (activeDrakes[i] == 0)
                         break;
 
-                    if (Creature* drake = ObjectAccessor::GetCreature(*me, activeDrakes[i]))
+                    if (auto drake = ObjectAccessor::GetCreature(*me, activeDrakes[i]))
                     {                                     
                         me->SummonCreature(GetLockOrNormalDrakeEntry(drake->GetEntry()), drake->GetPositionX(), drake->GetPositionY(), drake->GetPositionZ(), drake->GetOrientation());
                         drake->DespawnOrUnsummon();
@@ -397,9 +397,9 @@ class boss_halfus : public CreatureScript
                     me->AddAura(SPELL_SHADOW_WRAPPED, me);
                 else stormRider->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-                if (Creature* behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
+                if (auto behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
                 {
-                    if (Creature* welp = me->FindNearestCreature(NPC_ORPHANED_WHELP, 100.0f, true))
+                    if (auto welp = me->FindNearestCreature(NPC_ORPHANED_WHELP, 100.0f, true))
                         if (!welp->HasAura(SPELL_UNRESPONSIVE_WHELP))
                             behemoth->AddAura(SPELL_SUPERHEATED_BREATH, behemoth);
 
@@ -526,9 +526,9 @@ class npc_proto_behemoth : public CreatureScript
                     switch(eventId)
                     {
                         case EVENT_FIREBALL:
-                            if (Creature* halfus = Creature::GetCreature(*me, instance->GetData64(NPC_HALFUS_WORMBREAKER))) // innerhit halfu's threat list
+                            if (auto halfus = Creature::GetCreature(*me, instance->GetData64(NPC_HALFUS_WORMBREAKER))) // innerhit halfu's threat list
                             {
-                                if (Unit* target = halfus->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
+                                if (auto target = halfus->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
                                 {
                                     if (!me->HasAura(SPELL_TIME_DILATION))
                                         DoCast(target, SPELL_FIREBALL);
@@ -593,7 +593,7 @@ public:
         {
             if (Activate)
             {
-                if (Creature* Halfus = me->FindNearestCreature(NPC_HALFUS_WORMBREAKER, 500.0f, true))
+                if (auto Halfus = me->FindNearestCreature(NPC_HALFUS_WORMBREAKER, 500.0f, true))
                 {
                     Talk(SAY_DRAGON);
                     switch (me->GetEntry())
@@ -611,7 +611,7 @@ public:
                         DoCast(Halfus, SPELL_CYCLONE_WINDS, true);
                         break;
                     case NPC_TIME_RIDER:
-                        if (Creature* behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
+                        if (auto behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
                             DoCast(behemoth, SPELL_TIME_DILATION, true);
                         break;
                     }
@@ -697,8 +697,8 @@ public:
         {
             if (spellInfo->Id == SPELL_FREE_DRAGON)
             {
-                if (Creature* halfus = Creature::GetCreature(*me, instance->GetData64(NPC_HALFUS_WORMBREAKER)))
-                    if (Creature* drake = halfus->SummonCreature(GetLockOrNormalDrakeEntry(me->GetEntry()), me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
+                if (auto halfus = Creature::GetCreature(*me, instance->GetData64(NPC_HALFUS_WORMBREAKER)))
+                    if (auto drake = halfus->SummonCreature(GetLockOrNormalDrakeEntry(me->GetEntry()), me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
                         drake->AI()->SetData(1, 1);
 
                 me->DespawnOrUnsummon();
@@ -735,11 +735,11 @@ public:
         {
             if (id == 1 && type == POINT_MOTION_TYPE)
             {
-                if (Creature* Halfus = me->FindNearestCreature(NPC_HALFUS_WORMBREAKER, 150.0f, true))
+                if (auto Halfus = me->FindNearestCreature(NPC_HALFUS_WORMBREAKER, 150.0f, true))
                 {
                     if (!me->HasAura(SPELL_UNRESPONSIVE_WHELP))
                     {
-                        if (Creature* behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
+                        if (auto behemoth = me->FindNearestCreature(NPC_PROTO_BEHEMOTH, 100.0f, true))
                             DoCast(behemoth, SPELL_ATROPHIC_POISON, true);
 
                         if (!Halfus->isInCombat())
@@ -755,7 +755,7 @@ public:
         void UpdateAI(uint32 const /*diff*/) override
         {
             if (me->HasAura(83432) && !me->getVictim())
-                if (Player* player = me->FindNearestPlayer(500.0f))
+                if (auto player = me->FindNearestPlayer(500.0f))
                     AttackStart(player);
 
             DoMeleeAttackIfReady();
@@ -814,9 +814,9 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (InstanceScript* instance = caster->GetInstanceScript())
-                if (Creature* halfus = Creature::GetCreature(*caster, instance->GetData64(NPC_HALFUS_WORMBREAKER)))
-                    if (Unit* target = halfus->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
+            if (auto instance = caster->GetInstanceScript())
+                if (auto halfus = Creature::GetCreature(*caster, instance->GetData64(NPC_HALFUS_WORMBREAKER)))
+                    if (auto target = halfus->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
                         caster->CastSpell(target, caster->HasAura(SPELL_TIME_DILATION) ? SPELL_FIREBALL_BARRAGE_DAMAGE_TD : SPELL_FIREBALL_BARRAGE_DAMAGE, true);
         }
 
@@ -893,7 +893,7 @@ class go_halfus_whelp_cage : public GameObjectScript
             {
                 if (!isHalfus)
                 {
-                    if (Creature* halfus = Creature::GetCreature(*go, go->GetInstanceScript()->GetData64(NPC_HALFUS_WORMBREAKER)))
+                    if (auto halfus = Creature::GetCreature(*go, go->GetInstanceScript()->GetData64(NPC_HALFUS_WORMBREAKER)))
                         _halfus = halfus;
                     isHalfus = true;
                 }

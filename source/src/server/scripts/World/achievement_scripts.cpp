@@ -112,7 +112,7 @@ class achievement_bg_ic_glaive_grave : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* /*target*/)
         {
-            if (Creature* vehicle = source->GetVehicleCreatureBase())
+            if (auto vehicle = source->GetVehicleCreatureBase())
             {
                 if (vehicle->GetEntry() == NPC_GLAIVE_THROWER_H ||  vehicle->GetEntry() == NPC_GLAIVE_THROWER_A)
                     return true;
@@ -129,7 +129,7 @@ class achievement_bg_ic_mowed_down : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* /*target*/)
         {
-            if (Creature* vehicle = source->GetVehicleCreatureBase())
+            if (auto vehicle = source->GetVehicleCreatureBase())
             {
                 if (vehicle->GetEntry() == NPC_KEEP_CANNON)
                     return true;
@@ -146,7 +146,7 @@ class achievement_bg_sa_artillery : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* /*target*/)
         {
-            if (Creature* vehicle = source->GetVehicleCreatureBase())
+            if (auto vehicle = source->GetVehicleCreatureBase())
             {
                 if (vehicle->GetEntry() == NPC_ANTI_PERSONNAL_CANNON)
                     return true;
@@ -187,7 +187,7 @@ public:
         if (!target)
             return false;
 
-        if (Player* victim = target->ToPlayer())
+        if (auto victim = target->ToPlayer())
             if (victim->IsMounted())
                 return true;
 
@@ -341,7 +341,7 @@ public:
         if (!target)
             return false;
 
-        if (Player* victim = target->ToPlayer())
+        if (auto victim = target->ToPlayer())
         {
             if (Vehicle* vehicle = victim->GetVehicle())
                 if (vehicle->GetVehicleInfo()->m_ID == 321)

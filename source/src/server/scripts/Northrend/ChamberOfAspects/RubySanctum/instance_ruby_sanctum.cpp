@@ -66,7 +66,7 @@ class instance_ruby_sanctum : public InstanceMapScript
                 if (!GetData64(DATA_HALION_CONTROLLER) && GetBossState(DATA_HALION) != DONE && GetBossState(DATA_GENERAL_ZARITHRIAN) == DONE)
                 {
                     instance->LoadGrid(HalionControllerSpawnPos.GetPositionX(), HalionControllerSpawnPos.GetPositionY());
-                    if (Creature* halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
+                    if (auto halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
                         halionController->AI()->DoAction(ACTION_INTRO_HALION);
                 }
             }
@@ -184,7 +184,7 @@ class instance_ruby_sanctum : public InstanceMapScript
                 if (creature->GetEntry() == NPC_GENERAL_ZARITHRIAN && GetBossState(DATA_HALION) != DONE)
                 {
                     instance->LoadGrid(HalionControllerSpawnPos.GetPositionX(), HalionControllerSpawnPos.GetPositionY());
-                    if (Creature* halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
+                    if (auto halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
                         halionController->AI()->DoAction(ACTION_INTRO_HALION);
                 }
             }
@@ -244,7 +244,7 @@ class instance_ruby_sanctum : public InstanceMapScript
                         if (state == DONE && GetBossState(DATA_SAVIANA_RAGEFIRE) == DONE)
                         {
                             HandleGameObject(FlameWallsGUID, true);
-                            if (Creature* zarithrian = instance->GetCreature(GeneralZarithrianGUID))
+                            if (auto zarithrian = instance->GetCreature(GeneralZarithrianGUID))
                                 zarithrian->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
                         }
                         break;
@@ -254,7 +254,7 @@ class instance_ruby_sanctum : public InstanceMapScript
                         if (state == DONE && GetBossState(DATA_BALTHARUS_THE_WARBORN) == DONE)
                         {
                             HandleGameObject(FlameWallsGUID, true);
-                            if (Creature* zarithrian = instance->GetCreature(GeneralZarithrianGUID))
+                            if (auto zarithrian = instance->GetCreature(GeneralZarithrianGUID))
                                 zarithrian->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
                         }
                         break;

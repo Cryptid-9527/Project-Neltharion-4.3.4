@@ -257,8 +257,8 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
-                if (Creature* c = target->ToCreature())
+            if (auto target = GetTarget())
+                if (auto c = target->ToCreature())
                 {
                     c->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NOT_SELECTABLE);
                     c->RemoveArenaAuras();
@@ -271,8 +271,8 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
-            if (Creature* c = target->ToCreature())
+            if (auto target = GetTarget())
+            if (auto c = target->ToCreature())
             {
                 c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NOT_SELECTABLE);
                 c->SetReactState(REACT_AGGRESSIVE);
@@ -354,7 +354,7 @@ public:
 
         void OnPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if(WorldObject* owner = GetOwner())
                     if (GetOwner()->ToUnit()->isMoving())
                     {

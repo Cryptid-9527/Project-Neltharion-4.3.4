@@ -107,7 +107,7 @@ public:
             Talk(SAY_AGGRO);
             if (instance)
             {
-                if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_ZURAMAT_CELL)))
+                if (auto pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_ZURAMAT_CELL)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -136,7 +136,7 @@ public:
 
             if (SpellVoidShiftTimer <= diff)
             {
-                 if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                 if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_VOID_SHIFT);
                 SpellVoidShiftTimer = 20000;
             } else SpellVoidShiftTimer -=diff;
@@ -213,7 +213,7 @@ class achievement_void_dance : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Zuramat = target->ToCreature())
+            if (auto Zuramat = target->ToCreature())
                 if (Zuramat->AI()->GetData(DATA_VOID_DANCE))
                     return true;
 

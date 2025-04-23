@@ -162,7 +162,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 player->CastSpell(me, SPELL_RIDE_DRAGONHAWK);
                 _playerGUID = player->GetGUID();
@@ -195,7 +195,7 @@ public:
             case 18:
                 if (!_noPassenger)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         _noPassenger = true;
                         player->ExitVehicle();
@@ -398,7 +398,7 @@ public:
         {
             me->CastWithDelay(500, me, SPELL_WISPY_VORTEX);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
             }
@@ -489,7 +489,7 @@ public:
                     }
                 }
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -526,7 +526,7 @@ public:
                 case EVENT_VORTEX_1:
                     _inAction = false;
                     me->RemoveAura(SPELL_ROOT);
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->GetMotionMaster()->MoveFollow(player, 0.9f, 0.4f * M_PI);
                     }
@@ -535,7 +535,7 @@ public:
                     me->CastSpell(me, SPELL_QUEST_KILL_CREDIT);
                     break;
                 case EVENT_VORTEX_3:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->CastSpell(me, SPELL_EJECT_ALL_PASSENGERS);
                         player->CastSpell(player, 44795);
@@ -652,7 +652,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->CastSpell(me, SPELL_RIDE_VORTEX);
@@ -684,7 +684,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (who->GetEntry() == NPC_CREDIT_DEFENDER)
                         player->KilledMonsterCredit(NPC_CREDIT_DEFENDER);
@@ -721,7 +721,7 @@ public:
             {
                 if (point == 13)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
@@ -741,7 +741,7 @@ public:
                 _checkTimer = 3000;
                 me->CastSpell(me, SPELL_VORTEX_KNOCK);
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!_questCompleted)
                     {
@@ -808,7 +808,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 _events.ScheduleEvent(EVENT_SWOOP_EGG_1, 3000);
@@ -816,7 +816,7 @@ public:
             else
                 me->DespawnOrUnsummon();
 
-            if (Creature* nest = me->FindNearestCreature(NPC_PLACE_SWOOP_BUNNY, 10.f))
+            if (auto nest = me->FindNearestCreature(NPC_PLACE_SWOOP_BUNNY, 10.f))
                 _swoopTargetGUID = nest->GetGUID();
         }
 
@@ -830,7 +830,7 @@ public:
         {
             EggDespawner();
 
-            if (Creature* nest = Unit::GetCreature(*me, _swoopTargetGUID))
+            if (auto nest = Unit::GetCreature(*me, _swoopTargetGUID))
             {
                 nest->setActive(true);
                 nest->AI()->SetData(1, 1);
@@ -849,7 +849,7 @@ public:
             {
                 if (who->GetEntry() == NPC_SNAPJAW_BASILISK)
                 {
-                    if (Creature* basilisk = who->ToCreature())
+                    if (auto basilisk = who->ToCreature())
                     {
                         _mobKilled = false;
                         _summons.Summon(basilisk);
@@ -860,7 +860,7 @@ public:
 
                 if (who->GetEntry() == NPC_FAMISHED_BONEPAW)
                 {
-                    if (Creature* bone = who->ToCreature())
+                    if (auto bone = who->ToCreature())
                     {
                         _mobKilled = false;
                         _summons.Summon(bone);
@@ -880,13 +880,13 @@ public:
                 _checkTimer = 1000;
                 if (!_completed)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (!player->isAlive())
                         {
                             EggDespawner();
 
-                            if (Creature* nest = Unit::GetCreature(*me, _swoopTargetGUID))
+                            if (auto nest = Unit::GetCreature(*me, _swoopTargetGUID))
                             {
                                 nest->setActive(true);
                                 nest->AI()->SetData(1, 1);
@@ -897,7 +897,7 @@ public:
                         {
                             EggDespawner();
 
-                            if (Creature* nest = Unit::GetCreature(*me, _swoopTargetGUID))
+                            if (auto nest = Unit::GetCreature(*me, _swoopTargetGUID))
                             {
                                 nest->setActive(true);
                                 nest->AI()->SetData(1, 1);
@@ -908,7 +908,7 @@ public:
                         {
                             EggDespawner();
 
-                            if (Creature* nest = Unit::GetCreature(*me, _swoopTargetGUID))
+                            if (auto nest = Unit::GetCreature(*me, _swoopTargetGUID))
                             {
                                 nest->setActive(true);
                                 nest->AI()->SetData(1, 1);
@@ -964,7 +964,7 @@ public:
                     _completed = true;
                     me->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
 
-                    if (Creature* bird = me->SummonCreature(NPC_SUMMONED_DEFIANT_SWOOP, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 1, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto bird = me->SummonCreature(NPC_SUMMONED_DEFIANT_SWOOP, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 1, TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         _birdGUID = bird->GetGUID();
                         _summons.Summon(bird);
@@ -982,14 +982,14 @@ public:
                     break;
                 }
                 case EVENT_SWOOP_EGG_3:
-                    if (Creature* bird = Unit::GetCreature(*me, _birdGUID))
+                    if (auto bird = Unit::GetCreature(*me, _birdGUID))
                     {
                         _events.ScheduleEvent(EVENT_SWOOP_EGG_4, 6000);
 
-                        if (Creature* target = me->FindNearestCreature(NPC_WONDI_TARGET_1, 150.f))
+                        if (auto target = me->FindNearestCreature(NPC_WONDI_TARGET_1, 150.f))
                             bird->GetMotionMaster()->MovePoint(1, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
 
-                        if (Creature* nest = Unit::GetCreature(*me, _swoopTargetGUID))
+                        if (auto nest = Unit::GetCreature(*me, _swoopTargetGUID))
                         {
                             nest->setActive(true);
                             nest->AI()->SetData(1, 1);
@@ -1259,13 +1259,13 @@ public:
             summoner->CastSpell(summoner, SPELL_SANCTUARY_NO_COMBAT);
             summoner->CastSpell(summoner, SPELL_DISMOUNT_AND_CANCEL_ALL_SHAPESHIFTS);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
 
                 if (!me->FindNearestCreature(NPC_LADY_VALISHJ, 150.f))
                 {
-                    if (Creature* valishj = me->SummonCreature(NPC_LADY_VALISHJ, 298.852f, 2958.92f, -1.6418f, 2.7137f, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto valishj = me->SummonCreature(NPC_LADY_VALISHJ, 298.852f, 2958.92f, -1.6418f, 2.7137f, TEMPSUMMON_MANUAL_DESPAWN))
                         _valishjGUID = valishj->GetGUID();
                 }
             }
@@ -1275,14 +1275,14 @@ public:
         {
             if (!apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->CastSpell(player, SPELL_PLAYER_UPDATE_AREA);
                     player->CastSpell(player, SPELL_SANCTUARY_NO_COMBAT);
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                     me->DespawnOrUnsummon(100);
 
-                    if (Creature* valishj = Unit::GetCreature(*me, _valishjGUID))
+                    if (auto valishj = Unit::GetCreature(*me, _valishjGUID))
                         valishj->DespawnOrUnsummon();
                 }
             }
@@ -1290,7 +1290,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 player->CastSpell(player, SPELL_PLAYER_UPDATE_AREA);
                 player->ExitVehicle();
@@ -1298,7 +1298,7 @@ public:
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                 me->DespawnOrUnsummon(100);
 
-                if (Creature* valishj = Unit::GetCreature(*me, _valishjGUID))
+                if (auto valishj = Unit::GetCreature(*me, _valishjGUID))
                     valishj->DespawnOrUnsummon();
             }
         }
@@ -1311,7 +1311,7 @@ public:
             {
                 _checkTimer = 500;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_A_REVENANTS_VENGEANCE) == QUEST_STATUS_NONE)
                     {
@@ -1321,7 +1321,7 @@ public:
                         me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                         me->DespawnOrUnsummon(100);
 
-                        if (Creature* valishj = Unit::GetCreature(*me, _valishjGUID))
+                        if (auto valishj = Unit::GetCreature(*me, _valishjGUID))
                             valishj->DespawnOrUnsummon();
                     }
 
@@ -1387,9 +1387,9 @@ public:
         {
             if (spellInfo->Id == SPELL_KODO_KOMBOBULATOR)
             {
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
-                    if (Creature* tamed = player->SummonCreature(NPC_TAMED_KODO, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto tamed = player->SummonCreature(NPC_TAMED_KODO, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         tamed->SetReactState(REACT_PASSIVE);
                         tamed->SetOwnerGUID(player->GetGUID());
@@ -1422,7 +1422,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _inAction = false;
                 me->CastSpell(me, SPELL_KODO_KOMBOBULATOR_AURA);
@@ -1439,7 +1439,7 @@ public:
 
                 if (!_inAction)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (!player->isAlive())
                         {
@@ -1469,7 +1469,7 @@ public:
                             me->GetMotionMaster()->MoveFollow(player, 1.0f, 0.5f * M_PI);
                         }
 
-                        if (Creature* smeed = me->FindNearestCreature(NPC_SMEED, 16.f))
+                        if (auto smeed = me->FindNearestCreature(NPC_SMEED, 16.f))
                         {
                             me->SetRooted(true);
                             _inAction = true;
@@ -1491,7 +1491,7 @@ public:
                 {
                     _checkTimeExpire = 600000;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->DespawnOrUnsummon();
                         me->RemoveAura(SPELL_KODO_KOMBOBULATOR_AURA);
@@ -1613,7 +1613,7 @@ public:
         {
             me->SetRooted(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->CastSpell(me, SPELL_RIDE_CENTAUR);
@@ -1641,7 +1641,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     _dismounted = true;
                     _step = 3;
@@ -1665,7 +1665,7 @@ public:
                 {
                     if (me->FindNearestCreature(NPC_SUMMONED_SPEAR, 40.0f))
                     {
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             player->ExitVehicle();
                             me->AI()->Talk(4, _playerGUID);
@@ -1696,7 +1696,7 @@ public:
                 }
                 else
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->GetMotionMaster()->Clear();
                         player->ExitVehicle();
@@ -1724,7 +1724,7 @@ public:
                 {
                     _checkTimer = 1000;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (player->GetQuestStatus(QUEST_DELICATE_NOTIFY) == QUEST_STATUS_NONE ||
                             player->GetQuestStatus(QUEST_DELICATE_NOTIFY) == QUEST_STATUS_COMPLETE)
@@ -1803,13 +1803,13 @@ public:
             me->SetReactState(REACT_PASSIVE);
             me->CastWithDelay(500, me, SPELL_ROOT);
 
-            if (Creature* defender1 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                if (Creature* defender2 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                    if (Creature* defender3 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                        if (Creature* defender4 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                            if (Creature* defender5 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                if (Creature* defender6 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                    if (Creature* defender7 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+            if (auto defender1 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                if (auto defender2 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                    if (auto defender3 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto defender4 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                            if (auto defender5 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                if (auto defender6 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                    if (auto defender7 = me->SummonCreature(NPC_KOLKAR_WARMMONGER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                                     {
                                         _summons.Summon(defender1);
                                         _summons.Summon(defender2);
@@ -1904,7 +1904,7 @@ public:
                             me->CastSpell(me, SPELL_NOTIFICATION_CREDIT);
                             _events.ScheduleEvent(EVENT_DEFEND_SPEAR_4, 3000);
 
-                            if (Creature* khan = me->FindNearestCreature(NPC_KAMMAH, 100.0f))
+                            if (auto khan = me->FindNearestCreature(NPC_KAMMAH, 100.0f))
                                 khan->AI()->TalkWithDelay(2000, 0);
                         }
                     }
@@ -1922,13 +1922,13 @@ public:
                 {
                     _wave = 1;
 
-                    if (Creature* enemy1 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                        if (Creature* enemy2 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                            if (Creature* enemy3 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                if (Creature* enemy4 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                    if (Creature* enemy5 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                        if (Creature* enemy6 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                            if (Creature* enemy7 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                    if (auto enemy1 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto enemy2 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                            if (auto enemy3 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                if (auto enemy4 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                    if (auto enemy5 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                        if (auto enemy6 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                            if (auto enemy7 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                                             {
                                                 _summons.Summon(enemy1);
                                                 _summons.Summon(enemy2);
@@ -1949,9 +1949,9 @@ public:
                 }
                 break;
                 case EVENT_DEFEND_SPEAR_2:
-                    if (Creature* enemy2 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                        if (Creature* enemy4 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                            if (Creature* enemy6 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                    if (auto enemy2 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto enemy4 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[3], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                            if (auto enemy6 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[5], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                             {
                                 _summons.Summon(enemy2);
                                 _summons.Summon(enemy4);
@@ -1963,10 +1963,10 @@ public:
                             }
                     break;
                 case EVENT_DEFEND_SPEAR_3:
-                    if (Creature* enemy1 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                        if (Creature* enemy3 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                            if (Creature* enemy5 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
-                                if (Creature* enemy7 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                    if (auto enemy1 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto enemy3 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                            if (auto enemy5 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                                if (auto enemy7 = me->SummonCreature(NPC_MAGRAM_DEFENDER, KolkarDefendersSpawnPosition[6], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                                 {
                                     _summons.Summon(enemy1);
                                     _summons.Summon(enemy3);
@@ -2117,7 +2117,7 @@ public:
         {
             me->SetRooted(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->CastSpell(me, SPELL_RIDE_GRIMFEATHER);
@@ -2174,7 +2174,7 @@ public:
             case 2:
                 if (point == 7)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->SetRooted(true);
                         player->ExitVehicle();
@@ -2192,7 +2192,7 @@ public:
         {
             if (spellInfo->Id == SPELL_GRIMFEATHER_RETURN)
             {
-                if (Creature* end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
+                if (auto end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
                 {
                     _complete = true;
                     _step = 2;
@@ -2208,7 +2208,7 @@ public:
                 }
             }
 
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (spellInfo->Id == SPELL_DUMMY_PING)
                     player->KilledMonsterCredit(NPC_CREDIT_SIREN);
@@ -2229,7 +2229,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -2267,7 +2267,7 @@ public:
                                 me->CastSpell(me, SPELL_FLIGHT_SPEED_280);
                                 _step = 2;
 
-                                if (Creature* end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
+                                if (auto end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
                                 {
                                     if (end->GetGUIDLow() == 44709) // far
                                         me->GetMotionMaster()->MoveSmoothPath(GrimfeatherPath4, GrimfeatherPathSize4);
@@ -2287,7 +2287,7 @@ public:
                                 me->CastSpell(me, SPELL_FLIGHT_SPEED_280);
                                 _step = 2;
 
-                                if (Creature* end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
+                                if (auto end = me->FindNearestCreature(NPC_END_TRIP_CONTROLLER, 200.0f))
                                 {
                                     if (end->GetGUIDLow() == 44709) // far
                                         me->GetMotionMaster()->MoveSmoothPath(GrimfeatherPath4, GrimfeatherPathSize4);
@@ -2366,7 +2366,7 @@ public:
                 me->setActive(true);
                 me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
 
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     _events.ScheduleEvent(EVENT_ESCORT_MILAZZA_1, 2000);
@@ -2400,7 +2400,7 @@ public:
                 me->AI()->TalkWithDelay(4500, 3);
                 me->AI()->TalkWithDelay(9000, 4);
 
-                if (Creature* hornizz = me->FindNearestCreature(NPC_HORNIZZ, 20.f))
+                if (auto hornizz = me->FindNearestCreature(NPC_HORNIZZ, 20.f))
                     me->CastSpell(hornizz, SPELL_DUMMY_PING);
                 break;
             case 48:
@@ -2424,7 +2424,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ESCORT_MILAZZA_1:
-                    if (GameObject* cage = me->FindNearestGameObject(177706, 10.f))
+                    if (auto cage = me->FindNearestGameObject(177706, 10.f))
                         cage->SetGoState(GO_STATE_ACTIVE);
 
                     _events.ScheduleEvent(EVENT_ESCORT_MILAZZA_2, 1000);
@@ -2478,7 +2478,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->EnterVehicle(me, 0);
@@ -2487,7 +2487,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 player->ExitVehicle();
                 _summons.DespawnAll();
@@ -2498,10 +2498,10 @@ public:
         {
             if (spellInfo->Id == SPELL_RETURN_ORDER)
             {
-                if (Creature* mauler1 = Unit::GetCreature(*me, _mauler1_GUID))
-                    if (Creature* mauler2 = Unit::GetCreature(*me, _mauler2_GUID))
-                        if (Creature* mauler3 = Unit::GetCreature(*me, _mauler3_GUID))
-                            if (Creature* windchaser = Unit::GetCreature(*me, _windchaser_GUID))
+                if (auto mauler1 = Unit::GetCreature(*me, _mauler1_GUID))
+                    if (auto mauler2 = Unit::GetCreature(*me, _mauler2_GUID))
+                        if (auto mauler3 = Unit::GetCreature(*me, _mauler3_GUID))
+                            if (auto windchaser = Unit::GetCreature(*me, _windchaser_GUID))
                             {
                                 me->CastSpell(me, SPELL_SANCTUARY_NO_COMBAT);
                                 mauler1->CastSpell(mauler1, SPELL_SANCTUARY_NO_COMBAT);
@@ -2513,10 +2513,10 @@ public:
 
             if (spellInfo->Id == SPELL_PING_ATTACK)
             {
-                if (Creature* mauler1 = Unit::GetCreature(*me, _mauler1_GUID))
-                    if (Creature* mauler2 = Unit::GetCreature(*me, _mauler2_GUID))
-                        if (Creature* mauler3 = Unit::GetCreature(*me, _mauler3_GUID))
-                            if (Creature* windchaser = Unit::GetCreature(*me, _windchaser_GUID))
+                if (auto mauler1 = Unit::GetCreature(*me, _mauler1_GUID))
+                    if (auto mauler2 = Unit::GetCreature(*me, _mauler2_GUID))
+                        if (auto mauler3 = Unit::GetCreature(*me, _mauler3_GUID))
+                            if (auto windchaser = Unit::GetCreature(*me, _windchaser_GUID))
                             {
                                 mauler1->AI()->DoAction(ACTION_CENTAUR_ATTACK_ENEMY);
                                 mauler2->AI()->DoAction(ACTION_CENTAUR_ATTACK_ENEMY);
@@ -2530,10 +2530,10 @@ public:
         {
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Creature* mauler1 = me->SummonCreature(NPC_CENTAUR_MAULER_1, me->GetPositionX(), me->GetPositionY() + 2, me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
-                    if (Creature* mauler2 = me->SummonCreature(NPC_CENTAUR_MAULER_2, me->GetPositionX(), me->GetPositionY() - 2, me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* mauler3 = me->SummonCreature(NPC_CENTAUR_MAULER_3, me->GetPositionX() + 2, me->GetPositionY(), me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* windchaser = me->SummonCreature(NPC_CENTAUR_WINDCHASER, me->GetPositionX() - 2, me->GetPositionY(), me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto mauler1 = me->SummonCreature(NPC_CENTAUR_MAULER_1, me->GetPositionX(), me->GetPositionY() + 2, me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto mauler2 = me->SummonCreature(NPC_CENTAUR_MAULER_2, me->GetPositionX(), me->GetPositionY() - 2, me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto mauler3 = me->SummonCreature(NPC_CENTAUR_MAULER_3, me->GetPositionX() + 2, me->GetPositionY(), me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto windchaser = me->SummonCreature(NPC_CENTAUR_WINDCHASER, me->GetPositionX() - 2, me->GetPositionY(), me->GetPositionZ(), TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 _summons.Summon(mauler1);
                                 _summons.Summon(mauler2);
@@ -2587,7 +2587,7 @@ public:
                     }
                 }
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -2616,7 +2616,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_CENTAUR_COMMANDER_1:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         _summons.DespawnAll();
@@ -2664,24 +2664,24 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            //if (Player* player = summoner->ToPlayer())
+            //if (auto player = summoner->ToPlayer())
             //    _ownerGUID = player->GetGUID();
 
             me->SetReactState(REACT_PASSIVE);
 
-            if (Creature* owner = summoner->ToCreature())
+            if (auto owner = summoner->ToCreature())
                 _ownerGUID = owner->GetGUID();
         }
 
         void DoAction(int32 const actionId)
         {
-            if (Creature* centaur = Unit::GetCreature(*me, _ownerGUID))
+            if (auto centaur = Unit::GetCreature(*me, _ownerGUID))
             {
                 if (actionId == ACTION_CENTAUR_ATTACK_ENEMY)
                 {
                     std::list<Unit*> enemy = me->SelectNearbyUnits(0, 45.0f);
                     for (std::list<Unit*>::iterator itr = enemy.begin(); itr != enemy.end(); ++itr)
-                        if (Unit* enemy = (*itr))
+                        if (auto enemy = (*itr))
                         {
                             if (enemy->GetAura(SPELL_ATTACK_ORDER))
                             {
@@ -2715,7 +2715,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Creature* owner = Unit::GetCreature(*me, _ownerGUID))
+                if (auto owner = Unit::GetCreature(*me, _ownerGUID))
                 {
                     if (!me->getVictim() && me->GetReactState() != REACT_AGGRESSIVE && owner->isInCombat())
                     {
@@ -2814,9 +2814,9 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Creature* lehprah = Unit::GetCreature(*me, _lehprahGUID))
-                if (Creature* kammah = Unit::GetCreature(*me, _kammahGUID))
-                    if (Creature* shodo = Unit::GetCreature(*me, _shodoGUID))
+            if (auto lehprah = Unit::GetCreature(*me, _lehprahGUID))
+                if (auto kammah = Unit::GetCreature(*me, _kammahGUID))
+                    if (auto shodo = Unit::GetCreature(*me, _shodoGUID))
                     {
                         lehprah->GetMotionMaster()->Clear();
                         lehprah->CombatStop();
@@ -2851,9 +2851,9 @@ public:
             {
                 _fightInProgress = true;
 
-                if (Creature* lehprah = me->SummonCreature(NPC_KHAN_LEHPRAH, -1993.44f, 562.820f, 165.76f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
-                    if (Creature* kammah = me->SummonCreature(NPC_KHAN_KAMMAH, -1993.36f, 567.990f, 166.34f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* shodo = me->SummonCreature(NPC_KHAN_SHODO, -1995.62f, 559.359f, 165.70f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto lehprah = me->SummonCreature(NPC_KHAN_LEHPRAH, -1993.44f, 562.820f, 165.76f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto kammah = me->SummonCreature(NPC_KHAN_KAMMAH, -1993.36f, 567.990f, 166.34f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto shodo = me->SummonCreature(NPC_KHAN_SHODO, -1995.62f, 559.359f, 165.70f, 5.6f, TEMPSUMMON_MANUAL_DESPAWN))
                         {
                             _lehprahGUID = lehprah->GetGUID();
                             _kammahGUID = kammah->GetGUID();
@@ -2940,7 +2940,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 player->CastSpell(me, SPELL_RIDE_JANKIE_MOUNT);
                 _playerGUID = player->GetGUID();
@@ -2967,7 +2967,7 @@ public:
             switch (point)
             {
             case 8:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     me->DespawnOrUnsummon(100);
@@ -3055,11 +3055,11 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
 
-            if (GameObject* magnet = me->SummonGameObject(OBJECT_GHOST_MAGNET, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.f, 0, 0, 0, 0, 0))
-                if (GameObject* magnetaura = me->SummonGameObject(OBJECT_GHOST_MAGNET_AURA, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.f, 0, 0, 0, 0, 0))
+            if (auto magnet = me->SummonGameObject(OBJECT_GHOST_MAGNET, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.f, 0, 0, 0, 0, 0))
+                if (auto magnetaura = me->SummonGameObject(OBJECT_GHOST_MAGNET_AURA, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.f, 0, 0, 0, 0, 0))
                 {
                     me->setActive(true);
                     magnetaura->setActive(true);
@@ -3075,7 +3075,7 @@ public:
         {
             if (me->IsWithinDistInMap(who, 14.0f))
             {
-                if (Creature* spectre = who->ToCreature())
+                if (auto spectre = who->ToCreature())
                 {
                     if (spectre->GetEntry() == NPC_MAGRAMI_SPECTRE)
                     {
@@ -3085,7 +3085,7 @@ public:
                             spectre->setFaction(16);
                             spectre->AI()->Talk(1, _playerGUID);
 
-                            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                            if (auto player = Unit::GetPlayer(*me, _playerGUID))
                                 spectre->AI()->AttackStart(player);
                         }
                     }
@@ -3099,7 +3099,7 @@ public:
             {
                 //_summons.RemoveNotExisting();
 
-                if (Creature* spectre1 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto spectre1 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
                     _summons.Summon(spectre1);
             }
         }
@@ -3110,15 +3110,15 @@ public:
             {
                 _checkTimer = 2000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
                         me->DespawnOrUnsummon();
                         _summons.DespawnAll();
 
-                        if (GameObject* magnet = GameObject::GetGameObject(*me, _magnetGUID))
-                            if (GameObject* magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
+                        if (auto magnet = GameObject::GetGameObject(*me, _magnetGUID))
+                            if (auto magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
                             {
                                 magnetaura->Delete();
                                 magnet->Delete();
@@ -3131,8 +3131,8 @@ public:
                         me->DespawnOrUnsummon();
                         _summons.DespawnAll();
 
-                        if (GameObject* magnet = GameObject::GetGameObject(*me, _magnetGUID))
-                            if (GameObject* magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
+                        if (auto magnet = GameObject::GetGameObject(*me, _magnetGUID))
+                            if (auto magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
                             {
                                 magnetaura->Delete();
                                 magnet->Delete();
@@ -3145,8 +3145,8 @@ public:
                         me->DespawnOrUnsummon();
                         _summons.DespawnAll();
 
-                        if (GameObject* magnet = GameObject::GetGameObject(*me, _magnetGUID))
-                            if (GameObject* magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
+                        if (auto magnet = GameObject::GetGameObject(*me, _magnetGUID))
+                            if (auto magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
                             {
                                 magnetaura->Delete();
                                 magnet->Delete();
@@ -3160,14 +3160,14 @@ public:
             {
                 _checkTimer = 5000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     me->AI()->Talk(1, _playerGUID);
                     me->DespawnOrUnsummon();
                     _summons.DespawnAll();
 
-                    if (GameObject* magnet = GameObject::GetGameObject(*me, _magnetGUID))
-                        if (GameObject* magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
+                    if (auto magnet = GameObject::GetGameObject(*me, _magnetGUID))
+                        if (auto magnetaura = GameObject::GetGameObject(*me, _magnetAuraGUID))
                         {
                             magnetaura->Delete();
                             magnet->Delete();
@@ -3186,10 +3186,10 @@ public:
                 switch (eventId)
                 {
                 case EVENT_GHOST_PLASM_1:
-                    if (Creature* spectre1 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* spectre2 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* spectre3 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* spectre4 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto spectre1 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto spectre2 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto spectre3 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto spectre4 = me->SummonCreature(NPC_MAGRAMI_SPECTRE, MagramiSpectreSpawnPosition[urand(0, 23)], TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     _summons.Summon(spectre1);
                                     _summons.Summon(spectre2);
@@ -3253,7 +3253,7 @@ public:
                 _events.CancelEvent(EVENT_LORD_BELLOW);
                 _events.CancelEvent(EVENT_LORD_TORCH);
 
-                if (Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
                     _playerGUID = player->GetGUID();
             }
             else
@@ -3261,7 +3261,7 @@ public:
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->DespawnOrUnsummon();
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     player->RemoveAura(SPELL_POSSES_AURA);
             }
         }
@@ -3283,7 +3283,7 @@ public:
 
             if (me->HasAura(SPELL_POSSES_AURA))
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (_checkTimer <= diff)
                     {

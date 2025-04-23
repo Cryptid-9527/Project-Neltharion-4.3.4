@@ -125,7 +125,7 @@ public:
 
             if (instance->GetData(TYPE_SH_QUEST))
             {
-                if (Player* player = killer->ToPlayer())
+                if (auto player = killer->ToPlayer())
                     player->KilledMonsterCredit(SH_QUEST_CREDIT, 0);
             }
         }

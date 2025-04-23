@@ -224,7 +224,7 @@ class boss_setesh : public CreatureScript
                                 me->SetReactState(REACT_PASSIVE);
                                 me->StopMoving();
                                 me->AttackStop();
-                                if (Creature* trigger = me->SummonCreature(54638, Portal_Locations[urand(0, 3)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto trigger = me->SummonCreature(54638, Portal_Locations[urand(0, 3)], TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     Position Walk_To(*trigger);
                                     trigger->MoveBlink(Walk_To, 15.f, trigger->NormalizeOrientation(trigger->GetRelativeAngle(me->GetPositionX(), me->GetPositionY())));
@@ -235,7 +235,7 @@ class boss_setesh : public CreatureScript
                             break;
                         case EVENT_SUMMON_PORTAL:
                             if (auto trigger = me->FindNearestCreature(54638, 50.f, true))
-                            if (Creature* portal = me->SummonCreature(NPC_CHAOS_PORTAL, *trigger))
+                            if (auto portal = me->SummonCreature(NPC_CHAOS_PORTAL, *trigger))
                             {
                                 trigger->DespawnOrUnsummon();
                             }
@@ -326,7 +326,7 @@ struct npc_chaos_portal : public Scripted_NoMovementAI
         summon->SetInCombatWithZone();
         summon->SetCorpseDelay(2000);
 
-        if (Creature* setesh = Creature::GetCreature(*me, instance->GetData64(DATA_SETESH_GUID)))
+        if (auto setesh = Creature::GetCreature(*me, instance->GetData64(DATA_SETESH_GUID)))
             setesh->AI()->JustSummoned(summon);
     }
 
@@ -527,7 +527,7 @@ struct npc_setesh_void_lord : public ScriptedAI
                 me->AddAura(SPELL_GROW, me)->SetStackAmount(6);
 
                 SetCombatMovement(true);
-                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO))
+                if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO))
                     me->GetMotionMaster()->MoveChase(target);
 
                 break;
@@ -602,7 +602,7 @@ public:
         {
             if (checkTimer <= diff)
             {
-                if (Unit* target = me->FindNearestPlayer(3.0f))
+                if (auto target = me->FindNearestPlayer(3.0f))
                     DoCastAOE(SPELL_SEED_OF_CHAOS_DAMAGE);
                 checkTimer = 1000;
             } else checkTimer -= diff;

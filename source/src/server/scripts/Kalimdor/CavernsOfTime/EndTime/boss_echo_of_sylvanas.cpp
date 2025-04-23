@@ -105,7 +105,7 @@ public:
 	bool Execute(uint64 /*time*/, uint32 /*diff*/)
 	{
 
-		if (Creature* sylvanas = ObjectAccessor::GetCreature(*summon, sylvanasGUID))
+		if (auto sylvanas = ObjectAccessor::GetCreature(*summon, sylvanasGUID))
 			summon->GetMotionMaster()->MovePoint(POINT_SACRIFICE, sylvanas->GetPositionX(), sylvanas->GetPositionY(), summon->GetPositionZ());
 		if (summon->GetEntry() == NPC_RISEN_GHOUL)
 			summon->CastSpell(summon, SPELL_RISEN_GHOUL_CALL_OF_THE_HIGHBORNE, true);
@@ -162,7 +162,7 @@ public:
 			Talk(TALK_DEATH);
 			RemoveEncounterFrame();
 			_JustDied();
-			if (Player* player = me->FindNearestPlayer(100.0f))
+			if (auto player = me->FindNearestPlayer(100.0f))
 				player->SummonGameObject(209443, 3822.4487f, 935.4551f, 55.3302002f, 55.8124f, 5.2739f, 0, 1, 1, 0);
 		}
 
@@ -332,8 +332,8 @@ public:
 					//me->SetDisableGravity(true);
 					DoCast(me, SPELL_BLIGHTED_ARROWS, true);
 					me->CastWithDelay(3500, me, SPELL_BLIGHTED_ARROWS_MORPH, false);
-					if (Creature* vehicle = me->SummonCreature(NPC_JUMP_TRIGGER, me->GetPositionX(), me->GetPositionY(), 63.00f, 0.00f, TEMPSUMMON_MANUAL_DESPAWN))
-						if (Creature* arrow = vehicle->FindNearestCreature(NPC_BLIGHTED_ARROW, 30.00f))
+					if (auto vehicle = me->SummonCreature(NPC_JUMP_TRIGGER, me->GetPositionX(), me->GetPositionY(), 63.00f, 0.00f, TEMPSUMMON_MANUAL_DESPAWN))
+						if (auto arrow = vehicle->FindNearestCreature(NPC_BLIGHTED_ARROW, 30.00f))
 							vehicle->SetFacingToObject(arrow);
 					// No repeat
 					return;
@@ -471,9 +471,9 @@ public:
 		void JustDied(Unit* /*killer*/) override
 		{
 			if (me->ToTempSummon())
-				if (Unit* ghoulVis = me->ToTempSummon()->GetSummoner())
+				if (auto ghoulVis = me->ToTempSummon()->GetSummoner())
 					ghoulVis->ToCreature()->DespawnOrUnsummon(100);
-			if (Creature* sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
+			if (auto sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
 				sylvanas->AI()->SummonedCreatureDies(me, NULL);
 		}
 
@@ -484,7 +484,7 @@ public:
 
 		void IsSummonedBy(Unit* summoner) override
 		{
-			if (Creature* sylvanas = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
+			if (auto sylvanas = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
 			{
 				sylvanas->AI()->JustSummoned(me);
 				summoner->m_Events.AddEvent(new MoveEvent(sylvanas->GetGUID(), summoner->ToCreature()), summoner->m_Events.CalculateTime(5100));
@@ -494,7 +494,7 @@ public:
 		void MovementInform(uint32 type, uint32 id) override
 		{
 			if (type == POINT_MOTION_TYPE && id == POINT_SACRIFICE)
-				if (Creature* sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
+				if (auto sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
 					sylvanas->AI()->DoAction(ACTION_SACRIFICE);
 		}
 
@@ -552,7 +552,7 @@ public:
 
 		void IsSummonedBy(Unit* summoner) override
 		{
-			if (Creature* sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
+			if (auto sylvanas = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
 				sylvanas->AI()->JustSummoned(me);
 
 			me->SetInCombatWithZone();
@@ -580,7 +580,7 @@ public:
 
 		void HandleScriptEffect(SpellEffIndex effIndex)
 		{
-			if (Unit* caster = GetCaster())
+			if (auto caster = GetCaster())
 			{
 				caster->CastSpell(caster, SPELL_SUMMON_GHOUL_O, true);
 				caster->CastSpell(caster, SPELL_SUMMON_GHOUL_SO, true);
@@ -618,8 +618,8 @@ public:
 
 		void HandleScriptEffect(SpellEffIndex effIndex)
 		{
-			if (Unit* caster = GetCaster())
-				if (Unit* target = GetHitUnit())
+			if (auto caster = GetCaster())
+				if (auto target = GetHitUnit())
 				{
 					uint32 spellId = GetSpellInfo()->Effects[effIndex].CalcValue();
 					target->CastWithDelay(100, caster, spellId, true);
@@ -767,12 +767,12 @@ public:
 				switch (eventId)
 				{
 				case EVENT_CALLING_OF_THE_HIGHBORNE:
-					if (Unit* owner = GetUnitOwner())
+					if (auto owner = GetUnitOwner())
 					{
 						int32 rapStack = owner->HasAura(SPELL_SHRINK_TRIGGER) ? owner->GetAura(SPELL_SHRINK_TRIGGER)->GetStackAmount() : 1;
 						Map::PlayerList const& playerList = owner->GetMap()->GetPlayers();
 						for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
-							if (Player* target = i->getSource())
+							if (auto target = i->getSource())
 								if (target->isAlive())
 									if (owner->isInBack(target) && owner->GetDistance2d(target) <= (25.0f - 25.0f * 0.1f * rapStack))
 										target->CastSpell(target, SPELL_PAIN_DAMAGE, true);
@@ -807,7 +807,7 @@ public:
 
 		void HandleDummy(SpellEffIndex /*effIndex*/)
 		{
-			if (Unit* target = GetHitUnit())
+			if (auto target = GetHitUnit())
 			{
 				Position startPos;
 				// 8M behind the player
@@ -936,8 +936,8 @@ public:
 
 	bool OnCheck(Player* source, Unit* /*target*/) override
 	{
-		if (InstanceScript* instance = source->GetInstanceScript())
-			if (Creature* sylvanas = ObjectAccessor::GetCreature(*source, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
+		if (auto instance = source->GetInstanceScript())
+			if (auto sylvanas = ObjectAccessor::GetCreature(*source, instance->GetData64(DATA_ECHO_OF_SYLVANAS_GUID)))
 				return sylvanas->AI()->GetData(DATA_ACHIEVEMENT_CHECK) == 1;
 		return false;
 	}

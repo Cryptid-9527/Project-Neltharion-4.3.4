@@ -82,13 +82,13 @@ class instance_hour_of_twilight : public InstanceMapScript
                     case 54633:
                     case 54632:
                     case 54686:
-                        if (Creature* thrall = GetCreature(DATA_THRALL_EVENT_3))
+                        if (auto thrall = GetCreature(DATA_THRALL_EVENT_3))
                             thrall->AI()->DoAction(ACTION_KILL_CREATURE);
                         break;
                     case 54555:
                     case 55559:
                     case 55563:
-                        if (Creature* thrall = GetCreature(DATA_THRALL_EVENT_0))
+                        if (auto thrall = GetCreature(DATA_THRALL_EVENT_0))
                             thrall->AI()->DoAction(ACTION_KILL_CREATURE);
                         break;
                     default:
@@ -103,7 +103,7 @@ class instance_hour_of_twilight : public InstanceMapScript
                     case DATA_EVENT_0:
                         if (data == DONE)
                         {
-                            if (Creature* thrall = GetCreature(DATA_THRALL_EVENT_1))
+                            if (auto thrall = GetCreature(DATA_THRALL_EVENT_1))
                                 thrall->SetVisible(true);
                         }
                         thrallEscortEncouters[DATA_EVENT_0] = data;
@@ -111,7 +111,7 @@ class instance_hour_of_twilight : public InstanceMapScript
                     case DATA_EVENT_1:
                         if (data == DONE)
                         {
-                            if (Creature* thrall = GetCreature(DATA_THRALL_EVENT_2))
+                            if (auto thrall = GetCreature(DATA_THRALL_EVENT_2))
                                 thrall->SetVisible(true);
                         }
                         thrallEscortEncouters[DATA_EVENT_1] = data;
@@ -119,7 +119,7 @@ class instance_hour_of_twilight : public InstanceMapScript
                     case DATA_EVENT_2:
                         if (data == DONE)
                         {
-                            if (Creature* thrall = GetCreature(DATA_THRALL_EVENT_3))
+                            if (auto thrall = GetCreature(DATA_THRALL_EVENT_3))
                                 thrall->SetVisible(true);
                         }
                         thrallEscortEncouters[DATA_EVENT_2] = data;
@@ -127,7 +127,7 @@ class instance_hour_of_twilight : public InstanceMapScript
                     case DATA_EVENT_3:
                         if (data == DONE)
                         {
-                            if (Creature* thrall = GetCreature(DATA_THRALL))
+                            if (auto thrall = GetCreature(DATA_THRALL))
                                 thrall->SetVisible(true);
                         }
                         thrallEscortEncouters[DATA_EVENT_3] = data;
@@ -176,7 +176,7 @@ class instance_hour_of_twilight : public InstanceMapScript
                 {
                     case DATA_ARCHBISHOP:
                         if (state == DONE || state == DONE_HM)
-                            if (GameObject* portal = GetGameObject(TeamInInstance == ALLIANCE ? DATA_ALLIANCE_PORTAL : DATA_HORDE_PORTAL))
+                            if (auto portal = GetGameObject(TeamInInstance == ALLIANCE ? DATA_ALLIANCE_PORTAL : DATA_HORDE_PORTAL))
                                 portal->SetRespawnTime(portal->GetRespawnDelay());
                         break;
                 }

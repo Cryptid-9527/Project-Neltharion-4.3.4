@@ -339,7 +339,7 @@ class boss_halion : public CreatureScript
                 events.ScheduleEvent(EVENT_METEOR_STRIKE, urand(20000, 25000));
                 events.ScheduleEvent(EVENT_FIERY_COMBUSTION, urand(15000, 18000));
 
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->AI()->SetData(DATA_FIGHT_PHASE, PHASE_ONE);
             }
 
@@ -350,11 +350,11 @@ class boss_halion : public CreatureScript
                 Talk(SAY_DEATH);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
 
-                if (Creature* twilightHalion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TWILIGHT_HALION)))
+                if (auto twilightHalion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TWILIGHT_HALION)))
                     if (twilightHalion->isAlive())
                         twilightHalion->Kill(twilightHalion);
 
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                     if (controller->isAlive())
                         controller->Kill(controller);
             }
@@ -372,7 +372,7 @@ class boss_halion : public CreatureScript
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     DoCast(me, SPELL_TWILIGHT_PHASING);
 
-                    if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                    if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                         controller->AI()->SetData(DATA_FIGHT_PHASE, PHASE_TWO);
                     return;
                 }
@@ -383,7 +383,7 @@ class boss_halion : public CreatureScript
                     if (!me->InSamePhase(attacker))
                         return;
 
-                    if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                    if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                         controller->AI()->SetData(DATA_MATERIAL_DAMAGE_TAKEN, damage);
                 }
             }
@@ -403,12 +403,12 @@ class boss_halion : public CreatureScript
                     case EVENT_ACTIVATE_FIREWALL:
                         // Flame ring is activated 5 seconds after starting encounter, DOOR_TYPE_ROOM is only instant.
                         for (uint8 i = DATA_FLAME_RING; i <= DATA_TWILIGHT_FLAME_RING; ++i)
-                            if (GameObject* flameRing = ObjectAccessor::GetGameObject(*me, instance->GetData64(i)))
+                            if (auto flameRing = ObjectAccessor::GetGameObject(*me, instance->GetData64(i)))
                                 instance->HandleGameObject(instance->GetData64(DATA_FLAME_RING), false, flameRing);
                         break;
                     case EVENT_METEOR_STRIKE:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_TWILIGHT_REALM))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_TWILIGHT_REALM))
                         {
                             target->GetPosition(&_meteorStrikePos);
                             me->CastSpell(_meteorStrikePos.GetPositionX(), _meteorStrikePos.GetPositionY(), _meteorStrikePos.GetPositionZ(), SPELL_METEOR_STRIKE, true, NULL, NULL, me->GetGUID());
@@ -419,7 +419,7 @@ class boss_halion : public CreatureScript
                     }
                     case EVENT_FIERY_COMBUSTION:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_TWILIGHT_REALM))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_TWILIGHT_REALM))
                             DoCast(target, SPELL_FIERY_COMBUSTION);
                         events.ScheduleEvent(EVENT_FIERY_COMBUSTION, 25000);
                         break;
@@ -503,7 +503,7 @@ class boss_twilight_halion : public CreatureScript
 
             void JustDied(Unit* killer)
             {
-                if (Creature* halion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION)))
+                if (auto halion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION)))
                 {
                     // Ensure looting
                     if (me->IsDamageEnoughForLootingAndReward())
@@ -513,7 +513,7 @@ class boss_twilight_halion : public CreatureScript
                         killer->Kill(halion);
                 }
 
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                     if (controller->isAlive())
                         controller->Kill(controller);
 
@@ -537,7 +537,7 @@ class boss_twilight_halion : public CreatureScript
                     if (!me->InSamePhase(attacker))
                         return;
 
-                    if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                    if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                         controller->AI()->SetData(DATA_TWILIGHT_DAMAGE_TAKEN, damage);
                 }
             }
@@ -547,7 +547,7 @@ class boss_twilight_halion : public CreatureScript
                 switch (spell->Id)
                 {
                     case SPELL_TWILIGHT_DIVISION:
-                        if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                        if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                             controller->AI()->DoAction(ACTION_MONITOR_CORPOREALITY);
                         break;
                     default:
@@ -561,7 +561,7 @@ class boss_twilight_halion : public CreatureScript
                 switch (eventId)
                 {
                     case EVENT_SOUL_CONSUMPTION:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, SPELL_TWILIGHT_REALM))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, SPELL_TWILIGHT_REALM))
                             DoCast(target, SPELL_SOUL_CONSUMPTION);
                         events.ScheduleEvent(EVENT_SOUL_CONSUMPTION, 20000);
                         break;
@@ -628,10 +628,10 @@ class npc_halion_controller : public CreatureScript
 
             void JustReachedHome()
             {
-                if (Creature* twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
+                if (auto twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
                     twilightHalion->DespawnOrUnsummon();
 
-                if (Creature* halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION)))
+                if (auto halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION)))
                 {
                     halion->AI()->SetData(DATA_EVADE_METHOD, 1);
                     halion->AI()->EnterEvadeMode();
@@ -705,36 +705,36 @@ class npc_halion_controller : public CreatureScript
                             break;
                         case EVENT_INTRO_PROGRESS_1:
                             for (uint8 i = DATA_BURNING_TREE_3; i <= DATA_BURNING_TREE_4; ++i)
-                                if (GameObject* tree = ObjectAccessor::GetGameObject(*me, _instance->GetData64(i)))
+                                if (auto tree = ObjectAccessor::GetGameObject(*me, _instance->GetData64(i)))
                                     _instance->HandleGameObject(_instance->GetData64(i), true, tree);
                             _events.ScheduleEvent(EVENT_INTRO_PROGRESS_2, 4000);
                             break;
                         case EVENT_INTRO_PROGRESS_2:
                             for (uint8 i = DATA_BURNING_TREE_1; i <= DATA_BURNING_TREE_2; ++i)
-                                if (GameObject* tree = ObjectAccessor::GetGameObject(*me, _instance->GetData64(i)))
+                                if (auto tree = ObjectAccessor::GetGameObject(*me, _instance->GetData64(i)))
                                     _instance->HandleGameObject(_instance->GetData64(i), true, tree);
                             _events.ScheduleEvent(EVENT_INTRO_PROGRESS_3, 4000);
                             break;
                         case EVENT_INTRO_PROGRESS_3:
                             DoCast(me, SPELL_FIERY_EXPLOSION);
-                            if (Creature* halion = me->GetMap()->SummonCreature(NPC_HALION, HalionSpawnPos))
+                            if (auto halion = me->GetMap()->SummonCreature(NPC_HALION, HalionSpawnPos))
                                 halion->AI()->Talk(SAY_INTRO);
                             break;
                         case EVENT_TWILIGHT_MENDING:
                             if (ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION))) // Just check if physical Halion is spawned
-                                if (Creature* twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
+                                if (auto twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
                                     twilightHalion->CastSpell((Unit*)NULL, SPELL_TWILIGHT_MENDING, true);
                             break;
                         case EVENT_TRIGGER_BERSERK:
                             for (uint8 i = DATA_HALION; i <= DATA_TWILIGHT_HALION; i++)
-                                if (Creature* halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(i)))
+                                if (auto halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(i)))
                                     halion->CastSpell(halion, SPELL_BERSERK, true);
                             break;
                         case EVENT_SHADOW_PULSARS_SHOOT:
-                            if (Creature* twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
+                            if (auto twilightHalion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_TWILIGHT_HALION)))
                                 twilightHalion->AI()->Talk(SAY_SPHERE_PULSE);
 
-                            if (Creature* orbCarrier = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ORB_CARRIER)))
+                            if (auto orbCarrier = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_ORB_CARRIER)))
                                 orbCarrier->AI()->DoAction(ACTION_SHOOT);
 
                             _events.ScheduleEvent(EVENT_SHADOW_PULSARS_SHOOT, 29000);
@@ -847,7 +847,7 @@ class npc_halion_controller : public CreatureScript
 
                 for (uint8 itr = DATA_HALION; itr <= DATA_TWILIGHT_HALION; itr++)
                 {
-                    if (Creature* halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(itr)))
+                    if (auto halion = ObjectAccessor::GetCreature(*me, _instance->GetData64(itr)))
                     {
                         RemoveCorporeality(halion, itr == DATA_TWILIGHT_HALION);
                         halion->CastSpell(halion, GetSpell(_materialCorporealityValue, itr == DATA_TWILIGHT_HALION), true);
@@ -923,7 +923,7 @@ class npc_orb_carrier : public CreatureScript
                 /// we are having two creatures involded here. This attribute is handled clientside, meaning the client
                 /// sends orientation update itself. Here, no packet is sent, and the creature does not rotate. By
                 /// forcing the carrier to always be facing the rotation focus, we ensure everything works as it should.
-                if (Creature* rotationFocus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ORB_ROTATION_FOCUS)))
+                if (auto rotationFocus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ORB_ROTATION_FOCUS)))
                     me->SetFacingToObject(rotationFocus); // setInFront
             }
 
@@ -998,7 +998,7 @@ class npc_meteor_strike_initial : public CreatureScript
                     return;
 
                 // Let Halion Controller count as summoner
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->AI()->JustSummoned(me);
 
                 DoCast(me, SPELL_METEOR_STRIKE_COUNTDOWN);
@@ -1020,7 +1020,7 @@ class npc_meteor_strike_initial : public CreatureScript
                         angle[i] = Position::NormalizeOrientation(angle[i]);
                         me->SetOrientation(angle[i]);
                         me->GetNearPosition(newPos, 10.0f, 0.0f); // Exact distance
-                        if (Creature* meteor = me->SummonCreature(NPC_METEOR_STRIKE_NORTH + i, newPos, TEMPSUMMON_TIMED_DESPAWN, 30000))
+                        if (auto meteor = me->SummonCreature(NPC_METEOR_STRIKE_NORTH + i, newPos, TEMPSUMMON_TIMED_DESPAWN, 30000))
                             _meteorList.push_back(meteor);
                     }
                 }
@@ -1066,7 +1066,7 @@ class npc_meteor_strike : public CreatureScript
             void IsSummonedBy(Unit* /*summoner*/)
             {
                 // Let Halion Controller count as summoner.
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->AI()->JustSummoned(me);
             }
 
@@ -1082,9 +1082,9 @@ class npc_meteor_strike : public CreatureScript
                     Position pos;
                     me->GetNearPosition(pos, _range, 0.0f);
 
-                    if (Creature* flame = me->SummonCreature(NPC_METEOR_STRIKE_FLAME, pos, TEMPSUMMON_TIMED_DESPAWN, 25000))
+                    if (auto flame = me->SummonCreature(NPC_METEOR_STRIKE_FLAME, pos, TEMPSUMMON_TIMED_DESPAWN, 25000))
                     {
-                        if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
+                        if (auto controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                             controller->AI()->JustSummoned(flame);
 
                         flame->CastSpell(flame, SPELL_METEOR_STRIKE_FIRE_AURA_2, true);
@@ -1143,7 +1143,7 @@ class npc_combustion_consumption : public CreatureScript
             void IsSummonedBy(Unit* summoner)
             {
                 // Let Halion Controller count as summoner
-                if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->AI()->JustSummoned(me);
 
                 _summonerGuid = summoner->GetGUID();
@@ -1192,8 +1192,8 @@ class npc_living_inferno : public CreatureScript
                 me->SetInCombatWithZone();
                 me->CastSpell(me, SPELL_BLAZING_AURA, true);
 
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto instance = me->GetInstanceScript())
+                    if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                         controller->AI()->JustSummoned(me);
             }
 
@@ -1232,8 +1232,8 @@ class npc_living_ember : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                if (InstanceScript* instance = me->GetInstanceScript())
-                    if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
+                if (auto instance = me->GetInstanceScript())
+                    if (auto controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                         controller->AI()->JustSummoned(me);
             }
 
@@ -1342,7 +1342,7 @@ class spell_halion_meteor_strike_marker : public SpellScriptLoader
                     return;
 
                 if (GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE)
-                    if (Creature* creCaster = GetCaster()->ToCreature())
+                    if (auto creCaster = GetCaster()->ToCreature())
                         creCaster->AI()->DoAction(ACTION_METEOR_STRIKE_AOE);
             }
 
@@ -1442,7 +1442,7 @@ class spell_halion_marks : public SpellScriptLoader
                 // Prevent any stack from being removed at this point.
                 dispelData->SetRemovedCharges(0);
 
-                if (Unit* dispelledUnit = GetUnitOwner())
+                if (auto dispelledUnit = GetUnitOwner())
                     if (dispelledUnit->HasAura(_removeSpellId))
                         dispelledUnit->RemoveAurasDueToSpell(_removeSpellId, 0, 0, AURA_REMOVE_BY_EXPIRE);
             }
@@ -1495,7 +1495,7 @@ class spell_halion_damage_aoe_summon : public SpellScriptLoader
 
                 Position pos;
                 caster->GetPosition(&pos);
-                if (Creature* summon = caster->GetMap()->SummonCreature(entry, pos, properties, duration, caster, GetSpellInfo()->Id))
+                if (auto summon = caster->GetMap()->SummonCreature(entry, pos, properties, duration, caster, GetSpellInfo()->Id))
                     if (summon->IsAIEnabled)
                         summon->AI()->SetData(DATA_STACKS_DISPELLED, GetSpellValue()->EffectBasePoints[EFFECT_1]);
             }
@@ -1538,7 +1538,7 @@ class spell_halion_twilight_realm_handlers : public SpellScriptLoader
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*handle*/)
             {
                 GetTarget()->RemoveAurasDueToSpell(SPELL_TWILIGHT_REALM);
-                if (InstanceScript* instance = GetTarget()->GetInstanceScript())
+                if (auto instance = GetTarget()->GetInstanceScript())
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_UNK7);
             }
 
@@ -1549,7 +1549,7 @@ class spell_halion_twilight_realm_handlers : public SpellScriptLoader
                     return;
 
                 target->RemoveAurasDueToSpell(_beforeHitSpellId, 0, 0, AURA_REMOVE_BY_ENEMY_SPELL);
-                if (InstanceScript* instance = target->GetInstanceScript())
+                if (auto instance = target->GetInstanceScript())
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_UNK7);
             }
 
@@ -1646,7 +1646,7 @@ class spell_halion_twilight_cutter : public SpellScriptLoader
                 Unit* caster = GetCaster();
                 if (Aura* cutter = caster->GetAura(SPELL_TWILIGHT_CUTTER))
                 {
-                    if (Unit* cutterCaster = cutter->GetCaster())
+                    if (auto cutterCaster = cutter->GetCaster())
                     {
                         unitList.remove_if(TwilightCutterSelector(caster, cutterCaster));
                         return;

@@ -217,7 +217,7 @@ public:
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             if (instance->IsDone(DATA_DRAKOS_EVENT))
             {
@@ -329,7 +329,7 @@ public:
         void IsSummonedBy(Unit* summoner)
         {
             if (instance && instance->GetBossState(DATA_EREGOS_EVENT) == IN_PROGRESS)
-                if (Creature* eregos = me->FindNearestCreature(NPC_EREGOS, 450.0f, true))
+                if (auto eregos = me->FindNearestCreature(NPC_EREGOS, 450.0f, true))
                 {
                     eregos->DespawnOrUnsummon(); // On retail this kills abusive call of drake during engaged Eregos
                 }
@@ -514,7 +514,7 @@ public:
             {
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                         DoCast(target, DUNGEON_MODE(50715, 59278));
                     _blizzardTimer = urand(12000, 17000);
                 }
@@ -528,7 +528,7 @@ public:
             {
                 if (!me->IsNonMeleeSpellCasted(false))
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30, true))
                         DoCast(target, DUNGEON_MODE(16102, 61402));
                     _flameStrikeTimer = urand(6000, 13000);
                 }

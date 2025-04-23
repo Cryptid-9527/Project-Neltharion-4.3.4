@@ -153,7 +153,7 @@ class instance_dragonsoul : public InstanceMapScript
                 {
                     Map::PlayerList const& players = instance->GetPlayers();
                     if (!players.isEmpty())
-                        if (Player* player = players.begin()->getSource())
+                        if (auto player = players.begin()->getSource())
                             if (Group* grp = player->GetGroup())
                             {
                                 raidMode = (instance->Is25ManRaid() && grp->isLFRGroup()) ? RAID_MODE_LFR : RAID_MODE_NORMAL;
@@ -448,7 +448,7 @@ class instance_dragonsoul : public InstanceMapScript
                         {
                             for (uint64 guid : dragonSoulNpcs)
                             {
-                                if (Creature* creature = instance->GetCreature(guid))
+                                if (auto creature = instance->GetCreature(guid))
                                 {
                                     creature->RemoveAurasDueToSpell(SPELL_PRESENCE_OF_THE_DRAGON_SOUL);
                                     creature->RemoveAurasDueToSpell(SPELL_POWER_OF_THE_ASPECTS);
@@ -460,7 +460,7 @@ class instance_dragonsoul : public InstanceMapScript
                     {
                         for (auto itr : npcGroups)
                             if (itr.first == GROUP_ENTRANCE_WYRMREST_ACCORD)
-                                if (Creature* trashMob = instance->GetCreature(itr.second))
+                                if (auto trashMob = instance->GetCreature(itr.second))
                                 {
                                     trashMob->SetPhaseMask(0x2, true);
                                 }
@@ -468,7 +468,7 @@ class instance_dragonsoul : public InstanceMapScript
 
                         for (auto itr : npcGroups)
                             if (itr.first == GROUP_TOWER_WYRMREST_ACCORD)
-                                if (Creature* trashMob = instance->GetCreature(itr.second))
+                                if (auto trashMob = instance->GetCreature(itr.second))
                                 {
                                     if (trashMob->GetEntry() == NPC_TYRYGOSA)
                                     {
@@ -517,7 +517,7 @@ class instance_dragonsoul : public InstanceMapScript
             {
                 for (auto itr : npcGroups)
                     if (itr.first == GROUP_RAID_TEPORTERS)
-                        if (Creature* transporter = instance->GetCreature(itr.second))
+                        if (auto transporter = instance->GetCreature(itr.second))
                             switch (transporter->GetEntry())
                             {
                                 case NPC_TRAVEL_GNOME:              //andorgos, next to portals
@@ -560,12 +560,12 @@ class instance_dragonsoul : public InstanceMapScript
                         {
                             for (auto itr : npcGroups)
                                 if (itr.first == GROUP_MORCHOK_GROUND_TRASH)
-                                    if (Creature* trashMob = instance->GetCreature(itr.second))
+                                    if (auto trashMob = instance->GetCreature(itr.second))
                                         trashMob->SetPhaseMask(0x2, true);
 
                             for (auto itr : npcGroups)
                                 if (itr.first == GROUP_ENTRANCE_WYRMREST_ACCORD)
-                                    if (Creature* trashMob = instance->GetCreature(itr.second))
+                                    if (auto trashMob = instance->GetCreature(itr.second))
                                     {
                                         Creature* follow_this{ nullptr };
                                         trashMob->SetSpeed(MOVE_RUN, 1.4f, true, true);
@@ -592,7 +592,7 @@ class instance_dragonsoul : public InstanceMapScript
 
 
                             for (auto itr : wingTrash)
-                                if (Creature* trashMob = instance->GetCreature(itr))
+                                if (auto trashMob = instance->GetCreature(itr))
                                     trashMob->SetPhaseMask(0x1, true);
 
                         }
@@ -602,14 +602,14 @@ class instance_dragonsoul : public InstanceMapScript
                         {
                             for (auto itr : npcGroups)
                                 if (itr.first == DATA_MADNESS_OF_DEATHWING)
-                                    if (Creature* trashMob = instance->GetCreature(itr.second))
+                                    if (auto trashMob = instance->GetCreature(itr.second))
                                         trashMob->SetVisible(true);
                         }
                         if (state == IN_PROGRESS || state == FAIL)
                         {
                             for (auto itr : npcGroups)
                                 if (itr.first == DATA_SPINE_OF_DEATHWING)
-                                    if (Creature* trashMob = instance->GetCreature(itr.second))
+                                    if (auto trashMob = instance->GetCreature(itr.second))
                                         trashMob->SetVisible(state == FAIL ? true : false);
                         }
                         break;
@@ -618,7 +618,7 @@ class instance_dragonsoul : public InstanceMapScript
                         {
                             for (auto itr : npcGroups)
                                 if (itr.first == DATA_SPINE_OF_DEATHWING)
-                                    if (Creature* trashMob = instance->GetCreature(itr.second))
+                                    if (auto trashMob = instance->GetCreature(itr.second))
                                         trashMob->SetVisible(true);
                         }
                     case DATA_YORSAHJ:
@@ -629,7 +629,7 @@ class instance_dragonsoul : public InstanceMapScript
                             {
                                 for (auto itr : npcGroups)
                                     if (itr.first == DATA_YORSAHJ)
-                                        if (Creature* trashMob = instance->GetCreature(itr.second))
+                                        if (auto trashMob = instance->GetCreature(itr.second))
                                             trashMob->SetVisible(true);
                             }
                             if (auto c = GetCreature(DATA_DEATHWING_ULTRAXION))

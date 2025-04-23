@@ -146,7 +146,7 @@ class boss_general_vezax : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_SHADOW_CRASH:
-                            if (Unit* target = CheckPlayersInRange(RAID_MODE(4, 9), 15.0f, 50.0f))
+                            if (auto target = CheckPlayersInRange(RAID_MODE(4, 9), 15.0f, 50.0f))
                                 DoCast(target, SPELL_SHADOW_CRASH);
                             events.ScheduleEvent(EVENT_SHADOW_CRASH, urand(8000, 12000));
                             break;
@@ -155,7 +155,7 @@ class boss_general_vezax : public CreatureScript
                             events.ScheduleEvent(EVENT_SEARING_FLAMES, urand(14000, 17500));
                             break;
                         case EVENT_MARK_OF_THE_FACELESS:
-                            if (Unit* target = CheckPlayersInRange(RAID_MODE(4, 9), 15.0f, 50.0f))
+                            if (auto target = CheckPlayersInRange(RAID_MODE(4, 9), 15.0f, 50.0f))
                                 DoCast(target, SPELL_MARK_OF_THE_FACELESS);
                             events.ScheduleEvent(EVENT_MARK_OF_THE_FACELESS, urand(35000, 45000));
                             break;
@@ -273,7 +273,7 @@ class boss_general_vezax : public CreatureScript
                     Map::PlayerList const& Players = map->GetPlayers();
                     for (Map::PlayerList::const_iterator itr = Players.begin(); itr != Players.end(); ++itr)
                     {
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                         {
                             float distance = player->GetDistance(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
                             if (rangeMin > distance || distance > rangeMax)
@@ -419,7 +419,7 @@ class npc_saronite_vapors : public CreatureScript
                         Map::PlayerList const& players = me->GetMap()->GetPlayers();
                         if (!players.isEmpty())
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                     if (player->isAlive())
                                     {
                                         Position basePos;
@@ -489,7 +489,7 @@ class npc_saronite_vapors : public CreatureScript
                     DoCast(me, SPELL_SARONITE_VAPORS);
                     me->DespawnOrUnsummon(30000);
 
-                    if (Creature* Vezax = me->GetCreature(*me, instance->GetData64(BOSS_VEZAX)))
+                    if (auto Vezax = me->GetCreature(*me, instance->GetData64(BOSS_VEZAX)))
                         Vezax->AI()->DoAction(ACTION_VAPORS_DIE);
                 }
             }
@@ -586,7 +586,7 @@ public:
 
             void HandleEffectPeriodic(AuraEffect const* aurEff)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastCustomSpell(SPELL_MARK_OF_THE_FACELESS_DAMAGE, SPELLVALUE_BASE_POINT1, aurEff->GetAmount(), GetTarget(), true);
             }
 
@@ -640,8 +640,8 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const * /*aurEff*/)
         {
-            if (Unit* target = GetTarget())
-                if (Player* player = target->ToPlayer())
+            if (auto target = GetTarget())
+                if (auto player = target->ToPlayer())
                 {
                     if (player->GetDistance(basePos) > 8.0f) // Max. range: 8 yards
                     {
@@ -695,7 +695,7 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->GetPosition(&basePos);
         }
 
@@ -728,7 +728,7 @@ class achievement_shadowdodger : public AchievementCriteriaScript
         bool OnCheck(Player* /*player*/, Unit* target)
         {
             if (target)
-                if (Creature* Vezax = target->ToCreature())
+                if (auto Vezax = target->ToCreature())
                     if (Vezax->AI()->GetData(DATA_SHADOWDODGER))
                         return true;
 
@@ -744,7 +744,7 @@ class achievement_i_love_the_smell_of_saronite_in_the_morning : public Achieveme
         bool OnCheck(Player* /*player*/, Unit* target)
         {
             if (target)
-                if (Creature* Vezax = target->ToCreature())
+                if (auto Vezax = target->ToCreature())
                     if (Vezax->AI()->GetData(DATA_SMELL_OF_SARONITE))
                         return true;
 

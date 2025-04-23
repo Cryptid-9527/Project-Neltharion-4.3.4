@@ -174,7 +174,7 @@ public:
 
             if (Rage_Timer <= diff)
             {
-                if (Creature* distiller = me->FindNearestCreature(17954, 100.0f))
+                if (auto distiller = me->FindNearestCreature(17954, 100.0f))
                 {
                     Talk(SAY_REGEN);
                     DoCast(me, SPELL_WARLORDS_RAGE);
@@ -193,7 +193,7 @@ public:
             //Impale_Timer
             if (Impale_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_IMPALE);
 
                 Impale_Timer = 7500+rand()%5000;

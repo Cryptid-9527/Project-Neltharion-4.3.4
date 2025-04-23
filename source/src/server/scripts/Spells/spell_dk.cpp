@@ -126,7 +126,7 @@ class spell_dk_necrotic : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 absorbAmount = caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.7f;
                     caster->ApplyResilience(GetUnitOwner(), &absorbAmount);
@@ -413,7 +413,7 @@ class spell_dk_anti_magic_zone : public SpellScriptLoader
 
                 SpellInfo const* talentSpell = sSpellMgr->GetSpellInfo(SPELL_DK_ANTI_MAGIC_SHELL_TALENT);
                 amount = talentSpell->Effects[EFFECT_0].CalcValue(GetCaster());
-                if (Unit* owner = GetCaster()->GetOwner())
+                if (auto owner = GetCaster()->GetOwner())
                     amount += int32(2 * owner->GetTotalAttackPowerValue(BASE_ATTACK));
             }
 
@@ -664,7 +664,7 @@ class spell_dk_pestilence : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (target != GetExplTargetUnit())
                     {
@@ -746,7 +746,7 @@ class spell_dk_blood_gorged : public SpellScriptLoader
                     if (roll_chance_i(aur->GetStackAmount() * 10))
                     {
                         target->CastSpell((Unit*)NULL, 81280, true);
-                        if (Creature* creature = target->ToCreature())
+                        if (auto creature = target->ToCreature())
                             creature->DespawnOrUnsummon(1000);
                     }
             }
@@ -775,7 +775,7 @@ class spell_dk_resilient_infection : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* /*dispelInfo*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Resilient Infection
                     if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 1910, EFFECT_0))
@@ -826,7 +826,7 @@ class spell_dk_death_coil : public SpellScriptLoader
             {
                 int32 damage = GetEffectValue();
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (caster->IsFriendlyTo(target))
                     {
@@ -845,7 +845,7 @@ class spell_dk_death_coil : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                 {
                     if (caster->GetDistance2d(target) > 30.0f)
                         return SPELL_FAILED_OUT_OF_RANGE;
@@ -931,7 +931,7 @@ class spell_dk_death_gate : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     target->CastSpell(target, GetEffectValue(), false);
             }
 
@@ -962,7 +962,7 @@ class spell_dk_death_grip : public SpellScriptLoader
             {
                 int32 damage = GetEffectValue();
                 Position const* pos = GetExplTargetDest();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     if (!target->HasAuraType(SPELL_AURA_DEFLECT_SPELLS)) // Deterrence
                         target->CastSpell(pos->GetPositionX(), pos->GetPositionY(), pos->GetPositionZ(), damage, true);
             }
@@ -993,9 +993,9 @@ class spell_dk_death_pact : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 // Check if we have valid targets, otherwise skip spell casting here
-                if (Player* player = GetCaster()->ToPlayer())
+                if (auto player = GetCaster()->ToPlayer())
                     for (Unit::ControlList::const_iterator itr = player->m_Controlled.begin(); itr != player->m_Controlled.end(); ++itr)
-                        if (Creature* undeadPet = (*itr)->ToCreature())
+                        if (auto undeadPet = (*itr)->ToCreature())
                             if (undeadPet->isAlive() &&
                                 undeadPet->GetOwnerGUID() == player->GetGUID() &&
                                 undeadPet->GetCreatureType() == CREATURE_TYPE_UNDEAD &&
@@ -1012,11 +1012,11 @@ class spell_dk_death_pact : public SpellScriptLoader
 
             void FilterTargets(std::list<WorldObject*>& targetList)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     for (std::list<WorldObject*>::iterator itr = targetList.begin(); itr != targetList.end(); ++itr)
                     {
-                        if (Unit* unit = (*itr)->ToUnit())
+                        if (auto unit = (*itr)->ToUnit())
                             if (unit->GetOwnerGUID() == caster->GetGUID() && unit->GetCreatureType() == CREATURE_TYPE_UNDEAD)
                             {
                                 target = unit;
@@ -1025,7 +1025,7 @@ class spell_dk_death_pact : public SpellScriptLoader
                     }
 
                     if (IS_CREATURE_GUID(caster->GetUInt64Value(UNIT_FIELD_TARGET)))
-                        if (Creature* pet = Creature::GetCreature(*caster, caster->GetUInt64Value(UNIT_FIELD_TARGET)))
+                        if (auto pet = Creature::GetCreature(*caster, caster->GetUInt64Value(UNIT_FIELD_TARGET)))
                             if (pet->isAlive() && pet->GetOwnerGUID() == caster->GetGUID() && pet->GetCreatureType() == CREATURE_TYPE_UNDEAD && pet->IsWithinDist(caster, 100.0f, false))
                                 target = pet;
 
@@ -1260,7 +1260,7 @@ class spell_dk_scourge_strike : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     multiplier = (GetEffectValue() * unitTarget->GetDiseasesByCaster(caster->GetGUID()) / 100.f);
                     // Death Knight T8 Melee 4P Bonus
@@ -1275,7 +1275,7 @@ class spell_dk_scourge_strike : public SpellScriptLoader
             void HandleAfterHit()
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     int32 bp = GetTrueDamage() * multiplier;
 
@@ -1361,7 +1361,7 @@ class spell_dk_vampiric_blood : public SpellScriptLoader
 
             void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     if (Aura* t13 = target->GetAura(105587, target->GetGUID()))
                     {
                         int32 baseHealthPctDone = 25;
@@ -1402,13 +1402,13 @@ public:
 
         void ApplyEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->ModifyAuraState(AURA_STATE_DEFENSE, true);
         }
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->ModifyAuraState(AURA_STATE_DEFENSE, false);
         }
 
@@ -1467,7 +1467,7 @@ public:
         {
             uint32 heal = 0;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Aura* aura = caster->GetAura(81277))
                     heal = caster->CountPctFromMaxHealth(aura->GetStackAmount() * 10);
 
@@ -1539,9 +1539,9 @@ public:
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     if (target->HasAura(50434, caster->GetGUID()))
                         target->RemoveAurasDueToSpell(50434, caster->GetGUID());
@@ -1576,7 +1576,7 @@ public:
 
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
-            if (Player* player = GetCaster()->ToPlayer())
+            if (auto player = GetCaster()->ToPlayer())
             {
                 int32 damage = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), 6);
                 player->CastCustomSpell(eventInfo.GetActionTarget(), 99000, &damage, NULL, NULL, true);
@@ -1719,7 +1719,7 @@ public:
             // Glyph of resilient grip
             if (AuraEffect* glyph = caster->GetAuraEffect(59309, EFFECT_0, caster->GetGUID()))
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     if (unitTarget->IsImmunedToSpell(sSpellMgr->GetSpellInfo(49576), 0))
                         caster->ToPlayer()->RemoveSpellCooldown(49576, true);
@@ -1883,7 +1883,7 @@ public:
             bool canProc = true;
             if (eventInfo.GetSpellInfo()->Id == 49184 && GetTarget())
             {
-                if (Player* player = GetTarget()->ToPlayer())
+                if (auto player = GetTarget()->ToPlayer())
                 {
                     if (player->HasSpellCooldown(GetId()))
                         canProc = false;

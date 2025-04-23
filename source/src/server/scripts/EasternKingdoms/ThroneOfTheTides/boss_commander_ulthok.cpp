@@ -103,7 +103,7 @@ public:
             if(Id == 1001)
             {
                 me->RemoveAllAuras();
-                if (GameObject* corail = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_CORAIL)))
+                if (auto corail = ObjectAccessor::GetGameObject(*me, instance->GetData64(GO_CORAIL)))
                 {
                     corail->Use(me);
                     corail->Delete();
@@ -125,7 +125,7 @@ public:
             {
                 if (start_event && mui_start_event <= diff)
                 {
-                    if (Creature* trigger = me->FindNearestCreature(NPC_CINEMATIC_TRIGGER, 20.0f))
+                    if (auto trigger = me->FindNearestCreature(NPC_CINEMATIC_TRIGGER, 20.0f))
                         trigger->AI()->DoCast(SPELL_INTRO_VISUAL_CEILING_IMPACT);
                     me->CastSpell(me, SPELL_INTRO_VISUAL_STATE, true);
                     Position pos = { 50.57f, 802.39f, 805.7308f, 0.0f };
@@ -153,7 +153,7 @@ public:
                 case EVENT_SQUEEZE_START:
                 {
                     lock_orientation = me->GetOrientation();
-                    if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                    if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(victim, SPELL_SQUEEZE);
                     me->SetFacingTo(lock_orientation);
                     if (events.HasEvent(EVENT_DARK_FISSURE))
@@ -184,7 +184,7 @@ public:
                 {
                     Position pos(*me);
                     me->MoveBlink(pos, 5.f, 0.f);
-                    if (Creature* dark = me->SummonCreature(NPC_DARK_FISSURE, pos))
+                    if (auto dark = me->SummonCreature(NPC_DARK_FISSURE, pos))
                         dark->CastWithDelay(2000, dark, IsHeroic() ? SPELL_DARK_FISSURE_AURA_HC : SPELL_DARK_FISSURE_AURA_NM);
                     DoCast(me, SPELL_DARK_FISSURE);
                     events.CancelEvent(EVENT_DARK_FISSURE);
@@ -195,7 +195,7 @@ public:
                     events.CancelEvent(EVENT_ENRAGE);
                     break;
                 case EVENT_CURSE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, SPELL_CURSE_OF_FATIGUE);
                     events.CancelEvent(EVENT_CURSE);
                     break;

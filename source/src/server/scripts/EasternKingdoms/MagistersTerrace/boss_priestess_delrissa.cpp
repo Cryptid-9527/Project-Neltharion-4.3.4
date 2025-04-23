@@ -148,7 +148,7 @@ public:
 
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
             {
-                if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
+                if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
                 {
                     if (!pAdd->getVictim())
                     {
@@ -185,9 +185,9 @@ public:
                     LackeyEntryList.erase(LackeyEntryList.begin() + rand()%LackeyEntryList.size());
 
                 //summon all the remaining in vector
-                for (std::vector<uint32>::const_iterator itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
+                for (auto itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
                 {
-                    if (Creature* pAdd = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                    if (auto pAdd = me->SummonCreature((*itr), LackeyLocations[j][0], LackeyLocations[j][1], fZLocation, fOrientation, TEMPSUMMON_CORPSE_DESPAWN, 0))
                         m_auiLackeyGUID[j] = pAdd->GetGUID();
 
                     ++j;
@@ -195,7 +195,7 @@ public:
             }
             else
             {
-                for (std::vector<uint32>::const_iterator itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
+                for (auto itr = LackeyEntryList.begin(); itr != LackeyEntryList.end(); ++itr)
                 {
                     Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[j]);
 
@@ -261,7 +261,7 @@ public:
                 Unit* target = me;
                 for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 {
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
+                    if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[i]))
                     {
                         if (pAdd->isAlive() && pAdd->GetHealth() < health)
                             target = pAdd;
@@ -277,7 +277,7 @@ public:
                 Unit* target = me;
 
                 if (urand(0, 1))
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                    if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
                         if (pAdd->isAlive())
                             target = pAdd;
 
@@ -290,7 +290,7 @@ public:
                 Unit* target = me;
 
                 if (urand(0, 1))
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                    if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
                         if (pAdd->isAlive() && !pAdd->HasAura(SPELL_SHIELD))
                             target = pAdd;
 
@@ -309,7 +309,7 @@ public:
                     if (urand(0, 1))
                         target = me;
                     else
-                        if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
+                        if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUID[rand()%MAX_ACTIVE_LACKEY]))
                             if (pAdd->isAlive())
                                 target = pAdd;
                 }
@@ -322,7 +322,7 @@ public:
 
             if (SWPainTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_SW_PAIN_NORMAL);
 
                 SWPainTimer = 10000;
@@ -366,7 +366,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         ResetThreatTimer = urand(5000, 20000);
 
         // in case she is not alive and Reset was for some reason called, respawn her (most likely party wipe after killing her)
-        if (Creature* pDelrissa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DELRISSA) : 0))
+        if (auto pDelrissa = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_DELRISSA) : 0))
         {
             if (!pDelrissa->isAlive())
                 pDelrissa->Respawn();
@@ -382,7 +382,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
             {
-                if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
+                if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
                 {
                     if (!pAdd->getVictim() && pAdd != me)
                     {
@@ -392,7 +392,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
                 }
             }
 
-            if (Creature* pDelrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
+            if (auto pDelrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
             {
                 if (pDelrissa->isAlive() && !pDelrissa->getVictim())
                 {
@@ -440,7 +440,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (!instance)
             return;
 
-        if (Creature* Delrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
+        if (auto Delrissa = Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA)))
             Delrissa->AI()->KilledUnit(victim);
     }
 
@@ -449,7 +449,7 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
         if (!instance)
             return;
 
-        if (Creature* Delrissa = (Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA))))
+        if (auto Delrissa = (Unit::GetCreature(*me, instance->GetData64(DATA_DELRISSA))))
         {
             for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 m_auiLackeyGUIDs[i] = CAST_AI(boss_priestess_delrissa::boss_priestess_delrissaAI, Delrissa->AI())->m_auiLackeyGUID[i];
@@ -644,7 +644,7 @@ public:
 
             if (Seed_of_Corruption_Timer <= diff)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_SEED_OF_CORRUPTION);
 
                 Seed_of_Corruption_Timer = 10000;
@@ -652,7 +652,7 @@ public:
 
             if (Curse_of_Agony_Timer <= diff)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_CURSE_OF_AGONY);
 
                 Curse_of_Agony_Timer = 13000;
@@ -660,7 +660,7 @@ public:
 
             if (Fear_Timer <= diff)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_FEAR);
 
                 Fear_Timer = 10000;
@@ -789,7 +789,7 @@ public:
 
             if (Polymorph_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(target, SPELL_POLYMORPH);
                     Polymorph_Timer = 20000;
@@ -804,7 +804,7 @@ public:
 
             if (Blizzard_Timer <= diff)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_BLIZZARD);
 
                 Blizzard_Timer = 8000;
@@ -834,7 +834,7 @@ public:
                 ThreatContainer::StorageType const &t_list = me->getThreatManager().getThreatList();
                 for (ThreatContainer::StorageType::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         //if in melee range
                         if (target->IsWithinDistInMap(me, 5))
@@ -920,7 +920,7 @@ public:
                 ThreatContainer::StorageType const &t_list = me->getThreatManager().getThreatList();
                 for (ThreatContainer::StorageType::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         //if in melee range
                         if (target->IsWithinDistInMap(me, ATTACK_DISTANCE))
@@ -934,7 +934,7 @@ public:
                 //if nobody is in melee range than try to use Intercept
                 if (!InMeleeRange)
                 {
-                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(unit, SPELL_INTERCEPT_STUN);
                 }
 
@@ -1166,7 +1166,7 @@ public:
 
             if (Purge_Timer <= diff)
             {
-                if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(unit, SPELL_PURGE);
 
                 Purge_Timer = 15000;
@@ -1269,7 +1269,7 @@ public:
             {
                 for (uint8 i = 0; i < MAX_ACTIVE_LACKEY; ++i)
                 {
-                    if (Unit* pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
+                    if (auto pAdd = Unit::GetUnit(*me, m_auiLackeyGUIDs[i]))
                     {
                         if (pAdd->IsPolymorphed())
                         {

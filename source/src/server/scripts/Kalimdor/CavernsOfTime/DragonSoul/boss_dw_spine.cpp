@@ -282,7 +282,7 @@ public:
             }
 
             for (uint8 i = 0; i < 3; i++)
-                if (GameObject* go = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + i))
+                if (auto go = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + i))
                     go->SetGoState(GO_STATE_READY);
             instance->SetData(DATA_DW_SPINE_BACKPLATE_CNT, 0);
             instance->SetData(DATA_DW_SPINE_ROLL_INFO, 0);
@@ -341,11 +341,11 @@ public:
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_BLOOD_OF_DEATHWING, AURA_REMOVE_BY_ENEMY_SPELL);
                 instance->SetBossState(DATA_SPINE_OF_DEATHWING, IsHeroic() ? DONE_HM : DONE);
                 instance->instance->LoadGrid(-12077.301f, 12165.879f); //make sure chest is loaded
-                if (GameObject* chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_SPINE_CHEST_LFR : DATA_SPINE_CHEST))
+                if (auto chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_SPINE_CHEST_LFR : DATA_SPINE_CHEST))
                 {
                     chest->SetRespawnTime(chest->GetRespawnDelay());
                     chest->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (Player* player = me->FindNearestPlayer(200.0f))
+                    if (auto player = me->FindNearestPlayer(200.0f))
                         chest->SetLootRecipient(player);
                 }
 
@@ -356,7 +356,7 @@ public:
                     Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
                     for (auto i = playerList.begin(); i != playerList.end(); ++i)
                     {
-                        if (Player* player = i->getSource())
+                        if (auto player = i->getSource())
                         {
                             player->ModifyCurrency(CURRENCY_TYPE_VALOR_POINTS, Is25ManRaid() ? 13500 : 11500);
                             player->ModifyCurrency(CURRENCY_TYPE_ESSENCE_OF_CORRUPTED_DEATHWING, 1);
@@ -642,7 +642,7 @@ public:
             spawner->CastSpell(spawner, SPELL_SUMMON_GRASPING_TENDRIS, true);
             spawner->CastWithDelay(urand(4500, 5000), spawner, SPELL_SUMMON_ELEMENTARY, true);
             me->CastSpell(spawner, SPELL_ACTIVATE_SPAWMER, true);
-            if (Creature* deathwing = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+            if (auto deathwing = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
                 deathwing->AI()->DoAction(ACTION_CORRUPTED_BLOOD);
 
             Creature* corruption = GetNearCorruption(me, true, 200.0f);
@@ -792,7 +792,7 @@ public:
         {
             DoCast(SPELL_ACT_BLOOD_ABSORB_BAR);
             DoCast(SPELL_ABSORB_BLOOD);
-            if (Unit* target = me->FindNearestPlayer(200.0f))
+            if (auto target = me->FindNearestPlayer(200.0f))
                 AttackStart(target);
             canCastBlast = true;
             if (IsHeroic())
@@ -899,7 +899,7 @@ public:
                 DoCast(me, SPELL_RESIDUE, true);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
 
-                if (Creature* spawner = me->FindNearestCreature(NPC_DW_SPINE_SPAWNER, 100.00f))
+                if (auto spawner = me->FindNearestCreature(NPC_DW_SPINE_SPAWNER, 100.00f))
                 {
                     me->SetWalk(true);
                     Position pos(*spawner);
@@ -913,7 +913,7 @@ public:
         {
             if (type == POINT_MOTION_TYPE && id == POINT_SPAWNER)
             {
-                if (Creature* spawner = me->FindNearestCreature(NPC_DW_SPINE_SPAWNER, 100.00f))
+                if (auto spawner = me->FindNearestCreature(NPC_DW_SPINE_SPAWNER, 100.00f))
                     spawner->CastSpell(spawner, SPELL_SUMMON_SLIME, true);
 
                 me->DespawnOrUnsummon();
@@ -952,7 +952,7 @@ public:
 
         void JustDied(Unit* killer) override
         {
-            if (GameObject* backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
+            if (auto backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
             {
                 if (me->GetEntry() == NPC_BURNING_TENDONS_L)
                     backplate->SendActivateAnimKit(ANIM_LOOSE_BACKPLATE_LEFT);
@@ -963,16 +963,16 @@ public:
             }
             if (instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT) == 2)
             {
-                if (Creature* spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+                if (auto spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
                     spine->AI()->DoAction(ACTION_FINISH_FIGHT);
                 return;
             }
-            if (Creature* spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+            if (auto spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
             {
                 spine->AI()->DoAction(ACTION_CORRUPTION);
             }
             instance->SetData(DATA_DW_SPINE_BACKPLATE_CNT, instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT) + 1);
-            if (Creature* tendron = me->FindNearestCreature(me->GetEntry() == NPC_BURNING_TENDONS_L ? NPC_BURNING_TENDONS_R : NPC_BURNING_TENDONS_L, 20.0f))
+            if (auto tendron = me->FindNearestCreature(me->GetEntry() == NPC_BURNING_TENDONS_L ? NPC_BURNING_TENDONS_R : NPC_BURNING_TENDONS_L, 20.0f))
                 tendron->DespawnOrUnsummon();
             RemoveEncounterFrame();
         }
@@ -1021,18 +1021,18 @@ public:
             switch (action)
             {
                 case ACTION_ACTIVATE_CORRUPTION:
-                    if (Creature* corruption = DoSummon(NPC_CORRUPTION, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
+                    if (auto corruption = DoSummon(NPC_CORRUPTION, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
                         corruptionGUID = corruption->GetGUID();
                     break;
                 case ACTION_ACTIVATE_FIRST_CORRUPTION:
                     if (me->GetDBTableGUIDLow() == 254390 || me->GetDBTableGUIDLow() == 254396)
                     {
                             //left
-                            if (Creature* corruption = DoSummon(me->GetDBTableGUIDLow() == 254390 ? NPC_CORRUPTION_VEH_L : NPC_CORRUPTION_VEH_R, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
+                            if (auto corruption = DoSummon(me->GetDBTableGUIDLow() == 254390 ? NPC_CORRUPTION_VEH_L : NPC_CORRUPTION_VEH_R, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
                             {
                                 corruption->SetReactState(REACT_PASSIVE);
 
-                                if (Creature* yeet_npc = DoSummon(me->GetDBTableGUIDLow() == 254390 ? NPC_KEANU_ORC : NPC_SKY_CAPTAIN_SWAYZE, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
+                                if (auto yeet_npc = DoSummon(me->GetDBTableGUIDLow() == 254390 ? NPC_KEANU_ORC : NPC_SKY_CAPTAIN_SWAYZE, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
                                 {
                                     yeet_npc->EnterVehicle(corruption);
                                 }
@@ -1042,7 +1042,7 @@ public:
 
                     }
                     else
-                    if (Creature* corruption = DoSummon(NPC_CORRUPTION, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
+                    if (auto corruption = DoSummon(NPC_CORRUPTION, *me, 300000, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT))
                     {
                         corruptionGUID = corruption->GetGUID();
                         corruption->AI()->DoAction(ACTION_ACTIVATE_FIRST_CORRUPTION);
@@ -1331,9 +1331,9 @@ public:
         void HandleHit(SpellEffIndex /*effIndex*/)
         {
             if (auto u = GetHitUnit())
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
-                if (GameObject* backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
+                if (auto backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
                 {
                     if (u->GetEntry() == NPC_BURNING_TENDONS_L)
                     {
@@ -1432,7 +1432,7 @@ public:
 
         void HandleHit(SpellEffIndex /*effIndex*/)
         {
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
                 if (isLeft > (isRight + isMiddle))
                 {
@@ -1446,7 +1446,7 @@ public:
                     }
                     instance->SetData(DATA_DW_SPINE_ROLL_INFO, ACTION_ROLL_LEFT);
 
-                    if (Creature* spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+                    if (auto spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
                         spine->AI()->DoAction(ACTION_ROLL_LEFT);
                 }
                 else if (isRight > (isLeft + isMiddle))
@@ -1460,14 +1460,14 @@ public:
                             target->AI()->DoAction(ACTION_REACTIVATE_ACTIVATE_CORRUPTION);
                     }
                     instance->SetData(DATA_DW_SPINE_ROLL_INFO, ACTION_ROLL_RIGHT);
-                    if (Creature* spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+                    if (auto spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
                         spine->AI()->DoAction(ACTION_ROLL_RIGHT);
                 }
                 else
                 {
                     instance->SetData(DATA_DW_SPINE_ROLL_INFO, ACTION_ROLL_MIDDLE);
 
-                    if (Creature* spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
+                    if (auto spine = instance->GetCreature(DATA_SPINE_OF_DEATHWING))
                         spine->AI()->DoAction(ACTION_ROLL_MIDDLE);
                     // GetCaster()->ToCreature()->AI()->Talk(EMOTE_WARN_ROLL_RIGHT, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                 }
@@ -1574,9 +1574,9 @@ public:
             // GetCaster()->SetHealth(GetCaster()->GetMaxHealth());
             GetCaster()->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
             GetCaster()->ToCreature()->AI()->RemoveEncounterFrame();
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
-                if (GameObject* backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
+                if (auto backplate = instance->GetGameObject(DATA_DW_SPINE_BACKPLATE_1 + instance->GetData(DATA_DW_SPINE_BACKPLATE_CNT)))
                 {
                     backplate->SetGoState(GO_STATE_READY);
                 }

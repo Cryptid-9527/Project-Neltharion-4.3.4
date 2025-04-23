@@ -454,7 +454,7 @@ public:
     {
         npc_bloodmaul_brutebaneAI(Creature* creature) : ScriptedAI(creature)
         {
-           if (Creature* Ogre = me->FindNearestCreature(NPC_OGRE_BRUTE, 50, true))
+           if (auto Ogre = me->FindNearestCreature(NPC_OGRE_BRUTE, 50, true))
            {
                Ogre->SetReactState(REACT_DEFENSIVE);
                Ogre->GetMotionMaster()->MovePoint(1, me->GetPositionX()-1, me->GetPositionY()+1, me->GetPositionZ());
@@ -555,7 +555,7 @@ class go_thunderspike : public GameObjectScript
         bool OnGossipHello(Player* player, GameObject* go)
         {
             if (player->GetQuestStatus(QUEST_THUNDERSPIKE) == QUEST_STATUS_INCOMPLETE && !go->FindNearestCreature(NPC_GOR_GRIMGUT, 25.0f, true))
-                if (Creature* gorGrimgut = go->SummonCreature(NPC_GOR_GRIMGUT, -2413.4f, 6914.48f, 25.01f, 3.67f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000))
+                if (auto gorGrimgut = go->SummonCreature(NPC_GOR_GRIMGUT, -2413.4f, 6914.48f, 25.01f, 3.67f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000))
                     gorGrimgut->AI()->AttackStart(player);
 
             return true;
@@ -790,7 +790,7 @@ class npc_simon_bunny : public CreatureScript
 
                 for (std::list<WorldObject*>::const_iterator i = ClusterList.begin(); i != ClusterList.end(); ++i)
                 {
-                    if (GameObject* go = (*i)->ToGameObject())
+                    if (auto go = (*i)->ToGameObject())
                     {
                         // We are checking for displayid because all simon nodes have 4 clusters with different entries
                         if (large)
@@ -842,7 +842,7 @@ class npc_simon_bunny : public CreatureScript
                 _events.ScheduleEvent(EVENT_SIMON_ROUND_FINISHED, 1000);
                 _events.ScheduleEvent(EVENT_SIMON_PERIODIC_PLAYER_CHECK, 2000);
 
-                if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
+                if (auto relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                     relic->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
             }
 
@@ -852,14 +852,14 @@ class npc_simon_bunny : public CreatureScript
                 DoPlaySoundToSet(me, SOUND_DISABLE_NODE);
 
                 for (uint32 clusterId = SIMON_BLUE; clusterId < SIMON_MAX_COLORS; clusterId++)
-                    if (GameObject* cluster = me->FindNearestGameObject(clusterIds[clusterId], searchDistance))
+                    if (auto cluster = me->FindNearestGameObject(clusterIds[clusterId], searchDistance))
                         cluster->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                 for (uint32 auraId = GO_AURA_BLUE; auraId <= GO_AURA_YELLOW; auraId++)
-                    if (GameObject* auraGo = me->FindNearestGameObject(auraId, searchDistance))
+                    if (auto auraGo = me->FindNearestGameObject(auraId, searchDistance))
                         auraGo->RemoveFromWorld();
 
-                if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
+                if (auto relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                     relic->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                 me->DespawnOrUnsummon(1000);
@@ -903,14 +903,14 @@ class npc_simon_bunny : public CreatureScript
             void PrepareClusters(bool clustersOnly = false)
             {
                 for (uint32 clusterId = SIMON_BLUE; clusterId < SIMON_MAX_COLORS; clusterId++)
-                    if (GameObject* cluster = me->FindNearestGameObject(clusterIds[clusterId], searchDistance))
+                    if (auto cluster = me->FindNearestGameObject(clusterIds[clusterId], searchDistance))
                         cluster->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
                 if (clustersOnly)
                     return;
 
                 for (uint32 auraId = GO_AURA_BLUE; auraId <= GO_AURA_YELLOW; auraId++)
-                    if (GameObject* auraGo = me->FindNearestGameObject(auraId, searchDistance))
+                    if (auto auraGo = me->FindNearestGameObject(auraId, searchDistance))
                         auraGo->RemoveFromWorld();
             }
 
@@ -956,7 +956,7 @@ class npc_simon_bunny : public CreatureScript
             {
                 for (uint32 clusterId = SIMON_BLUE; clusterId < SIMON_MAX_COLORS; clusterId++)
                 {
-                    if (GameObject* cluster = me->FindNearestGameObject(clusterIds[clusterId], 2.0f*searchDistance))
+                    if (auto cluster = me->FindNearestGameObject(clusterIds[clusterId], 2.0f*searchDistance))
                     {
                         cluster->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
@@ -983,7 +983,7 @@ class npc_simon_bunny : public CreatureScript
                     }
                 }
 
-                if (GameObject* relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
+                if (auto relic = me->FindNearestGameObject(large ? GO_APEXIS_MONUMENT : GO_APEXIS_RELIC, searchDistance))
                 {
                     float x, y, z, o;
                     relic->GetPosition(x, y, z, o);
@@ -1014,7 +1014,7 @@ class npc_simon_bunny : public CreatureScript
                 }
 
                 if (rewSpell)
-                    if (Player* player = me->GetPlayer(*me, playerGUID))
+                    if (auto player = me->GetPlayer(*me, playerGUID))
                         DoCast(player, rewSpell, true);
             }
 
@@ -1029,8 +1029,8 @@ class npc_simon_bunny : public CreatureScript
             {
                 if (large)
                 {
-                    if (Player* player = me->GetPlayer(*me, playerGUID))
-                        if (Creature* guardian = me->SummonCreature(NPC_APEXIS_GUARDIAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - zCoordCorrection, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000))
+                    if (auto player = me->GetPlayer(*me, playerGUID))
+                        if (auto guardian = me->SummonCreature(NPC_APEXIS_GUARDIAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - zCoordCorrection, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000))
                             guardian->AI()->AttackStart(player);
 
                     ResetNode();
@@ -1039,7 +1039,7 @@ class npc_simon_bunny : public CreatureScript
                 {
                     fails++;
 
-                    if (Player* player = me->GetPlayer(*me, playerGUID))
+                    if (auto player = me->GetPlayer(*me, playerGUID))
                         DoCast(player, SPELL_BAD_PRESS_TRIGGER, true);
 
                     if (fails >= 4)
@@ -1062,7 +1062,7 @@ class npc_simon_bunny : public CreatureScript
             // Checks if player has already die or has get too far from the current node
             bool CheckPlayer()
             {
-                if (Player* player = me->GetPlayer(*me, playerGUID))
+                if (auto player = me->GetPlayer(*me, playerGUID))
                 {
                     if (player->isDead())
                         return false;
@@ -1092,7 +1092,7 @@ class go_simon_cluster : public GameObjectScript
 
         bool OnGossipHello(Player* player, GameObject* go)
         {
-            if (Creature* bunny = go->FindNearestCreature(NPC_SIMON_BUNNY, 12.0f, true))
+            if (auto bunny = go->FindNearestCreature(NPC_SIMON_BUNNY, 12.0f, true))
                 bunny->AI()->SetData(go->GetEntry(), 0);
 
             player->CastSpell(player, go->GetGOInfo()->goober.spellId, true);
@@ -1132,7 +1132,7 @@ class go_apexis_relic : public GameObjectScript
             {
                 player->CastSpell(player, large ? SPELL_TAKE_REAGENTS_GROUP : SPELL_TAKE_REAGENTS_SOLO, false);
 
-                if (Creature* bunny = player->SummonCreature(NPC_SIMON_BUNNY, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ()))
+                if (auto bunny = player->SummonCreature(NPC_SIMON_BUNNY, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ()))
                     bunny->AI()->SetGUID(player->GetGUID(), large);
             }
 

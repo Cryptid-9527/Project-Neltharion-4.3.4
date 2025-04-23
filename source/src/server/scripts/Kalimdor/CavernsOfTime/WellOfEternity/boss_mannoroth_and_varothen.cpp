@@ -258,7 +258,7 @@ public:
                 if (damageReceived >= 10000000)
                 {
                     canDamageCount = false;
-                    if (Creature* captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
+                    if (auto captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
                         if (captain->isAlive())
                             DoCast(captain, SPELL_FEL_DRAIN, true);
                 }
@@ -270,10 +270,10 @@ public:
                 Talk(TALK_MONNOROTH_NETHER_TEAR);
                 DoCast(me, SPELL_NETHER_TEAR, false);
 
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     tyrande->AI()->DoAction(ACTION_HAND_OF_ELUNE);
 
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                     illidan->AI()->TalkWithDelay(16000, TALK_ILLIDAN_HE_IS_STILL_CONNECTED);
             }
             else if (!phase70PctTriggered && me->HealthBelowPctDamaged(71, damage))
@@ -281,14 +281,14 @@ public:
                 phase70PctTriggered = true;
                 Talk(TALK_EMOTE_FELGUARD_SUMMON, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                 Talk(TALK_MANNOROTH_EMOTE_FIRESTORM, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                if (Creature* portal = instance->GetCreature(DATA_PORTAL))
+                if (auto portal = instance->GetCreature(DATA_PORTAL))
                     portal->AddAura(SPELL_SUMMON_FELGUARD_PERIODIC, portal);
             }
             else if (!phase60PctTriggered && me->HealthBelowPctDamaged(61, damage))
             {
                 phase60PctTriggered = true;
                 Talk(TALK_EMOTE_DOOMGUARD_SUMMON, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                if (Creature* portal = instance->GetCreature(DATA_PORTAL))
+                if (auto portal = instance->GetCreature(DATA_PORTAL))
                     portal->AddAura(SPELL_SUMMON_DOOMGUARD_PERIODIC, portal);
             }
             else if (!phase50PctTriggered && me->HealthBelowPctDamaged(51, damage))
@@ -298,7 +298,7 @@ public:
                 TalkWithDelay(14000, TALK_MANNOROTH_EMOTE_INFERNAL, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                 DoCast(me, SPELL_SUMMON_INFERNO, false);
 
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                 {
                     tyrande->AI()->DoAction(ACTION_COLLAPSE);
                     tyrande->AI()->TalkWithDelay(20000, TALK_TYRANDE_THERE_ARE_TOO_MANY);
@@ -307,7 +307,7 @@ public:
                     tyrande->AI()->TalkWithDelay(44000, TALK_TYRANDE_NO_ILLIDAN);
                 }
 
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                 {
                     illidan->CastWithDelay(27000, illidan, SPELL_GIFT_OF_SARGERAS, false);
                     illidan->CastWithDelay(57000, illidan, SPELL_GIFT_OF_SARGERAS_PLAYER, true);
@@ -336,25 +336,25 @@ public:
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC);
                 me->DeleteThreatList();
                 me->CombatStop();
-                if (Creature* portal = instance->GetCreature(DATA_PORTAL))
+                if (auto portal = instance->GetCreature(DATA_PORTAL))
                     portal->RemoveAllAuras();
 
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                     illidan->AI()->DoAction(ACTION_FIGHT_FINISHED);
 
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     tyrande->AI()->DoAction(ACTION_FIGHT_FINISHED);
 
-                if (Creature* chromie = instance->GetCreature(DATA_CHROMIE))
+                if (auto chromie = instance->GetCreature(DATA_CHROMIE))
                     chromie->SetVisible(true);
 
-                if (GameObject* cache = instance->GetGameObject(DATA_MANNOROTH_CACHE))
+                if (auto cache = instance->GetGameObject(DATA_MANNOROTH_CACHE))
                     cache->SetRespawnTime(cache->GetRespawnDelay());
 
                 Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                     {
                         if (player->GetQuestStatus(QUEST_THE_PATH_TO_THE_DRAGON_SOUL) == QUEST_STATUS_INCOMPLETE)
                             player->KilledMonsterCredit(me->GetEntry());
@@ -373,7 +373,7 @@ public:
                 DoAction(ACTION_PULL_INTO_PORTAL);
 
 
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                 {
                     tyrande->DeleteThreatList();
                     tyrande->CombatStop();
@@ -407,7 +407,7 @@ public:
                 AddEncounterFrame();
                 me->InterruptSpell(CURRENT_CHANNELED_SPELL);
                 Talk(TALK_MONNOROTH_AGGRO);
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     tyrande->AI()->TalkWithDelay(12000, TALK_TYRANDE_I_WILL_HANDLE_DEMON);
                 events.ScheduleEvent(EVENT_FEL_FIRESTORM, 15000);
                 events.ScheduleEvent(EVENT_FELBLADE, 30000);
@@ -438,7 +438,7 @@ public:
                     summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                     summon->CastSpell(summon, SPELL_COSMETIC_PURPLE_STATE, true);
                     summon->CastSpell(summon, SPELL_COSMETIC_SUMMON_EFFECT, true);
-                    if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                    if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     {
                         summon->SetFacingToObject(tyrande);
                         tyrande->AI()->DoAction(ACTION_LIGHT_OF_ELUNE);
@@ -465,12 +465,12 @@ public:
                 events.ScheduleEvent(EVENT_FEL_FIRE_NOVA, 5000);
                 Position pos(*me);
                 me->SummonCreature(NPC_EMBEDDED_BLADE, pos);
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                 {
                     illidan->AddAura(73411, illidan);
                     illidan->AI()->TalkWithDelay(5000, TALK_ILLIDAN_THE_SWORD_HAS_PIERCED);
                 }
-                if (Creature* portal = instance->GetCreature(DATA_DOOMGUARD_PORTAL))
+                if (auto portal = instance->GetCreature(DATA_DOOMGUARD_PORTAL))
                     portal->m_Events.KillAllEvents(false);
             }
         }
@@ -491,7 +491,7 @@ public:
             {
                 case NPC_DREADLORD_DEBILITATOR:
                     if (--aliveDemons <= 0)
-                        if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                        if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                             tyrande->AI()->DoAction(ACTION_RESTART_COMBAT);
                     break;
                 default:
@@ -577,13 +577,13 @@ public:
         {
             checkWipe = true;
 
-            if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+            if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
             {
                 mannoroth->SetReactState(REACT_PASSIVE);
                 mannoroth->CombatStop(true);
                 mannoroth->AI()->EnterEvadeMode();
             }
-            if (Creature* captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
+            if (auto captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
             {
                 captain->SetReactState(REACT_PASSIVE);
                 if (!captain->isAlive())
@@ -591,15 +591,15 @@ public:
                 else
                     captain->CombatStop(true);
             }
-            if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+            if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                 tyrande->AI()->DoAction(ACTION_RESET_BOSS_FIGHT);
 
             me->AI()->DoAction(ACTION_RESET_BOSS_FIGHT);
 
-            if (Creature* portal = instance->GetCreature(DATA_PORTAL))
+            if (auto portal = instance->GetCreature(DATA_PORTAL))
                 portal->RemoveAllAuras();
 
-            if (Creature* portal = instance->GetCreature(DATA_DOOMGUARD_PORTAL))
+            if (auto portal = instance->GetCreature(DATA_DOOMGUARD_PORTAL))
                 portal->m_Events.KillAllEvents(false);
 
             me->DespawnCreaturesInArea(NPC_DOOMGUARD_DEVASTATOR, 500.00f);
@@ -697,13 +697,13 @@ public:
                     TalkWithDelay(26000, TALK_ILLIDAN_LET_THEM_COME, NULL, CHAT_MSG_MONSTER_SAY);
                     TalkWithDelay(36000, TALK_ILLIDAN_WEAK_PITIFUL, NULL, CHAT_MSG_MONSTER_SAY);
 
-                    if (Creature* malfurion = instance->GetCreature(DATA_MALFURION_STORMRAGE))
+                    if (auto malfurion = instance->GetCreature(DATA_MALFURION_STORMRAGE))
                     {
                         malfurion->AI()->TalkWithDelay(3000, TALK_MALFURION_IT_IS_MAINTAINED, NULL, CHAT_MSG_MONSTER_SAY);
                         malfurion->AI()->TalkWithDelay(10000, TALK_MALFURION_CANNOT_BREAK, NULL, CHAT_MSG_MONSTER_SAY);
                     }
 
-                    if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                    if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     {
                         tyrande->SetReactState(REACT_PASSIVE);
                         tyrande->AI()->TalkWithDelay(20000, TALK_TYRANDE_HE_KNOWS_WHAT, NULL, CHAT_MSG_MONSTER_SAY);
@@ -729,7 +729,7 @@ public:
                     events.ScheduleEvent(EVENT_DRINK, 21000);
                     TalkWithDelay(23000, TALK_ILLIDAN_YES_YES_I_CAN_FEEL);
 
-                    if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                    if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     {
                         tyrande->DeleteThreatList();
                         tyrande->AI()->TalkWithDelay(10000, TALK_TYRANDE_ILLIDAN_WHAT_IS_IN, NULL, CHAT_MSG_MONSTER_SAY);
@@ -741,23 +741,23 @@ public:
                     me->SetHomePosition(resetPosition);
                     me->RemoveAurasDueToSpell(SPELL_WATERS_OF_ETERNITY);
                     SetEscortPaused(true);
-                    if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+                    if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
                         mannoroth->AI()->Talk(TALK_MANNOROTH_INTRO);
 
-                    if (Creature* captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
+                    if (auto captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
                         captain->AI()->DoAction(ACTION_START_INTRO);
                     break;
                 case 13:
                     me->GetPosition(&resetPosition);
                     me->SetHomePosition(resetPosition);
-                    if (Creature* captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
+                    if (auto captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
                         if (!captain->isInCombat())
                             SetEscortPaused(true);
                     break;
                 case 14:
                     SetEscortPaused(true);
                     events.ScheduleEvent(EVENT_PLAYER_ALIVE_CHECK, 5000);
-                    if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+                    if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
                     {
                         me->SetReactState(REACT_AGGRESSIVE);
                         mannoroth->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC);
@@ -814,7 +814,7 @@ public:
                         if (!aliveGuardFound || doomguards.empty())
                         {
                             Start(false, true);
-                            if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                            if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                                 tyrande->AI()->DoAction(ACTION_START_ESCORT_EVENT);
 
                         }
@@ -828,13 +828,13 @@ public:
                         events.ScheduleEvent(EVENT_ATTACK_DOOMBRINGER, 2500);
                         break;
                     case EVENT_ATTACK_DOOMBRINGER:
-                        if (Creature* doombringer = instance->GetCreature(DATA_DOOMBRINGER))
+                        if (auto doombringer = instance->GetCreature(DATA_DOOMBRINGER))
                         {
                             doombringer->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
                             doombringer->SetInCombatWithZone();
                             AttackStart(doombringer);
                         }
-                        if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                        if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                             tyrande->AI()->DoAction(ACTION_ATTACK_DOOMBRINGER);
                         break;
                     case EVENT_PLAYER_ALIVE_CHECK:
@@ -842,7 +842,7 @@ public:
                         bool alivePlayerFound = false;
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (!player->isGameMaster() && player->isAlive())
                                 {
                                     alivePlayerFound = true;
@@ -1029,7 +1029,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ATTACK_DOOMBRINGER:
-                    if (Creature* doombringer = instance->GetCreature(DATA_DOOMBRINGER))
+                    if (auto doombringer = instance->GetCreature(DATA_DOOMBRINGER))
                     {
                         if (doombringer->isAlive())
                         {
@@ -1065,7 +1065,7 @@ public:
                     outOfArrows = true;
                     Talk(TALK_TYRANDE_I_AM_OUT_OF_ARROWS, NULL, CHAT_MSG_MONSTER_SAY);
                     Talk(TALK_TYRANDE_EMOTE_HAND_OF_ELUNE, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                    if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+                    if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
                         me->SetFacingToObject(mannoroth);
                     DoCast(me, SPELL_HAND_OF_ELUNE, false);
                     break;
@@ -1079,7 +1079,7 @@ public:
                     events.Reset();
                     break;
                 case EVENT_ATTACK_DOOMGUARD:
-                    if (Creature* doomguard = me->FindNearestCreature(NPC_DOOMGUARD_DEVASTATOR, 45.00f))
+                    if (auto doomguard = me->FindNearestCreature(NPC_DOOMGUARD_DEVASTATOR, 45.00f))
                     {
                         if (!outOfArrows)
                         {
@@ -1205,13 +1205,13 @@ public:
         {
             if (me->GetEntry() == NPC_ABYSSAL_DOOMBRINGER)
             {
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                 {
                     illidan->AI()->DoAction(ACTION_RESET_EVENTS);
                     illidan->AI()->DoAction(ACTION_RESTART_ESCORT);
                 }
 
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     tyrande->AI()->DoAction(ACTION_RESTART_ESCORT);
 
                 me->DespawnOrUnsummon(1000);
@@ -1231,7 +1231,7 @@ public:
                         events.ScheduleEvent(EVENT_ABYSSAL_FLAMES, 2000);
                         break;
                     case EVENT_ABYSSAL_FLAMETHROWER:
-                        if (Creature* flameTarget = me->FindNearestCreature(NPC_FLAME_TARGET, 50.00f))
+                        if (auto flameTarget = me->FindNearestCreature(NPC_FLAME_TARGET, 50.00f))
                             DoCast(flameTarget, SPELL_ABYSSAL_FLAMETHROWER, false);
                         events.ScheduleEvent(EVENT_ABYSSAL_FLAMETHROWER, 10000);
                         break;
@@ -1299,9 +1299,9 @@ public:
         {
             if (instance->GetBossState(DATA_MANNOROTH) != IN_PROGRESS)
             {
-                if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                     illidan->AI()->DoAction(ACTION_RESTART_ESCORT);
-                if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                     tyrande->AI()->DoAction(ACTION_RESTART_ESCORT);
             }
 
@@ -1326,7 +1326,7 @@ public:
             // WORKAROUND - we are out of time... - maybe some know the real issue... 
             // if a unfriedly npc summons the blade the spellclick doesnt work.. we use temp. a friendly trigger npc until the bug is found...
             Position pos(*me);
-            if (Creature* trigger = me->SummonCreature(55091, pos, TEMPSUMMON_TIMED_DESPAWN, 30000))
+            if (auto trigger = me->SummonCreature(55091, pos, TEMPSUMMON_TIMED_DESPAWN, 30000))
                 trigger->CastSpell(trigger, SPEL_VAROTHENS_MAGICAL_BLADE, true);
         }
         bool CanRespawn() 
@@ -1345,7 +1345,7 @@ public:
                     Position pos(*summon);
                     summon->SetReactState(REACT_PASSIVE);
                     summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
-                    if (Creature* shadowbat = me->SummonCreature(NPC_SHADOWBAT, pos, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
+                    if (auto shadowbat = me->SummonCreature(NPC_SHADOWBAT, pos, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
                     {
                         shadowbat->setFaction(me->getFaction());
                         shadowbat->AddAura(103714, shadowbat);
@@ -1368,7 +1368,7 @@ public:
                     if (--aliveGuards <= 0)
                     {
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
-                        if (Creature* illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
+                        if (auto illidan = instance->GetCreature(DATA_ILLIDAN_PART_TWO))
                             illidan->AI()->DoAction(ACTION_RESTART_ESCORT);
 
                         if (auto tyrande = me->FindNearestCreature(NPC_TYRANDE_WHISPERWIND, 100.f, true))
@@ -1381,7 +1381,7 @@ public:
                 case NPC_SHADOWBAT:
                     for (uint64 summonGUID : summons)
                     {
-                        if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGUID))
+                        if (auto summon = ObjectAccessor::GetCreature(*me, summonGUID))
                         {
                             if (summon->GetEntry() == NPC_HIGHGUARD_ELITE)
                             {
@@ -1390,7 +1390,7 @@ public:
                                     summon->SetReactState(REACT_AGGRESSIVE);
                                     summon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
                                     summon->SetStandState(UNIT_STAND_STATE_STAND);
-                                    if (Player* p = me->FindNearestPlayer(100.f))
+                                    if (auto p = me->FindNearestPlayer(100.f))
                                         summon->AI()->AttackStart(p);
                                 }
                             }
@@ -1428,9 +1428,9 @@ public:
 
 
 
-                        if (Player* p = me->FindNearestPlayer(100.f))
+                        if (auto p = me->FindNearestPlayer(100.f))
                         for (uint64 summonGUID : summons)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGUID))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, summonGUID))
                                 if (summon->GetEntry() == NPC_SHADOWBAT)
                                 {
                                     summon->setFaction(me->getFaction());
@@ -1444,7 +1444,7 @@ public:
                         events.ScheduleEvent(EVENT_MAGISTRIKE, 10000);
                         break;
                     /*case EVENT_BDSM_TYRANDE:
-                        if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+                        if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
                         {
                             mannoroth->CastStop();
                             mannoroth->CastSpell(mannoroth, SPELL_NETHER_PORTAL, true);
@@ -1485,8 +1485,8 @@ public:
 
         void IsSummonedBy(Unit* owner)
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
-                if (Creature* mannoroth = instance->GetCreature(DATA_MANNOROTH))
+            if (auto instance = me->GetInstanceScript())
+                if (auto mannoroth = instance->GetCreature(DATA_MANNOROTH))
                     if (owner != mannoroth)
                         mannoroth->AI()->JustSummoned(me);
         }
@@ -1638,7 +1638,7 @@ public:
                         if (uint32 count = urand(3, (portalChoice == 0 ? 2 : 12)))
                             for (uint32 i = 0; i <= count; ++i)
                                 if (portalChoice != 0 || (instance->GetBossState(DATA_MANNOROTH) == IN_PROGRESS))
-                                    if (Creature* demon_x = me->SummonCreature(NPC_DOOMGUARD_DEVASTATOR,
+                                    if (auto demon_x = me->SummonCreature(NPC_DOOMGUARD_DEVASTATOR,
                                         demonSpawn.GetPositionX() + frand(-20.f, 20.f),
                                         demonSpawn.GetPositionY() + frand(-20.f, 20.f),
                                         demonSpawn.GetPositionZ() + frand(-20.f, 5.f),
@@ -1677,17 +1677,17 @@ public:
                     }
                     break;
                 case EVENT_SUMMON_DOOMGUARD_BOSSEVENT:
-                    if (Creature* tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
+                    if (auto tyrande = instance->GetCreature(DATA_TYRANDE_WHISPERWIND))
                         if (tyrande->HasAura(SPELL_HAND_OF_ELUNE))
                             midPortal = false;
                     if (midPortal)
                     {
-                        if (Creature* captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
-                            if (Creature* manno = instance->GetCreature(DATA_MANNOROTH))
+                        if (auto captain = instance->GetCreature(DATA_CAPTAIN_VAROTHEN))
+                            if (auto manno = instance->GetCreature(DATA_MANNOROTH))
                                 if (captain->isInCombat() || manno->isInCombat())
                                 {
                                     for (uint32 i = 0; i <= 5; ++i)
-                                        if (Creature* demon_x = me->SummonCreature(NPC_DOOMGUARD_DEVASTATOR,
+                                        if (auto demon_x = me->SummonCreature(NPC_DOOMGUARD_DEVASTATOR,
                                             demonSpawn.GetPositionX() + frand(-20.f, 20.f),
                                             demonSpawn.GetPositionY() + frand(-20.f, 20.f),
                                             demonSpawn.GetPositionZ() + frand(0.f, 5.f),
@@ -1831,7 +1831,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Position pos(*GetTarget());
                 caster->SummonCreature(NPC_DREADLORD_DEBILITATOR, pos, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000);

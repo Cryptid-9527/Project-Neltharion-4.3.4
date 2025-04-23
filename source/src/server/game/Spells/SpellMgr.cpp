@@ -1023,7 +1023,7 @@ bool SpellMgr::CanSpellTriggerProcOnEvent(SpellProcEntry const& procEntry, ProcE
 
     // check XP or honor target requirement
     if (procEntry.attributesMask & PROC_ATTR_REQ_EXP_OR_HONOR)
-        if (Player* actor = eventInfo.GetActor()->ToPlayer())
+        if (auto actor = eventInfo.GetActor()->ToPlayer())
             if (eventInfo.GetActionTarget() && !actor->isHonorOrXPTarget(eventInfo.GetActionTarget()))
                 return false;
 

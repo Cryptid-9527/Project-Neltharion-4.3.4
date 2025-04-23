@@ -38,7 +38,7 @@ void WorldSession::HandleInspectArenaTeamsOpcode(WorldPacket& recvData)
     recvData >> guid;
     TC_LOG_DEBUG("network.opcode", "Inspect Arena stats (GUID: %u TypeId: %u)", GUID_LOPART(guid), GuidHigh2TypeId(GUID_HIPART(guid)));
 
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         for (uint8 i = 0; i < MAX_NORMAL_ARENA_SLOT; ++i)
         {

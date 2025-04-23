@@ -192,7 +192,7 @@ public:
 					me->CastStop();
 					me->ClearUnitState(UNIT_STATE_CASTING);
 					Talk(SAY_ARCHANGEL);
-					if (Creature* wing = me->SummonCreature(50604, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
+					if (auto wing = me->SummonCreature(50604, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
 					{
 						wing->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, 1, me, false);
 						wing->CastSpell(me, 93766, false);
@@ -369,7 +369,7 @@ public:
 
 		void HandleScript(SpellEffIndex effIndex)
 		{
-			if (Unit* target = GetHitUnit())
+			if (auto target = GetHitUnit())
 			{
 				target->CastSpell(target, SPELL_CALAMITY, true);
 			}
@@ -486,8 +486,8 @@ public:
 		void HandleOnEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
 		{
 			//TC_LOG_ERROR("sql.sql", "float script activated by apply.");
-			if (Unit* caster = GetCaster())
-				if (Unit* target = GetTarget())
+			if (auto caster = GetCaster())
+				if (auto target = GetTarget())
 				{
 					caster->CastSpell(target, SPELL_ASPHYXIATE_ROOT, true);
 				}
@@ -495,8 +495,8 @@ public:
 
 		void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
 		{
-			if (Unit* caster = GetCaster())
-				if (Unit* target = GetTarget())
+			if (auto caster = GetCaster())
+				if (auto target = GetTarget())
 					if (target->ToPlayer())
 					{
 						target->RemoveAura(SPELL_ASPHYXIATE_ROOT, caster->GetGUID());
@@ -563,8 +563,8 @@ public:
         void HandleOnEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
 			//TC_LOG_ERROR("sql.sql", "float script activated by apply.");
-			if (Unit* caster = GetCaster())
-				if (Unit* target = GetTarget())
+			if (auto caster = GetCaster())
+				if (auto target = GetTarget())
 				{
 					float o = target->GetOrientation();
 					float z = target->GetPositionZ() + 15.0f;
@@ -579,8 +579,8 @@ public:
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
 			//TC_LOG_ERROR("sql.sql", "float script activated by remove");
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                 if (target->ToPlayer())
                 {
 					target->ClearUnitState(UNIT_STATE_STUNNED);

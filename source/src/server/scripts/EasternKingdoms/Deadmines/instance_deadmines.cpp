@@ -481,7 +481,7 @@ class instance_deadmines : public InstanceMapScript
 
             void CheckRequirements()
             {
-                if (Creature* captainCookie = instance->GetCreature(CaptainCookieGUID))
+                if (auto captainCookie = instance->GetCreature(CaptainCookieGUID))
                     captainCookie->SetVisible(IsDone(BOSS_ADMIRAL_RISNARL));
 
                 if (Creature *vvcleef = instance->GetCreature(VanessaVanCleefGUID))
@@ -920,7 +920,7 @@ class instance_deadmines : public InstanceMapScript
                 for (auto itr : npcGroups)
                     if (itr.first >= uint32(start) && itr.first <= uint32(end))
                     {
-                        if (Creature* trashMob = instance->GetCreature(itr.second))
+                        if (auto trashMob = instance->GetCreature(itr.second))
                         if (CheckFactionBeforePhasing(trashMob->GetEntry()))
                         {
                             if (itr.first != NM_GROUP_BEFORE_GAUNTLET)
@@ -932,7 +932,7 @@ class instance_deadmines : public InstanceMapScript
                     }
                     else
                     {
-                        if (Creature* trashMob = instance->GetCreature(itr.second))
+                        if (auto trashMob = instance->GetCreature(itr.second))
                         if (CheckFactionBeforePhasing(trashMob->GetEntry()))
                         {
                             trashMob->SetPhaseMask(0x4000, ForceUpdatePhasing(trashMob));
@@ -971,7 +971,7 @@ class instance_deadmines : public InstanceMapScript
                                     Map::PlayerList const &PlayerList = instance->GetPlayers();
                                     if (!PlayerList.isEmpty())
                                         for (auto i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                                            if (Player* player = i->getSource())
+                                            if (auto player = i->getSource())
                                                 if (player->isAlive())
                                                     player->NearTeleportTo(nightmare_gauntlet_positions[NMG_POS_PLATFORM_VANESSA_JUMP_TO].GetPositionX(), nightmare_gauntlet_positions[NMG_POS_PLATFORM_VANESSA_JUMP_TO].GetPositionY(), nightmare_gauntlet_positions[NMG_POS_PLATFORM_VANESSA_JUMP_TO].GetPositionZ(), nightmare_gauntlet_positions[NMG_POS_PLATFORM_VANESSA_JUMP_TO].GetOrientation());
 
@@ -981,7 +981,7 @@ class instance_deadmines : public InstanceMapScript
                                 case 1:
                                 {
 
-                                    if (Creature* magmaVeh = instance->GetCreature(MagmaVehicleGUID))
+                                    if (auto magmaVeh = instance->GetCreature(MagmaVehicleGUID))
                                     {
                                         std::list<Creature*> list_of_npcs;
                                         GetCreatureListWithEntryInGrid(list_of_npcs, magmaVeh, NPC_VAPOR_VALVE, 50.0f);
@@ -997,7 +997,7 @@ class instance_deadmines : public InstanceMapScript
                                 }
                                 case 2:
                                 {
-                                    if (Creature* magmaVeh = instance->GetCreature(MagmaVehicleGUID))
+                                    if (auto magmaVeh = instance->GetCreature(MagmaVehicleGUID))
                                         magmaVeh->AI()->DoAction(ACTION_EMOTE_TRAP);
                                     timerEvent = 8000;
                                     break;
@@ -1049,7 +1049,7 @@ class instance_deadmines : public InstanceMapScript
                                 {
                                     InitVancleefEventFlames(true);
                                     DoCastSpellOnPlayers(SPELL_NIGHTMARE_SLOW);
-                                    if (Creature* vc = instance->GetCreature(vanessas[VANESSA_GLUBTOK]))
+                                    if (auto vc = instance->GetCreature(vanessas[VANESSA_GLUBTOK]))
                                         vc->AI()->Talk(0);
 
                                     timerEvent = 6000;
@@ -1060,7 +1060,7 @@ class instance_deadmines : public InstanceMapScript
 
                                     SetActiveGauntletGroups(NM_GROUP_GLUBTOK, NM_GROUP_GLUBTOK);
 
-                                        if (Creature* vc = instance->GetCreature(vanessas[VANESSA_GLUBTOK]))
+                                        if (auto vc = instance->GetCreature(vanessas[VANESSA_GLUBTOK]))
                                         {
                                             vc->AI()->Talk(1);
                                             auto players = vc->GetPlayersInRange(100.f, true);
@@ -1089,7 +1089,7 @@ class instance_deadmines : public InstanceMapScript
                                 }
                                 case 8:
                                 {
-                                    if (Creature* vc = instance->GetCreature(vanessas[VANESSA_HELIX]))
+                                    if (auto vc = instance->GetCreature(vanessas[VANESSA_HELIX]))
                                         vc->SetPhaseMask(0x1, true);
                                     eventStep--;
                                     timerEvent = 5000;
@@ -1115,7 +1115,7 @@ class instance_deadmines : public InstanceMapScript
                                 {
                                     DoRemoveAurasDueToSpellOnPlayers(SPELL_NIGHTMARE);
                                     DoCastSpellOnPlayers(SPELL_AURA_NIGHTMARE_3);
-                                    if (Creature* vc = instance->GetCreature(vanessas[VANESSA_HELIX]))
+                                    if (auto vc = instance->GetCreature(vanessas[VANESSA_HELIX]))
                                         vc->SetPhaseMask(0x4000, true);
                                     if (Creature *hl = instance->GetCreature(HelixEventGUID))
                                         hl->AI()->DoAction(ACTION_START_FIGHT);
@@ -1151,10 +1151,10 @@ class instance_deadmines : public InstanceMapScript
                                 case 14:
                                 {
 
-                                    if (Creature* reeper = instance->GetCreature(ReeperEventGUID))
+                                    if (auto reeper = instance->GetCreature(ReeperEventGUID))
                                         reeper->NearTeleportTo(nightmare_gauntlet_positions[NMG_POS_REAPER_TELETO].GetPositionX(), nightmare_gauntlet_positions[NMG_POS_REAPER_TELETO].GetPositionY(), nightmare_gauntlet_positions[NMG_POS_REAPER_TELETO].GetPositionZ(), nightmare_gauntlet_positions[NMG_POS_REAPER_TELETO].GetOrientation());
 
-                                    if (Creature* vc = instance->GetCreature(vanessas[VANESSA_FOE_REAPER]))
+                                    if (auto vc = instance->GetCreature(vanessas[VANESSA_FOE_REAPER]))
                                         vc->AI()->Talk(7, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                                     timerEvent = 8000;
                                     break;
@@ -1178,14 +1178,14 @@ class instance_deadmines : public InstanceMapScript
                                 {
                                     SetActiveGauntletGroups(NM_GROUP_RIPSNARL, NM_GROUP_RIPSNARL);
                                     DoCastSpellOnPlayers(SPELL_NIGHTMARE);
-                                    if (Creature* vc = instance->GetCreature(vanessas[VANESSA_RIPSNARL]))
-                                        if (Creature* rs = instance->SummonCreature(NPC_RIPSNARL_NIGHTMARE, nightmare_gauntlet_positions[NMG_POS_RP_RIPSNARL]))
+                                    if (auto vc = instance->GetCreature(vanessas[VANESSA_RIPSNARL]))
+                                        if (auto rs = instance->SummonCreature(NPC_RIPSNARL_NIGHTMARE, nightmare_gauntlet_positions[NMG_POS_RP_RIPSNARL]))
                                         {
                                             vc->NearTeleportTo(nightmare_gauntlet_positions[NMG_POS_VANCLEEF_START_RIPSNARL].GetPositionX(), nightmare_gauntlet_positions[NMG_POS_VANCLEEF_START_RIPSNARL].GetPositionY(), nightmare_gauntlet_positions[NMG_POS_VANCLEEF_START_RIPSNARL].GetPositionZ(), nightmare_gauntlet_positions[NMG_POS_VANCLEEF_START_RIPSNARL].GetOrientation());
                                             vc->SetReactState(REACT_PASSIVE);
                                             vc->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                                             vc->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-                                            if (Creature* rp = instance->GetCreature(ReeperEventGUID))
+                                            if (auto rp = instance->GetCreature(ReeperEventGUID))
                                                 rp->DespawnOrUnsummon();
                                             vc->AI()->TalkWithDelay(2000, 9, NULL, CHAT_MSG_MONSTER_SAY);
                                         }
@@ -1206,7 +1206,7 @@ class instance_deadmines : public InstanceMapScript
                                     if (GameObject *go = instance->GetGameObject(doorDefiasCanonGUID))
                                         go->SetGoState(GO_STATE_ACTIVE);
                                     if (Creature *vc = instance->GetCreature(vanessas[VANESSA_RIPSNARL]))
-                                        if (Creature* rs = instance->GetCreature(RipsnarlEventGUID))
+                                        if (auto rs = instance->GetCreature(RipsnarlEventGUID))
                                     {
                                         vc->AI()->Talk(11, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                                         vc->AI()->Talk(12, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);

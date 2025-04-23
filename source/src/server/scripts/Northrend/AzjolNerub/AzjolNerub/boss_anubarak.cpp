@@ -185,16 +185,16 @@ public:
                     switch (ImpalePhase)
                     {
                     case IMPALE_PHASE_TARGET:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         {
-                            if (Creature* impaleTarget = DoSummonImpaleTarget(target))
+                            if (auto impaleTarget = DoSummonImpaleTarget(target))
                                 impaleTarget->CastSpell(impaleTarget, SPELL_IMPALE_SHAKEGROUND, true);
                             ImpaleTimer = 3*IN_MILLISECONDS;
                             ImpalePhase = IMPALE_PHASE_ATTACK;
                         }
                         break;
                     case IMPALE_PHASE_ATTACK:
-                        if (Creature* impaleTarget = Unit::GetCreature(*me, ImpaleTarget))
+                        if (auto impaleTarget = Unit::GetCreature(*me, ImpaleTarget))
                         {
                             impaleTarget->CastSpell(impaleTarget, SPELL_IMPALE_SPIKE, false);
                             impaleTarget->RemoveAurasDueToSpell(SPELL_IMPALE_SHAKEGROUND);
@@ -203,7 +203,7 @@ public:
                         ImpaleTimer = 1*IN_MILLISECONDS;
                         break;
                     case IMPALE_PHASE_DMG:
-                        if (Creature* impaleTarget = Unit::GetCreature(*me, ImpaleTarget))
+                        if (auto impaleTarget = Unit::GetCreature(*me, ImpaleTarget))
                             me->CastSpell(impaleTarget, SPELL_IMPALE_DMG, true);
                         ImpalePhase = IMPALE_PHASE_TARGET;
                         ImpaleTimer = 9*IN_MILLISECONDS;
@@ -215,7 +215,7 @@ public:
                 {
                     for (uint8 i = 0; i < 2; ++i)
                     {
-                        if (Creature* Guardian = me->SummonCreature(CREATURE_GUARDIAN, SpawnPointGuardian[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                        if (auto Guardian = me->SummonCreature(CREATURE_GUARDIAN, SpawnPointGuardian[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                         {
                             Guardian->AddThreat(me->getVictim(), 0.0f);
                             DoZoneInCombat(Guardian);
@@ -232,7 +232,7 @@ public:
                         {
                             for (uint8 i = 0; i < 2; ++i)
                             {
-                                if (Creature* Venomancer = me->SummonCreature(CREATURE_VENOMANCER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                                if (auto Venomancer = me->SummonCreature(CREATURE_VENOMANCER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                                 {
                                     Venomancer->AddThreat(me->getVictim(), 0.0f);
                                     DoZoneInCombat(Venomancer);
@@ -251,7 +251,7 @@ public:
                         {
                             for (uint8 i = 0; i < 2; ++i)
                             {
-                                if (Creature* Datter = me->SummonCreature(CREATURE_DATTER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
+                                if (auto Datter = me->SummonCreature(CREATURE_DATTER, SpawnPoint[i], TEMPSUMMON_CORPSE_DESPAWN, 0))
                                 {
                                     Datter->AddThreat(me->getVictim(), 0.0f);
                                     DoZoneInCombat(Datter);
@@ -318,9 +318,9 @@ public:
 
                 if (PoundTimer <= diff)
                 {
-                    if (Unit* target = me->getVictim())
+                    if (auto target = me->getVictim())
                     {
-                        if (Creature* pImpaleTarget = DoSummonImpaleTarget(target))
+                        if (auto pImpaleTarget = DoSummonImpaleTarget(target))
                             me->CastSpell(pImpaleTarget, SPELL_POUND, false);
                     }
                     PoundTimer = 16500;

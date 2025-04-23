@@ -1058,7 +1058,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
         Field* fields = resultGuild->Fetch();
         pCurrChar->SetInGuild(fields[0].GetUInt32());
         pCurrChar->SetRank(fields[1].GetUInt8());
-        if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
+        if (auto guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
         {
             pCurrChar->SetGuildLevel(guild->GetLevel());
 
@@ -1125,7 +1125,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 
     if (pCurrChar->GetGuildId() != 0)
     {
-        if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
+        if (auto guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
             guild->SendLoginInfo(this);
         else
         {
@@ -2137,7 +2137,7 @@ void WorldSession::HandleCharFactionOrRaceChange(WorldPacket& recvData)
 
                 PreparedQueryResult result = CharacterDatabase.Query(stmt);
                 if (result)
-                    if (Guild* guild = sGuildMgr->GetGuildById((result->Fetch()[0]).GetUInt32()))
+                    if (auto guild = sGuildMgr->GetGuildById((result->Fetch()[0]).GetUInt32()))
                         guild->DeleteMember(factionChangeInfo->Guid, false, false, true);
             }
 

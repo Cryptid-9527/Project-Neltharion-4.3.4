@@ -49,9 +49,9 @@ class boss_baron_silverlaine : public CreatureScript
             {
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                 _Reset();
-                isFirst = false;
-                isSecond = false;
-                isThird = false;
+                isFirst         = false;
+                isSecond        = false;
+                isThird         = false;
                 spellSet.clear();
                 for (uint8 i=0; i < 4; ++i)
                     spellSet.insert(spellIds[i]);
@@ -257,9 +257,9 @@ class boss_baron_silverlaine : public CreatureScript
             }
         private:
             std::set<uint32> spellSet;
-            bool isFirst;
-            bool isSecond;
-            bool isThird;
+            bool isFirst    { false };
+            bool isSecond   { false };
+            bool isThird    { false };
         };
 
         CreatureAI* GetAI(Creature* creature) const
@@ -285,7 +285,7 @@ public:
         
         void AfterCast(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* silverlaine = ObjectAccessor::GetCreature(*GetCaster(), _instance->GetData64(DATA_BARON_SILVERLAINE)))
+            if (auto silverlaine = ObjectAccessor::GetCreature(*GetCaster(), _instance->GetData64(DATA_BARON_SILVERLAINE)))
                 silverlaine->AI()->DoAction(ACTION_SUMMON);
         }
 
@@ -314,7 +314,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/) override
         {
-            if (Creature* silverlaine = _instance->GetCreature(DATA_BARON_SILVERLAINE))
+            if (auto silverlaine = _instance->GetCreature(DATA_BARON_SILVERLAINE))
                 silverlaine->AI()->JustSummoned(me);
 
             _instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);

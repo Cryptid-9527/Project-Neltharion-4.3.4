@@ -353,7 +353,7 @@ CalendarEventStore CalendarMgr::GetPlayerEvents(uint64 guid)
                 if (CalendarEvent* event = GetEvent(itr->first)) // NULL check added as attempt to fix #11512
                     events.insert(event);
 
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         for (CalendarEventStore::const_iterator itr = _events.begin(); itr != _events.end(); ++itr)
             if ((*itr)->GetGuildId() == player->GetGuildId())
                 events.insert(*itr);
@@ -444,7 +444,7 @@ void CalendarMgr::SendCalendarEventInvite(CalendarInvite const& invite)
 
     if (!calendarEvent) // Pre-invite
     {
-        if (Player* player = ObjectAccessor::FindPlayer(invite.GetSenderGUID()))
+        if (auto player = ObjectAccessor::FindPlayer(invite.GetSenderGUID()))
             player->SendDirectMessage(&data);
     }
     else
@@ -541,11 +541,11 @@ void CalendarMgr::SendCalendarEventInviteAlert(CalendarEvent const& calendarEven
 
     if (calendarEvent.IsGuildEvent() || calendarEvent.IsGuildAnnouncement())
     {
-        if (Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
+        if (auto guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
             guild->BroadcastPacket(&data);
     }
     else
-        if (Player* player = ObjectAccessor::FindPlayer(invite.GetInviteeGUID()))
+        if (auto player = ObjectAccessor::FindPlayer(invite.GetInviteeGUID()))
             player->SendDirectMessage(&data);
 }
 
@@ -599,7 +599,7 @@ void CalendarMgr::SendCalendarEvent(uint64 guid, CalendarEvent const& calendarEv
 
 void CalendarMgr::SendCalendarEventInviteRemoveAlert(uint64 guid, CalendarEvent const& calendarEvent, CalendarInviteStatus status)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         WorldPacket data(SMSG_CALENDAR_EVENT_INVITE_REMOVED_ALERT, 8 + 4 + 4 + 1);
         data << uint64(calendarEvent.GetEventId());
@@ -613,7 +613,7 @@ void CalendarMgr::SendCalendarEventInviteRemoveAlert(uint64 guid, CalendarEvent 
 
 void CalendarMgr::SendCalendarClearPendingAction(uint64 guid)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         WorldPacket data(SMSG_CALENDAR_CLEAR_PENDING_ACTION, 0);
         player->SendDirectMessage(&data);
@@ -622,7 +622,7 @@ void CalendarMgr::SendCalendarClearPendingAction(uint64 guid)
 
 void CalendarMgr::SendCalendarCommandResult(uint64 guid, CalendarError err, char const* param /*= NULL*/)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         WorldPacket data(SMSG_CALENDAR_COMMAND_RESULT, 0);
         data << uint32(0);
@@ -649,13 +649,13 @@ void CalendarMgr::SendPacketToAllEventRelatives(WorldPacket packet, CalendarEven
 {
     // Send packet to all guild members
     if (calendarEvent.IsGuildEvent() || calendarEvent.IsGuildAnnouncement())
-        if (Guild* guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
+        if (auto guild = sGuildMgr->GetGuildById(calendarEvent.GetGuildId()))
             guild->BroadcastPacket(&packet);
 
     // Send packet to all invitees if event is non-guild, in other case only to non-guild invitees (packet was broadcasted for them)
     CalendarInviteStore invites = _invites[calendarEvent.GetEventId()];
     for (CalendarInviteStore::iterator itr = invites.begin(); itr != invites.end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer((*itr)->GetInviteeGUID()))
+        if (auto player = ObjectAccessor::FindPlayer((*itr)->GetInviteeGUID()))
             if (!calendarEvent.IsGuildEvent() || (calendarEvent.IsGuildEvent() && player->GetGuildId() != calendarEvent.GetGuildId()))
                 player->SendDirectMessage(&packet);
 }

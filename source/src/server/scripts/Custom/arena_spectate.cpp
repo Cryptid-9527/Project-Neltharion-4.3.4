@@ -112,7 +112,7 @@ public:
             return false;
         }
 
-        if (Battleground* bg = target->GetBattleground())
+        if (auto bg = target->GetBattleground())
             if ((bg->GetStatus() != STATUS_IN_PROGRESS) && !player->isGameMaster())
             {
                 handler->PSendSysMessage("The Arena match didn't start yet.");
@@ -160,7 +160,7 @@ public:
             Player* firstTeamMember = target;
             Player* secondTeamMember = NULL;
             for (Battleground::BattlegroundPlayerMap::const_iterator itr = bGround->GetPlayers().begin(); itr != bGround->GetPlayers().end(); ++itr)
-                if (Player* tmpPlayer = ObjectAccessor::FindPlayer(itr->first))
+                if (auto tmpPlayer = ObjectAccessor::FindPlayer(itr->first))
                 {
                     if (tmpPlayer->IsSpectator())
                         continue;
@@ -305,7 +305,7 @@ public:
         //player->SetViewpoint(player->getSpectateFrom(), false);
 
         for (Battleground::BattlegroundPlayerMap::const_iterator itr = bGround->GetPlayers().begin(); itr != bGround->GetPlayers().end(); ++itr)
-            if (Player* tmpPlayer = ObjectAccessor::FindPlayer(itr->first))
+            if (auto tmpPlayer = ObjectAccessor::FindPlayer(itr->first))
             {
                 if (tmpPlayer->IsSpectator())
                     continue;
@@ -316,7 +316,7 @@ public:
                 std::string pName = tmpPlayer->GetName();
                 std::string tName = "";
 
-                if (Player* target = tmpPlayer->GetSelectedPlayer())
+                if (auto target = tmpPlayer->GetSelectedPlayer())
                     tName = target->GetName();
 
                 SpectatorAddonMsg msg;
@@ -479,7 +479,7 @@ public:
                 uint32 teamid = action - NPC_SPECTATOR_ACTION_SELECTED_PLAYER;
                 if (ArenaTeam* team = sArenaTeamMgr->GetArenaTeamById(teamid))
                 {
-                    if (Player* target = team->GetFirstMemberInArena())
+                    if (auto target = team->GetFirstMemberInArena())
                     {
                         ChatHandler handler(player->GetSession());
                         arena_spectator_commands::HandleSpectateCommand(&handler, target->GetName().c_str());
@@ -490,7 +490,7 @@ public:
             {
                 uint32 guid = action - NPC_SPECTATOR_ACTION_SELECTED_SOLO_PLAYER;
 
-                if (Player* target = ObjectAccessor::FindPlayer(guid))
+                if (auto target = ObjectAccessor::FindPlayer(guid))
                 {
                     ChatHandler handler(player->GetSession());
                     arena_spectator_commands::HandleSpectateCommand(&handler, target->GetName().c_str());
@@ -620,11 +620,11 @@ public:
     {
         std::string teamsMember[BG_TEAMS_COUNT];
         uint32 firstTeamId = 0;
-        if (Battleground* arena = player->GetBattleground())
+        if (auto arena = player->GetBattleground())
         {
             for (Battleground::BattlegroundPlayerMap::const_iterator itr = arena->GetPlayers().begin(); itr != arena->GetPlayers().end(); ++itr)
             {
-                if (Player* member = ObjectAccessor::FindPlayer(itr->first))
+                if (auto member = ObjectAccessor::FindPlayer(itr->first))
                 {
                     if (member->IsSpectator())
                         continue;
@@ -805,7 +805,7 @@ public:
 
     void OnUpdateZone(Player* player, uint32 zone, uint32 area)
     {
-        if (Battleground* bg = player->GetBattleground())
+        if (auto bg = player->GetBattleground())
         {
             if (bg->isArena() && player->IsSpectator())
             {

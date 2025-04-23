@@ -264,7 +264,7 @@ class boss_bethtilac : public CreatureScript
                     std::list<Player*> TargetList;
                     Map::PlayerList const& Players = me->GetMap()->GetPlayers();
                     for (auto itr = Players.begin(); itr != Players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             me->AddAura(urand(SPELL_VALID_HOST_START, SPELL_VALID_HOST_END), player);
                 }
                 else
@@ -329,7 +329,7 @@ class boss_bethtilac : public CreatureScript
 
                 ClearTransport();
 
-                if (Creature* lift = me->FindNearestCreature(NPC_BETHTILAC_VEHICLE, 30.0f, true))
+                if (auto lift = me->FindNearestCreature(NPC_BETHTILAC_VEHICLE, 30.0f, true))
                     lift->CastWithDelay(2000, me, SPELL_SPIDERWEB_FILAMENT_2, true);
                 
             }
@@ -372,7 +372,7 @@ class boss_bethtilac : public CreatureScript
                 DoCast(me, SPELL_MANA_BURN, true);
                 DoCast(me, SPELL_WEB_SILK, true);
                 DoCast(me, SPELL_ZERO_MANA_REGEN, true);
-                if (Creature* vehicle = me->FindNearestCreature(NPC_BETHTILAC_VEHICLE, 150.0f))
+                if (auto vehicle = me->FindNearestCreature(NPC_BETHTILAC_VEHICLE, 150.0f))
                     DoCast(vehicle, SPELL_RIDE_VEHICLE, true);
 
                 events.SetPhase(PHASE_ONE);
@@ -494,7 +494,7 @@ class boss_bethtilac : public CreatureScript
                     me->AddUnitState(MOVEMENTFLAG_SWIMMING);
                     if (!reset)
                     {
-                        if (Creature* lift = Creature::GetCreature(*me, instance->GetData64(NPC_BETHTILAC_VEHICLE)))
+                        if (auto lift = Creature::GetCreature(*me, instance->GetData64(NPC_BETHTILAC_VEHICLE)))
                             lift->CastSpell(me, SPELL_SPIDERWEB_FILAMENT_2, true);
 
                         me->SetUInt32Value(UNIT_FIELD_BYTES_1, up ? 0 : 50331648);
@@ -562,7 +562,7 @@ class boss_bethtilac : public CreatureScript
                             bool reset = true;
                             Map::PlayerList const& Players = me->GetMap()->GetPlayers();
                             for (auto itr = Players.begin(); itr != Players.end(); ++itr)
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                     if (me->GetExactDist2d(player) <= 300.0f && player->isAlive() && !player->isGameMaster())
                                         reset = false;
 
@@ -642,7 +642,7 @@ class boss_bethtilac : public CreatureScript
                                 events.ScheduleEvent(EVENT_SUMMON_CINDERWEB_SPINNER, 10000, GROUP_PHASE_ONE);
                             break;
                         case EVENT_METEOR_BURN:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, SPELL_WEB_SILK))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true, SPELL_WEB_SILK))
                                 DoCast(target, SPELL_METEOR_BURN, true);
                             events.ScheduleEvent(EVENT_METEOR_BURN, urand(15000, 18000), GROUP_PHASE_ONE);
                             break;
@@ -670,7 +670,7 @@ class boss_bethtilac : public CreatureScript
                             events.ScheduleEvent(EVENT_KISS, 32000, GROUP_PHASE_TWO);
                             break;
                         case EVENT_CONSUME_BETHTILAC:
-                            if (Creature* spiderling = me->FindNearestCreature(RAID_MODE(52447, 53579, 53580, 53581), 5.0f, true))
+                            if (auto spiderling = me->FindNearestCreature(RAID_MODE(52447, 53579, 53580, 53581), 5.0f, true))
                                 DoCast(spiderling, SPELL_CONSUME);
                             events.ScheduleEvent(EVENT_CONSUME_BETHTILAC, 1000);
                             break;
@@ -711,7 +711,7 @@ class boss_bethtilac : public CreatureScript
                                 Map::PlayerList const& Players = me->GetMap()->GetPlayers();
                                 for (auto itr = Players.begin(); itr != Players.end(); ++itr)
                                 {
-                                    if (Player* player = itr->getSource())
+                                    if (auto player = itr->getSource())
                                         if (player->GetPositionZ() > 100.0f && player->GetAreaId() == 5764)
                                             TargetList.push_back(player);
                                 }
@@ -739,7 +739,7 @@ class boss_bethtilac : public CreatureScript
                                     }
                                 }
 
-                                if (Unit* target = me->getVictim())
+                                if (auto target = me->getVictim())
                                 {
                                     if (target->GetPositionZ() < 100.0f && events.IsInPhase(PHASE_ONE))
                                     {
@@ -803,7 +803,7 @@ class npc_cinderweb_spinner : public CreatureScript
                 me->AddUnitState(MOVEMENTFLAG_SWIMMING);
                 me->SetUInt32Value(UNIT_FIELD_BYTES_1, 50331648);
                 _filamentGUID = 0;
-                //if (Unit* target = me->SelectNearestPlayer(200.0f))
+                //if (auto target = me->SelectNearestPlayer(200.0f))
                 //    me->Attack(target, false);
             }
 
@@ -852,13 +852,13 @@ class npc_cinderweb_spinner : public CreatureScript
                     Position pos;
                     me->GetPosition(&pos);
                     pos.m_positionZ = 105.0f;
-                    if (Creature* filament = me->SummonCreature(NPC_SPIDERWEB_FILAMENT, pos, TEMPSUMMON_TIMED_DESPAWN, 22000, 0))
+                    if (auto filament = me->SummonCreature(NPC_SPIDERWEB_FILAMENT, pos, TEMPSUMMON_TIMED_DESPAWN, 22000, 0))
                     {
                         filament->SetReactState(REACT_PASSIVE);
                         filament->AddAura(SPELL_SPIDERWEB_FILAMENT_1, filament);
                         filament->GetMotionMaster()->MoveFall();
                         pos.m_positionZ += 6.0f;
-                        if (Creature* dest = filament->SummonCreature(53237, pos, TEMPSUMMON_TIMED_DESPAWN, 22000, 0))
+                        if (auto dest = filament->SummonCreature(53237, pos, TEMPSUMMON_TIMED_DESPAWN, 22000, 0))
                         {
                             dest->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_SELECTABLE);
                             dest->CastSpell(filament, SPELL_SPIDERWEB_FILAMENT_2, true);
@@ -906,7 +906,7 @@ class npc_cinderweb_spinner : public CreatureScript
                         case EVENT_BURNING_ACID:
                             if(!Downed)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true, -SPELL_BURNING_ACID))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true, -SPELL_BURNING_ACID))
                                 {
                                     me->SetTarget(target->GetGUID());
                                     DoCast(target, SPELL_BURNING_ACID);
@@ -917,7 +917,7 @@ class npc_cinderweb_spinner : public CreatureScript
                         case EVENT_FIERY_WEB_SPIN:
                             if (!Downed)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, FieryWebSpinSelector(me)))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, FieryWebSpinSelector(me)))
                                     DoCast(target, SPELL_FIERY_WEB_SPIN);
                                 events.ScheduleEvent(EVENT_FIERY_WEB_SPIN, 25000);
                             }
@@ -1004,7 +1004,7 @@ public:
                             }
                         }
 
-                    if (Creature* SpinTarget = me->FindNearestCreature(target_npc_id, 40.0f))
+                    if (auto SpinTarget = me->FindNearestCreature(target_npc_id, 40.0f))
                         if (spinner_spell_id)
                         DoCast(SpinTarget, spinner_spell_id);
                 }
@@ -1066,7 +1066,7 @@ public:
             {
                 if (Vehicle* vehicle = me->GetVehicleKit())
                 {
-                    if (Unit* target = vehicle->GetPassenger(0))
+                    if (auto target = vehicle->GetPassenger(0))
                     {
                         Position pos(*me);
                         pos.m_positionZ = 115.0f;
@@ -1186,7 +1186,7 @@ public:
                         }
                     break;
                 case EVENT_GET_TARGET:
-                    if (Creature* drone = me->FindNearestCreature(NPC_CINDERWEB_DRONE, 100.0f, true))
+                    if (auto drone = me->FindNearestCreature(NPC_CINDERWEB_DRONE, 100.0f, true))
                     {
                         if (auto v = me->GetVehicle())
                             me->ExitVehicle();
@@ -1206,7 +1206,7 @@ public:
                         {
                             canEnterVehicle = true;
                             venom = false;
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 15.0f, true, -SPELL_SEEPING_VENOM))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 15.0f, true, -SPELL_SEEPING_VENOM))
                             {
                                 me->SetReactState(REACT_AGGRESSIVE);
                                 if (me->GetDistance(target) < 15.f)
@@ -1321,7 +1321,7 @@ class npc_cinderweb_drone : public CreatureScript
                     switch (eventid)
                     {
                         case EVENT_BURNIGN_ACID_DRONE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true, -SPELL_WEB_SILK))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true, -SPELL_WEB_SILK))
                                 DoCast(target, SPELL_BURNING_ACID);
                             events.ScheduleEvent(EVENT_BURNIGN_ACID_DRONE, urand(6000, 8000));
                             break;
@@ -1330,7 +1330,7 @@ class npc_cinderweb_drone : public CreatureScript
                             events.ScheduleEvent(EVENT_BOILING_SPATTER, urand(10000, 13000));
                             break;
                         case EVENT_CONSUME:
-                            if (Creature* spiderling = me->FindNearestCreature(NPC_CINDERWEB_SPIDERLING, 10.0f, true))
+                            if (auto spiderling = me->FindNearestCreature(NPC_CINDERWEB_SPIDERLING, 10.0f, true))
                                 DoCast(spiderling, SPELL_CONSUME);
                             events.ScheduleEvent(EVENT_CONSUME, 1100);
                             break;
@@ -1402,7 +1402,7 @@ public:
                         Map::PlayerList const& Players = me->GetMap()->GetPlayers();
                         for (auto itr = Players.begin(); itr != Players.end(); ++itr)
                         {
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                             {
                                 if (player->GetDistance(me) <= 3.0f && !player->GetVehicle())
                                     TargetList.push_back(player);
@@ -1462,7 +1462,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CHECK_MIDDLE_HOLE:
-                        if (Player* player = me->FindNearestPlayer(5.0f))
+                        if (auto player = me->FindNearestPlayer(5.0f))
                             if (player->GetPositionZ() > 80.0f && player->GetPositionZ() < 110.0f && me->GetDistance2d(63.131f, 386.165f) < 3.0f)
                                 player->GetMotionMaster()->MoveJump(62.273f, 390.738f, 74.04f, 13.0f, 13.7f);
 
@@ -1607,7 +1607,7 @@ public:
             me->SetInCombatWithZone();
             events.ScheduleEvent(EVENT_CHECK_PLAYERS_IN_RANGE, 1000);
             // missed the spell visual that link player to the npc
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true, -SPELL_WEB_SILK))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true, -SPELL_WEB_SILK))
             {
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
@@ -1635,7 +1635,7 @@ public:
         void UpdateAI(const uint32 diff) override
         {
             if (!me->GetVehicle())
-                if (Unit* victim = me->SelectVictim())
+                if (auto victim = me->SelectVictim())
                     AttackStart(victim);
 
             events.Update(diff);
@@ -1645,7 +1645,7 @@ public:
                 switch (eventid)
                 {
                     case EVENT_CHECK_PLAYERS_IN_RANGE:
-                        if (Player* player = me->FindNearestPlayer(5.0f))
+                        if (auto player = me->FindNearestPlayer(5.0f))
                             me->Kill(me);
                         events.ScheduleEvent(EVENT_CHECK_PLAYERS_IN_RANGE, 500);
                         break;
@@ -1674,7 +1674,7 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->GetTypeId() != TYPEID_UNIT)
                     return;

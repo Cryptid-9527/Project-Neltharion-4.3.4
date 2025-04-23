@@ -68,25 +68,25 @@ public:
             {
                 go->SendCustomAnim(0);
                 go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-                if (GameObject* door = player->FindNearestGameObject(GO_IRON_CLAD_DOOR, 100))
+                if (auto door = player->FindNearestGameObject(GO_IRON_CLAD_DOOR, 100))
                 {
                     door->UseDoorOrButton();
                     door->EnableCollision(false);
                 }
-                if (Creature* c = go->FindNearestCreature(45979, 20.0f))
+                if (auto c = go->FindNearestCreature(45979, 20.0f))
                 {
                     c->AI()->Talk(2);
                     c->CastSpell(c, SPELL_TRAP_EXPLOSION, true);
                 }
-                if (Creature* trash = go->SummonCreature(48502, -101.09f, -673.01f, 7.51f, 1.80f))
+                if (auto trash = go->SummonCreature(48502, -101.09f, -673.01f, 7.51f, 1.80f))
                 {
                     trash->SetInCombatWithZone();
                     trash->CallForHelp(10.f);
                 }
-                if (Creature* trash = go->SummonCreature(48505, -98.48f, -672.39f, 7.51f, 1.80f))
+                if (auto trash = go->SummonCreature(48505, -98.48f, -672.39f, 7.51f, 1.80f))
                     trash->SetInCombatWithZone();
-                if (Creature* trash1 = go->SummonCreature(48417, -97.46f, -675.72f, 7.51f, 1.80f))
-                    if (Creature* trash2 = go->SummonCreature(48417, -100.88f, -676.35f, 7.51f, 1.80f))
+                if (auto trash1 = go->SummonCreature(48417, -97.46f, -675.72f, 7.51f, 1.80f))
+                    if (auto trash2 = go->SummonCreature(48417, -100.88f, -676.35f, 7.51f, 1.80f))
                     {
                         trash1->SetReactState(REACT_AGGRESSIVE);
                         trash1->SetInCombatWithZone();
@@ -1465,7 +1465,7 @@ public:
             me->GetCreatureListWithEntryInGrid(triggerList, NPC_VAPOR_VALVE, 50.0f);
             for (std::list<Creature* >::iterator itr = triggerList.begin(); itr != triggerList.end(); itr++)
             {
-                if (Creature* valve = *itr)
+                if (auto valve = *itr)
                 {
                     if (valve->HasAura(SPELL_AURA_VAPOR_EVENT))
                         ValvesUsed++;
@@ -1503,7 +1503,7 @@ public:
         GetCreatureListWithEntryInGrid(units, go, 48442, 5.f);
         GetCreatureListWithEntryInGrid(units, go, 48278, 5.f);
         for (auto itr = units.begin(); itr != units.end(); ++itr)
-            if (Creature* monkey = (*itr))
+            if (auto monkey = (*itr))
             {
                 monkey->SetReactState(REACT_AGGRESSIVE);
                 monkey->setFaction(player->getFaction());
@@ -2016,7 +2016,7 @@ public:
 
             if (!StopCannon)
             {
-                if (Creature* user = FindCreatureByDBGuid(me, MyFireData.userGUID))
+                if (auto user = FindCreatureByDBGuid(me, MyFireData.userGUID))
                 {
                     if (user->isInCombat() || user->isDead())
                         StopCannon = true;
@@ -2030,10 +2030,10 @@ public:
                 {
                     if (!StopCannon)
                     {
-                        if (Creature* user = FindCreatureByDBGuid(me, MyFireData.userGUID))
+                        if (auto user = FindCreatureByDBGuid(me, MyFireData.userGUID))
                             user->HandleEmoteCommand(432);
 
-                        if (Creature* trigger = FindCreatureByDBGuid(me, MyFireData.triggerGUID))
+                        if (auto trigger = FindCreatureByDBGuid(me, MyFireData.triggerGUID))
                             me->CastSpell(trigger, 89757, false);
 
                         events.ScheduleEvent(1, 9000);
@@ -2086,7 +2086,7 @@ public:
         {
             for (uint16 i = 0; i < PassengerGuids.size(); ++i)
             {
-                if (Unit* passenger = ObjectAccessor::GetUnit(*me, PassengerGuids[i]))
+                if (auto passenger = ObjectAccessor::GetUnit(*me, PassengerGuids[i]))
                 {
                     if (passenger->GetEntry() != 48340)
                         passenger->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -2136,7 +2136,7 @@ public:
 
         void Remove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Player* ply = GetTarget()->ToPlayer())
+            if (auto ply = GetTarget()->ToPlayer())
                 ply->SetDrunkValue(0);
         }
 
@@ -2282,7 +2282,7 @@ public:
                         CastOrWait(eventId, spell, min_repeat, max_repeat, wait_castnext);
                     else
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, false))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, false))
                         {
                             me->AddThreat(target, 1000000.0f);
                             CastOrWait(eventId, spell, min_repeat, max_repeat, wait_castnext);

@@ -92,7 +92,7 @@ public:
         go->UseDoorOrButton();
         for (uint8 i = 0; i < 3; ++i)
         {
-            if (Creature* prisoner = go->FindNearestCreature(prisoners[i], 5.0f, true))
+            if (auto prisoner = go->FindNearestCreature(prisoners[i], 5.0f, true))
             {
                 prisoner->DespawnOrUnsummon(5000);
                 player->KilledMonsterCredit(prisoners[i], 0);

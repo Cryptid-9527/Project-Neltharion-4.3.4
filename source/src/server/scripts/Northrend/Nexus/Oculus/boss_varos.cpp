@@ -203,7 +203,7 @@ class npc_azure_ring_captain : public CreatureScript
 
                 me->GetMotionMaster()->MoveIdle();
 
-                if (Unit* target = ObjectAccessor::GetUnit(*me, targetGUID))
+                if (auto target = ObjectAccessor::GetUnit(*me, targetGUID))
                     DoCast(target, SPELL_ICE_BEAM);
             }
 
@@ -214,9 +214,9 @@ class npc_azure_ring_captain : public CreatureScript
                    case ACTION_CALL_DRAGON_EVENT:
                         if (instance)
                         {
-                            if (Creature* varos = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VAROS)))
+                            if (auto varos = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VAROS)))
                             {
-                                if (Unit* victim = varos->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0))
+                                if (auto victim = varos->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 {
                                     me->SetReactState(REACT_PASSIVE);
                                     me->SetWalk(false);
@@ -257,7 +257,7 @@ class spell_varos_centrifuge_shield : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // flags taken from sniffs
                     // UNIT_FLAG_UNK_9 -> means passive but it is not yet implemented in core
@@ -271,7 +271,7 @@ class spell_varos_centrifuge_shield : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     caster->ToCreature()->SetReactState(REACT_AGGRESSIVE);
                     caster->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_15|UNIT_FLAG_IMMUNE_TO_NPC|UNIT_FLAG_IMMUNE_TO_PC|UNIT_FLAG_UNK_6);

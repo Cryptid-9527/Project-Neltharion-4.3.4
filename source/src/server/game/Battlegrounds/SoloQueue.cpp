@@ -209,7 +209,7 @@ void SoloQueue::Update(const uint32 diff)
 
         if (playerList.size() == 3)
         {
-            if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+            if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
             {
                 bg->SetRated(true);
                 BattlegroundTypeId bgTypeId = bg->GetTypeID();
@@ -221,7 +221,7 @@ void SoloQueue::Update(const uint32 diff)
 
                     for (SoloQueueInfo* info : playerList)
                     {
-                        if (Player* player = ObjectAccessor::FindPlayer(info->playerGuid))
+                        if (auto player = ObjectAccessor::FindPlayer(info->playerGuid))
                         {
                             player->AddBattlegroundQueueJoinTime(bgTypeId, ginfo->JoinTime);
                             uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
@@ -392,7 +392,7 @@ void SoloQueue::IncreasePlayerMMrRange(SoloQueueInfo* playerInfo)
         uint32 completeRange = sBattlegroundMgr->GetMaxRatingDifference() + playerInfo->ratingRange;
         uint32 minRating = std::max(0, int32(playerInfo->ArenaMatchmakerRating - completeRange));
         uint32 maxRating = std::min(int32(playerInfo->ArenaMatchmakerRating + completeRange), 4000);
-        if (Player* player = sObjectAccessor->FindPlayer(playerInfo->playerGuid))
+        if (auto player = sObjectAccessor->FindPlayer(playerInfo->playerGuid))
             if (sWorld->getBoolConfig(CONFIG_SOLO_QUEUE_ENABLE_MMR))
                 ChatHandler(player->GetSession()).PSendSysMessage("The solo queue system will now try to find group members between %i and %i Matchmaking Rating", minRating, maxRating);
     }

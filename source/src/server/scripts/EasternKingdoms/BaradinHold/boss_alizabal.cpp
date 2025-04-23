@@ -64,8 +64,8 @@ class at_alizabal_intro : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
-                if (Creature* alizabal = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_ALIZABAL)))
+            if (auto instance = player->GetInstanceScript())
+                if (auto alizabal = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_ALIZABAL)))
                     alizabal->AI()->DoAction(ACTION_INTRO);
             return true;
         }
@@ -142,7 +142,7 @@ class boss_alizabal : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_SKEWER:
-                            if (Unit* target = me->getVictim())
+                            if (auto target = me->getVictim())
                             {
                                 DoCastVictim(SPELL_SKEWER, true);
                                 Talk(SAY_SKEWER);

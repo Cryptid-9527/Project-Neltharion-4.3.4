@@ -383,7 +383,7 @@ public:
 						events.ScheduleEvent(EVENT_FOUNTAIN_O_LIGHT, 15000);
                         break;
                     case EVENT_PW_SHIELD:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                        if (auto target = DoSelectLowestHpFriendly(40.0f))
                             DoCast(target, SPELL_PW_SHIELD);
                         events.ScheduleEvent(EVENT_PW_SHIELD, 20000);
                         break;
@@ -422,7 +422,7 @@ public:
         {
             if (type == POINT_MOTION_TYPE && id == 28)
                 if (me->HasReactState(REACT_PASSIVE))
-                    if (Creature* deadScourgeBeast = me->FindNearestCreature(54507, 10.f, false))
+                    if (auto deadScourgeBeast = me->FindNearestCreature(54507, 10.f, false))
                     {
                         TC_LOG_ERROR("sql.sql", "type: %u, id: %u", type, id);
                         me->UpdateOrientation(me->GetAngle(deadScourgeBeast));
@@ -897,7 +897,7 @@ public:
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            if (Creature* scourge = me->FindNearestCreature(54507, 10.0f))
+            if (auto scourge = me->FindNearestCreature(54507, 10.0f))
             {
                 scourge->SetReactState(REACT_PASSIVE);
             }
@@ -983,7 +983,7 @@ public:
                 std::list<Creature*> units;
                 GetCreatureListWithEntryInGrid(units, me, 54550, 30.0f);
                 for (std::list<Creature*>::iterator itr = units.begin(); itr != units.end(); ++itr)
-                    if (Creature* c = (*itr))
+                    if (auto c = (*itr))
                     {
                         c->AI()->DoAction(EVENT_CALL_FLAMES);
                         c->GetMotionMaster()->MovePoint(EVENT_CALL_FLAMES, (*me), true, 10.f);

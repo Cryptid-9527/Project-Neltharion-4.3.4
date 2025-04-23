@@ -121,7 +121,7 @@ public:
             Talk(SAY_ENGAGE);
             if (instance)
                 instance->SetData(DATA_ERUDAX, IN_PROGRESS);
-            if (Creature* FacelessPortalStalker = me->SummonCreature(NPC_FACELESS_PORTAL_STALKER, portalStalkerPosition, TEMPSUMMON_MANUAL_DESPAWN))
+            if (auto FacelessPortalStalker = me->SummonCreature(NPC_FACELESS_PORTAL_STALKER, portalStalkerPosition, TEMPSUMMON_MANUAL_DESPAWN))
                 FacelessPortalStalkerGUID = FacelessPortalStalker->GetGUID();
             RespawnEggs();
         }
@@ -145,7 +145,7 @@ public:
                 me->GetMotionMaster()->MoveChase(me->getVictim());
                 if (rand() % 2)
                     Talk(SAY_GUARDIAN);
-                if (Creature* FacelessPortalStalker = Unit::GetCreature(*me, FacelessPortalStalkerGUID))
+                if (auto FacelessPortalStalker = Unit::GetCreature(*me, FacelessPortalStalkerGUID))
                 {
                     if (FacelessPortalStalker->AI())
                     {
@@ -190,7 +190,7 @@ public:
                         Talk(EMOTE_SHADOW_GALE);
                         break;
                     case EVENT_REMOVE_TWILIGHT_PORTAL:
-                        if (Creature* FacelessPortalStalker = Unit::GetCreature(*me, FacelessPortalStalkerGUID))
+                        if (auto FacelessPortalStalker = Unit::GetCreature(*me, FacelessPortalStalkerGUID))
                             FacelessPortalStalker->RemoveAllAuras();
                         break;
                     case EVENT_BINDING_SHADOWS:
@@ -199,7 +199,7 @@ public:
                             events.ScheduleEvent(EVENT_BINDING_SHADOWS, cooldown);
                             break;
                         }
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, SIZE_OF_GRIDS, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, SIZE_OF_GRIDS, true))
                             DoCast(target, SPELL_BINDING_SHADOWS);
                         isCasting = true;
                         events.ScheduleEvent(EVENT_BINDING_SHADOWS, urand(12000, 17000));
@@ -401,14 +401,14 @@ public:
                     }
                     case EVENT_SIPHON:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(SPELL_SIPHON_ESSENCE);
                         events.ScheduleEvent(EVENT_SIPHON, urand(9500, 12000));
                         break;
                     }
                     case EVENT_UMBRAL:
                     {
-                        if (Unit* erudax = me->FindNearestCreature(BOSS_ERUDAX, SIZE_OF_GRIDS, true))
+                        if (auto erudax = me->FindNearestCreature(BOSS_ERUDAX, SIZE_OF_GRIDS, true))
                             DoCast(erudax, SPELL_UMBRAL_MENDING, false);
                         break;
                     }
@@ -459,7 +459,7 @@ public:
                     events.ScheduleEvent(EVENT_UMBRAL, 1000);
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetInCombatWithZone();
-                    if (Creature* c = Unit::GetCreature(*me, instance->GetData64(DATA_ERUDAX)))
+                    if (auto c = Unit::GetCreature(*me, instance->GetData64(DATA_ERUDAX)))
                     {
                         DoStartMovement(c->getVictim());
                         if (UpdateVictim())

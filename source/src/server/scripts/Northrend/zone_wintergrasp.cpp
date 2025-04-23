@@ -156,7 +156,7 @@ class npc_wg_demolisher_engineer : public CreatureScript
                         creature->CastSpell(player, player->GetTeamId() == TEAM_ALLIANCE ? SPELL_BUILD_SIEGE_VEHICLE_FORCE_ALLIANCE : SPELL_BUILD_SIEGE_VEHICLE_FORCE_HORDE, true);
                         break;
                 }
-                if (Creature* controlArms = creature->FindNearestCreature(NPC_WINTERGRASP_CONTROL_ARMS, 30.0f, true))
+                if (auto controlArms = creature->FindNearestCreature(NPC_WINTERGRASP_CONTROL_ARMS, 30.0f, true))
                     creature->CastSpell(controlArms, SPELL_ACTIVATE_CONTROL_ARMS, true);
             }
             return true;
@@ -307,9 +307,9 @@ class go_wg_vehicle_teleporter : public GameObjectScript
                     if (Battlefield* wg = sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
                         // Tabulation madness in the hole!
                         for (uint8 i = 0; i < MAX_WINTERGRASP_VEHICLES; i++)
-                            if (Creature* vehicleCreature = go->FindNearestCreature(vehiclesList[i], 3.0f, true))
+                            if (auto vehicleCreature = go->FindNearestCreature(vehiclesList[i], 3.0f, true))
                                 if (!vehicleCreature->HasAura(SPELL_VEHICLE_TELEPORT) && vehicleCreature->getFaction() == WintergraspFaction[wg->GetDefenderTeam()])
-                                    if (Creature* teleportTrigger = vehicleCreature->FindNearestCreature(NPC_WORLD_TRIGGER_LARGE_AOI_NOT_IMMUNE_PC_NPC, 100.0f, true))
+                                    if (auto teleportTrigger = vehicleCreature->FindNearestCreature(NPC_WORLD_TRIGGER_LARGE_AOI_NOT_IMMUNE_PC_NPC, 100.0f, true))
                                         teleportTrigger->CastSpell(vehicleCreature, SPELL_VEHICLE_TELEPORT, true);
 
                     _checkTimer = 1000;
@@ -502,7 +502,7 @@ class spell_wintergrasp_grab_passenger : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                     target->CastSpell(GetCaster(), SPELL_RIDE_WG_VEHICLE, false);
             }
 
@@ -528,7 +528,7 @@ public:
         if (!target)
             return false;
 
-        if (Player* victim = target->ToPlayer())
+        if (auto victim = target->ToPlayer())
         {
             if (!victim->IsMounted())
                 return false;
@@ -559,7 +559,7 @@ public:
         SpellCastResult CheckCast()
         {
             if (Battlefield* wg = sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
-                if (Player* target = GetExplTargetUnit()->ToPlayer())
+                if (auto target = GetExplTargetUnit()->ToPlayer())
                     // check if we are in Wintergrasp at all, SotA uses same teleport spells
                     if ((target->GetZoneId() == 4197 && target->GetTeamId() != wg->GetDefenderTeam()) || target->HasAura(SPELL_WINTERGRASP_TELEPORT_TRIGGER))
                         return SPELL_FAILED_BAD_TARGETS;
@@ -589,7 +589,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effindex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 WorldLocation loc;
                 target->GetPosition(&loc);

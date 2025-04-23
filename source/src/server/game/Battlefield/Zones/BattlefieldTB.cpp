@@ -99,9 +99,9 @@ bool BattlefieldTB::SetupBattlefield()
             gy->Initialize(TBGraveYard[i].startcontrol, TBGraveYard[i].guid);
 
         gy->SetTextId(TBGraveYard[i].textid);
-        if (Creature* creature = SpawnCreature(ALLIANCE_SPRIT_GUIDE, TBGraveYard[i].x, TBGraveYard[i].y, TBGraveYard[i].z, TBGraveYard[i].o, TEAM_ALLIANCE))
+        if (auto creature = SpawnCreature(ALLIANCE_SPRIT_GUIDE, TBGraveYard[i].x, TBGraveYard[i].y, TBGraveYard[i].z, TBGraveYard[i].o, TEAM_ALLIANCE))
             gy->SetSpirit(creature, TEAM_ALLIANCE);
-        if (Creature* creature = SpawnCreature(HORDE_SPIRIT_GUIDE, TBGraveYard[i].x, TBGraveYard[i].y, TBGraveYard[i].z, TBGraveYard[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(HORDE_SPIRIT_GUIDE, TBGraveYard[i].x, TBGraveYard[i].y, TBGraveYard[i].z, TBGraveYard[i].o, TEAM_HORDE))
             gy->SetSpirit(creature, TEAM_HORDE);
         m_GraveyardList[i] = gy;
     }
@@ -140,72 +140,72 @@ bool BattlefieldTB::SetupBattlefield()
     for (uint8 i = 0; i < TB_MAX_KEEP_NPC; i++)
     {
         // Horde npc
-        if (Creature* creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBKeepNPC[i].entryh, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_HORDE))
             KeepCreature[TEAM_HORDE].insert(creature->GetGUID());
         // Alliance npc
-        if (Creature* creature = SpawnCreature(TBKeepNPC[i].entrya, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_ALLIANCE))
+        if (auto creature = SpawnCreature(TBKeepNPC[i].entrya, TBKeepNPC[i].x, TBKeepNPC[i].y, TBKeepNPC[i].z, TBKeepNPC[i].o, TEAM_ALLIANCE))
             KeepCreature[TEAM_ALLIANCE].insert(creature->GetGUID());
     }
 
 
     // Spawwning quest trou creatures
     for (uint8 i = 0; i < TB_MAX_TROU_NPC; i++)
-        if (Creature* creature = SpawnCreature(TBTrouNPC[i].entryh, TBTrouNPC[i].x, TBTrouNPC[i].y, TBTrouNPC[i].z, TBTrouNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBTrouNPC[i].entryh, TBTrouNPC[i].x, TBTrouNPC[i].y, TBTrouNPC[i].z, TBTrouNPC[i].o, TEAM_HORDE))
             TrouCreature.insert(creature->GetGUID());
 
     // Spawwning quest trou creatures
     for (uint8 i = 0; i < TB_MAX_DEPTH_NPC; i++)
-        if (Creature* creature = SpawnCreature(TBDeapthNPC[i].entryh, TBDeapthNPC[i].x, TBDeapthNPC[i].y, TBDeapthNPC[i].z, TBDeapthNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBDeapthNPC[i].entryh, TBDeapthNPC[i].x, TBDeapthNPC[i].y, TBDeapthNPC[i].z, TBDeapthNPC[i].o, TEAM_HORDE))
             DepthCreature.insert(creature->GetGUID());
 
     // Spawwning quest trou creatures
     for (uint8 i = 0; i < TB_MAX_BLOCD_NPC; i++)
-        if (Creature* creature = SpawnCreature(TBBlocDNPC[i].entryh, TBBlocDNPC[i].x, TBBlocDNPC[i].y, TBBlocDNPC[i].z, TBBlocDNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBBlocDNPC[i].entryh, TBBlocDNPC[i].x, TBBlocDNPC[i].y, TBBlocDNPC[i].z, TBBlocDNPC[i].o, TEAM_HORDE))
             BlocDCreature.insert(creature->GetGUID());
 
     // Spawwning dynamic quest giver
     for (uint8 i = 0; i < TB_MAX_DYNAMIC_QUEST_GIVER; i++)
     {
-        if (Creature* creature = SpawnCreature(TBQuestNPC[i].entryh, TBQuestNPC[i].x, TBQuestNPC[i].y, TBQuestNPC[i].z, TBQuestNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBQuestNPC[i].entryh, TBQuestNPC[i].x, TBQuestNPC[i].y, TBQuestNPC[i].z, TBQuestNPC[i].o, TEAM_HORDE))
             DynamicQuestCreatre[TEAM_HORDE].insert(creature->GetGUID());
-        if (Creature* creature = SpawnCreature(TBQuestNPC[i].entrya, TBQuestNPC[i].x, TBQuestNPC[i].y, TBQuestNPC[i].z, TBQuestNPC[i].o, TEAM_ALLIANCE))
+        if (auto creature = SpawnCreature(TBQuestNPC[i].entrya, TBQuestNPC[i].x, TBQuestNPC[i].y, TBQuestNPC[i].z, TBQuestNPC[i].o, TEAM_ALLIANCE))
             DynamicQuestCreatre[TEAM_ALLIANCE].insert(creature->GetGUID());
     }
     for (GuidSet::const_iterator itr = TrouCreature.begin(); itr != TrouCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DepthCreature.begin(); itr != DepthCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = BlocDCreature.begin(); itr != BlocDCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetAttackerTeam()].begin(); itr != DynamicQuestCreatre[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetDefenderTeam()].begin(); itr != DynamicQuestCreatre[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     // Hide keep npc
     for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     // show keep npc
     for (GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
             {
                 ShowNpc(creature, true);
                 AnimateCreature(creature);
@@ -304,7 +304,7 @@ bool BattlefieldTB::Update(uint32 diff)
         m_saveTimer -= diff;
 
     for (GuidSet::const_iterator itr = m_PlayersIsSpellImu.begin(); itr != m_PlayersIsSpellImu.end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
+        if (auto player = ObjectAccessor::FindPlayer((*itr)))
         {
             if (player->HasAura(SPELL_SPIRITUAL_IMMUNITY_TB))
             {
@@ -327,7 +327,7 @@ void BattlefieldTB::AddPlayerToResurrectQueue(uint64 npc_guid, uint64 player_gui
     Battlefield::AddPlayerToResurrectQueue(npc_guid, player_guid);
     if (IsWarTime())
     {
-        if (Player* player = ObjectAccessor::FindPlayer(player_guid))
+        if (auto player = ObjectAccessor::FindPlayer(player_guid))
         {
             if (!player->HasAura(SPELL_SPIRITUAL_IMMUNITY_TB))
             {
@@ -364,24 +364,24 @@ void BattlefieldTB::OnBattleStart()
 
     //Hide keep npc
     for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     // Spawning battle npcs
     for (uint8 i = 0; i < TB_MAX_WAR_NPC; i++)
-        if (Creature* creature = SpawnCreature(TBWarNPC[i].entryh, TBWarNPC[i].x, TBWarNPC[i].y, TBWarNPC[i].z, TBWarNPC[i].o, TEAM_HORDE))
+        if (auto creature = SpawnCreature(TBWarNPC[i].entryh, TBWarNPC[i].x, TBWarNPC[i].y, TBWarNPC[i].z, TBWarNPC[i].o, TEAM_HORDE))
             WarCreature.insert(creature->GetGUID());
 
     //Show battle npcs
     for (GuidSet::const_iterator itr = WarCreature.begin(); itr != WarCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
             {
                 ShowNpc(creature, true);
                 if (creature->GetEntry() == BATTLEFIELD_TB_VEHICLE)
@@ -393,28 +393,28 @@ void BattlefieldTB::OnBattleStart()
             (*itr)->Rebuild();
 
     for (GuidSet::const_iterator itr = TrouCreature.begin(); itr != TrouCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DepthCreature.begin(); itr != DepthCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = BlocDCreature.begin(); itr != BlocDCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetAttackerTeam()].begin(); itr != DynamicQuestCreatre[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetDefenderTeam()].begin(); itr != DynamicQuestCreatre[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     m_GraveyardList[0]->GiveControlTo(GetAttackerTeam());
@@ -430,7 +430,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
 
     for (GuidSet::const_iterator itr = m_PlayersInWar[GetDefenderTeam()].begin(); itr != m_PlayersInWar[GetDefenderTeam()].end(); ++itr)
     {
-        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
+        if (auto player = ObjectAccessor::FindPlayer((*itr)))
         {
             if (player->GetTeamId() == TEAM_HORDE)
             {
@@ -464,32 +464,32 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     }
 
     for (GuidSet::const_iterator itr = m_PlayersInWar[GetAttackerTeam()].begin(); itr != m_PlayersInWar[GetAttackerTeam()].end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer((*itr)))
+        if (auto player = ObjectAccessor::FindPlayer((*itr)))
             player->CastSpell(player, SPELL_TOL_BARAD_DEFEAT, true);
 
     //Change all npc in keep
     for (GuidSet::const_iterator itr = KeepCreature[GetAttackerTeam()].begin(); itr != KeepCreature[GetAttackerTeam()].end(); ++itr)
     {
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
     }
     for (GuidSet::const_iterator itr = KeepCreature[GetDefenderTeam()].begin(); itr != KeepCreature[GetDefenderTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
             {
                 ShowNpc(creature, true);
                 AnimateCreature(creature);
             }
     for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetAttackerTeam()].begin(); itr != DynamicQuestCreatre[GetAttackerTeam()].end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 HideNpc(creature);
 
     // Hide creatures that should be visible only when battle is on.
     for (GuidSet::const_iterator itr = WarCreature.begin(); itr != WarCreature.end(); ++itr)
-        if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-            if (Creature* creature = unit->ToCreature())
+        if (auto unit = ObjectAccessor::FindUnit((*itr)))
+            if (auto creature = unit->ToCreature())
                 creature->RemoveFromWorld();
     WarCreature.clear();
 
@@ -526,7 +526,7 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
     {
         for (GuidSet::const_iterator itr = m_PlayersInWar[team].begin(); itr != m_PlayersInWar[team].end(); ++itr)
         {
-            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
+            if (auto player = ObjectAccessor::FindPlayer((*itr)))
             {
                 player->RemoveAurasDueToSpell(SPELL_VETERAN);
                 player->RemoveAurasDueToSpell(SPELL_SPIRITUAL_IMMUNITY_TB);
@@ -536,8 +536,8 @@ void BattlefieldTB::OnBattleEnd(bool endbytimer)
 
         for (GuidSet::const_iterator itr = m_vehicles[team].begin(); itr != m_vehicles[team].end(); ++itr)
         {
-            if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                if (Creature* creature = unit->ToCreature())
+            if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                if (auto creature = unit->ToCreature())
                     if (creature->IsVehicle())
                         creature->GetVehicleKit()->RemoveAllPassengers();
         }
@@ -597,7 +597,7 @@ void BattlefieldTB::HandleKill(Player* killer, Unit* victim)
     if (victim->GetTypeId() == TYPEID_PLAYER)
     {
         for (GuidSet::const_iterator itr = m_PlayersInWar[killerTeam].begin(); itr != m_PlayersInWar[killerTeam].end(); ++itr)
-            if (Player* player = sObjectAccessor->FindPlayer(*itr))
+            if (auto player = sObjectAccessor->FindPlayer(*itr))
                 if (player->GetDistance2d(killer) < 40 && !player->HasAura(SPELL_VETERAN))
                 {
                     player->CastSpell(player, SPELL_VETERAN, true);
@@ -681,7 +681,7 @@ void BattlefieldTB::SendInitWorldStatesToAll()
 {
     for (uint8 team = 0; team<2; team++)
         for (GuidSet::iterator itr = m_players[team].begin(); itr != m_players[team].end(); ++itr)
-            if (Player* player = ObjectAccessor::FindPlayer((*itr)))
+            if (auto player = ObjectAccessor::FindPlayer((*itr)))
                 SendInitWorldStatesTo(player);
 }
 
@@ -720,39 +720,39 @@ void BattlefieldTB::StartDynamicQuests()
             if (GameObject *go = m_Map->GetGameObject(uiHallDoor))
                 go->SetGoState(GO_STATE_ACTIVE);
             for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetDefenderTeam()].begin(); itr != DynamicQuestCreatre[GetDefenderTeam()].end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         if (creature->GetEntry() == (GetDefenderTeam() == TEAM_HORDE ? 48062 : 48074))
                             ShowNpc(creature, true);
             for (GuidSet::const_iterator itr = TrouCreature.begin(); itr != TrouCreature.end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         ShowNpc(creature, true);
             break;
         case 1:
             if (GameObject *go = m_Map->GetGameObject(uiDepthDoor))
                 go->SetGoState(GO_STATE_ACTIVE);
             for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetDefenderTeam()].begin(); itr != DynamicQuestCreatre[GetDefenderTeam()].end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         if (creature->GetEntry() == (GetDefenderTeam() == TEAM_HORDE ? 48071 : 48039))
                             ShowNpc(creature, true);
             for (GuidSet::const_iterator itr = DepthCreature.begin(); itr != DepthCreature.end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         ShowNpc(creature, true);
             break;
         case 2:
             if (GameObject *go = m_Map->GetGameObject(uiBlocDDoor))
                 go->SetGoState(GO_STATE_ACTIVE);
             for (GuidSet::const_iterator itr = DynamicQuestCreatre[GetDefenderTeam()].begin(); itr != DynamicQuestCreatre[GetDefenderTeam()].end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         if (creature->GetEntry() == (GetDefenderTeam() == TEAM_HORDE ? 48070 : 48061))
                             ShowNpc(creature, true);
             for (GuidSet::const_iterator itr = BlocDCreature.begin(); itr != BlocDCreature.end(); ++itr)
-                if (Unit* unit = ObjectAccessor::FindUnit((*itr)))
-                    if (Creature* creature = unit->ToCreature())
+                if (auto unit = ObjectAccessor::FindUnit((*itr)))
+                    if (auto creature = unit->ToCreature())
                         ShowNpc(creature, true);
             break;
         default:

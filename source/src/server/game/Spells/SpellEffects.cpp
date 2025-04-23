@@ -479,7 +479,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                 // Envenom
                 if (m_spellInfo->SpellFamilyFlags[1] & 0x00000008)
                 {
-                    if (Player* player = m_caster->ToPlayer())
+                    if (auto player = m_caster->ToPlayer())
                     {
                         // consume from stack dozes not more that have combo-points
                         if (uint32 combo = player->GetComboPoints())
@@ -583,7 +583,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     if (AuraEffect* aur = m_caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 2934, EFFECT_0))
                         AddPct(damage, aur->GetAmount());
 
-                    if (Unit* owner = m_caster->GetOwner()) // Sic 'Em! Rank 1 (Rank 2 is working fine)
+                    if (auto owner = m_caster->GetOwner()) // Sic 'Em! Rank 1 (Rank 2 is working fine)
                         if (owner->HasAura(83359))
                             owner->RemoveAurasDueToSpell(83359);
                 }
@@ -606,14 +606,14 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             {
                 if (m_spellInfo->Id == 31707)
                 {
-                    if (Unit* owner = m_caster->GetOwner())
+                    if (auto owner = m_caster->GetOwner())
                         if (owner->GetTypeId() == TYPEID_PLAYER)
                             damage += owner->ToPlayer()->GetUInt32Value(PLAYER_PET_SPELL_POWER);
                 }
 
                 if (m_spellInfo->Id == 33395)
                 {
-                    if (Unit* owner = m_caster->GetOwner())
+                    if (auto owner = m_caster->GetOwner())
                         if (owner->GetTypeId() == TYPEID_PLAYER)
                             damage += CalculatePct(owner->ToPlayer()->GetUInt32Value(PLAYER_PET_SPELL_POWER), 33); // not sure about this but it should do around 1/3 of the waterbolt damage
                 }
@@ -949,7 +949,7 @@ void Spell::EffectTriggerMissileSpell(SpellEffIndex effIndex)
         case 70051:
             if (m_caster->GetTypeId() == TYPEID_UNIT)
                 if (Vehicle *veh = m_caster->GetVehicleKit())
-                    if (Unit* passenger = veh->GetPassenger(0))
+                    if (auto passenger = veh->GetPassenger(0))
                         if (passenger->GetTypeId() == TYPEID_PLAYER)
                         {
                             if (Creature *c = passenger->ToPlayer()->SummonCreature(37203, passenger->GetPositionX(), passenger->GetPositionY(), passenger->GetPositionZ(),
@@ -1511,7 +1511,7 @@ void Spell::EffectSendEvent(SpellEffIndex effIndex)
 
     if (ZoneScript* zoneScript = m_caster->GetZoneScript())
         zoneScript->ProcessEvent(target, m_spellInfo->Effects[effIndex].MiscValue);
-    else if (InstanceScript* instanceScript = m_caster->GetInstanceScript())    // needed in case Player is the caster
+    else if (auto instanceScript = m_caster->GetInstanceScript())    // needed in case Player is the caster
         instanceScript->ProcessEvent(target, m_spellInfo->Effects[effIndex].MiscValue);
 
     m_caster->GetMap()->ScriptsStart(sEventScripts, m_spellInfo->Effects[effIndex].MiscValue, m_caster, target);
@@ -1587,7 +1587,7 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
         // Runic Healing Injector (heal increased by 25% for engineers - 3.2.0 patch change)
         else if (m_spellInfo->Id == 67489)
         {
-            if (Player* player = m_caster->ToPlayer())
+            if (auto player = m_caster->ToPlayer())
                 if (player->HasSkill(SKILL_ENGINEERING))
                     AddPct(addhealth, 25);
         }
@@ -1625,7 +1625,7 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
             addhealth = caster->SpellHealingBonusDone(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
 
             for (Unit::ControlList::const_iterator itr = caster->m_Controlled.begin(); itr != caster->m_Controlled.end(); ++itr)
-                if (Creature* undeadPet = (*itr)->ToCreature())
+                if (auto undeadPet = (*itr)->ToCreature())
                     if (undeadPet->HasUnitState(UNIT_STATE_CONTROLLED))
                         addhealth = 0;
         }
@@ -1819,7 +1819,7 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
         // send info to the client
         player->SendNewItem(pItem, num_to_add, true, bgType == 0);
 
-        if (Guild* guild = player->GetGuild())
+        if (auto guild = player->GetGuild())
         {
             if (pProto->Quality > ITEM_QUALITY_EPIC || (pProto->Quality == ITEM_QUALITY_EPIC && pProto->ItemLevel >= MinNewsItemLevel[sWorld->getIntConfig(CONFIG_EXPANSION)]))
                 guild->AddGuildNews(GUILD_NEWS_ITEM_CRAFTED, player->GetGUID(), 0, pProto->ItemId);
@@ -1836,7 +1836,7 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
     // for battleground marks send by mail if not add all expected
     if (no_space > 0 && bgType)
     {
-        if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BattlegroundTypeId(bgType)))
+        if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BattlegroundTypeId(bgType)))
             bg->SendRewardMarkByMail(player, newitemid, no_space);
     }
 */
@@ -1996,7 +1996,7 @@ void Spell::EffectEnergize(SpellEffIndex effIndex)
             break;
         case 67490:                                         // Runic Mana Injector (mana gain increased by 25% for engineers - 3.2.0 patch change)
         {
-            if (Player* player = m_caster->ToPlayer())
+            if (auto player = m_caster->ToPlayer())
                 if (player->HasSkill(SKILL_ENGINEERING))
                     AddPct(damage, 25);
             break;
@@ -2197,7 +2197,7 @@ void Spell::EffectOpenLock(SpellEffIndex effIndex)
 
             //CanUseBattlegroundObject() already called in CheckCast()
             // in battleground check
-            if (Battleground* bg = player->GetBattleground())
+            if (auto bg = player->GetBattleground())
             {
                 bg->EventPlayerClickedOnFlag(player, gameObjTarget);
                 return;
@@ -2207,7 +2207,7 @@ void Spell::EffectOpenLock(SpellEffIndex effIndex)
         {
             //CanUseBattlegroundObject() already called in CheckCast()
             // in battleground check
-            if (Battleground* bg = player->GetBattleground())
+            if (auto bg = player->GetBattleground())
             {
                 if (bg->GetTypeID(true) == BATTLEGROUND_EY)
                     bg->EventPlayerClickedOnFlag(player, gameObjTarget);
@@ -2433,7 +2433,7 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
         return;
 
     int32 duration = m_spellInfo->GetDuration();
-    if (Player* modOwner = m_originalCaster->GetSpellModOwner())
+    if (auto modOwner = m_originalCaster->GetSpellModOwner())
         modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DURATION, duration);
 
     TempSummon* summon = NULL;
@@ -3469,7 +3469,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             {
                 // Lava lash
                 case 60103:
-                    if (Player* caster = m_caster->ToPlayer())
+                    if (auto caster = m_caster->ToPlayer())
                     {
                         int32 totalLavaLashMultiplier = 0;
 
@@ -3627,7 +3627,7 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
     // Dancing Rune Weapon
     if (m_caster->GetEntry() == 27893)
     {
-        if (Unit* owner = m_caster->GetOwner())
+        if (auto owner = m_caster->GetOwner())
             weaponDamage = owner->CalculateDamage(m_attackType, normalized, true);
     }
     else
@@ -3816,8 +3816,8 @@ void Spell::EffectSummonObjectWild(SpellEffIndex effIndex)
     }
 
     if (pGameObj->GetGoType() == GAMEOBJECT_TYPE_FLAGDROP)
-        if (Player* player = m_caster->ToPlayer())
-            if (Battleground* bg = player->GetBattleground())
+        if (auto player = m_caster->ToPlayer())
+            if (auto bg = player->GetBattleground())
             {
                 bg->SetDroppedFlagGUID(pGameObj->GetGUID(), player->GetTeam() == ALLIANCE ? TEAM_HORDE : TEAM_ALLIANCE);
                 pGameObj->SetOwnerGUID(0);
@@ -4050,10 +4050,10 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 }
                 // Plant Warmaul Ogre Banner
                 case 32307:
-                    if (Player* caster = m_caster->ToPlayer())
+                    if (auto caster = m_caster->ToPlayer())
                     {
                         caster->RewardPlayerAndGroupAtEvent(18388, unitTarget);
-                        if (Creature* target = unitTarget->ToCreature())
+                        if (auto target = unitTarget->ToCreature())
                         {
                             target->setDeathState(CORPSE);
                             target->RemoveCorpse();
@@ -4330,9 +4330,9 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 {
                     if (unitTarget)
                     {
-                        if (Unit* seat = m_caster->GetVehicleBase())
+                        if (auto seat = m_caster->GetVehicleBase())
                         {
-                            if (Unit* parent = seat->GetVehicleBase())
+                            if (auto parent = seat->GetVehicleBase())
                             {
                                 // TODO: a hack, range = 11, should after some time cast, otherwise too far
                                 m_caster->CastSpell(parent, 62496, true);
@@ -4446,7 +4446,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 case 72891:
                 {
                     if (m_CastItem != NULL)
-                        if (Unit* caster = m_CastItem->GetOwner())
+                        if (auto caster = m_CastItem->GetOwner())
                             if (caster->GetTypeId() == TYPEID_PLAYER)
                             {
                                 Player *player = m_CastItem->GetOwner();
@@ -5016,7 +5016,7 @@ void Spell::EffectDisEnchant(SpellEffIndex /*effIndex*/)
     if (!itemTarget || !itemTarget->GetTemplate()->DisenchantID)
         return;
 
-    if (Player* caster = m_caster->ToPlayer())
+    if (auto caster = m_caster->ToPlayer())
     {
         caster->UpdateCraftSkill(m_spellInfo->Id);
         caster->SendLoot(itemTarget->GetGUID(), LOOT_DISENCHANTING);
@@ -5100,7 +5100,7 @@ void Spell::EffectDismissPet(SpellEffIndex effIndex)
     owner->SetCurrentPetSlot(int8(PET_SLOT_FULL_LIST));
 
     ExecuteLogEffectUnsummonObject(effIndex, pet);
-    if (Unit* unitOwner = pet->GetOwner())
+    if (auto unitOwner = pet->GetOwner())
         if (unitOwner->GetTypeId() == TYPEID_PLAYER)
         {
 
@@ -5193,7 +5193,7 @@ void Spell::EffectSummonObject(SpellEffIndex effIndex)
     uint8 slot = (isTrap ? EffectSummonObject_getSlot(m_spellInfo->Id) : (m_spellInfo->Effects[effIndex].Effect - SPELL_EFFECT_SUMMON_OBJECT_SLOT1));
 
     if (uint64 guid = m_caster->m_ObjectSlot[slot])
-        if (GameObject* obj = m_caster->GetMap()->GetGameObject(guid))
+        if (auto obj = m_caster->GetMap()->GetGameObject(guid))
     {
             // Recast case - null spell id to make auras not be removed on object remove from world
             if
@@ -5650,7 +5650,7 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
         //sWorld->SendServerMessage(SERVER_MSG_STRING, "[target] thunderstorm effect ACK skip initiated [disabled]");
     }
 
-    if (Creature* creatureTarget = unitTarget->ToCreature())
+    if (auto creatureTarget = unitTarget->ToCreature())
         if (creatureTarget->isWorldBoss() || creatureTarget->IsDungeonBoss())
             return;
 
@@ -5698,7 +5698,7 @@ void Spell::EffectLeapBack(SpellEffIndex effIndex)
     if (!unitTarget)
         return;
 
-    if (Unit* unitCaster = m_caster->ToUnit())
+    if (auto unitCaster = m_caster->ToUnit())
     {
         if (unitCaster->ToPlayer())
             unitCaster->ToPlayer()->SetUnderACKmountAdvanced();
@@ -6583,7 +6583,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
     float radius = 5.0f;
     int32 duration = m_spellInfo->GetDuration();
 
-    if (Player* modOwner = m_originalCaster->GetSpellModOwner())
+    if (auto modOwner = m_originalCaster->GetSpellModOwner())
         modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DURATION, duration);
 
     // Warlock T13 2P Bonus (Doomguard and Infernal)
@@ -6959,7 +6959,7 @@ void Spell::EffectUpdatePlayerPhase(SpellEffIndex /*effIndex*/)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
     
-    if (Player* player = unitTarget->ToPlayer())
+    if (auto player = unitTarget->ToPlayer())
         player->UpdateArea(player->GetAreaId());
     else
         return;
@@ -6973,7 +6973,7 @@ void Spell::EffectUpdateZoneAurasAndPhases(SpellEffIndex /*effIndex*/)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
    
-    if (Player* player = unitTarget->ToPlayer())
+    if (auto player = unitTarget->ToPlayer())
         player->UpdateArea(player->GetAreaId());
     else
         return;
@@ -6990,7 +6990,7 @@ void Spell::EffectUnlockGuildVaultTab(SpellEffIndex effIndex)
     Player* player = m_caster->ToPlayer();
 
     if (uint64 guildID = player->GetGuildId()) // Player must be in guild
-        if (Guild* guild = sGuildMgr->GetGuildById(guildID))
+        if (auto guild = sGuildMgr->GetGuildById(guildID))
             if (guild->GetLeaderGUID() == player->GetGUID())
                 guild->HandleBuyBankTab(player->GetSession(), GetSpellInfo()->Effects[effIndex].CalcValue() - 1);
 }

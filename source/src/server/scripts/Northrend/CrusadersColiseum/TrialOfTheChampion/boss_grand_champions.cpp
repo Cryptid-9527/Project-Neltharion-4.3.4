@@ -562,7 +562,7 @@ public:
 
             if (polymorphTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_POLYMORPH);
                 polymorphTimer = 8000;
             } else polymorphTimer -= diff;
@@ -723,7 +723,7 @@ public:
 
             if (chainLightningTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_CHAIN_LIGHTNING);
 
                 chainLightningTimer = 8000;
@@ -735,7 +735,7 @@ public:
 
                 if(!chance)
                 {
-                    if (Unit* friendUnit = DoSelectLowestHpFriendly(40))
+                    if (auto friendUnit = DoSelectLowestHpFriendly(40))
                     {
                         DoCast(friendUnit, SPELL_HEALING_WAVE);
                         healingWaveTimer = 5000;
@@ -1107,7 +1107,7 @@ public:
 
             if (posionBottleTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_POISON_BOTTLE);
                 posionBottleTimer = 19000;
             } else posionBottleTimer -= diff;
@@ -1169,9 +1169,9 @@ class spell_toc5_ride_mount : public SpellScriptLoader
 
             void HandleOnEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     target->RemoveAurasDueToSpell(SPELL_DEFEND);
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     caster->RemoveAurasDueToSpell(SPELL_DEFEND);
                     for (uint8 i=0; i<3; i++)

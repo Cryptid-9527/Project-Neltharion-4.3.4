@@ -351,7 +351,7 @@ void WorldSession::HandleGuildFinderPostRequest(WorldPacket& /*recvPacket*/)
         return;
 
     bool isGuildMaster = true;
-    if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
+    if (auto guild = sGuildMgr->GetGuildById(player->GetGuildId()))
         if (guild->GetLeaderGUID() != player->GetGUID())
             isGuildMaster = false;
 
@@ -439,7 +439,7 @@ void WorldSession::HandleGuildFinderSetGuildPost(WorldPacket& recvPacket)
     if (!player->GetGuildId()) // Player must be in guild
         return;
 
-    if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId())) // Player must be guild master
+    if (auto guild = sGuildMgr->GetGuildById(player->GetGuildId())) // Player must be guild master
         if (guild->GetLeaderGUID() != player->GetGUID())
             return;
 

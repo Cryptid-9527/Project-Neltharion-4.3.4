@@ -391,7 +391,7 @@ public:
 
          void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 player->FailQuest(QUEST_TOMB_LIGHTBRINGER);
         }
 

@@ -598,7 +598,7 @@ public:
             if (!GetTarget()->CreateVehicleKit(vehicleId, 0))
                 return;
 
-            if (Player* player = GetTarget()->ToPlayer())
+            if (auto player = GetTarget()->ToPlayer())
             {
                 WorldPacket data(SMSG_PLAYER_VEHICLE_DATA, player->GetPackGUID().size() + 4);
                 data.appendPackGUID(player->GetGUID());
@@ -612,8 +612,8 @@ public:
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
             Unit* target = GetTarget();
-            if (InstanceScript* instance = target->GetInstanceScript())
-                if (Creature* atramedes = ObjectAccessor::GetCreature(*target, instance->GetData64(NPC_ATRAMEDES)))
+            if (auto instance = target->GetInstanceScript())
+                if (auto atramedes = ObjectAccessor::GetCreature(*target, instance->GetData64(NPC_ATRAMEDES)))
                 {
                     if (target->GetPower(POWER_ALTERNATE_POWER) > 50)
                         atramedes->AI()->SetData(DATA_SILENCE_IS_GOLDEN, 0);
@@ -677,9 +677,9 @@ class npc_tracking_flames : public CreatureScript
             me->GetMotionMaster()->Clear();
             me->GetMotionMaster()->MoveIdle();
 
-            if (Unit* unit = me->GetUnit(*me, guid))
+            if (auto unit = me->GetUnit(*me, guid))
             {
-                if (Unit* old = me->GetUnit(*me, targetGUID))
+                if (auto old = me->GetUnit(*me, targetGUID))
                 {
                     me->getThreatManager().modifyThreatPercent(old, -100);
                     old->RemoveAurasDueToSpell(SPELL_TRACKING);
@@ -702,9 +702,9 @@ class npc_tracking_flames : public CreatureScript
 
             if (summFlammes <= diff)
             {
-                if (Creature* creature = me->SummonCreature(NPC_ROARING_FLAME, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 80000))
+                if (auto creature = me->SummonCreature(NPC_ROARING_FLAME, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 80000))
                 {
-                    if (Unit* player = me->GetUnit(*me, targetGUID))
+                    if (auto player = me->GetUnit(*me, targetGUID))
                     {
                         Position destPos;
                         player->GetPosition(&destPos);
@@ -828,13 +828,13 @@ class go_ancient_bell : public GameObjectScript
             instance->SetData(DATA_ATRAMEDES_SUMMON, 1);
             pGO->SendCustomAnim(0);
             pGO->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-            if (Creature* lunarCol = player->FindNearestCreature(NPC_LUNAR_COLUMN, 100))
+            if (auto lunarCol = player->FindNearestCreature(NPC_LUNAR_COLUMN, 100))
             {
                 lunarCol->DespawnCreaturesInArea(43400, 250.f);
                 lunarCol->DespawnCreaturesInArea(43396, 250.f);
                 lunarCol->DespawnCreaturesInArea(43404, 250.f);
                 lunarCol->DespawnCreaturesInArea(43407, 250.f);
-                if (GameObject* gob = lunarCol->FindNearestGameObject(202832, 250.f))
+                if (auto gob = lunarCol->FindNearestGameObject(202832, 250.f))
                     gob->Delete();
 
                 lunarCol->DespawnOrUnsummon(1000);
@@ -1179,7 +1179,7 @@ public:
                 Map::PlayerList const& players = caster->GetMap()->GetPlayers();
                 if (!players.isEmpty())
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             if (player->GetPower(POWER_ALTERNATE_POWER) == 100)
                             {
                                 caster->CastSpell(caster, SPELL_DEVASTATION_TRIG, true);
@@ -1323,9 +1323,9 @@ class npc_maloriak_atramedes_event : public CreatureScript
                     {
                     case 0: // 43396
 
-                        if (GameObject* gob = me->FindNearestGameObject(GO_ANCIENT_BELL, 100))
+                        if (auto gob = me->FindNearestGameObject(GO_ANCIENT_BELL, 100))
                             gob->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
-                        if (Creature* lunarCol = me->FindNearestCreature(NPC_LUNAR_COLUMN, 100))
+                        if (auto lunarCol = me->FindNearestCreature(NPC_LUNAR_COLUMN, 100))
                             lunarCol->CastSpell(lunarCol, SPELL_LUNAR_COLUMN_VISUAL, true);
 
                         Talk(10, NULL, CHAT_MSG_MONSTER_EMOTE, TEXT_RANGE_MAP);
@@ -1360,7 +1360,7 @@ class npc_maloriak_atramedes_event : public CreatureScript
                     case 7:
                         Talk(4);
                         TalkWithDelay(2000, 9, NULL, CHAT_MSG_MONSTER_EMOTE);
-                        if (Creature* atramedes = me->FindNearestCreature(NPC_LITTLE_ATRAMEDES, 100))
+                        if (auto atramedes = me->FindNearestCreature(NPC_LITTLE_ATRAMEDES, 100))
                             atramedes->GetMotionMaster()->MovePoint(0, { 150.49f, -225.26f, 75.45f }, true, 3.f);
                         textCooldown = 6000;
                         break; // 22:26:05.273
@@ -1557,7 +1557,7 @@ class spell_sonic_breath_periodic : public SpellScriptLoader
                     Map::PlayerList const& players = atramedes->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* target = itr->getSource())
+                            if (auto target = itr->getSource())
                                 if (atramedes->isInFrontInMap(target, 500.0f, static_cast<float>(M_PI / 12)))
                                     targets.push_back(target);
                 }

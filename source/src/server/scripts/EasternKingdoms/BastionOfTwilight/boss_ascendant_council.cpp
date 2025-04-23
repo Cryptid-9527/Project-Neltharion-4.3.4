@@ -411,7 +411,7 @@ public:
             Reset();
             me->DeleteThreatList();
             me->CombatStop();
-            if (Creature* element = me->FindNearestCreature(NPC_ELEMENTIUM_MONSTROSITY, 200.0f))
+            if (auto element = me->FindNearestCreature(NPC_ELEMENTIUM_MONSTROSITY, 200.0f))
                 element->AI()->DoAction(ACTION_DESPAWN);
             instance->SetData(DATA_ASCENDANT_COUNCIL, FAIL);
         }
@@ -454,7 +454,7 @@ public:
 
             if (!PlayerList.isEmpty())
               for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                if (Player* playr = i->getSource())
+                if (auto playr = i->getSource())
                     playr->AddAura(SPELL_ELEMENTAL_STASIS, playr); // Trap all players while Monstrosity spawns.
         }
 
@@ -551,7 +551,7 @@ public:
                             terrastra->SetVisible(false);
                             arion->SetVisible(false);
                             ignacious->SetVisible(false);
-                            if (Creature* monstosity = me->SummonCreature(NPC_ELEMENTIUM_MONSTROSITY, -1008.824f, -582.617f, 831.902f, 0.026f, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto monstosity = me->SummonCreature(NPC_ELEMENTIUM_MONSTROSITY, -1008.824f, -582.617f, 831.902f, 0.026f, TEMPSUMMON_MANUAL_DESPAWN))
                                 monstosity->CastSpell(monstosity, SPELL_SUMMON_MONSTROSITY_EXPLODE, true);
                             break;
                         case EVENT_CAST_STASIS:
@@ -566,7 +566,7 @@ public:
                             {
                                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                                 {
-                                    if (Player* target = itr->getSource())
+                                    if (auto target = itr->getSource())
                                     {
                                         if (target->isAlive() && me->GetDistance2d(target) < 100.0f && !target->isGameMaster())
                                         {
@@ -696,7 +696,7 @@ class boss_feludius : public CreatureScript
                 if (damage > ((me->GetHealth() / 4) * 3)) // Check needed for correct split.
                     damage = (me->GetHealth() / 4) * 3;
 
-                if (Creature* controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
+                if (auto controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
                     controller->SetHealth(controller->GetHealth() - damage);
             }
 
@@ -710,7 +710,7 @@ class boss_feludius : public CreatureScript
                 if (!events.IsInPhase(PHASE_BALCONY) && !UpdateVictim())
                     return;
 
-                if (Creature* ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
+                if (auto ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
                 {
                     if ((me->HealthBelowPct(26) || ignacious->HealthBelowPct(26)) && !wentUp)
                     {
@@ -739,7 +739,7 @@ class boss_feludius : public CreatureScript
                             Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
                             if (!PlayerList.isEmpty())
                                 for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                                    if (Player* player = i->getSource())
+                                    if (auto player = i->getSource())
                                     {
                                         Position pos;
                                         player->GetRandomNearPosition(pos, 5.0f);
@@ -905,7 +905,7 @@ class boss_ignacious : public CreatureScript
                 if (damage > ((me->GetHealth() / 4) * 3)) // Check needed for correct split.
                     damage = (me->GetHealth() / 4) * 3;
 
-                if (Creature* controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
+                if (auto controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
                     controller->SetHealth(controller->GetHealth() - damage);
             }
 
@@ -925,7 +925,7 @@ class boss_ignacious : public CreatureScript
                 if (!events.IsInPhase(PHASE_BALCONY) && !UpdateVictim())
                     return;
 
-                if (Creature* feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true))
+                if (auto feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true))
                 {
                     if ((me->HealthBelowPct(26) || feludius->HealthBelowPct(26)) && !wentUp)
                     {
@@ -952,7 +952,7 @@ class boss_ignacious : public CreatureScript
                             break;
                         case EVENT_INFERNO_RUSH:
                             lastTarget = me->getVictim();
-                            if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
+                            if (auto target = SelectTarget(SELECT_TARGET_FARTHEST))
                             {
                                 float dist = me->GetDistance2d(target->GetPositionX(), target->GetPositionY());
                                 float speedXY = 40.0f;
@@ -1000,12 +1000,12 @@ class boss_ignacious : public CreatureScript
                             DoCast(me, SPELL_RISING_FLAMES);
                             break;
                         case EVENT_BURNING_BLOOD:
-                            if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_HEART_OF_ICE))
+                            if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_HEART_OF_ICE))
                                 DoCast(victim, SPELL_BURNING_BLOOD);
                             events.ScheduleEvent(EVENT_BURNING_BLOOD, urand(22000, 24000), 0, PHASE_COMBAT);
                             break;
                         case EVENT_FLAME_STRIKE:
-                            if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_HITTIN_YA_PLAYER))
+                            if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_HITTIN_YA_PLAYER))
                             {
                                 if (Creature *c = me->SummonCreature(NPC_FLAME_STRIKE, victim->GetPositionX(), victim->GetPositionY(), victim->GetPositionZ(), 0))
                                 {
@@ -1105,7 +1105,7 @@ class boss_arion : public CreatureScript
                 if (damage > ((me->GetHealth() / 4) * 3)) // Check needed for correct split.
                     damage = (me->GetHealth() / 4) * 3;
 
-                if (Creature* controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
+                if (auto controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
                     controller->SetHealth(controller->GetHealth() - damage);
             }
 
@@ -1125,9 +1125,9 @@ class boss_arion : public CreatureScript
                 if (!events.IsInPhase(PHASE_BALCONY) && !UpdateVictim())
                     return;
 
-                if (Creature* feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true))
+                if (auto feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true))
                 {
-                    if (Creature* ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
+                    if (auto ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
                     {
                         if ((feludius->HealthBelowPct(26) || ignacious->HealthBelowPct(26)) && !wentDown)
                         {
@@ -1155,7 +1155,7 @@ class boss_arion : public CreatureScript
                             for (int cnt = 0; preventInfiniteLoop < RAID_MODE(10, 25, 10, 25) && cnt < RAID_MODE(1, 3, 1, 3); preventInfiniteLoop++)
                             {
                                 lightningVictim[cnt] = NULL;
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_LIGHTNING_ROD))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true, -SPELL_LIGHTNING_ROD))
                                     if (!target->HasAura(SPELL_HITTIN_YA_PLAYER))
                                     {
                                         me->AddAura(SPELL_LIGHTNING_ROD, target);
@@ -1188,7 +1188,7 @@ class boss_arion : public CreatureScript
                             break;
                         case EVENT_CALL_WINDS:
                             Talk(SAY_A_CALL_WINDS);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
                                 DoCast(target, SPELL_CALL_WINDS);
                             events.ScheduleEvent(EVENT_CALL_WINDS, urand(27000, 33000), 0, PHASE_COMBAT);
                             break;
@@ -1291,7 +1291,7 @@ class boss_terrastra : public CreatureScript
                 if (damage > ((me->GetHealth() / 4) * 3)) // Check needed for correct split.
                     damage = (me->GetHealth() / 4) * 3;
 
-                if (Creature* controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
+                if (auto controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
                     controller->SetHealth(controller->GetHealth() - damage);
             }
 
@@ -1311,9 +1311,9 @@ class boss_terrastra : public CreatureScript
                 if (!events.IsInPhase(PHASE_BALCONY) && !UpdateVictim())
                     return;
 
-                if (Creature* feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true)) // Check to prevent any damn crashes.
+                if (auto feludius = me->FindNearestCreature(NPC_FELUDIUS, 500.0f, true)) // Check to prevent any damn crashes.
                 {
-                    if (Creature* ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
+                    if (auto ignacious = me->FindNearestCreature(NPC_IGNACIOUS, 500.0f, true))
                     {
                         if ((feludius->HealthBelowPct(26) || ignacious->HealthBelowPct(26)) && !wentDown) // Check for Combat phase.
                         {
@@ -1339,7 +1339,7 @@ class boss_terrastra : public CreatureScript
                             events.ScheduleEvent(EVENT_QUAKE, 70000, 0, PHASE_COMBAT);
                             break;
                         case EVENT_ERUPTION:
-                            if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
+                            if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
                                 DoCast(victim, SPELL_ERUPTION_SUMMON_MOB);
                             events.ScheduleEvent(EVENT_ERUPTION, urand(14000, 16000), 0, PHASE_COMBAT);
                             break;
@@ -1349,7 +1349,7 @@ class boss_terrastra : public CreatureScript
                             break;
                         case EVENT_GRAVITY_WELL:
                             Talk(SAY_T_GRAVITY_WELL);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
                                 me->SummonCreature(NPC_GRAVITY_WELL, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 30000);
                             events.ScheduleEvent(EVENT_GRAVITY_WELL, urand(27000, 33000), 0, PHASE_COMBAT);
                             break;
@@ -1461,7 +1461,7 @@ class boss_monstrosity : public CreatureScript
 
             void DamageTaken(Unit* /*who*/, uint32& damage)
             {
-                if (Creature* controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
+                if (auto controller = me->FindNearestCreature(NPC_ASCENDANT_CONTROLLER, 500.0f, true))
                     controller->SetHealth(controller->GetHealth() - damage);
             }
 
@@ -1809,7 +1809,7 @@ class WaterloggedCheck
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return !unit->HasAura(SPELL_WATERLOGGED);
         return false;
     }
@@ -1988,7 +1988,7 @@ public:
 
         void AddSpecialEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 if (target->HasAura(SPELL_WATERLOGGED))
                     target->RemoveAurasDueToSpell(SPELL_WATERLOGGED);
@@ -2021,7 +2021,7 @@ public:
             if (AuraEffect* effect = GetAura()->GetEffect(EFFECT_0))
                 effect->SetAmount(2000 * aurEff->GetTickNumber());
 
-            if (Unit* caster = GetTarget())
+            if (auto caster = GetTarget())
             {
                 if (aurEff->GetId() == SPELL_HEART_OF_ICE)
                     caster->CastSpell(caster, SPELL_FROST_IMBUED, true);
@@ -2049,7 +2049,7 @@ public:
 
     bool operator()(WorldObject* object)
     {
-        if (Unit* tank = caster->GetAI()->SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+        if (auto tank = caster->GetAI()->SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
             return object == tank;
 
         return false;
@@ -2103,7 +2103,7 @@ public:
                 return;
 
 
-            if (Creature* vehicle = GetCaster()->SummonCreature(NPC_GRAVITY_CRUSH, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 6500))
+            if (auto vehicle = GetCaster()->SummonCreature(NPC_GRAVITY_CRUSH, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 6500))
                 target->CastSpell(vehicle, SPELL_GRAVITY_CRUSH_CONTROL_VEHICLE, true);
         }
 
@@ -2243,7 +2243,7 @@ public:
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (Unit *caster = GetCaster())
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     if (target->HasAura(SPELL_GROUNDED))
                         target->RemoveAurasDueToSpell(SPELL_GROUNDED);
@@ -2275,7 +2275,7 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 if (target->HasAura(SPELL_SWIRLING_WINDS))
                     target->RemoveAurasDueToSpell(SPELL_SWIRLING_WINDS);
@@ -2341,7 +2341,7 @@ class DebuffCheck
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return !unit->HasAura(SPELL_LIGHTNING_ROD);
         return false;
     }
@@ -2456,7 +2456,7 @@ class StaticOverloadCheck
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->HasAura(SPELL_STATIC_OVERLOAD);
         return false;
     }
@@ -2473,7 +2473,7 @@ public:
 
         void OnPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* owner = GetTarget())
+            if (auto owner = GetTarget())
             {
                 std::list<Player *> _players = owner->GetPlayersInRange(2.0f, true);
                 for (std::list<Player *>::iterator itr = _players.begin(); itr != _players.end(); itr++)
@@ -2641,7 +2641,7 @@ class GravityCoreCheck
 public:
     bool operator()(WorldObject* target) const
     {
-        if (Unit* unit = target->ToUnit())
+        if (auto unit = target->ToUnit())
             return unit->HasAura(SPELL_GRAVITY_CORE);
         return false;
     }

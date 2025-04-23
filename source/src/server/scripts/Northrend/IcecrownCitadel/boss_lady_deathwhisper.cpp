@@ -319,14 +319,14 @@ class boss_lady_deathwhisper : public CreatureScript
                 summons.RemoveNotExisting();
                 // Full House achievement
                 for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                    if (Unit* unit = ObjectAccessor::GetUnit(*me, *itr))
+                    if (auto unit = ObjectAccessor::GetUnit(*me, *itr))
                         if (unit->isAlive() && unit->GetEntry() != NPC_VENGEFUL_SHADE)
                             livingAddEntries.insert(unit->GetEntry() == NPC_EMPOWERED_ADHERENT ? NPC_CULT_ADHERENT : unit->GetEntry());
 
                 if (livingAddEntries.size() >= 5)
                     instance->DoCompleteAchievement(ACHIEVEMENT_FULL_HOUSE);
 
-                if (Creature* darnavan = ObjectAccessor::GetCreature(*me, _darnavanGUID))
+                if (auto darnavan = ObjectAccessor::GetCreature(*me, _darnavanGUID))
                 {
                     if (darnavan->isAlive())
                     {
@@ -336,12 +336,12 @@ class boss_lady_deathwhisper : public CreatureScript
                         darnavan->SetReactState(REACT_PASSIVE);
                         darnavan->m_Events.AddEvent(new DaranavanMoveEvent(*darnavan), darnavan->m_Events.CalculateTime(10000));
                         darnavan->AI()->Talk(SAY_DARNAVAN_RESCUED);
-                        if (Player* owner = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+                        if (auto owner = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                         {
                             if (Group* group = owner->GetGroup())
                             {
-                                for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
-                                    if (Player* member = itr->getSource())
+                                for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+                                    if (auto member = itr->getSource())
                                         member->KilledMonsterCredit(NPC_DARNAVAN_CREDIT, 0);
                             }
                             else
@@ -359,7 +359,7 @@ class boss_lady_deathwhisper : public CreatureScript
                 instance->SetBossState(DATA_LADY_DEATHWHISPER, FAIL);
 
                 summons.DespawnAll();
-                if (Creature* darnavan = ObjectAccessor::GetCreature(*me, _darnavanGUID))
+                if (auto darnavan = ObjectAccessor::GetCreature(*me, _darnavanGUID))
                 {
                     darnavan->DespawnOrUnsummon();
                     _darnavanGUID = 0;
@@ -461,14 +461,14 @@ class boss_lady_deathwhisper : public CreatureScript
                             Talk(SAY_INTRO_7);
                             break;
                         case EVENT_DEATH_AND_DECAY:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(target, SPELL_DEATH_AND_DECAY);
                             events.ScheduleEvent(EVENT_DEATH_AND_DECAY, urand(22000, 30000));
                             break;
                         case EVENT_DOMINATE_MIND_H:
                             Talk(SAY_DOMINATE_MIND);
                             for (uint8 i = 0; i < _dominateMindCount; i++)
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_DOMINATE_MIND_H))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_DOMINATE_MIND_H))
                                     DoCast(target, SPELL_DOMINATE_MIND_H);
                             events.ScheduleEvent(EVENT_DOMINATE_MIND_H, urand(40000, 45000));
                             break;
@@ -477,7 +477,7 @@ class boss_lady_deathwhisper : public CreatureScript
                             events.ScheduleEvent(EVENT_P1_SUMMON_WAVE, IsHeroic() ? 45000 : 60000, 0, PHASE_ONE);
                             break;
                         case EVENT_P1_SHADOW_BOLT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                                 DoCast(target, SPELL_SHADOW_BOLT);
                             events.ScheduleEvent(EVENT_P1_SHADOW_BOLT, urand(5000, 8000), 0, PHASE_ONE);
                             break;
@@ -498,7 +498,7 @@ class boss_lady_deathwhisper : public CreatureScript
                             events.ScheduleEvent(EVENT_P2_TOUCH_OF_INSIGNIFICANCE, urand(9000, 13000), 0, PHASE_TWO);
                             break;
                         case EVENT_P2_SUMMON_SHADE:
-                            if (Unit* shadeTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                            if (auto shadeTarget = SelectTarget(SELECT_TARGET_RANDOM, 1))
                             {
                                 _nextVengefulShadeTargetGUID = shadeTarget->GetGUID();
                                 DoCast(shadeTarget, SPELL_SUMMON_SHADE);
@@ -589,7 +589,7 @@ class boss_lady_deathwhisper : public CreatureScript
 
                 std::list<Creature*> temp;
                 for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                    if (Creature* cre = ObjectAccessor::GetCreature(*me, *itr))
+                    if (auto cre = ObjectAccessor::GetCreature(*me, *itr))
                         if (cre->isAlive() && (cre->GetEntry() == NPC_CULT_FANATIC || cre->GetEntry() == NPC_CULT_ADHERENT))
                             temp.push_back(cre);
 
@@ -637,7 +637,7 @@ class npc_cult_fanatic : public CreatureScript
                 Events.ScheduleEvent(EVENT_FANATIC_SHADOW_CLEAVE, urand(14000, 16000));
                 Events.ScheduleEvent(EVENT_FANATIC_VAMPIRIC_MIGHT, urand(20000, 27000));
                 if (me->ToTempSummon() && me->ToTempSummon()->GetSummoner())
-                    if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
+                    if (auto summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
                         if (me->GetEntry() == NPC_CULT_FANATIC && CAST_AI(DeathwisperAI, summoner->AI())->CanTransformAdds())
                             Events.ScheduleEvent(EVENT_CULTIST_DARK_MARTYRDOM, urand(18000, 32000));
             }
@@ -667,7 +667,7 @@ class npc_cult_fanatic : public CreatureScript
                 if (action == ACTION_SPAWN_REANIMATED_FANATIC)
                 {
                     if (me->ToTempSummon() && me->ToTempSummon()->GetSummoner())
-                        if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
+                        if (auto summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
                         {
                             CAST_AI(DeathwisperAI, summoner->AI())->DoActionSpawn(ACTION_SPAWN_REANIMATED_FANATIC, pos);
                             me->DespawnOrUnsummon();
@@ -738,7 +738,7 @@ class npc_cult_adherent : public CreatureScript
                 Events.ScheduleEvent(EVENT_ADHERENT_CURSE_OF_TORPOR, urand(14000, 16000));
                 Events.ScheduleEvent(EVENT_ADHERENT_SHORUD_OF_THE_OCCULT, urand(20000, 30000));
                 if (me->ToTempSummon() && me->ToTempSummon()->GetSummoner())
-                    if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
+                    if (auto summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
                         if (me->GetEntry() == NPC_CULT_ADHERENT && CAST_AI(DeathwisperAI, summoner->AI())->CanTransformAdds())
                             Events.ScheduleEvent(EVENT_CULTIST_DARK_MARTYRDOM, urand(18000, 32000));
             }
@@ -767,7 +767,7 @@ class npc_cult_adherent : public CreatureScript
                 me->GetPosition(&pos);
                 if (action == ACTION_SPAWN_REANIMATED_ADHERENT)
                     if (me->ToTempSummon() && me->ToTempSummon()->GetSummoner())
-                        if (Creature* summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
+                        if (auto summoner = me->ToTempSummon()->GetSummoner()->ToCreature())
                         {
                             CAST_AI(DeathwisperAI, summoner->AI())->DoActionSpawn(ACTION_SPAWN_REANIMATED_ADHERENT, pos);
                             me->DespawnOrUnsummon();
@@ -800,7 +800,7 @@ class npc_cult_adherent : public CreatureScript
                             Events.ScheduleEvent(EVENT_ADHERENT_DEATHCHILL, urand(9000, 13000));
                             break;
                         case EVENT_ADHERENT_CURSE_OF_TORPOR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_CURSE_OF_TORPOR);
                             Events.ScheduleEvent(EVENT_ADHERENT_CURSE_OF_TORPOR, urand(9000, 13000));
                             break;
@@ -893,12 +893,12 @@ class npc_darnavan : public CreatureScript
             void JustDied(Unit* killer)
             {
                 _events.Reset();
-                if (Player* owner = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+                if (auto owner = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
                     if (Group* group = owner->GetGroup())
                     {
-                        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
-                            if (Player* member = itr->getSource())
+                        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+                            if (auto member = itr->getSource())
                                 member->FailQuest(QUEST_DEPROGRAMMING);
                     }
                     else
@@ -1001,7 +1001,7 @@ class spell_deathwhisper_mana_barrier : public SpellScriptLoader
             void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 missingHealth = int32(caster->GetMaxHealth() - caster->GetHealth());
                     caster->ModifyHealth(missingHealth);

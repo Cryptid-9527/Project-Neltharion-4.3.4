@@ -782,7 +782,7 @@ public:
 
     uint8 getLevelForTarget(WorldObject const* target) const
     {
-        if (Unit* owner = GetOwner())
+        if (auto owner = GetOwner())
             return owner->getLevelForTarget(target);
 
         return 1;

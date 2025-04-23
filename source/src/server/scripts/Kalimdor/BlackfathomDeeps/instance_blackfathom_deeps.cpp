@@ -152,13 +152,13 @@ public:
                 case TYPE_GELIHAST:
                     encounter[0] = data;
                     if (data == DONE)
-                        if (GameObject* go = instance->GetGameObject(shrineOfGelihastGUID))
+                        if (auto go = instance->GetGameObject(shrineOfGelihastGUID))
                             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     break;
                 case TYPE_AKU_MAI:
                     encounter[3] = data;
                     if (data == DONE)
-                        if (GameObject* go = instance->GetGameObject(altarOfTheDeepsGUID))
+                        if (auto go = instance->GetGameObject(altarOfTheDeepsGUID))
                         {
                             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                             go->SummonCreature(NPC_MORRIDUNE, SpawnsLocation[4], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
@@ -169,7 +169,7 @@ public:
                     switch (countFires)
                     {
                         case 1:
-                            if (GameObject* go = instance->GetGameObject(shrine1GUID))
+                            if (auto go = instance->GetGameObject(shrine1GUID))
                             {
                                 go->SummonCreature(NPC_AKU_MAI_SNAPJAW, SpawnsLocation[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
                                 go->SummonCreature(NPC_AKU_MAI_SNAPJAW, SpawnsLocation[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
@@ -178,7 +178,7 @@ public:
                             }
                             break;
                         case 2:
-                            if (GameObject* go = instance->GetGameObject(shrine1GUID))
+                            if (auto go = instance->GetGameObject(shrine1GUID))
                             {
                                 for (uint8 i = 0; i < 2; ++i)
                                 {
@@ -190,14 +190,14 @@ public:
                             }
                             break;
                         case 3:
-                            if (GameObject* go = instance->GetGameObject(shrine1GUID))
+                            if (auto go = instance->GetGameObject(shrine1GUID))
                             {
                                 go->SummonCreature(NPC_AKU_MAI_SERVANT, SpawnsLocation[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
                                 go->SummonCreature(NPC_AKU_MAI_SERVANT, SpawnsLocation[2], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
                             }
                             break;
                         case 4:
-                            if (GameObject* go = instance->GetGameObject(shrine1GUID))
+                            if (auto go = instance->GetGameObject(shrine1GUID))
                             {
                                 go->SummonCreature(NPC_BARBED_CRUSTACEAN, SpawnsLocation[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
                                 go->SummonCreature(NPC_BARBED_CRUSTACEAN, SpawnsLocation[1], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);

@@ -307,7 +307,7 @@ class spell_dru_eclipse_energize : public SpellScriptLoader
                 if (!effect2)
                     return;
                 effect2->SetAmount(0);
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     Unit::appliedAurasList::reverse_iterator itr = std::find(caster->appliedAuras.rbegin(), caster->appliedAuras.rend(), GetAura());
                     if (itr != caster->appliedAuras.rend() && itr != caster->appliedAuras.rbegin())
@@ -493,9 +493,9 @@ class spell_dru_innervate : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
-                    if (Unit* target = GetUnitOwner())
+                    if (auto target = GetUnitOwner())
                     {
                         int32 pct = amount / 4;
                         // If cast on self Innervate regenerates 15% more mana
@@ -512,7 +512,7 @@ class spell_dru_innervate : public SpellScriptLoader
 
             void AfterApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Glyph of Innervate
                     if (caster->HasAura(SPELL_DRUID_GLYPH_OF_INNERVATE, caster->GetGUID()))
@@ -578,7 +578,7 @@ class spell_dru_rejuv : public SpellScriptLoader
 
             void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     uint32 rejuvCount = 0;
                     Unit::appliedAurasList const& auras = caster->appliedAuras;
@@ -597,7 +597,7 @@ class spell_dru_rejuv : public SpellScriptLoader
 
             void AfterApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (AuraEffect* naturesBounty = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_DRUID, 197, EFFECT_0))
                     {
@@ -985,7 +985,7 @@ class spell_dru_primal_madness : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* c = GetCaster())
+                if (auto c = GetCaster())
                 {
                     if (auto madness = c->GetAura(80879))
                     {
@@ -1034,7 +1034,7 @@ class spell_dru_feral_aggression : public SpellScriptLoader
 
             void OnHitTarget(SpellEffIndex effIndex)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect const* feralSwiftness = caster->GetDummyAuraEffect(SPELLFAMILY_DRUID, 960, EFFECT_0))
                     {
                         PreventHitDefaultEffect(effIndex);
@@ -1132,7 +1132,7 @@ class spell_dru_barkskin : public SpellScriptLoader
                     return;
 
                 // Druid T12 Feral 4P Bonus
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(99009))
                         caster->CastSpell(caster, 99011, true);
             }
@@ -1317,7 +1317,7 @@ class spell_sha_efflorescence_heal : public SpellScriptLoader
             {
                 std::list<Unit*> temp;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                    if (Unit* unit = (*itr)->ToUnit())
+                    if (auto unit = (*itr)->ToUnit())
                         temp.push_back(unit);
 
                 targets.clear();
@@ -1367,7 +1367,7 @@ public:
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* unitTarget = GetHitUnit())
+            if (auto unitTarget = GetHitUnit())
                 if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_DRUID, 0x2, 0, 0, caster->GetGUID()))
                 {
                     Aura* aura = aurEff->GetBase();
@@ -1410,7 +1410,7 @@ public:
             PreventDefaultAction();
 
             Unit* caster = GetCaster();
-            if (Unit* unitTarget = eventInfo.GetProcTarget())
+            if (auto unitTarget = eventInfo.GetProcTarget())
             {
                 if (const Aura* moonfire = unitTarget->GetAura(SPELL_DRUID_MOONFIRE, caster->GetGUID()))
                 {
@@ -1499,7 +1499,7 @@ class spell_dru_insect_swarm : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* aurEff, int32 & amount, bool & /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect const* relicAurEff = caster->GetAuraEffect(SPELL_DRUID_ITEM_T8_BALANCE_RELIC, EFFECT_0))
                         amount += relicAurEff->GetAmount() / aurEff->GetTotalTicks();
             }
@@ -1543,7 +1543,7 @@ class spell_dru_lifebloom : public SpellScriptLoader
                     // final heal
                     int32 stack = GetStackAmount();
                     int32 healAmount = aurEff->GetAmount();
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                     {
                         healAmount = caster->SpellHealingBonusDone(GetTarget(), GetSpellInfo(), healAmount, DOT, 0);
                         healAmount = caster->SpellHealingBonusDone(GetTarget(), GetSpellInfo(), healAmount, HEAL, stack);
@@ -1561,13 +1561,13 @@ class spell_dru_lifebloom : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* dispelInfo)
             {
-                if (Unit* target = GetUnitOwner())
+                if (auto target = GetUnitOwner())
                 {
                     if (AuraEffect const* aurEff = GetEffect(EFFECT_1))
                     {
                         // final heal
                         int32 healAmount = aurEff->GetAmount();
-                        if (Unit* caster = GetCaster())
+                        if (auto caster = GetCaster())
                         {
                             healAmount = caster->SpellHealingBonusDone(target, GetSpellInfo(), healAmount, DOT, 0);
                             healAmount = target->SpellHealingBonusDone(caster, GetSpellInfo(), healAmount, HEAL, dispelInfo->GetRemovedCharges());
@@ -1644,7 +1644,7 @@ class spell_dru_faerie_fire : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* /*dispelInfo*/)
             {
-                if (Unit* target = GetUnitOwner())
+                if (auto target = GetUnitOwner())
                     target->RemoveAura(GetId());
             }
 
@@ -1807,7 +1807,7 @@ class spell_dru_predatory_strikes : public SpellScriptLoader
 
             void UpdateAmount(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Player* target = GetTarget()->ToPlayer())
+                if (auto target = GetTarget()->ToPlayer())
                     target->UpdateAttackPowerAndDamage();
             }
 
@@ -1888,7 +1888,7 @@ class spell_dru_rip : public SpellScriptLoader
             {
                 canBeRecalculated = false;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // 0.0207 * $AP * cp
                     uint8 cp = caster->ToPlayer()->GetComboPoints();
@@ -1923,7 +1923,7 @@ class spell_dru_rake : public SpellScriptLoader
             {
                 canBeRecalculated = false;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     float coeff = 0.441f;
                     if (AuraEffect* carnage = caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_DRUID, 2725, EFFECT_0))
@@ -1966,7 +1966,7 @@ class spell_dru_savage_roar : public SpellScriptLoader
 
             void HandleOnHit()
             {
-                if (Player* player = GetHitUnit()->ToPlayer())
+                if (auto player = GetHitUnit()->ToPlayer())
                 {
                     if (player->HasAura(SPELL_DRUID_T12_FERAL_4P_BONUS))
                     {
@@ -2147,7 +2147,7 @@ class spell_dru_survival_instincts : public SpellScriptLoader
 
             void OnUpdate(AuraEffect* /*aurEff*/, const uint32 diff)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect* survival_reduction = caster->GetAuraEffect(SPELL_DRUID_SURVIVAL_INSTINCTS, EFFECT_0, GetCasterGUID()))
                         if (survival_reduction->GetAmount() != (caster->IsInFeralForm() ? -50 : 0))
                             survival_reduction->SetAmount(caster->IsInFeralForm() ? -50 : 0);
@@ -2188,7 +2188,7 @@ class spell_dru_swift_flight_passive : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
             {
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                     if (caster->GetSkillValue(SKILL_RIDING) >= 375)
                         amount = 310;
             }
@@ -2330,7 +2330,7 @@ class spell_dru_thorns : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     float coeff = 0.168f;
                     int32 amount1 = GetSpellInfo()->Effects[EFFECT_0].CalcValue(caster) + caster->GetTotalAttackPowerValue(BASE_ATTACK) * coeff;
@@ -2408,7 +2408,7 @@ public:
         {
             if (Spell* mangle = GetSpell())
                 if (mangle->GetSpellInfo()->Id == 33878)
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                         if (caster->HasAura(105725))
                             if (caster->HasAura(80951))
                                 if (mangle->getIsCriticalStrike() == 2/*decided AND true*/)
@@ -2506,7 +2506,7 @@ public:
 
         void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
                 if (target->GetHealthPct() <= 50)
                     if (Aura* aura = GetAura())
                         aura->RefreshDuration();
@@ -2514,7 +2514,7 @@ public:
 
         void AfterApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 // Druid T13 Restoration 4P Bonus (Rejuvenation)
                 if (AuraEffect* t13_4p = caster->GetAuraEffect(105770, EFFECT_0, GetCasterGUID()))
@@ -2553,7 +2553,7 @@ public:
 
         void RemoveEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(94338);
         }
 
@@ -2587,7 +2587,7 @@ public:
 
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
         {
-            if (Player* player = GetTarget()->ToPlayer())
+            if (auto player = GetTarget()->ToPlayer())
             {
                 int32 triggerChance = player->GetComboPoints() * 20;
                 if (roll_chance_i(triggerChance))
@@ -2619,7 +2619,7 @@ public:
 
         bool CheckProc(ProcEventInfo& eventInfo)
         {
-            if (Unit* target = eventInfo.GetActionTarget())
+            if (auto target = eventInfo.GetActionTarget())
             {
                 //  Druid T13 Feral 2P Bonus (Savage Defense and Blood In The Water)
                 uint32 healthPct = eventInfo.GetActor()->HasAura(105725, eventInfo.GetActor()->GetGUID()) ? 60 : 25;
@@ -2652,7 +2652,7 @@ public:
         bool CheckProc(ProcEventInfo& eventInfo)
         {
             if (eventInfo.GetSpellInfo()->Id == 33878)
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect* druid_t13_feral_2p = caster->GetAuraEffect(105725, EFFECT_0, caster->GetGUID()))
                         if (AuraEffect* druid_pulverize_buff = caster->GetAuraEffect(80951, EFFECT_0, caster->GetGUID()))
                             return false;

@@ -219,7 +219,7 @@ public:
                                 Position pos;
                                 (*iter)->GetPosition(&pos);
                                 (*iter)->Relocate(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f);
-                                if (Creature* creature = (*iter)->ToCreature())
+                                if (auto creature = (*iter)->ToCreature())
                                     creature->NearTeleportTo(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0);
                                 (*iter)->AddAura(SPELL_SHOCKWAVE_VISUAL_PERIODIC, (*iter));
                                 (*iter)->GetMotionMaster()->MovePoint(0, pos);
@@ -355,7 +355,7 @@ public:
             if (id == POINT_DROP_PLAYER)
             {
                 if(me->GetVehicleKit())
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = me->GetVehicleKit()->GetPassenger(0))
                     {
                         me->GetVehicleKit()->RemovePassenger(passenger);
                         passenger->GetMotionMaster()->MoveFall();
@@ -387,7 +387,7 @@ public:
             GetCaster()->RemoveAurasDueToSpell(SPELL_MYSTIC_TRAP_SEARCHER);
             GetCaster()->CastSpell((Unit*)NULL, SPELL_MYSTIC_TRAP_EXPLODE);
 
-            if (Unit* veh = GetCaster()->GetVehicleBase())
+            if (auto veh = GetCaster()->GetVehicleBase())
                 veh->ToCreature()->DespawnOrUnsummon();
         }
 
@@ -600,8 +600,8 @@ public:
                 switch (eventId)
                 {
                 case EVENT_EARTHQUAKE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.f, true))
-                        if (Creature* quake = me->SummonCreature(NPC_EARTHQUAKE_TRIGGER, *target, TEMPSUMMON_TIMED_DESPAWN, 15000))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 20.f, true))
+                        if (auto quake = me->SummonCreature(NPC_EARTHQUAKE_TRIGGER, *target, TEMPSUMMON_TIMED_DESPAWN, 15000))
                         {
                             quake->SetMaxHealth(200000000);
                             quake->SetHealth(quake->GetMaxHealth());
@@ -727,7 +727,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -829,7 +829,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))

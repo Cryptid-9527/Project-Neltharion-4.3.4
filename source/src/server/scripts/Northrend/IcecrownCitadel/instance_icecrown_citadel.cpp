@@ -197,7 +197,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 if (!players.isEmpty())
                     for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
                     {
-                        if (Player* player = i->getSource())
+                        if (auto player = i->getSource())
                             player->AddItem(20558, 4);
                     }
             }
@@ -210,7 +210,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 {
                     Map::PlayerList const &players = instance->GetPlayers();
                     if (!players.isEmpty())
-                        if (Player* player = players.begin()->getSource())
+                        if (auto player = players.begin()->getSource())
                             TeamInInstance = player->GetTeam();
                 }
 
@@ -463,7 +463,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case NPC_YMIRJAR_FROSTBINDER:
                     case NPC_YMIRJAR_HUNTRESS:
                     case NPC_YMIRJAR_WARLORD:
-                        if (Creature* crok = instance->GetCreature(CrokScourgebaneGUID))
+                        if (auto crok = instance->GetCreature(CrokScourgebaneGUID))
                             crok->AI()->SetGUID(creature->GetGUID(), ACTION_VRYKUL_DEATH);
                         break;
                     case NPC_FROSTWING_WHELP:
@@ -474,14 +474,14 @@ class instance_icecrown_citadel : public InstanceMapScript
                         {
                             SpinestalkerTrash.erase(creature->GetDBTableGUIDLow());
                             if (SpinestalkerTrash.empty())
-                            if (Creature* spinestalk = instance->GetCreature(SpinestalkerGUID))
+                            if (auto spinestalk = instance->GetCreature(SpinestalkerGUID))
                                 spinestalk->AI()->DoAction(ACTION_START_FROSTWYRM);
                         }
                         else
                         {
                             RimefangTrash.erase(creature->GetDBTableGUIDLow());
                             if (RimefangTrash.empty())
-                            if (Creature* spinestalk = instance->GetCreature(RimefangGUID))
+                            if (auto spinestalk = instance->GetCreature(RimefangGUID))
                                 spinestalk->AI()->DoAction(ACTION_START_FROSTWYRM);
                         }
                         break;
@@ -498,7 +498,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (FrostwyrmGUIDs.empty())
                         {
                             instance->LoadGrid(SindragosaSpawnPos.GetPositionX(), SindragosaSpawnPos.GetPositionY());
-                            if (Creature* boss = instance->SummonCreature(NPC_SINDRAGOSA, SindragosaSpawnPos))
+                            if (auto boss = instance->SummonCreature(NPC_SINDRAGOSA, SindragosaSpawnPos))
                                 boss->AI()->DoAction(ACTION_START_FROSTWYRM);
                         }
                         break;
@@ -624,7 +624,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_CACHE_OF_THE_DREAMWALKER_25N:
                     case GO_CACHE_OF_THE_DREAMWALKER_10H:
                     case GO_CACHE_OF_THE_DREAMWALKER_25H:
-                        if (Creature* valithria = instance->GetCreature(ValithriaDreamwalkerGUID))
+                        if (auto valithria = instance->GetCreature(ValithriaDreamwalkerGUID))
                             go->SetLootRecipient(valithria->GetLootRecipient());
                         go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE | GO_FLAG_NODESPAWN);
                         uiDreamwalkerCache = go->GetGUID();
@@ -853,7 +853,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case DATA_LADY_DEATHWHISPER:
                         if (state == DONE || state == DONE_HM)
                         {
-                            //if (GameObject* elevator = instance->GetGameObject(LadyDeathwisperElevatorGUID))
+                            //if (auto elevator = instance->GetGameObject(LadyDeathwisperElevatorGUID))
                                 //elevator->SetControlableTransport(false); Hyjarion: function makes no sense, deleted it
                             SpawnGunship();
                         }
@@ -861,7 +861,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case DATA_ICECROWN_GUNSHIP_BATTLE:
                         if (state == DONE)
                         {
-                            if (GameObject* loot = instance->GetGameObject(GunshipArmoryGUID))
+                            if (auto loot = instance->GetGameObject(GunshipArmoryGUID))
                                 loot->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE | GO_FLAG_NODESPAWN);
                         }
                         else if (state == FAIL)
@@ -872,14 +872,14 @@ class instance_icecrown_citadel : public InstanceMapScript
                         {
                             case DONE_HM:
                             case DONE:
-                                if (GameObject* loot = instance->GetGameObject(DeathbringersCacheGUID))
+                                if (auto loot = instance->GetGameObject(DeathbringersCacheGUID))
                                 {
                                     DoRespawnGameObject(DeathbringersCacheGUID, 7*DAY);
                                     loot->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE | GO_FLAG_NODESPAWN);
                                 }
                                 // no break
                             case NOT_STARTED:
-                                if (GameObject* teleporter = instance->GetGameObject(SaurfangTeleportGUID))
+                                if (auto teleporter = instance->GetGameObject(SaurfangTeleportGUID))
                                 {
                                     HandleGameObject(SaurfangTeleportGUID, true, teleporter);
                                     teleporter->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
@@ -895,9 +895,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                             if (IsDone(DATA_ROTFACE))
                             {
                                 HandleGameObject(PutricideCollisionGUID, true);
-                                if (GameObject* go = instance->GetGameObject(PutricideGateGUIDs[0]))
+                                if (auto go = instance->GetGameObject(PutricideGateGUIDs[0]))
                                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
-                                if (GameObject* go = instance->GetGameObject(PutricideGateGUIDs[1]))
+                                if (auto go = instance->GetGameObject(PutricideGateGUIDs[1]))
                                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                             }
                             else
@@ -911,9 +911,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                             if (IsDone(DATA_FESTERGUT))
                             {
                                 HandleGameObject(PutricideCollisionGUID, true);
-                                if (GameObject* go = instance->GetGameObject(PutricideGateGUIDs[0]))
+                                if (auto go = instance->GetGameObject(PutricideGateGUIDs[0]))
                                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
-                                if (GameObject* go = instance->GetGameObject(PutricideGateGUIDs[1]))
+                                if (auto go = instance->GetGameObject(PutricideGateGUIDs[1]))
                                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                             }
                             else
@@ -932,7 +932,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 --HeroicAttempts;
                                 DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
                                 if (!HeroicAttempts)
-                                if (Creature* putricide = instance->GetCreature(ProfessorPutricideGUID))
+                                if (auto putricide = instance->GetCreature(ProfessorPutricideGUID))
                                     putricide->DespawnOrUnsummon();
                             }
                         }
@@ -948,7 +948,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 --HeroicAttempts;
                                 DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
                                 if (!HeroicAttempts)
-                                if (Creature* bq = instance->GetCreature(BloodQueenLanaThelGUID))
+                                if (auto bq = instance->GetCreature(BloodQueenLanaThelGUID))
                                     bq->DespawnOrUnsummon();
                             }
                         }
@@ -959,7 +959,7 @@ class instance_icecrown_citadel : public InstanceMapScript
 
                         if (state == DONE || state == DONE_HM)
                         {
-                            if (GameObject* pChest = instance->GetGameObject(uiDreamwalkerCache))
+                            if (auto pChest = instance->GetGameObject(uiDreamwalkerCache))
                                 pChest->SetRespawnTime(pChest->GetRespawnDelay());
                         }
                         break;
@@ -974,7 +974,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 --HeroicAttempts;
                                 DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
                                 if (!HeroicAttempts)
-                                if (Creature* sindra = instance->GetCreature(SindragosaGUID))
+                                if (auto sindra = instance->GetCreature(SindragosaGUID))
                                     sindra->DespawnOrUnsummon();
                             }
                         }
@@ -984,14 +984,14 @@ class instance_icecrown_citadel : public InstanceMapScript
                         switch (state)
                         {
                             case DONE:
-                                if (GameObject* bolvar = instance->GetGameObject(FrozenBolvarGUID))
+                                if (auto bolvar = instance->GetGameObject(FrozenBolvarGUID))
                                 {
                                     bolvar->SetRespawnTime(7 * DAY);
                                     bolvar->SetPhaseMask(1, true);
                                 }
-                                if (GameObject* pillars = instance->GetGameObject(PillarsChainedGUID))
+                                if (auto pillars = instance->GetGameObject(PillarsChainedGUID))
                                     pillars->SetRespawnTime(7 * DAY);
-                                if (GameObject* pillars = instance->GetGameObject(PillarsUnchainedGUID))
+                                if (auto pillars = instance->GetGameObject(PillarsUnchainedGUID))
                                     pillars->SetRespawnTime(7 * DAY);
                                 break;
                             case FAIL:
@@ -1004,9 +1004,9 @@ class instance_icecrown_citadel : public InstanceMapScript
 
                         // set the platform as active object to dramatically increase visibility range
                         // note: "active" gameobjects do not block grid unloading
-                        if (GameObject* precipice = instance->GetGameObject(ArthasPrecipiceGUID))
+                        if (auto precipice = instance->GetGameObject(ArthasPrecipiceGUID))
                             precipice->setActive(state == IN_PROGRESS);
-                        if (GameObject* platform = instance->GetGameObject(ArthasPlatformGUID))
+                        if (auto platform = instance->GetGameObject(ArthasPlatformGUID))
                             platform->setActive(state == IN_PROGRESS);
 
                         if (instance->IsHeroic())
@@ -1017,9 +1017,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
                                 if (!HeroicAttempts)
                                 {
-                                    if (Creature* theLichKing = instance->GetCreature(TheLichKingGUID))
+                                    if (auto theLichKing = instance->GetCreature(TheLichKingGUID))
                                         theLichKing->DespawnOrUnsummon();
-                                    if (Creature* tirion = instance->GetCreature(HighlordTirionFordringGUID))
+                                    if (auto tirion = instance->GetCreature(HighlordTirionFordringGUID))
                                         tirion->DespawnOrUnsummon();
                                 }
                             }
@@ -1048,7 +1048,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 }
                 else if (pPlayer)
                 {
-                    if (GameObject* go = instance->GetGameObject(GunshipGUID))
+                    if (auto go = instance->GetGameObject(GunshipGUID))
                         if (Transport* transport = go->ToTransport())
                         {
                             UpdateData transData(transport->GetMapId());
@@ -1129,7 +1129,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (SindragosaGauntlet == DONE || SindragosaGauntlet == DONE_HM)
                         {
                             SaveToDB();
-                            if (GameObject* go = instance->GetGameObject(SindragosaGauntletDoorGUID))
+                            if (auto go = instance->GetGameObject(SindragosaGauntletDoorGUID))
                                 go->SetGoState(GO_STATE_ACTIVE);
                         }
                         break;
@@ -1140,12 +1140,12 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (GunshipErsatzboss == DONE || GunshipErsatzboss == DONE_HM)
                         {
                             SaveToDB();
-                            if (GameObject* go = instance->GetGameObject(SindragosaGauntletDoorGUID))
+                            if (auto go = instance->GetGameObject(SindragosaGauntletDoorGUID))
                                 go->SetGoState(GO_STATE_ACTIVE);
                         }
 
                         if (GunshipErsatzboss == IN_PROGRESS)
-                            if (GameObject* go = instance->GetGameObject(SindragosaGauntletDoorGUID))
+                            if (auto go = instance->GetGameObject(SindragosaGauntletDoorGUID))
                                 HandleGameObject(0, false, go);
                     }
                         break;
@@ -1341,7 +1341,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             {
                 if (IsDone(DATA_PROFESSOR_PUTRICIDE) && IsDone(DATA_BLOOD_QUEEN_LANA_THEL) && IsDone(DATA_SINDRAGOSA))
                 {
-                    if (GameObject* teleporter = instance->GetGameObject(TheLichKingTeleportGUID))
+                    if (auto teleporter = instance->GetGameObject(TheLichKingTeleportGUID))
                     {
                         teleporter->SetGoState(GO_STATE_ACTIVE);
 
@@ -1393,17 +1393,17 @@ class instance_icecrown_citadel : public InstanceMapScript
                 if (CheckDeathTimer <= diff)
                 {
                     if (!IsDone(DATA_ROTFACE))
-                        if (Creature* rotface = instance->GetCreature(RotfaceGUID))
+                        if (auto rotface = instance->GetCreature(RotfaceGUID))
                             if (rotface->isDead())
                                 SetBossState(DATA_ROTFACE, DONE);
 
                     if (!IsDone(DATA_FESTERGUT))
-                        if (Creature* festergut = instance->GetCreature(FestergutGUID))
+                        if (auto festergut = instance->GetCreature(FestergutGUID))
                             if (festergut->isDead())
                                 SetBossState(DATA_FESTERGUT, DONE);
 
                     if (IsDone(DATA_DEATHBRINGER_SAURFANG))
-                        if (Creature* saurfang = instance->GetCreature(DeathbringerSaurfangGUID))
+                        if (auto saurfang = instance->GetCreature(DeathbringerSaurfangGUID))
                             if (saurfang->isDead())
                                 SetBossState(DATA_DEATHBRINGER_SAURFANG, DONE);
 
@@ -1434,7 +1434,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                             {
                                 BloodQuickeningState = DONE;
                                 DoUpdateWorldState(WORLDSTATE_SHOW_TIMER, 0);
-                                if (Creature* bq = instance->GetCreature(BloodQueenLanaThelGUID))
+                                if (auto bq = instance->GetCreature(BloodQueenLanaThelGUID))
                                     bq->AI()->DoAction(ACTION_KILL_MINCHAR);
                             }
                             SaveToDB();
@@ -1442,32 +1442,32 @@ class instance_icecrown_citadel : public InstanceMapScript
                         }
                         case EVENT_QUAKE_SHATTER:
                         {
-                            if (GameObject* platform = instance->GetGameObject(ArthasPlatformGUID))
+                            if (auto platform = instance->GetGameObject(ArthasPlatformGUID))
                                 platform->SetDestructibleState(GO_DESTRUCTIBLE_DAMAGED);
-                            if (GameObject* edge = instance->GetGameObject(FrozenThroneEdgeGUID))
+                            if (auto edge = instance->GetGameObject(FrozenThroneEdgeGUID))
                                 edge->SetGoState(GO_STATE_ACTIVE);
-                            if (GameObject* wind = instance->GetGameObject(FrozenThroneWindGUID))
+                            if (auto wind = instance->GetGameObject(FrozenThroneWindGUID))
                                 wind->SetGoState(GO_STATE_READY);
-                            if (GameObject* warning = instance->GetGameObject(FrozenThroneWarningGUID))
+                            if (auto warning = instance->GetGameObject(FrozenThroneWarningGUID))
                                 warning->SetGoState(GO_STATE_READY);
-                            if (GameObject* iceShard = instance->GetGameObject(IceShardGUID))
+                            if (auto iceShard = instance->GetGameObject(IceShardGUID))
                                 iceShard->EnableCollision(false);
-                            if (GameObject* iceShard2 = instance->GetGameObject(IceShardGUID2))
+                            if (auto iceShard2 = instance->GetGameObject(IceShardGUID2))
                                 iceShard2->EnableCollision(false);
-                            if (GameObject* iceShard3 = instance->GetGameObject(IceShardGUID3))
+                            if (auto iceShard3 = instance->GetGameObject(IceShardGUID3))
                                 iceShard3->EnableCollision(false);
-                            if (GameObject* iceShard4 = instance->GetGameObject(IceShardGUID4))
+                            if (auto iceShard4 = instance->GetGameObject(IceShardGUID4))
                                 iceShard4->EnableCollision(false);
-                            if (Creature* theLichKing = instance->GetCreature(TheLichKingGUID))
+                            if (auto theLichKing = instance->GetCreature(TheLichKingGUID))
                                 theLichKing->AI()->DoAction(ACTION_RESTORE_LIGHT);
                             break;
                         }
                         case EVENT_REBUILD_PLATFORM:
-                            if (GameObject* platform = instance->GetGameObject(ArthasPlatformGUID))
+                            if (auto platform = instance->GetGameObject(ArthasPlatformGUID))
                                 platform->SetDestructibleState(GO_DESTRUCTIBLE_REBUILDING);
-                            if (GameObject* edge = instance->GetGameObject(FrozenThroneEdgeGUID))
+                            if (auto edge = instance->GetGameObject(FrozenThroneEdgeGUID))
                                 edge->SetGoState(GO_STATE_READY);
-                            if (GameObject* wind = instance->GetGameObject(FrozenThroneWindGUID))
+                            if (auto wind = instance->GetGameObject(FrozenThroneWindGUID))
                                 wind->SetGoState(GO_STATE_ACTIVE);
                             break;
                         case EVENT_RESPAWN_GUNSHIP:
@@ -1488,19 +1488,19 @@ class instance_icecrown_citadel : public InstanceMapScript
                             source->AddObjectToRemoveList();
                         break;
                     case EVENT_ENEMY_GUNSHIP_COMBAT:
-                        if (Creature* captain = source->FindNearestCreature(TeamInInstance == HORDE ? NPC_IGB_HIGH_OVERLORD_SAURFANG : NPC_IGB_MURADIN_BRONZEBEARD, 100.0f))
+                        if (auto captain = source->FindNearestCreature(TeamInInstance == HORDE ? NPC_IGB_HIGH_OVERLORD_SAURFANG : NPC_IGB_MURADIN_BRONZEBEARD, 100.0f))
                             captain->AI()->DoAction(ACTION_ENEMY_GUNSHIP_TALK);
                         // no break;
                     case EVENT_PLAYERS_GUNSHIP_SPAWN:
                     case EVENT_PLAYERS_GUNSHIP_COMBAT:
                     case EVENT_PLAYERS_GUNSHIP_SAURFANG:
                     {
-                        if (GameObject* go = source->ToGameObject())
+                        if (auto go = source->ToGameObject())
                             if (Transport* transport = go->ToTransport())
                             {
                                 transport->BuildStopMovePacket(instance);
                                 for (Map::PlayerList::const_iterator itr = instance->GetPlayers().begin(); itr != instance->GetPlayers().end(); ++itr)
-                                    if (Player* pPlayer = itr->getSource())
+                                    if (auto pPlayer = itr->getSource())
                                     {
                                         UpdateData transData(transport->GetMapId());
                                         transport->BuildCreateUpdateBlockForPlayer(&transData, pPlayer);
@@ -1512,19 +1512,19 @@ class instance_icecrown_citadel : public InstanceMapScript
                         break;
                     }
                     case EVENT_QUAKE:
-                        if (GameObject* warning = instance->GetGameObject(FrozenThroneWarningGUID))
+                        if (auto warning = instance->GetGameObject(FrozenThroneWarningGUID))
                             warning->SetGoState(GO_STATE_ACTIVE);
                         Events.ScheduleEvent(EVENT_QUAKE_SHATTER, 5000);
                         break;
                     case EVENT_SECOND_REMORSELESS_WINTER:
-                        if (GameObject* platform = instance->GetGameObject(ArthasPlatformGUID))
+                        if (auto platform = instance->GetGameObject(ArthasPlatformGUID))
                         {
                             platform->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
                             Events.ScheduleEvent(EVENT_REBUILD_PLATFORM, 1500);
                         }
                         break;
                     case EVENT_TELEPORT_TO_FROSMOURNE: // Harvest Soul (normal mode)
-                        if (Creature* terenas = instance->SummonCreature(NPC_TERENAS_MENETHIL_FROSTMOURNE, TerenasSpawn, NULL, 63000))
+                        if (auto terenas = instance->SummonCreature(NPC_TERENAS_MENETHIL_FROSTMOURNE, TerenasSpawn, NULL, 63000))
                         {
                             terenas->AI()->DoAction(ACTION_FROSTMOURNE_INTRO);
                             std::list<Creature*> triggers;
@@ -1536,7 +1536,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                                 visual->CastSpell(visual, SPELL_FROSTMOURNE_TELEPORT_VISUAL, true);
                             }
 
-                            if (Creature* warden = instance->SummonCreature(NPC_SPIRIT_WARDEN, SpiritWardenSpawn, NULL, 63000))
+                            if (auto warden = instance->SummonCreature(NPC_SPIRIT_WARDEN, SpiritWardenSpawn, NULL, 63000))
                             {
                                 terenas->AI()->AttackStart(warden);
                                 warden->AddThreat(terenas, 300000.0f);
@@ -1545,12 +1545,12 @@ class instance_icecrown_citadel : public InstanceMapScript
                         break;
                     case EVENT_ZEPPLIN_ARRIVED:
                     {
-                        if (GameObject* go = source->ToGameObject())
+                        if (auto go = source->ToGameObject())
                             if (Transport* transport = go->ToTransport())
                             {
                                 transport->BuildStopMovePacket(instance);
                                 for (Map::PlayerList::const_iterator itr = instance->GetPlayers().begin(); itr != instance->GetPlayers().end(); ++itr)
-                                    if (Player* pPlayer = itr->getSource())
+                                    if (auto pPlayer = itr->getSource())
                                     {
                                         UpdateData transData(transport->GetMapId());
                                         transport->BuildCreateUpdateBlockForPlayer(&transData, pPlayer);

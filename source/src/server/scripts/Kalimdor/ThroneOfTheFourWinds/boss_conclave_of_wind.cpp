@@ -686,7 +686,7 @@ public:
             std::list<Creature*> creatureList;
             me->GetCreatureListWithEntryInGrid(creatureList, NPC_SLIPSTREAM_ALAKIR, 1000.0f);
             for (std::list<Creature*>::iterator itr = creatureList.begin();itr != creatureList.end(); ++itr)
-                if (Creature* slipstream = (*itr)->ToCreature())
+                if (auto slipstream = (*itr)->ToCreature())
                     slipstream->SetVisible(true);
         }
 
@@ -823,7 +823,7 @@ public:
                 {
                 case EVENT_WIND_BLAST:
                     if (canMove())
-                        if (Creature* trigger = DoSummon(NPC_WORLD_TRIGGER_2, me, 20.0f, 12000, TEMPSUMMON_TIMED_DESPAWN))
+                        if (auto trigger = DoSummon(NPC_WORLD_TRIGGER_2, me, 20.0f, 12000, TEMPSUMMON_TIMED_DESPAWN))
                         {
                             float x, y;
                             me->GetNearPoint2D(x, y, 25, me->GetAngle(trigger));
@@ -892,7 +892,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/)
         {
-            if (Creature* anshal = sObjectAccessor->GetCreature(*me, instance->GetData64(DATA_ANSHAL)))
+            if (auto anshal = sObjectAccessor->GetCreature(*me, instance->GetData64(DATA_ANSHAL)))
                 anshal->AI()->JustSummoned(me);
             me->SetInCombatWithZone();
             toxicSporesTimer = 10000;
@@ -914,7 +914,7 @@ public:
         {
             if (Unit *victim = me->getVictim())
             {
-                if (Creature* anshal = Creature::GetCreature(*me, instance->GetData64(DATA_ANSHAL)))
+                if (auto anshal = Creature::GetCreature(*me, instance->GetData64(DATA_ANSHAL)))
                     if (victim->GetDistance2d(anshal->GetHomePosition().GetPositionX(), anshal->GetHomePosition().GetPositionY()) > 65.0f)
                         return false;
                     else
@@ -927,7 +927,7 @@ public:
         {
             if (!canMove())
             {
-                if (Creature* westwind = me->FindNearestCreature(47925, 200.0f, true)) // we should use the westwind trigger for the selection because the trigger is always on center position
+                if (auto westwind = me->FindNearestCreature(47925, 200.0f, true)) // we should use the westwind trigger for the selection because the trigger is always on center position
                 {
                     if (Unit *victim = westwind->AI()->SelectTarget(SELECT_TARGET_NEAREST, 0, 60.0f, true))
                     {
@@ -1008,12 +1008,12 @@ public:
         {
             targets.clear();
             if (Unit *caster = GetCaster())
-                if (InstanceScript* instance = caster->GetInstanceScript())
-                    if (Creature* nezir = Creature::GetCreature(*caster, instance->GetData64(DATA_NEZIR)))
+                if (auto instance = caster->GetInstanceScript())
+                    if (auto nezir = Creature::GetCreature(*caster, instance->GetData64(DATA_NEZIR)))
                     {
                         ThreatContainer::StorageType const &threatList = nezir->getThreatManager().getThreatList();
                         for (ThreatContainer::StorageType::const_iterator itr = threatList.begin(); itr != threatList.end(); ++itr)
-                            if (Unit* target = (*itr)->getTarget())
+                            if (auto target = (*itr)->getTarget())
                                 if (nezir->isInFrontInMap(target, 90.0f, 100.0f * M_PI / 180.0f))
                                     targets.push_back(target);
                     }
@@ -1042,7 +1042,7 @@ public:
 
         void HandleDummy()
         {
-            if (Creature* caster = GetCaster()->ToCreature())
+            if (auto caster = GetCaster()->ToCreature())
             {
                 caster->CastWithDelay(8000, caster, SPELL_NURTURE_CREEPER_SUMMON, true);
                 caster->DespawnOrUnsummon(10000);
@@ -1077,7 +1077,7 @@ public:
         if (player->IsFalling())
             return false;
 
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
             if (instance->GetData(DATA_DEACTIVATE_SLIPSTREAM))
                 return false;
 
@@ -1190,7 +1190,7 @@ public:
 
         void onPeriodicTick(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetTarget())
+            if (auto caster = GetTarget())
             {
                 if (caster->GetTypeId() != TYPEID_UNIT || caster->getPowerType() != POWER_MANA)
                     return;
@@ -1222,7 +1222,7 @@ public:
 
         void onPeriodicTick(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetTarget())
+            if (auto caster = GetTarget())
             {
                 if (caster->GetTypeId() != TYPEID_UNIT || caster->getPowerType() != POWER_MANA)
                     return;
@@ -1267,9 +1267,9 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* cas = GetCaster())
-                if (Creature* caster = cas->ToCreature())
-                    if (Unit* target = GetTarget())
+            if (auto cas = GetCaster())
+                if (auto caster = cas->ToCreature())
+                    if (auto target = GetTarget())
                     {
                         float x, y;
                         if (!start)
@@ -1314,8 +1314,8 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Unit* target = GetHitUnit())
-                if (Creature* vehicle = GetCaster()->SummonCreature(46419, -51.4478f, 576.8439f, 250.6340f, 2.3387f, TEMPSUMMON_TIMED_DESPAWN, 30000))
+            if (auto target = GetHitUnit())
+                if (auto vehicle = GetCaster()->SummonCreature(46419, -51.4478f, 576.8439f, 250.6340f, 2.3387f, TEMPSUMMON_TIMED_DESPAWN, 30000))
                     target->CastSpell(vehicle, 86481, true);
         }
 
@@ -1369,14 +1369,14 @@ public:
         void PassengerBoarded(Unit* who, int8 seatId, bool apply)
         {
             if (apply)
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     player->AddUnitMovementFlag(MOVEMENTFLAG_DISABLE_GRAVITY);
                     player->SendMovementDisableGravity();
                 }
 
             if (!apply)
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     player->RemoveUnitMovementFlag(MOVEMENTFLAG_DISABLE_GRAVITY);
                     player->SendMovementDisableGravity();
@@ -1417,7 +1417,7 @@ public:
 
     bool Execute(uint64 execTime, uint32 /*diff*/)
     {
-        if (Creature* landing = _player->FindNearestCreature(45504, 500.0f, true))
+        if (auto landing = _player->FindNearestCreature(45504, 500.0f, true))
             _player->GetMotionMaster()->MoveJump(landing->GetPositionX(), landing->GetPositionY(), landing->GetPositionZ(), 80.0f, 25.0f, 0);
         return false;
     }

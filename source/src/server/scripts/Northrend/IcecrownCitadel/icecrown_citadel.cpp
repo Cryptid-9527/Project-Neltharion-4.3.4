@@ -460,11 +460,11 @@ class npc_highlord_tirion_fordring_lh : public CreatureScript
                 {
                     if (++_damnedKills == 2)
                     {
-                        if (Creature* theLichKing = me->FindNearestCreature(NPC_THE_LICH_KING_LH, 150.0f))
+                        if (auto theLichKing = me->FindNearestCreature(NPC_THE_LICH_KING_LH, 150.0f))
                         {
-                            if (Creature* bolvarFordragon = me->FindNearestCreature(NPC_HIGHLORD_BOLVAR_FORDRAGON_LH, 150.0f))
+                            if (auto bolvarFordragon = me->FindNearestCreature(NPC_HIGHLORD_BOLVAR_FORDRAGON_LH, 150.0f))
                             {
-                                if (Creature* factionNPC = me->FindNearestCreature(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE ? NPC_SE_HIGH_OVERLORD_SAURFANG : NPC_SE_MURADIN_BRONZEBEARD, 50.0f))
+                                if (auto factionNPC = me->FindNearestCreature(_instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE ? NPC_SE_HIGH_OVERLORD_SAURFANG : NPC_SE_MURADIN_BRONZEBEARD, 50.0f))
                                 {
                                     me->setActive(true);
                                     _theLichKing = theLichKing->GetGUID();
@@ -541,85 +541,85 @@ class npc_highlord_tirion_fordring_lh : public CreatureScript
                         break;
                     case EVENT_LK_INTRO_1:
                         me->HandleEmoteCommand(EMOTE_ONESHOT_POINT_NO_SHEATHE);
-                        if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
+                        if (auto theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
                             theLichKing->AI()->Talk(SAY_LK_INTRO_1);
                         break;
                     case EVENT_TIRION_INTRO_6:
                         Talk(SAY_TIRION_INTRO_4);
                         break;
                     case EVENT_LK_INTRO_2:
-                        if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
+                        if (auto theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
                             theLichKing->AI()->Talk(SAY_LK_INTRO_2);
                         break;
                     case EVENT_LK_INTRO_3:
-                        if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
+                        if (auto theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
                             theLichKing->AI()->Talk(SAY_LK_INTRO_3);
                         break;
                     case EVENT_LK_INTRO_4:
-                        if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
+                        if (auto theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
                             theLichKing->AI()->Talk(SAY_LK_INTRO_4);
                         break;
                     case EVENT_BOLVAR_INTRO_1:
-                        if (Creature* bolvarFordragon = ObjectAccessor::GetCreature(*me, _bolvarFordragon))
+                        if (auto bolvarFordragon = ObjectAccessor::GetCreature(*me, _bolvarFordragon))
                         {
                             bolvarFordragon->AI()->Talk(SAY_BOLVAR_INTRO_1);
                             bolvarFordragon->setActive(false);
                         }
                         break;
                     case EVENT_LK_INTRO_5:
-                        if (Creature* theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
+                        if (auto theLichKing = ObjectAccessor::GetCreature(*me, _theLichKing))
                         {
                             theLichKing->AI()->Talk(SAY_LK_INTRO_5);
                             theLichKing->setActive(false);
                         }
                         break;
                     case EVENT_SAURFANG_INTRO_1:
-                        if (Creature* saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
                             saurfang->AI()->Talk(SAY_SAURFANG_INTRO_1);
                         break;
                     case EVENT_TIRION_INTRO_H_7:
                         Talk(SAY_TIRION_INTRO_H_5);
                         break;
                     case EVENT_SAURFANG_INTRO_2:
-                        if (Creature* saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
                             saurfang->AI()->Talk(SAY_SAURFANG_INTRO_2);
                         break;
                     case EVENT_SAURFANG_INTRO_3:
-                        if (Creature* saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
                             saurfang->AI()->Talk(SAY_SAURFANG_INTRO_3);
                         break;
                     case EVENT_SAURFANG_INTRO_4:
-                        if (Creature* saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto saurfang = ObjectAccessor::GetCreature(*me, _factionNPC))
                             saurfang->AI()->Talk(SAY_SAURFANG_INTRO_4);
                         break;
                     case EVENT_MURADIN_RUN:
                     case EVENT_SAURFANG_RUN:
-                        if (Creature* factionNPC = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto factionNPC = ObjectAccessor::GetCreature(*me, _factionNPC))
                             factionNPC->GetMotionMaster()->MovePath(factionNPC->GetDBTableGUIDLow() * 10, false);
                         me->setActive(false);
                         _damnedKills = 3;
                         break;
                     case EVENT_MURADIN_INTRO_1:
-                        if (Creature* muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
                             muradin->AI()->Talk(SAY_MURADIN_INTRO_1);
                         break;
                     case EVENT_MURADIN_INTRO_2:
-                        if (Creature* muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
                             muradin->HandleEmoteCommand(EMOTE_ONESHOT_TALK);
                         break;
                     case EVENT_MURADIN_INTRO_3:
-                        if (Creature* muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
                             muradin->HandleEmoteCommand(EMOTE_ONESHOT_EXCLAMATION);
                         break;
                     case EVENT_TIRION_INTRO_A_7:
                         Talk(SAY_TIRION_INTRO_A_5);
                         break;
                     case EVENT_MURADIN_INTRO_4:
-                        if (Creature* muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
                             muradin->AI()->Talk(SAY_MURADIN_INTRO_2);
                         break;
                     case EVENT_MURADIN_INTRO_5:
-                        if (Creature* muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
+                        if (auto muradin = ObjectAccessor::GetCreature(*me, _factionNPC))
                             muradin->AI()->Talk(SAY_MURADIN_INTRO_3);
                         break;
                     default:
@@ -682,7 +682,7 @@ class npc_rotting_frost_giant : public CreatureScript
                     switch (eventId)
                     {
                     case EVENT_DEATH_PLAGUE:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                         {
                             Talk(EMOTE_DEATH_PLAGUE_WARNING, target->GetGUID());
                             DoCast(target, SPELL_DEATH_PLAGUE);
@@ -809,7 +809,7 @@ class boss_sister_svalna : public CreatureScript
                 uint64 delay = 1;
                 for (uint32 i = 0; i < 4; ++i)
                 {
-                    if (Creature* crusader = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CAPTAIN_ARNATH + i)))
+                    if (auto crusader = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CAPTAIN_ARNATH + i)))
                     {
                         if (crusader->isAlive() && crusader->GetEntry() == crusader->GetCreatureData()->id)
                         {
@@ -823,7 +823,7 @@ class boss_sister_svalna : public CreatureScript
             void EnterCombat(Unit* /*attacker*/)
             {
                 _EnterCombat();
-                if (Creature* crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
+                if (auto crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
                     crok->AI()->Talk(SAY_CROK_COMBAT_SVALNA);
                 events.ScheduleEvent(EVENT_SVALNA_COMBAT, 9000);
                 events.ScheduleEvent(EVENT_IMPALING_SPEAR, urand(40000, 50000));
@@ -958,7 +958,7 @@ class boss_sister_svalna : public CreatureScript
                             Talk(SAY_SVALNA_AGGRO);
                             break;
                         case EVENT_IMPALING_SPEAR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_IMPALING_SPEAR))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_IMPALING_SPEAR))
                             {
                                 DoCast(me, SPELL_AETHER_SHIELD);
                                 DoCast(target, SPELL_IMPALING_SPEAR);
@@ -1022,7 +1022,7 @@ class npc_crok_scourgebane : public CreatureScript
                     _isEventDone = true;
                     // Load Grid with Sister Svalna
                     me->GetMap()->LoadGrid(4356.71f, 2484.33f);
-                    if (Creature* svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
+                    if (auto svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
                         svalna->AI()->DoAction(ACTION_START_GAUNTLET);
                     Talk(SAY_CROK_INTRO_1);
                     _events.ScheduleEvent(EVENT_ARNATH_INTRO_2, 7000);
@@ -1030,7 +1030,7 @@ class npc_crok_scourgebane : public CreatureScript
                     _events.ScheduleEvent(EVENT_START_PATHING, 37000);
                     me->setActive(true);
                     for (uint32 i = 0; i < 4; ++i)
-                    if (Creature* crusader = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH + i)))
+                    if (auto crusader = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH + i)))
                         crusader->AI()->DoAction(ACTION_START_GAUNTLET);
                 }
                 else if (action == ACTION_RESET_EVENT)
@@ -1056,7 +1056,7 @@ class npc_crok_scourgebane : public CreatureScript
                             _isEventActive = false;
                             me->setActive(false);
                             Talk(SAY_CROK_FINAL_WP);
-                            if (Creature* svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
+                            if (auto svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
                                 svalna->AI()->DoAction(ACTION_RESURRECT_CAPTAINS);
                         }
                     }
@@ -1084,7 +1084,7 @@ class npc_crok_scourgebane : public CreatureScript
                         _isEventActive = false;
                         me->setActive(false);
                         Talk(SAY_CROK_FINAL_WP);
-                        if (Creature* svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
+                        if (auto svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
                             svalna->AI()->DoAction(ACTION_RESURRECT_CAPTAINS);
                     }
                     break;
@@ -1110,7 +1110,7 @@ class npc_crok_scourgebane : public CreatureScript
                             minY -= 50.0f;
                             maxY -= 50.0f;
                             // at waypoints 1 and 2 she kills one captain
-                            if (Creature* svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
+                            if (auto svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
                                 svalna->AI()->DoAction(ACTION_KILL_CAPTAIN);
                         }
                         else if (waypointId == 4)
@@ -1133,7 +1133,7 @@ class npc_crok_scourgebane : public CreatureScript
                     }
                         // at waypoints 1 and 2 she kills one captain
                     case 2:
-                        if (Creature* svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
+                        if (auto svalna = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SISTER_SVALNA)))
                             svalna->AI()->DoAction(ACTION_KILL_CAPTAIN);
                         break;
                     default:
@@ -1203,7 +1203,7 @@ class npc_crok_scourgebane : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_ARNATH_INTRO_2:
-                            if (Creature* arnath = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH)))
+                            if (auto arnath = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_CAPTAIN_ARNATH)))
                                 arnath->AI()->Talk(SAY_ARNATH_INTRO_2);
                             break;
                         case EVENT_CROK_INTRO_3:
@@ -1297,7 +1297,7 @@ struct npc_argent_captainAI : public ScriptedAI
         {
             if (action == ACTION_START_GAUNTLET)
             {
-                if (Creature* crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
+                if (auto crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
                 {
                     me->SetReactState(REACT_DEFENSIVE);
                     FollowAngle = me->GetAngle(crok) + me->GetOrientation();
@@ -1341,7 +1341,7 @@ struct npc_argent_captainAI : public ScriptedAI
             if (!me->GetVehicle())
             {
                 me->GetMotionMaster()->Clear(false);
-                if (Creature* crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
+                if (auto crok = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_CROK_SCOURGEBANE)))
                     me->GetMotionMaster()->MoveFollow(crok, FollowDist, FollowAngle, MOTION_SLOT_IDLE);
             }
 
@@ -1426,7 +1426,7 @@ class npc_captain_arnath : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_ARNATH_FLASH_HEAL:
-                            if (Creature* target = FindFriendlyCreature())
+                            if (auto target = FindFriendlyCreature())
                                 DoCast(target, SPELL_FLASH_HEAL);
                             Events.ScheduleEvent(EVENT_ARNATH_FLASH_HEAL, urand(6000, 9000));
                             break;
@@ -1442,7 +1442,7 @@ class npc_captain_arnath : public CreatureScript
                             Events.ScheduleEvent(EVENT_ARNATH_SMITE, urand(4000, 7000));
                             break;
                         case EVENT_ARNATH_DOMINATE_MIND:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_DOMINATE_MIND);
                             Events.ScheduleEvent(EVENT_ARNATH_DOMINATE_MIND, urand(28000, 37000));
                             break;
@@ -1520,7 +1520,7 @@ class npc_captain_brandon : public CreatureScript
                             Events.ScheduleEvent(EVENT_BRANDON_JUDGEMENT_OF_COMMAND, urand(8000, 13000));
                             break;
                         case EVENT_BRANDON_HAMMER_OF_BETRAYAL:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 DoCast(target, SPELL_HAMMER_OF_BETRAYAL);
                             Events.ScheduleEvent(EVENT_BRANDON_HAMMER_OF_BETRAYAL, urand(45000, 60000));
                             break;
@@ -1587,7 +1587,7 @@ class npc_captain_grondel : public CreatureScript
                         Events.ScheduleEvent(EVENT_GRONDEL_SUNDER_ARMOR, urand(5000, 17000));
                         break;
                     case EVENT_GRONDEL_CONFLAGRATION:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                             DoCast(target, SPELL_CONFLAGRATION);
                         Events.ScheduleEvent(EVENT_GRONDEL_CONFLAGRATION, urand(10000, 15000));
                         break;
@@ -1640,17 +1640,17 @@ class npc_captain_rupert : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_RUPERT_FEL_IRON_BOMB:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_FEL_IRON_BOMB);
                             Events.ScheduleEvent(EVENT_RUPERT_FEL_IRON_BOMB, urand(15000, 20000));
                             break;
                         case EVENT_RUPERT_MACHINE_GUN:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_MACHINE_GUN);
                             Events.ScheduleEvent(EVENT_RUPERT_MACHINE_GUN, urand(25000, 30000));
                             break;
                         case EVENT_RUPERT_ROCKET_LAUNCH:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_ROCKET_LAUNCH);
                             Events.ScheduleEvent(EVENT_RUPERT_ROCKET_LAUNCH, urand(10000, 15000));
                             break;
@@ -1841,8 +1841,8 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* caster = GetCaster())
-            if (InstanceScript* instance = caster->GetInstanceScript())
+            if (auto caster = GetCaster())
+            if (auto instance = caster->GetInstanceScript())
             if (instance->GetData(DATA_ZONE_BUFF_STATUS) == 1)
                 return SPELL_FAILED_DONT_REPORT;
             return SPELL_CAST_OK;
@@ -1903,7 +1903,7 @@ class npc_sindragosas_ward : public CreatureScript
             {
                 summons.Summon(summon);
 
-                if (Unit* target = summon->SelectNearestPlayer(100.0f))
+                if (auto target = summon->SelectNearestPlayer(100.0f))
                     summon->AI()->AttackStart(target);
 
             }
@@ -2004,7 +2004,7 @@ class spell_icc_stoneform : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                 {
                     target->SetReactState(REACT_PASSIVE);
                     target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
@@ -2014,7 +2014,7 @@ class spell_icc_stoneform : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                 {
                     target->SetReactState(REACT_AGGRESSIVE);
                     target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC);
@@ -2066,7 +2066,7 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
                         return;
                 }
 
-                if (GameObject* trap = GetCaster()->FindNearestGameObject(trapId, 5.0f))
+                if (auto trap = GetCaster()->FindNearestGameObject(trapId, 5.0f))
                     trap->SetRespawnTime(trap->GetGOInfo()->trap.autoCloseTime);
 
                 std::list<Creature*> wards;
@@ -2078,7 +2078,7 @@ class spell_icc_sprit_alarm : public SpellScriptLoader
                     {
                         (*itr)->AI()->Talk(SAY_TRAP_ACTIVATE);
                         (*itr)->RemoveAurasDueToSpell(SPELL_STONEFORM);
-                        if (Unit* target = (*itr)->SelectNearestTarget(150.0f))
+                        if (auto target = (*itr)->SelectNearestTarget(150.0f))
                             (*itr)->AI()->AttackStart(target);
                         break;
                     }
@@ -2220,7 +2220,7 @@ class AliveCheck
     public:
         bool operator()(WorldObject* object) const
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 return unit->isAlive();
             return true;
         }
@@ -2281,9 +2281,9 @@ class spell_svalna_remove_spear : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
-                    if (Unit* vehicle = target->GetVehicleBase())
+                    if (auto vehicle = target->GetVehicleBase())
                         vehicle->RemoveAurasDueToSpell(SPELL_IMPALING_SPEAR);
                     target->DespawnOrUnsummon(1);
                 }
@@ -2369,7 +2369,7 @@ class at_icc_shutdown_traps : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 instance->SetData(DATA_COLDFLAME_JETS, DONE);
             return true;
         }
@@ -2382,7 +2382,7 @@ class at_icc_start_blood_quickening : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if (instance->GetData(DATA_BLOOD_QUICKENING_STATE) == NOT_STARTED)
                     instance->SetData(DATA_BLOOD_QUICKENING_STATE, IN_PROGRESS);
             return true;
@@ -2396,8 +2396,8 @@ class at_icc_start_frostwing_gauntlet : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
-                if (Creature* crok = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CROK_SCOURGEBANE)))
+            if (auto instance = player->GetInstanceScript())
+                if (auto crok = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CROK_SCOURGEBANE)))
                     crok->AI()->DoAction(ACTION_START_GAUNTLET);
             return true;
         }
@@ -2410,9 +2410,9 @@ class at_icc_sindragosa_gauntlet : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* areaTrigger)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if (instance->GetData(DATA_SINDRAGOSAS_GAUNTLET) == NOT_STARTED)
-                    if (Creature* trigger = ObjectAccessor::GetCreature(*player, instance->GetData64(GUID_SINDRAGOSAS_WARD)))
+                    if (auto trigger = ObjectAccessor::GetCreature(*player, instance->GetData64(GUID_SINDRAGOSAS_WARD)))
                         trigger->AI()->DoAction(ACTION_START_SINDRAGOSA_GAUNTLET);
 
             return true;

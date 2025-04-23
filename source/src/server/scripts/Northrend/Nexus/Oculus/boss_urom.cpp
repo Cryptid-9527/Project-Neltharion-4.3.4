@@ -298,7 +298,7 @@ public:
 
                 if (timeBombTimer <= uiDiff)
                 {
-                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM))
+                    if (auto unit = SelectTarget(SELECT_TARGET_RANDOM))
                         DoCast(unit, SPELL_TIME_BOMB);
 
                     timeBombTimer = urand(20000, 25000);

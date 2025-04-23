@@ -56,7 +56,7 @@ public:
             float x, y, z;
             me->GetClosePoint(x, y, z, me->GetObjectSize() / 3, 0.1f);
 
-            if (Unit* summon = me->SummonCreature(NPC_RAGECLAW, x, y, z, 0, TEMPSUMMON_DEAD_DESPAWN, 1000))
+            if (auto summon = me->SummonCreature(NPC_RAGECLAW, x, y, z, 0, TEMPSUMMON_DEAD_DESPAWN, 1000))
             {
                 RageclawGUID = summon->GetGUID();
                 LockRageclaw();
@@ -92,7 +92,7 @@ public:
             {
                 if (pCaster->ToPlayer()->GetQuestStatus(QUEST_TROLLS_IS_GONE_CRAZY) == QUEST_STATUS_INCOMPLETE)
                 {
-                    if (Creature* pRageclaw = Unit::GetCreature(*me, RageclawGUID))
+                    if (auto pRageclaw = Unit::GetCreature(*me, RageclawGUID))
                     {
                         UnlockRageclaw(pCaster);
                         pCaster->ToPlayer()->KilledMonster(pRageclaw->GetCreatureTemplate(), RageclawGUID);
@@ -433,13 +433,13 @@ public:
                     switch (uiPhase)
                     {
                         case 1:
-                            if (Creature* summon = me->SummonCreature(NPC_ORINOKO_TUSKBREAKER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                            if (auto summon = me->SummonCreature(NPC_ORINOKO_TUSKBREAKER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
                                 SummonGUID = summon->GetGUID();
                             uiPhase = 2;
                             uiTimer = 4000;
                             break;
                          case 2:
-                            if (Creature* summon = Unit::GetCreature(*me, SummonGUID))
+                            if (auto summon = Unit::GetCreature(*me, SummonGUID))
                                 summon->GetMotionMaster()->MoveJump(5776.319824f, -2981.005371f, 273.100037f, 10.0f, 20.0f);
                             uiPhase = 0;
                             SummonGUID = 0;
@@ -450,7 +450,7 @@ public:
                             uiPhase = 4;
                             break;
                         case 4:
-                            if (Creature* summon = me->SummonCreature(NPC_KORRAK_BLOODRAGER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                            if (auto summon = me->SummonCreature(NPC_KORRAK_BLOODRAGER, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
                                 SummonGUID = summon->GetGUID();
                             uiTimer = 3000;
                             uiPhase = 0;
@@ -500,7 +500,7 @@ public:
                             uiPhase = 0;
                             break;
                         case 11:
-                            if (Creature* creature = me->SummonCreature(NPC_STINKBEARD, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                            if (auto creature = me->SummonCreature(NPC_STINKBEARD, SpawnPosition[0], TEMPSUMMON_CORPSE_DESPAWN, 1000))
                                 creature->AI()->Talk(SAY_STINKBEARD_SPAWN);
                             uiPhase = 0;
                             break;
@@ -522,7 +522,7 @@ public:
                             break;
                         case 14:
                             uiBossRandom = urand(0, 3);
-                            if (Creature* creature = me->SummonCreature(Boss[uiBossRandom].uiBoss, SpawnPosition[2], TEMPSUMMON_CORPSE_DESPAWN, 1000))
+                            if (auto creature = me->SummonCreature(Boss[uiBossRandom].uiBoss, SpawnPosition[2], TEMPSUMMON_CORPSE_DESPAWN, 1000))
                                 creature->AI()->SetData(1, uiBossRandom);
                             uiPhase = 0;
                             break;
@@ -616,7 +616,7 @@ public:
 
         void EnterEvadeMode()
         {
-            if (Creature* pWhisker = me->GetCreature(*me, uiWhisker))
+            if (auto pWhisker = me->GetCreature(*me, uiWhisker))
                 pWhisker->RemoveFromWorld();
         }
 
@@ -649,7 +649,7 @@ public:
 
             if (uiFishyScentTimer <= uiDiff)
             {
-                if (Unit* pAffected = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto pAffected = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(pAffected, SPELL_FISHY_SCENT);
                     AffectedGUID = pAffected->GetGUID();
@@ -662,7 +662,7 @@ public:
                 Talk(SAY_CALL_FOR_HELP);
                 //DoCastVictim(SPELL_SUMMON_WHISKER); petai is not working correctly???
 
-                if (Creature* pWhisker = me->SummonCreature(NPC_WHISKER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0))
+                if (auto pWhisker = me->SummonCreature(NPC_WHISKER, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0))
                     uiWhisker = pWhisker->GetGUID();
                 bSummoned = true;
             }
@@ -678,7 +678,7 @@ public:
                     summon->AI()->AttackStart(me->getVictim());
                     break;
                 case NPC_HUNGRY_PENGUIN:
-                    if (Unit* pAffected = Unit::GetUnit(*me, AffectedGUID))
+                    if (auto pAffected = Unit::GetUnit(*me, AffectedGUID))
                     {
                         if (pAffected->isAlive())
                             summon->AI()->AttackStart(pAffected);
@@ -690,7 +690,7 @@ public:
         void JustDied(Unit* killer)
         {
             if (uiWhisker)
-                if (Creature* pWhisker = me->GetCreature(*me, uiWhisker))
+                if (auto pWhisker = me->GetCreature(*me, uiWhisker))
                     pWhisker->RemoveFromWorld();
 
             if (killer->GetTypeId() == TYPEID_PLAYER)
@@ -770,14 +770,14 @@ public:
 
             if (uiUppercutTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0))
                     DoCast(target, SPELL_UPPERCUT);
                 uiUppercutTimer = 12000;
             } else uiUppercutTimer -= uiDiff;
 
             if (uiChargeTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0))
                     DoCast(target, SPELL_CHARGE);
                 uiChargeTimer = 15000;
             } else uiChargeTimer -= uiDiff;
@@ -792,7 +792,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (auto player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                 player->GroupEventHappens(QUEST_AMPHITHEATER_ANGUISH_KORRAK_BLOODRAGER, killer);
         }
     };
@@ -842,7 +842,7 @@ public:
                 std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         if (unit->GetPositionZ() <= 286.276f)
                         {
@@ -872,13 +872,13 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+            if (auto summoner = me->ToTempSummon()->GetSummoner())
             {
                 std::string sText = (std::string(killer->GetName()) + " has defeated Yg.. Yggg-really big worm!");
                 summoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
             }
 
-            if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (auto player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
             {
                 player->GroupEventHappens(QUEST_AMPHITHEATER_ANGUISH_YGGDRAS_1, killer);
                 player->GroupEventHappens(QUEST_AMPHITHEATER_ANGUISH_YGGDRAS_2, killer);
@@ -957,14 +957,14 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (Unit* victim = me->getVictim())
+            if (auto victim = me->getVictim())
             {
                 if (victim->GetPositionZ() >= 286.276f)
                 {
                     std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                     for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                     {
-                        if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                        if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                         {
                             if (unit->GetPositionZ() <= 286.276f)
                             {
@@ -986,7 +986,7 @@ public:
 
             if (uiKnockAwayTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_KNOCK_AWAY);
@@ -996,7 +996,7 @@ public:
 
             if (uiStinkyBeardTimer <= uiDiff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_STINKY_BEARD);
@@ -1014,7 +1014,7 @@ public:
 
         void JustDied(Unit* killer)
         {
-            if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (auto player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                 player->GetCharmerOrOwnerPlayerOrPlayerItself()->GroupEventHappens(QUEST_AMPHITHEATER_ANGUISH_MAGNATAUR, killer);
 
             std::string sText = ("And with AUTHORITY, " + std::string(killer->GetName()) + " dominates the magnataur lord! Stinkbeard's clan is gonna miss him back home in the Dragonblight!");
@@ -1077,7 +1077,7 @@ public:
 
             for (uint8 uiI = 0; uiI < 16; uiI++)
             {
-                if (Creature* summon = me->SummonCreature(Boss[uiBossRandom].uiAdd, AddSpawnPosition[uiI]))
+                if (auto summon = me->SummonCreature(Boss[uiBossRandom].uiAdd, AddSpawnPosition[uiI]))
                 {
                     summon->AI()->SetData(1, uiBossRandom);
                     SummonList.push_back(summon->GetGUID());
@@ -1091,7 +1091,7 @@ public:
             if (!SummonList.empty())
                 for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
                 {
-                    if (Creature* temp = Unit::GetCreature(*me, *itr))
+                    if (auto temp = Unit::GetCreature(*me, *itr))
                     {
                         temp->m_CombatDistance = 100.0f; // ugly hack? we are not in a instance sorry. :(
                         temp->AI()->AttackStart(unit);
@@ -1109,7 +1109,7 @@ public:
                 std::list<HostileReference*> t_list = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator itr = t_list.begin(); itr!= t_list.end(); ++itr)
                 {
-                    if (Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto unit = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     {
                         if (unit->GetPositionZ() <= 286.276f)
                         {
@@ -1134,7 +1134,7 @@ public:
                 if (!SummonList.empty())
                     for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
                     {
-                        if (Creature* temp = Unit::GetCreature(*me, *itr))
+                        if (auto temp = Unit::GetCreature(*me, *itr))
                         {
                             if (temp->GetPositionZ() >= 287.00f)
                                 continue;
@@ -1154,15 +1154,15 @@ public:
         {
             if (!SummonList.empty())
                 for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
-                    if (Creature* temp = Unit::GetCreature(*me, *itr))
+                    if (auto temp = Unit::GetCreature(*me, *itr))
                         temp->DespawnOrUnsummon();
 
-            if (Player* player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
+            if (auto player = killer->GetCharmerOrOwnerPlayerOrPlayerItself())
                 player->GetCharmerOrOwnerPlayerOrPlayerItself()->GroupEventHappens(QUEST_AMPHITHEATER_ANGUISH_FROM_BEYOND, killer);
 
             std::string sText = (std::string(killer->GetName()) + " is victorious once more!");
 
-            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+            if (auto summoner = me->ToTempSummon()->GetSummoner())
                 summoner->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
         }
     };

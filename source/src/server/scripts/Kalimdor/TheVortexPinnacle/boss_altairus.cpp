@@ -147,7 +147,7 @@ public:
                     break;
                 case EVENT_CALL_THE_WIND:
                 {
-                    if (Creature* c = me->FindNearestCreature(NPC_WIND, 100))
+                    if (auto c = me->FindNearestCreature(NPC_WIND, 100))
                         c->DespawnOrUnsummon();
                     instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_WIND_OF_ALTAIRUS);
                     instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_DOWNWIND_OF_ALTAIRUS);
@@ -200,7 +200,7 @@ public:
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             if (!playerList.isEmpty())
                 for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         player->CastSpell(player, SPELL_WIND_OF_ALTAIRUS, true);
         }
 
@@ -209,7 +209,7 @@ public:
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             if (!playerList.isEmpty())
                 for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (player->GetDistance2d(platform.m_positionX, platform.m_positionY) > 35.0f)
                             me->CastSpell(player, SPELL_LIGHTNING_BLAST, true);
         }
@@ -257,18 +257,18 @@ public:
             PreventDefaultAction();
             if (!GetCaster())
                 return;
-            if (Creature* c = GetCaster()->FindNearestCreature(43873, 100, true))
+            if (auto c = GetCaster()->FindNearestCreature(43873, 100, true))
             {
-                if (InstanceScript* instance = c->GetInstanceScript())
+                if (auto instance = c->GetInstanceScript())
                 {
                     if (instance->GetBossState(BOSS_ALTAIRUS) != IN_PROGRESS)
                     {
                         RemovedWrongAuras();
                         return;
                     }
-                    if (Creature* wind = instance->instance->GetCreature(instance->GetData64(NPC_WIND)))
-                    if (Creature* Altarius_npc = GetCaster()->FindNearestCreature(NPC_ALTAIRUS, 100, true))
-                    if (Unit* Altarius = Altarius_npc->ToUnit())
+                    if (auto wind = instance->instance->GetCreature(instance->GetData64(NPC_WIND)))
+                    if (auto Altarius_npc = GetCaster()->FindNearestCreature(NPC_ALTAIRUS, 100, true))
+                    if (auto Altarius = Altarius_npc->ToUnit())
                     {
                         float windOrientation = wind->GetOrientation();
                         float orientationDiff = GetCaster()->GetAngle(Altarius->GetPositionX(), Altarius->GetPositionY());

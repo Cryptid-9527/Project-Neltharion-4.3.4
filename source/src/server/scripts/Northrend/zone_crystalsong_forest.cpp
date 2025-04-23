@@ -75,7 +75,7 @@ public:
                     {
                         for (std::list<Creature*>::const_iterator itr = orbList.begin(); itr != orbList.end(); ++itr)
                         {
-                            if (Creature* pOrb = *itr)
+                            if (auto pOrb = *itr)
                             {
                                 if (pOrb->GetPositionY() < 1000)
                                 {
@@ -89,12 +89,12 @@ public:
             }else
             {
                 if (!uiTargetGUID)
-                    if (Creature* pOrb = GetClosestCreatureWithEntry(me, NPC_TRANSITUS_SHIELD_DUMMY, 32.0f))
+                    if (auto pOrb = GetClosestCreatureWithEntry(me, NPC_TRANSITUS_SHIELD_DUMMY, 32.0f))
                         uiTargetGUID = pOrb->GetGUID();
 
             }
 
-            if (Creature* pOrb = me->GetCreature(*me, uiTargetGUID))
+            if (auto pOrb = me->GetCreature(*me, uiTargetGUID))
                 DoCast(pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
 
         }

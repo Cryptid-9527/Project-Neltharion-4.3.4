@@ -111,7 +111,7 @@ public:
 				ando->EnterVehicle(me, 0);
 			}
 
-			if (Player* player = summoner->ToPlayer())
+			if (auto player = summoner->ToPlayer())
 			{
 				playerGUID = player->GetGUID();
 				player->CastWithDelay(500, me, SPELL_RIDE_VEHICLE);
@@ -183,7 +183,7 @@ public:
 				case EVENT_START_GROUND_PATH:
 					me->GetMotionMaster()->MoveSmoothPath(SkystriderVehiclePath1, SkystriderVehiclePathSize1);
 
-					if (Player* player = Unit::GetPlayer(*me, playerGUID))
+					if (auto player = Unit::GetPlayer(*me, playerGUID))
 						player->RemoveAura(SPELL_INVISIBILITY_DETECTION_2_MISC_8);
 					break;
 				case EVENT_END_GROUND_PATH:
@@ -197,7 +197,7 @@ public:
 					break;
 				case EVENT_END_FLY_PATH_1:
 					flymode++;
-					if (Player* player = Unit::GetPlayer(*me, playerGUID))
+					if (auto player = Unit::GetPlayer(*me, playerGUID))
 					{
 						player->ExitVehicle();
 						me->GetMotionMaster()->MoveSmoothPath(SkystriderVehiclePath3, SkystriderVehiclePathSize3);

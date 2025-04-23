@@ -120,7 +120,7 @@ class boss_ossirian : public CreatureScript
             void DoAction(const int32 action)
             {
                 if (action == ACTION_TRIGGER_WEAKNESS)
-                    if (Creature* Trigger = me->GetMap()->GetCreature(TriggerGUID))
+                    if (auto Trigger = me->GetMap()->GetCreature(TriggerGUID))
                         if (!Trigger->HasUnitState(UNIT_STATE_CASTING))
                             Trigger->CastSpell(Trigger, SpellWeakness[urand(0, 4)], false);
             }
@@ -150,7 +150,7 @@ class boss_ossirian : public CreatureScript
                     {
                         Position Point;
                         me->GetRandomPoint(RoomCenter, RoomRadius, Point);
-                        if (Creature* Tornado = me->GetMap()->SummonCreature(NPC_SAND_VORTEX, Point))
+                        if (auto Tornado = me->GetMap()->SummonCreature(NPC_SAND_VORTEX, Point))
                             Tornado->CastSpell(Tornado, SPELL_SAND_STORM, true);
                     }
 
@@ -178,7 +178,7 @@ class boss_ossirian : public CreatureScript
 
             void Cleanup()
             {
-                if (GameObject* Crystal = me->GetMap()->GetGameObject(CrystalGUID))
+                if (auto Crystal = me->GetMap()->GetGameObject(CrystalGUID))
                     Crystal->Use(me);
             }
 
@@ -187,10 +187,10 @@ class boss_ossirian : public CreatureScript
                 if (CrystalIterator == NUM_CRYSTALS)
                     CrystalIterator = 0;
 
-                if (Creature* Trigger = me->GetMap()->SummonCreature(NPC_OSSIRIAN_TRIGGER, CrystalCoordinates[CrystalIterator]))
+                if (auto Trigger = me->GetMap()->SummonCreature(NPC_OSSIRIAN_TRIGGER, CrystalCoordinates[CrystalIterator]))
                 {
                     TriggerGUID = Trigger->GetGUID();
-                    if (GameObject* Crystal = Trigger->SummonGameObject(GO_OSSIRIAN_CRYSTAL,
+                    if (auto Crystal = Trigger->SummonGameObject(GO_OSSIRIAN_CRYSTAL,
                                                        CrystalCoordinates[CrystalIterator].GetPositionX(),
                                                        CrystalCoordinates[CrystalIterator].GetPositionY(),
                                                        CrystalCoordinates[CrystalIterator].GetPositionZ(),

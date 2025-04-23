@@ -97,7 +97,7 @@ class boss_skeram : public CreatureScript
                 if (_flag & (1 << 7))
                     _flag = 0;
 
-                if (Unit* Target = SelectTarget(SELECT_TARGET_RANDOM))
+                if (auto Target = SelectTarget(SELECT_TARGET_RANDOM))
                     creature->AI()->AttackStart(Target);
 
                 float ImageHealthPct;

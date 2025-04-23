@@ -140,7 +140,7 @@ class boss_doomlord_kazzak : public CreatureScript
                             _events.ScheduleEvent(EVENT_VOID_BOLT, urand(15000, 18000));
                             break;
                         case EVENT_MARK_OF_KAZZAK:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_MARK_OF_KAZZAK);
                             _events.ScheduleEvent(EVENT_MARK_OF_KAZZAK, 20000);
                             break;
@@ -150,7 +150,7 @@ class boss_doomlord_kazzak : public CreatureScript
                             _events.ScheduleEvent(EVENT_ENRAGE, 30000);
                             break;
                         case EVENT_TWISTED_REFLECTION:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_TWISTED_REFLECTION);
                             _events.ScheduleEvent(EVENT_TWISTED_REFLECTION, 15000);
                             break;
@@ -193,7 +193,7 @@ class spell_mark_of_kazzak : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* owner = GetUnitOwner())
+                if (auto owner = GetUnitOwner())
                     amount = CalculatePct(owner->GetPower(POWER_MANA), 5);
             }
 

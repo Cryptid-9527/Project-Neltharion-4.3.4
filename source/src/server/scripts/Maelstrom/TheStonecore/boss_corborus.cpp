@@ -192,7 +192,7 @@ public:
                 if (checkSkipTimer >= 300)
                 {
                     checkSkipTimer = 0;
-                    if (Creature* trigger = me->FindNearestCreature(22515, 100.f))
+                    if (auto trigger = me->FindNearestCreature(22515, 100.f))
                     {
                         Map::PlayerList const& players = instance->instance->GetPlayers();
                         if (!players.isEmpty())
@@ -429,13 +429,13 @@ class AreaTrigger_at_rockdoor_break : public AreaTriggerScript
             if (player->isGameMaster() || !player->isGMVisible())
                 return false;
 
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
             {
-                if (Creature* corborus = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CORBORUS)))
-                    if (Creature* millhouse = corborus->FindNearestCreature(NPC_MILLHOUSE_MANASTORM, 300.f, true))
+                if (auto corborus = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_CORBORUS)))
+                    if (auto millhouse = corborus->FindNearestCreature(NPC_MILLHOUSE_MANASTORM, 300.f, true))
                         if (millhouse->GetDistance(*corborus) < 80.f)
                         {
-                            if (GameObject* go = ObjectAccessor::GetGameObject(*player, instance->GetData64(DATA_ROCKDOOR)))
+                            if (auto go = ObjectAccessor::GetGameObject(*player, instance->GetData64(DATA_ROCKDOOR)))
                             {
                                 if (go->getLootState() != GO_READY)
                                     return false;
@@ -529,7 +529,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* c = GetCaster())
+            if (auto c = GetCaster())
                 if (c->isDead())
                     return SPELL_FAILED_DONT_REPORT;
             return SPELL_CAST_OK;

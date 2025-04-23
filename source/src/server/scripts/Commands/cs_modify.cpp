@@ -713,7 +713,7 @@ public:
             return false;
         }
 
-        if (Player* player = target->ToPlayer())
+        if (auto player = target->ToPlayer())
         {
             // check online security
             if (handler->HasLowerSecurity(player, 0))
@@ -1148,7 +1148,7 @@ public:
         if (drunklevel > 100)
             drunklevel = 100;
 
-        if (Player* target = handler->getSelectedPlayer())
+        if (auto target = handler->getSelectedPlayer())
             target->SetDrunkValue(drunklevel);
 
         return true;

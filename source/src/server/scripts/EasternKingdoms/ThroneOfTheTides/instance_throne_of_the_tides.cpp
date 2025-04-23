@@ -134,7 +134,7 @@ public:
             {
                 Map::PlayerList const& players = instance->GetPlayers();
                 if (!players.isEmpty())
-                    if (Player* player = players.begin()->getSource())
+                    if (auto player = players.begin()->getSource())
                         TeamInInstance = player->GetTeam();
             }
 
@@ -205,7 +205,7 @@ public:
                 tainted_sentry_dead++;
                 if (tainted_sentry_dead >= 4)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_abyssal4))
+                    if (auto go = instance->GetGameObject(go_abyssal4))
                         HandleGameObject(NULL, true, go);
                 }
                 break;
@@ -338,21 +338,21 @@ public:
                 uiEncounter[0] = data;
                 if (data == NOT_STARTED)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_console))
+                    if (auto go = instance->GetGameObject(go_console))
                         HandleGameObject(go_console, false, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, true, go);
                 }
                 else if (data == IN_PROGRESS)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_console))
+                    if (auto go = instance->GetGameObject(go_console))
                         HandleGameObject(go_console, true, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, false, go);
                 }
                 else if (data == DONE)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, false, go);
                 }
                 break;
@@ -360,38 +360,38 @@ public:
                 uiEncounter[1] = data;
                 if (data == NOT_STARTED)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_abyssal))
+                    if (auto go = instance->GetGameObject(go_abyssal))
                         HandleGameObject(go_abyssal, true, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, true, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal3))
+                    if (auto go = instance->GetGameObject(go_abyssal3))
                         HandleGameObject(go_abyssal3, true, go);
                 }
                 else if (data == IN_PROGRESS)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_abyssal))
+                    if (auto go = instance->GetGameObject(go_abyssal))
                         HandleGameObject(go_abyssal, false, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, false, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal4))
+                    if (auto go = instance->GetGameObject(go_abyssal4))
                         HandleGameObject(go_abyssal4, false, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal3))
+                    if (auto go = instance->GetGameObject(go_abyssal3))
                         HandleGameObject(go_abyssal3, false, go);
                 }
                 else if (data == DONE)
                 {
-                    if (GameObject* go = instance->GetGameObject(go_abyssal))
+                    if (auto go = instance->GetGameObject(go_abyssal))
                         HandleGameObject(go_abyssal, true, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal2))
+                    if (auto go = instance->GetGameObject(go_abyssal2))
                         HandleGameObject(go_abyssal2, true, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal4))
+                    if (auto go = instance->GetGameObject(go_abyssal4))
                         HandleGameObject(go_abyssal4, false, go);
-                    if (GameObject* go = instance->GetGameObject(go_abyssal3))
+                    if (auto go = instance->GetGameObject(go_abyssal3))
                         HandleGameObject(go_abyssal3, true, go);
 
                     if (IsDone(DATA_COMMANDER_ULTHOK))
                         for (uint64 trashGUID : wingTrash)
-                            if (Creature* trashMob = instance->GetCreature(trashGUID))
+                            if (auto trashMob = instance->GetCreature(trashGUID))
                                 trashMob->SetPhaseMask(0x1, true);
                 }
                 break;
@@ -405,7 +405,7 @@ public:
                 uiEncounter[4] = data;
                 if (data == DONE)
                     if (!InstanceScript::IsChallengeModeStarted() && !InstanceScript::IsChallengeModeFinished())
-                        if (GameObject* go = instance->GetGameObject(go_ozumat_chest))
+                        if (auto go = instance->GetGameObject(go_ozumat_chest))
                             go->SetRespawnTime(go->GetRespawnDelay());
                 break;
             case DATA_PROGRESS_EVENT:
@@ -467,7 +467,7 @@ public:
                                 c->GetMotionMaster()->MoveJump(upstairs_spawns[i], 15.f, 15.f, 553);
                             }
 
-                        if (Creature* ladyNazjarIntro = instance->GetCreature(uiLadynazjarIntro))
+                        if (auto ladyNazjarIntro = instance->GetCreature(uiLadynazjarIntro))
                             ladyNazjarIntro->AI()->DoAction(ACTION_LADY_NAZJAR_INTRO_START);
                         mui_timerAreaTriggerEvent = 1500;
                         startAreaTriggerEvent = true;
@@ -484,7 +484,7 @@ public:
                             mui_timerCinematicEvent = 15000;
                             startCinematicEvent = true;
                         }*/
-                        if (GameObject* go = instance->GetGameObject(GetData64(GO_ABYSSAL_MAW_02)))
+                        if (auto go = instance->GetGameObject(GetData64(GO_ABYSSAL_MAW_02)))
                             HandleGameObject(GetData64(GO_ABYSSAL_MAW_02), true, go);
                         break;
                     }
@@ -586,7 +586,7 @@ public:
                         Map::PlayerList const &PlayerList = instance->GetPlayers();
                         if (!PlayerList.isEmpty())
                             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                                if (Player* player = i->getSource())
+                                if (auto player = i->getSource())
                                     if (player->IsWatchingCinematic())
                                     {
                                         start_event = false;
@@ -602,13 +602,13 @@ public:
              
             if (GetData(DATA_COMMANDER_ULTHOK) == DONE)
             {
-                if (GameObject* go = instance->GetGameObject(go_wall_tentacle_left))
+                if (auto go = instance->GetGameObject(go_wall_tentacle_left))
                     go->Delete();
-                if (GameObject* go = instance->GetGameObject(go_wall_tentacle_right))
+                if (auto go = instance->GetGameObject(go_wall_tentacle_right))
                     go->Delete();
-                if (GameObject* go = instance->GetGameObject(go_tentacle_left))
+                if (auto go = instance->GetGameObject(go_tentacle_left))
                     go->Delete();
-                if (GameObject* go = instance->GetGameObject(go_tentacle_right))
+                if (auto go = instance->GetGameObject(go_tentacle_right))
                     go->Delete();
             }
 
@@ -617,7 +617,7 @@ public:
                 Position pos;
                 Map::PlayerList const& players = instance->GetPlayers();
                 for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
-                    if (Player* player = i->getSource())
+                    if (auto player = i->getSource())
                     {
                         player->GetPosition(&pos);
                         if (player->GetPositionZ() >= 310.0f && (player->FindNearestCreature(40936, 30.0f) || player->FindNearestCreature(49074, 30.0f)))

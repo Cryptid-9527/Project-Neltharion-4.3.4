@@ -60,7 +60,7 @@ class AreaTrigger_at_coilfang_waterfall : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*trigger*/)
         {
-            if (GameObject* go = GetClosestGameObjectWithEntry(player, GO_COILFANG_WATERFALL, 35.0f))
+            if (auto go = GetClosestGameObjectWithEntry(player, GO_COILFANG_WATERFALL, 35.0f))
                 if (go->getLootState() == GO_READY)
                     go->UseDoorOrButton();
 
@@ -292,7 +292,7 @@ class AreaTrigger_at_nats_landing : public AreaTriggerScript
             {
                 if (!player->FindNearestCreature(NPC_LURKING_SHARK, 20.0f))
                 {
-                    if (Creature* shark = player->SummonCreature(NPC_LURKING_SHARK, -4246.243f, -3922.356f, -7.488f, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 100000))
+                    if (auto shark = player->SummonCreature(NPC_LURKING_SHARK, -4246.243f, -3922.356f, -7.488f, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 100000))
                         shark->AI()->AttackStart(player);
 
                     return false;
@@ -338,11 +338,11 @@ class AreaTrigger_at_brewfest : public AreaTriggerScript
             switch (triggerId)
             {
                 case AT_BREWFEST_DUROTAR:
-                    if (Creature* tapper = player->FindNearestCreature(NPC_TAPPER_SWINDLEKEG, 20.0f))
+                    if (auto tapper = player->FindNearestCreature(NPC_TAPPER_SWINDLEKEG, 20.0f))
                         tapper->AI()->Talk(SAY_WELCOME, player->GetGUID());
                     break;
                 case AT_BREWFEST_DUN_MOROGH:
-                    if (Creature* ipfelkofer = player->FindNearestCreature(NPC_IPFELKOFER_IRONKEG, 20.0f))
+                    if (auto ipfelkofer = player->FindNearestCreature(NPC_IPFELKOFER_IRONKEG, 20.0f))
                         ipfelkofer->AI()->Talk(SAY_WELCOME, player->GetGUID());
                     break;
                 default:

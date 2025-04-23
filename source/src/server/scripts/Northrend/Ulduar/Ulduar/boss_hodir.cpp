@@ -187,7 +187,7 @@ class npc_flash_freeze : public CreatureScript
 
                 if (checkDespawnTimer <= diff)
                 {
-                    if (Unit* target = ObjectAccessor::GetUnit(*me, targetGUID))
+                    if (auto target = ObjectAccessor::GetUnit(*me, targetGUID))
                     {
                         if (!target->isAlive() || (target->GetTypeId() != TYPEID_PLAYER &&
                                                    target->GetEntry() != 32941 &&
@@ -224,7 +224,7 @@ class npc_flash_freeze : public CreatureScript
                 me->SetInCombatWith(summoner);
                 me->AddThreat(summoner, 250.0f);
 
-                if (Unit* target = ObjectAccessor::GetUnit(*me, targetGUID))
+                if (auto target = ObjectAccessor::GetUnit(*me, targetGUID))
                 {
                     if (target->GetTypeId() == TYPEID_PLAYER ||
                         target->GetEntry() == 32941 ||
@@ -248,7 +248,7 @@ class npc_flash_freeze : public CreatureScript
                         // Prevents to have Ice Block on other place than target is
                         me->NearTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation());
                         if (target->GetTypeId() == TYPEID_PLAYER)
-                            if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+                            if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                                 Hodir->AI()->DoAction(ACTION_CHEESE_THE_FREEZE);
                     }
                     else
@@ -289,7 +289,7 @@ class npc_ice_block : public CreatureScript
                 me->SetInCombatWith(summoner);
                 me->AddThreat(summoner, 250.0f);
                 summoner->AddThreat(me, 250.0f);
-                if (Creature* target = ObjectAccessor::GetCreature(*me, targetGUID))
+                if (auto target = ObjectAccessor::GetCreature(*me, targetGUID))
                 {
                     DoCast(target, SPELL_BLOCK_OF_ICE, true);
                     // Prevents to have Ice Block on other place than target is
@@ -304,11 +304,11 @@ class npc_ice_block : public CreatureScript
 
             void JustDied(Unit* who)
             {
-                if (Creature* Helper = ObjectAccessor::GetCreature(*me, targetGUID))
+                if (auto Helper = ObjectAccessor::GetCreature(*me, targetGUID))
                 {
                     Helper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_STUNNED | UNIT_FLAG_PACIFIED);
 
-                    if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+                    if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                     {
                         if (!Hodir->isInCombat())
                         {
@@ -359,7 +359,7 @@ public:
             summonAddVerif = false;
             doCbt = false;
             me->RemoveAura(SPELL_BITING_COLD);
-            if (GameObject* HodirRareCache = instance->instance->GetGameObject(instance->GetData64(DATA_HODIR_RARE_CACHE)))
+            if (auto HodirRareCache = instance->instance->GetGameObject(instance->GetData64(DATA_HODIR_RARE_CACHE)))
             {
                 HodirRareCache->Respawn();
                 HodirRareCache->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -400,7 +400,7 @@ public:
                 me->SetReactState(REACT_PASSIVE);
                 for (uint8 n = 0; n < FRIENDS_COUNT; ++n)
                 {
-                    if (Creature* FrozenHelper = me->SummonCreature(Entry[n], SummonPositions[n], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto FrozenHelper = me->SummonCreature(Entry[n], SummonPositions[n], TEMPSUMMON_MANUAL_DESPAWN))
                         FrozenHelper->CastSpell(FrozenHelper, SPELL_SUMMON_FLASH_FREEZE_HELPER, true);
                     summonAddVerif = true;
                 }
@@ -465,7 +465,7 @@ public:
                     events.ScheduleEvent(EVENT_FREEZE, urand(30000, 45000));
                     break;
                 case EVENT_ICICLE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         DoCast(target, SPELL_ICICLE);
                     events.ScheduleEvent(EVENT_ICICLE, RAID_MODE(5500, 3500));
                     break;
@@ -473,7 +473,7 @@ public:
                     Talk(SAY_FLASH_FREEZE);
                     Talk(EMOTE_FREEZE);
                     for (uint8 n = 0; n < RAID_MODE(2, 3); ++n)
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             target->CastSpell(target, SPELL_ICICLE_SNOWDRIFT, true);
                     DoCast(SPELL_FLASH_FREEZE);
                     events.ScheduleEvent(EVENT_FLASH_FREEZE_EFFECT, 500);
@@ -513,7 +513,7 @@ public:
             {
                 std::list<HostileReference*> ThreatList = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator itr = ThreatList.begin(); itr != ThreatList.end(); ++itr)
-                    if (Unit* target = ObjectAccessor::GetUnit(*me, (*itr)->getUnitGuid()))
+                    if (auto target = ObjectAccessor::GetUnit(*me, (*itr)->getUnitGuid()))
                         if (Aura* BitingColdAura = target->GetAura(SPELL_BITING_COLD_TRIGGERED))
                             if ((target->GetTypeId() == TYPEID_PLAYER) && (BitingColdAura->GetStackAmount() > 2))
                                 me->AI()->SetData(DATA_GETTING_COLD_IN_HERE, 0);
@@ -654,7 +654,7 @@ public:
         {
             if (despawnTimer <= diff)
             {
-                if (GameObject* Snowdrift = me->FindNearestGameObject(GO_SNOWDRIFT, 2.0f))
+                if (auto Snowdrift = me->FindNearestGameObject(GO_SNOWDRIFT, 2.0f))
                     me->RemoveGameObject(Snowdrift, true);
                 me->DespawnOrUnsummon();
             }
@@ -739,7 +739,7 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+            if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                 Hodir->AI()->DoAction(ACTION_I_HAVE_THE_COOLEST_FRIENDS);
         }
 
@@ -817,7 +817,7 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+            if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                 Hodir->AI()->DoAction(ACTION_I_HAVE_THE_COOLEST_FRIENDS);
         }
 
@@ -886,7 +886,7 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+            if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                 Hodir->AI()->DoAction(ACTION_I_HAVE_THE_COOLEST_FRIENDS);
         }
 
@@ -962,7 +962,7 @@ public:
                     events.ScheduleEvent(EVENT_CONJURE_FIRE, urand(15000, 20000));
                     break;
                 case EVENT_MELT_ICE:
-                    if (Creature* FlashFreeze = me->FindNearestCreature(NPC_FLASH_FREEZE, 50.0f, true))
+                    if (auto FlashFreeze = me->FindNearestCreature(NPC_FLASH_FREEZE, 50.0f, true))
                         DoCast(FlashFreeze, SPELL_MELT_ICE, true);
                     events.ScheduleEvent(EVENT_MELT_ICE, urand(10000, 15000));
                     break;
@@ -974,7 +974,7 @@ public:
 
         void JustDied(Unit* /*who*/)
         {
-            if (Creature* Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
+            if (auto Hodir = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(BOSS_HODIR) : 0))
                 Hodir->AI()->DoAction(ACTION_I_HAVE_THE_COOLEST_FRIENDS);
         }
 
@@ -1011,7 +1011,7 @@ public:
             {
                 if (spell->Id == SPELL_BLOCK_OF_ICE || spell->Id == SPELL_ICE_SHARD || spell->Id == SPELL_ICE_SHARD_HIT)
                 {
-                    if (GameObject* ToastyFire = me->FindNearestGameObject(GO_TOASTY_FIRE, 4.0f))
+                    if (auto ToastyFire = me->FindNearestGameObject(GO_TOASTY_FIRE, 4.0f))
                         me->RemoveGameObject(ToastyFire, true);
                     me->DespawnOrUnsummon();
                 }
@@ -1020,7 +1020,7 @@ public:
             // Just for the case
             void JustDied(Unit* /*victim*/)
             {
-                if (GameObject* fire = me->FindNearestGameObject(GO_TOASTY_FIRE, 4.0f))
+                if (auto fire = me->FindNearestGameObject(GO_TOASTY_FIRE, 4.0f))
                     me->RemoveGameObject(fire, true);
             }
         };

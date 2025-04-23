@@ -197,7 +197,7 @@ public:
                         me->DespawnOrUnsummon();
                         player->RemoveAura(SPELL_PORTAL_WISP_GUARDIAN_AURA);
 
-                        if (Creature* portal = Unit::GetCreature(*me, _portalGUID))
+                        if (auto portal = Unit::GetCreature(*me, _portalGUID))
                             portal->DespawnOrUnsummon();
                     }
 
@@ -413,7 +413,7 @@ public:
                 _controllerGUID = controller->GetGUID();
             }
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
 
@@ -447,7 +447,7 @@ public:
         {
             _summons.DespawnAll();
 
-            if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+            if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                 controller->AI()->DoAction(ACTION_FORLORN_RESET_CONTROLLER);
         }
 
@@ -455,7 +455,7 @@ public:
         {
             _summons.DespawnAll();
 
-            if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+            if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                 controller->AI()->DoAction(ACTION_FORLORN_RESET_CONTROLLER);
         }
 
@@ -580,7 +580,7 @@ public:
                 {
                 case EVENT_THE_FORLORN_SPIRE_ESCORT_1:
                 {
-                    if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                    if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                         controller->AI()->DoAction(ACTION_FORLORN_RESET_CONTROLLER);
 
                     auto player = me->GetPlayersInRange(55, true);
@@ -997,7 +997,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 me->setRegeneratingHealth(false);
@@ -1015,7 +1015,7 @@ public:
         {
             _summons.DespawnAll();
 
-            if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+            if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                 controller->AI()->DoAction(ACTION_INTO_THE_FIRE_RESET_CONTROLLER);
         }
 
@@ -1023,7 +1023,7 @@ public:
         {
             _summons.DespawnAll();
 
-            if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+            if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                 controller->AI()->DoAction(ACTION_INTO_THE_FIRE_RESET_CONTROLLER);
         }
 
@@ -1133,7 +1133,7 @@ public:
                 _summons.DespawnAll();
                 me->DespawnOrUnsummon();
 
-                if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                     controller->AI()->DoAction(ACTION_INTO_THE_FIRE_RESET_CONTROLLER);
             }
         }
@@ -1170,7 +1170,7 @@ public:
                         _summons.DespawnAll();
                         me->DespawnOrUnsummon();
 
-                        if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                        if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                             controller->AI()->DoAction(ACTION_INTO_THE_FIRE_RESET_CONTROLLER);
                     }
                 }
@@ -1406,7 +1406,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->CastSpell(player, SPELL_SANCTUARY_NO_COMBAT);
@@ -1591,7 +1591,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 me->RemoveByteFlag(UNIT_FIELD_BYTES_1, 0, 7);

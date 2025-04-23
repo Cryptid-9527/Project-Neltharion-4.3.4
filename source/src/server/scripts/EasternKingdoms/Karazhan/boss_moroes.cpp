@@ -164,7 +164,7 @@ public:
                     AddList.erase((AddList.begin())+(rand()%AddList.size()));
 
                 uint8 i = 0;
-                for (std::vector<uint32>::const_iterator itr = AddList.begin(); itr != AddList.end(); ++itr)
+                for (auto itr = AddList.begin(); itr != AddList.end(); ++itr)
                 {
                     uint32 entry = *itr;
 
@@ -297,7 +297,7 @@ public:
                 {
                     Talk(SAY_SPECIAL);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         target->CastSpell(target, SPELL_GARROTE, true);
 
                     InVanish = false;
@@ -335,7 +335,7 @@ struct boss_moroes_guestAI : public ScriptedAI
         if (!instance)
             return;
 
-        if (Creature* Moroes = Unit::GetCreature(*me, instance->GetData64(DATA_MOROES)))
+        if (auto Moroes = Unit::GetCreature(*me, instance->GetData64(DATA_MOROES)))
             for (uint8 i = 0; i < 4; ++i)
                 if (uint64 GUID = CAST_AI(boss_moroes::boss_moroesAI, Moroes->AI())->AddGUID[i])
                     GuestGUID[i] = GUID;
@@ -436,7 +436,7 @@ public:
 
             if (ManaBurn_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     if (target->getPowerType() == POWER_MANA)
                         DoCast(target, SPELL_MANABURN);
                 ManaBurn_Timer = 5000;                          // 3 sec cast
@@ -444,7 +444,7 @@ public:
 
             if (ShadowWordPain_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                 {
                     DoCast(target, SPELL_SWPAIN);
                     ShadowWordPain_Timer = 7000;
@@ -572,7 +572,7 @@ public:
 
             if (DispelMagic_Timer <= diff)
             {
-                if (Unit* target = RAND(SelectGuestTarget(), SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)))
+                if (auto target = RAND(SelectGuestTarget(), SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true)))
                     DoCast(target, SPELL_DISPELMAGIC);
 
                 DispelMagic_Timer = 25000;

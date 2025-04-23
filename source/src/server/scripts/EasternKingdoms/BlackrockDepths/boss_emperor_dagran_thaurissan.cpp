@@ -74,7 +74,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Creature* Moira = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(DATA_MOIRA) : 0))
+            if (auto Moira = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(DATA_MOIRA) : 0))
             {
                 Moira->AI()->EnterEvadeMode();
                 Moira->setFaction(35);
@@ -89,7 +89,7 @@ public:
 
             if (HandOfThaurissan_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_HANDOFTHAURISSAN);
 
                 //3 Hands of Thaurissan will be casted

@@ -157,10 +157,10 @@ class boss_anomalus : public CreatureScript
                     Phase = 1;
                     Talk(SAY_SHIELD);
                     DoCast(me, SPELL_RIFT_SHIELD);
-                    if (Creature* Rift = me->SummonCreature(MOB_CHAOTIC_RIFT, RiftLocation[urand(0, 5)], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
+                    if (auto Rift = me->SummonCreature(MOB_CHAOTIC_RIFT, RiftLocation[urand(0, 5)], TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
                     {
                         //DoCast(Rift, SPELL_CHARGE_RIFT);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             Rift->AI()->AttackStart(target);
                         uiChaoticRiftGUID = Rift->GetGUID();
                         Talk(SAY_RIFT);
@@ -169,7 +169,7 @@ class boss_anomalus : public CreatureScript
 
                 if (uiSparkTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_SPARK);
                     uiSparkTimer = 5000;
                 }
@@ -219,7 +219,7 @@ class mob_chaotic_rift : public CreatureScript
                 if (uiChaoticEnergyBurstTimer <= diff)
                 {
                     Creature* Anomalus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ANOMALUS));
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         if (Anomalus && Anomalus->HasAura(SPELL_RIFT_SHIELD))
                             DoCast(target, SPELL_CHARGED_CHAOTIC_ENERGY_BURST);
@@ -233,8 +233,8 @@ class mob_chaotic_rift : public CreatureScript
 
                 if (uiSummonCrazedManaWraithTimer <= diff)
                 {
-                    if (Creature* Wraith = me->SummonCreature(MOB_CRAZED_MANA_WRAITH, me->GetPositionX() + 1, me->GetPositionY() + 1, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto Wraith = me->SummonCreature(MOB_CRAZED_MANA_WRAITH, me->GetPositionX() + 1, me->GetPositionY() + 1, me->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             Wraith->AI()->AttackStart(target);
                     Creature* Anomalus = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_ANOMALUS));
                     if (Anomalus && Anomalus->HasAura(SPELL_RIFT_SHIELD))
@@ -265,7 +265,7 @@ class achievement_chaos_theory : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Anomalus = target->ToCreature())
+            if (auto Anomalus = target->ToCreature())
                 if (Anomalus->AI()->GetData(DATA_CHAOS_THEORY))
                     return true;
 

@@ -587,7 +587,7 @@ public:
 
         void InitializeAI() override
         {
-            if (GameObject* effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
+            if (auto effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
                 effigy->SetGoState(GO_STATE_ACTIVE);
             else
             {
@@ -602,7 +602,7 @@ public:
         {
             if (spellInfo->Id == SPELL_BUCKET_LANDS)
             {
-                if (GameObject* effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
+                if (auto effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
                 {
                     if (effigy->GetGoState() == GO_STATE_ACTIVE)
                     {
@@ -614,7 +614,7 @@ public:
                 }
                 else
                 {
-                    if (Creature* horseman = me->GetCreature(*me, me->GetCreatorGUID()))
+                    if (auto horseman = me->GetCreature(*me, me->GetCreatorGUID()))
                         horseman->AI()->SetGUID(attacker->GetGUID(), EVENT_FIRE_HIT_BY_BUCKET);
 
                     if (Aura* fireSize = me->GetAura(SPELL_FIRE_SIZE_STACK))
@@ -638,7 +638,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_FIRE_GROW_FIRE:
-                        if (GameObject* effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
+                        if (auto effigy = me->FindNearestGameObject(GO_FIRE_EFFIGY, 0.5f))
                             effigy->SetGoState(GO_STATE_ACTIVE);
                         else
                         {
@@ -807,7 +807,7 @@ public:
                         Talk(TALK_EVENT_FAILED);
                         for (std::list<uint64>::const_iterator i = _playerList.begin(); i != _playerList.end(); ++i)
                         {
-                            if (Player* player = me->GetPlayer(*me, *i))
+                            if (auto player = me->GetPlayer(*me, *i))
                             {
                                 uint32 questId = player->GetTeam() == ALLIANCE ? QUEST_LET_THE_FIRES_COME_A : QUEST_LET_THE_FIRES_COME_H;
                                 if (player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
@@ -991,7 +991,7 @@ public:
                 if (horseman && !horseman->isAlive())
                     horseman->DespawnOrUnsummon();
 
-                if (Creature* newHorseman = player->SummonCreature(NPC_SHADE_HORSEMAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 20.0f, 0, TEMPSUMMON_DEAD_DESPAWN, 180000))
+                if (auto newHorseman = player->SummonCreature(NPC_SHADE_HORSEMAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 20.0f, 0, TEMPSUMMON_DEAD_DESPAWN, 180000))
                     _headlessHoresemanGUID = newHorseman->GetGUID();
             }
         }
@@ -1103,8 +1103,8 @@ public:
                 {
                     case EVENT_START_PATH:
                         for (int8 seat = 0; seat < 8; seat++)
-                            if (Unit* passenger = me->GetVehicleKit()->GetPassenger(seat))
-                                if (Player* player = passenger->ToPlayer())
+                            if (auto passenger = me->GetVehicleKit()->GetPassenger(seat))
+                                if (auto player = passenger->ToPlayer())
                                 {
                                     player->SetMover(me);
                                     if (isHordeBroom)
@@ -1136,8 +1136,8 @@ public:
                         break;
                     case EVENT_RETURN_PATH:
                         for (int8 seat = 0; seat < 8; seat++)
-                            if (Unit* passenger = me->GetVehicleKit()->GetPassenger(seat))
-                                if (Player* player = passenger->ToPlayer())
+                            if (auto passenger = me->GetVehicleKit()->GetPassenger(seat))
+                                if (auto player = passenger->ToPlayer())
                                 {
                                     if (isHordeBroom)
                                     {

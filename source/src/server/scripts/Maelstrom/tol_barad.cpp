@@ -184,7 +184,7 @@ public:
         void DoAction(int32 const action) override
         {
             if (action == ACTION_REWARD_ACHIEVEMENT)
-                if (Player* player = ObjectAccessor::GetPlayer(*me, playerGUID))
+                if (auto player = ObjectAccessor::GetPlayer(*me, playerGUID))
                     if (AchievementEntry const* TowerPlower = sAchievementStore.LookupEntry(5415))
                         player->CompletedAchievement(TowerPlower);
         }
@@ -335,7 +335,7 @@ public:
                 return false;
             if (go->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED))
                 return false;
-            else if (Creature* missileTarget = caster->SummonCreature(36171, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ() + 50, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 2000))
+            else if (auto missileTarget = caster->SummonCreature(36171, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ() + 50, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 2000))
             {
                 if (go->GetGOValue() && go->GetGOValue()->Building.Health <= 1500)
                 {
@@ -393,7 +393,7 @@ public:
         {
             if (Unit *caster = GetCaster())
                 if (Vehicle *veh = caster->GetVehicleKit())
-                    if (Unit* target = veh->GetPassenger(0)) // player seat
+                    if (auto target = veh->GetPassenger(0)) // player seat
                         target->ExitVehicle();
         }
 

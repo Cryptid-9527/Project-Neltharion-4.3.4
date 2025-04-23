@@ -118,7 +118,7 @@ class spell_ex_5581 : public SpellScriptLoader
             void HandleDummyLaunchTarget(SpellEffIndex /*effIndex*/)
             {
                 uint64 targetGUID = 0;
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     targetGUID = unitTarget->GetGUID();
                 // we're handling SPELL_EFFECT_DUMMY in effIndex 0 here
                 TC_LOG_INFO("misc", "Spell %u with SPELL_EFFECT_DUMMY is just launched at it's target: " UI64FMTD "!", GetSpellInfo()->Id, targetGUID);
@@ -133,7 +133,7 @@ class spell_ex_5581 : public SpellScriptLoader
             {
                 TC_LOG_INFO("misc", "SPELL_EFFECT_DUMMY is hits it's target!");
                 // make caster cast a spell on a unit target of effect
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     GetCaster()->CastSpell(target, SPELL_TRIGGERED, true);
             }
 
@@ -221,7 +221,7 @@ class spell_ex_66244 : public SpellScriptLoader
             bool Load()
             {
                 // do not load script if aura is casted by player or caster not avalible
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->GetTypeId() == TYPEID_PLAYER)
                         return true;
                 return false;

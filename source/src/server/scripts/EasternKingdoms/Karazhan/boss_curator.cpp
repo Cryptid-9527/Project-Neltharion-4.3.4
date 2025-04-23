@@ -189,7 +189,7 @@ public:
                 else
                     HatefulBoltTimer = 15000;
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
+                if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 1))
                     DoCast(target, SPELL_HATEFUL_BOLT);
             } else HatefulBoltTimer -= diff;
 

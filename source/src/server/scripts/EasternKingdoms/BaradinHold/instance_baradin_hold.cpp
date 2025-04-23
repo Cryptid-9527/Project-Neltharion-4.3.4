@@ -118,7 +118,7 @@ public:
                 {
                     Map::PlayerList const& players = instance->GetPlayers();
                     for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
-                        if (Player* player = i->getSource())
+                        if (auto player = i->getSource())
                             if (!player->isGameMaster())
                             {
                                 if (pvpTB->IsWarTime())

@@ -778,7 +778,7 @@ void Channel::SetOwner(uint64 guid, bool exclaim)
 void Channel::SendToAll(WorldPacket* data, uint64 guid)
 {
     for (PlayerContainer::const_iterator i = playersStore.begin(); i != playersStore.end(); ++i)
-        if (Player* player = ObjectAccessor::FindPlayer(i->first))
+        if (auto player = ObjectAccessor::FindPlayer(i->first))
             if (!guid || !player->GetSocial()->HasIgnore(GUID_LOPART(guid)))
                 player->GetSession()->SendPacket(data);
 }
@@ -787,13 +787,13 @@ void Channel::SendToAllButOne(WorldPacket* data, uint64 who)
 {
     for (PlayerContainer::const_iterator i = playersStore.begin(); i != playersStore.end(); ++i)
         if (i->first != who)
-            if (Player* player = ObjectAccessor::FindPlayer(i->first))
+            if (auto player = ObjectAccessor::FindPlayer(i->first))
                 player->GetSession()->SendPacket(data);
 }
 
 void Channel::SendToOne(WorldPacket* data, uint64 who)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(who))
+    if (auto player = ObjectAccessor::FindPlayer(who))
         player->GetSession()->SendPacket(data);
 }
 

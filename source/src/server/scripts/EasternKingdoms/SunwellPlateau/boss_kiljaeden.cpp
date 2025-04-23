@@ -284,7 +284,7 @@ public:
             me->setActive(true);
 
             for (uint8 i = 0; i < 4; ++i)
-                if (GameObject* pOrb = GetOrb(i))
+                if (auto pOrb = GetOrb(i))
                     pOrb->SetGoType(GAMEOBJECT_TYPE_BUTTON);
         }
 
@@ -311,7 +311,7 @@ public:
         {
             me->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             for (uint8 i = 0; i < 4; ++i)
-                if (GameObject* orb = GetOrb(i))
+                if (auto orb = GetOrb(i))
                 {
                     orb->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     orb->ResetDoorOrButton();
@@ -326,7 +326,7 @@ public:
                 me->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
                 for (uint8 i = 0; i < 4; ++i)
                 {
-                    if (GameObject* orb = GetOrb(i))
+                    if (auto orb = GetOrb(i))
                     {
                         orb->ResetDoorOrButton();
                         orb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
@@ -340,7 +340,7 @@ public:
                 std::set<uint8> orbs;
                 for (uint8 i = 0; i < 4; ++i)
                 {
-                    if (GameObject* orb = GetOrb(i))
+                    if (auto orb = GetOrb(i))
                     {
                         if (orb->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE))
                             orbs.insert(i);
@@ -351,7 +351,7 @@ public:
                     std::set<uint8>::iterator itr = orbs.begin();
                     std::advance(itr, urand(0, orbs.size() - 1));
 
-                    if (GameObject* orb = GetOrb(*itr))
+                    if (auto orb = GetOrb(*itr))
                     {
                         orb->ResetDoorOrButton();
                         orb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
@@ -374,7 +374,7 @@ public:
             me->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             for (uint8 i = 0; i < 4; ++i)
             {
-                if (GameObject* orb = GetOrb(i))
+                if (auto orb = GetOrb(i))
                 {
                     if (!orb->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE))
                         orb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
@@ -399,7 +399,7 @@ public:
 
         InstanceScript* instance = pGo->GetInstanceScript();
 
-        if (Creature* summon = player->SummonCreature(CREATURE_POWER_OF_THE_BLUE_DRAGONFLIGHT, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 121000))
+        if (auto summon = player->SummonCreature(CREATURE_POWER_OF_THE_BLUE_DRAGONFLIGHT, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 121000))
         {
             if (instance && instance->GetData(DATA_MODUS80))
             {
@@ -421,7 +421,7 @@ public:
         pGo->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
         if (instance)
-            if (Creature* kalec = Unit::GetCreature(*player, instance->GetData64(DATA_KALECGOS_KJ)))
+            if (auto kalec = Unit::GetCreature(*player, instance->GetData64(DATA_KALECGOS_KJ)))
                 CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, kalec->AI())->SetRingOfBlueFlames();
 
         return true;
@@ -470,7 +470,7 @@ public:
             phase = PHASE_DECEIVERS;
 
             if (instance)
-                if (Creature* kalecKJ = Unit::GetCreature((*me), instance->GetData64(DATA_KALECGOS_KJ)))
+                if (auto kalecKJ = Unit::GetCreature((*me), instance->GetData64(DATA_KALECGOS_KJ)))
                     CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, kalecKJ->AI())->ResetOrbs();
             deceiverDeathCount = 0;
             bSummonedDeceivers = false;
@@ -603,7 +603,7 @@ public:
 
             if (instance)
             {
-                if (Creature* kalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
+                if (auto kalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                     kalec->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             }
             if (instance && instance->GetData(DATA_MODUS80))
@@ -666,7 +666,7 @@ public:
                     Map::PlayerList const& players = me->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 player->KilledMonsterCredit(411039, player->GetGUID());
                 }
 
@@ -687,7 +687,7 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_KILJAEDEN_EVENT, NOT_STARTED);
-                if (Creature* control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+                if (auto control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                     CAST_AI(mob_kiljaeden_controller::mob_kiljaeden_controllerAI, control->AI())->Reset();
             }
         }
@@ -714,13 +714,13 @@ public:
         void CastSinisterReflection()
         {
             Talk(SAY_KJ_REFLECTION);
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
             {
                 for (uint8 i = 0; i < 4; ++i)
                 {
                     float x, y ,z;
                     target->GetPosition(x,y,z);
-                    if (Creature* sinisterReflection = me->SummonCreature(CREATURE_SINISTER_REFLECTION, x, y, z, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
+                    if (auto sinisterReflection = me->SummonCreature(CREATURE_SINISTER_REFLECTION, x, y, z, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
                         sinisterReflection->AI()->AttackStart(target);
                 }
                 target->CastSpell(target, SPELL_SINISTER_REFLECTION, true);
@@ -798,12 +798,12 @@ public:
                             {
                                 speechTimer = 0;
                                 if (instance)
-                                    if (Creature* speechCreature = Unit::GetCreature(*me, instance->GetData64(speeches[speechCount].creatureData)))
+                                    if (auto speechCreature = Unit::GetCreature(*me, instance->GetData64(speeches[speechCount].creatureData)))
                                         speechCreature->AI()->Talk(speeches[speechCount].textid);
                                 if (speechCount == 11)
                                 {
                                     if (instance)
-                                        if (Creature* anveena = Unit::GetCreature(*me, instance->GetData64(DATA_ANVEENA)))
+                                        if (auto anveena = Unit::GetCreature(*me, instance->GetData64(DATA_ANVEENA)))
                                         {
                                             anveena->RemoveAurasDueToSpell(SPELL_ANVEENA_PRISON);
                                             anveena->CastSpell(me, SPELL_SACRIFICE_OF_ANVEENA, false);
@@ -818,7 +818,7 @@ public:
                                 }
                                 else if (speechCount == 13)
                                 {
-                                    if (Creature* anveena = Unit::GetCreature(*me, instance->GetData64(DATA_ANVEENA)))
+                                    if (auto anveena = Unit::GetCreature(*me, instance->GetData64(DATA_ANVEENA)))
                                         anveena->DisappearAndDie();
                                     me->RemoveAurasDueToSpell(SPELL_CUSTOM_08_STATE);
                                 }
@@ -840,7 +840,7 @@ public:
                             if (!me->IsNonMeleeSpellCasted(false))
                             {
                                 me->RemoveAurasDueToSpell(SPELL_SOUL_FLAY);
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
                                     DoCast(target, SPELL_LEGION_LIGHTNING);
 
                                 timer[TIMER_LEGION_LIGHTNING] = (phase == PHASE_SACRIFICE) ? 18000 : 30000; // 18 seconds in PHASE_SACRIFICE
@@ -870,7 +870,7 @@ public:
                                 {
                                     x = middleOfSunwell[0] + SHIELD_ORB_RADIUS * cos((i-1) * M_PI/2);
                                     y = middleOfSunwell[1] + SHIELD_ORB_RADIUS * sin((i-1) * M_PI/2);
-                                    if (Creature* orb = me->SummonCreature(CREATURE_SHIELD_ORB, x, y, SHIELD_ORB_Z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                                    if (auto orb = me->SummonCreature(CREATURE_SHIELD_ORB, x, y, SHIELD_ORB_Z, 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
                                         if (CreatureAI* orbAi = orb->AI())
                                             orbAi->DoAction(i%2);
                                 }
@@ -923,7 +923,7 @@ public:
                         //    break;
                         case TIMER_ORBS_EMPOWER: //Phase 3
                             if (instance)
-                                if (Creature* kalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
+                                if (auto kalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                                 {
                                     switch (phase)
                                     {
@@ -1061,7 +1061,7 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_KILJAEDEN_EVENT, IN_PROGRESS);
-                if (Creature* control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+                if (auto control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                     control->AddThreat(who, 1.0f);
             }
             me->InterruptNonMeleeSpells(true);
@@ -1072,7 +1072,7 @@ public:
             if (!instance)
                 return;
 
-            if (Creature* control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
+            if (auto control = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN_CONTROLLER)))
                 ++(CAST_AI(mob_kiljaeden_controller::mob_kiljaeden_controllerAI, control->AI())->deceiverDeathCount);
         }
 
@@ -1100,7 +1100,7 @@ public:
             // Felfire Portal - Creatres a portal, that spawns Volatile Felfire Fiends, which do suicide bombing.
             if (felfirePortalTimer <= diff)
             {
-                if (Creature* portal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0,0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                if (auto portal = DoSpawnCreature(CREATURE_FELFIRE_PORTAL, 0, 0,0, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                 {
                     ThreatContainer::StorageType const &threatlist = me->getThreatManager().getThreatList();
                     for (ThreatContainer::StorageType::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
@@ -1156,7 +1156,7 @@ public:
 
             if (uiSpawnFiendTimer <= diff)
             {
-                if (Creature* fiend = DoSpawnCreature(CREATURE_VOLATILE_FELFIRE_FIEND, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
+                if (auto fiend = DoSpawnCreature(CREATURE_VOLATILE_FELFIRE_FIEND, 0, 0, 0, 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 20000))
                     fiend->AddThreat(SelectTarget(SELECT_TARGET_RANDOM,0), 100000.0f);
                 uiSpawnFiendTimer = urand(4000,8000);
             } else uiSpawnFiendTimer -= diff;
@@ -1573,7 +1573,7 @@ public:
                     {
                         if (me->HasAura(SPELL_SR_RENEW))
                         {
-                            if (Creature* pKj = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN)))
+                            if (auto pKj = Unit::GetCreature(*me, instance->GetData64(DATA_KILJAEDEN)))
                                 DoCast(pKj, SPELL_SR_RENEW, false);
                         }
                         else
@@ -1628,7 +1628,7 @@ public:
         switch (action)
         {
         case GOSSIP_ACTION_INFO_DEF+1:
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if ((player->GetMapId() == 580) && !instance->GetData(DATA_MODUS80) && (instance->GetData(DATA_KILJAEDEN_EVENT) == NOT_STARTED))
                     if ((player->GetGroup() && player->GetGroup()->isRaidGroup() && player->GetGroup()->IsLeader(player->GetGUID())) || player->isGameMaster())
                     {
@@ -1638,7 +1638,7 @@ public:
                     }
             break;
         case GOSSIP_ACTION_INFO_DEF+2:
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if ((player->GetMapId() == 580) && instance->GetData(DATA_MODUS80) && (instance->GetData(DATA_KILJAEDEN_EVENT) == NOT_STARTED))
                     if ((player->GetGroup() && player->GetGroup()->isRaidGroup()) || player->isGameMaster())
                         player->NearTeleportTo(1768.0f, 685.1f, 71.3f, 2.4f);
@@ -1649,7 +1649,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
             if ((player->GetMapId() == 580) && !instance->GetData(DATA_MODUS80) && (instance->GetData(DATA_KILJAEDEN_EVENT) == NOT_STARTED))
             {
                 if ((player->GetGroup() && player->GetGroup()->isRaidGroup() && player->GetGroup()->IsLeader(player->GetGUID())) || player->isGameMaster())
@@ -1675,10 +1675,10 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->GetAI())
-                    if (Unit* target = caster->GetAI()->SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
+                    if (auto target = caster->GetAI()->SelectTarget(SELECT_TARGET_RANDOM, 0, NoDragonTargetSelector()))
                         SetExplTargetUnit(target);
                 return true;
             }
@@ -1778,9 +1778,9 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80) && GetSpellInfo()->Id == SPELL_REVITALIZE)
                     {
@@ -1854,9 +1854,9 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -1889,9 +1889,9 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -1922,9 +1922,9 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -1955,9 +1955,9 @@ public:
 
         bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -1990,9 +1990,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -2023,9 +2023,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -2056,9 +2056,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -2091,9 +2091,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {
@@ -2124,9 +2124,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 580 && instance->GetData(DATA_MODUS80))
                     {

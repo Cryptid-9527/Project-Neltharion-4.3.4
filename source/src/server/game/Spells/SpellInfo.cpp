@@ -577,7 +577,7 @@ int32 SpellEffectInfo::CalcBaseValue(int32 value) const
 float SpellEffectInfo::CalcValueMultiplier(Unit* caster, Spell* spell) const
 {
     float multiplier = ValueMultiplier;
-    if (Player* modOwner = (caster ? caster->GetSpellModOwner() : NULL))
+    if (auto modOwner = (caster ? caster->GetSpellModOwner() : NULL))
         modOwner->ApplySpellMod(_spellInfo->Id, SPELLMOD_VALUE_MULTIPLIER, multiplier, spell);
     return multiplier;
 }
@@ -585,7 +585,7 @@ float SpellEffectInfo::CalcValueMultiplier(Unit* caster, Spell* spell) const
 float SpellEffectInfo::CalcDamageMultiplier(Unit* caster, Spell* spell) const
 {
     float multiplier = DamageMultiplier;
-    if (Player* modOwner = (caster ? caster->GetSpellModOwner() : NULL))
+    if (auto modOwner = (caster ? caster->GetSpellModOwner() : NULL))
         modOwner->ApplySpellMod(_spellInfo->Id, SPELLMOD_DAMAGE_MULTIPLIER, multiplier, spell);
     return multiplier;
 }
@@ -611,7 +611,7 @@ float SpellEffectInfo::CalcRadius(Unit* caster, Spell* spell) const
             {
                 radius += MaxRadiusEntry->RadiusPerLevel * caster->getLevel();
                 radius = std::min(radius, MaxRadiusEntry->RadiusMax);
-                if (Player* modOwner = caster->GetSpellModOwner())
+                if (auto modOwner = caster->GetSpellModOwner())
                     modOwner->ApplySpellMod(_spellInfo->Id, SPELLMOD_RADIUS, radius, spell);
             }
             return radius;
@@ -629,7 +629,7 @@ float SpellEffectInfo::CalcRadius(Unit* caster, Spell* spell) const
     {
         radius += RadiusEntry->RadiusPerLevel * caster->getLevel();
         radius = std::min(radius, RadiusEntry->RadiusMax);
-        if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(_spellInfo->Id, SPELLMOD_RADIUS, radius, spell);
     }
 
@@ -1826,7 +1826,7 @@ SpellCastResult SpellInfo::CheckTarget(Unit const* caster, WorldObject const* ta
         if (corpseTarget->GetType() == CORPSE_BONES)
             return SPELL_FAILED_BAD_TARGETS;
         // we have to use owner for some checks (aura preventing resurrection for example)
-        if (Player* owner = ObjectAccessor::FindPlayer(corpseTarget->GetOwnerGUID()))
+        if (auto owner = ObjectAccessor::FindPlayer(corpseTarget->GetOwnerGUID()))
             unitTarget = owner;
         // we're not interested in corpses without owner
         else
@@ -2340,7 +2340,7 @@ float SpellInfo::GetMaxRange(bool positive, Unit* caster, Spell* spell) const
     else
         range = RangeEntry->maxRangeHostile;
     if (caster)
-        if (Player* modOwner = caster->GetSpellModOwner())
+        if (auto modOwner = caster->GetSpellModOwner())
             modOwner->ApplySpellMod(Id, SPELLMOD_RANGE, range, spell);
     return range;
 }
@@ -2577,7 +2577,7 @@ int32 SpellInfo::CalcPowerCost(Unit const* caster, SpellSchoolMask schoolMask, S
     if (AttributesEx4 & SPELL_ATTR4_SPELL_VS_EXTEND_COST)
         powerCost += caster->GetAttackTime(OFF_ATTACK) / 100;
     // Apply cost mod by spell
-    if (Player* modOwner = caster->GetSpellModOwner())
+    if (auto modOwner = caster->GetSpellModOwner())
         modOwner->ApplySpellMod(Id, SPELLMOD_COST, powerCost, spell);
 
     if (!caster->IsControlledByPlayer())

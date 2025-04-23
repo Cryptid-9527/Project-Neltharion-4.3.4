@@ -79,7 +79,7 @@ public:
         {
             if (who->isAlive() && who->GetEntry() == MOB_ZOMBIE && me->GetDistance(who) <= 0.5)
             {
-                if (Creature* creature = who->ToCreature())
+                if (auto creature = who->ToCreature())
                     me->Kill(who);
                 me->ModifyHealth(me->CountPctFromMaxHealth(5));
                 Talk(TEXT_DEVOUR);
@@ -184,7 +184,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_HORROR, true);
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_SAPPED, true);
             if (TempSummon* summ = me->ToTempSummon())
-                if (Unit* summoner = summ->GetSummoner())
+                if (auto summoner = summ->GetSummoner())
                     me->GetMotionMaster()->MoveFollow(summoner, -me->GetObjectSize(), 0.0f);
         }
     };

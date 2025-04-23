@@ -595,13 +595,13 @@ class at_sulfuron_keep : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/) override
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if ((!instance->IsDone(DATA_RAGNAROS) && !player->GetMap()->IsHeroic())
                     || (!instance->IsDone(DATA_RAGNAROS) && player->GetMap()->IsHeroic()
                     && instance->IsDoneInHeroic(DATA_SHANNOX) && instance->IsDoneInHeroic(DATA_BALOROC)
                     && instance->IsDoneInHeroic(DATA_LORD_RHYOLITH) && instance->IsDoneInHeroic(DATA_BETHTILAC)
                     && instance->IsDoneInHeroic(DATA_ALYSRAZOR) && instance->IsDoneInHeroic(DATA_MAJORDOMO_STAGHELM)))
-                    if (Creature* ragnaros = Creature::GetCreature(*player, instance->GetData64(DATA_RAGNAROS)))
+                    if (auto ragnaros = Creature::GetCreature(*player, instance->GetData64(DATA_RAGNAROS)))
                         ragnaros->AI()->DoAction(ACTION_START_INTRO);
             return true;
         }
@@ -643,7 +643,7 @@ public:
             me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
             me->RemoveAurasDueToSpell(SPELL_BURNING_WOUNDS_AURA);
             me->AddUnitState(UNIT_STATE_IGNORE_PATHFINDING); // Test
-            if (GameObject* platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
+            if (auto platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
                 platform->SetDestructibleState(GO_DESTRUCTIBLE_INTACT);
 
             _submergeCounter = 0;
@@ -676,7 +676,7 @@ public:
 
             Map::PlayerList const& player = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = player.begin(); itr != player.end(); ++itr)
-                if (Player* player = itr->getSource())
+                if (auto player = itr->getSource())
                 {
                     if (player->HasItemOrGemWithIdEquipped(ITEM_PRE_LEGENDARY_STAFF, 1) && !QuestText)
                     {
@@ -712,24 +712,24 @@ public:
             me->DespawnCreaturesInArea(NPC_SPLITTING_BLOW_TRIGGER, 200.f);
 
             if (heartQuest)
-                if (Player* player = me->FindNearestPlayer(50.f))
+                if (auto player = me->FindNearestPlayer(50.f))
                     player->SummonCreature(NPC_HEART_OF_RAGNAROS, 1078.43f, -57.529f, 53.6618f, TEMPSUMMON_MANUAL_DESPAWN);
 
             if (!IsHeroic())
             {
-                if (GameObject* chest = me->FindNearestGameObject(Is25ManRaid() ? GO_CACHE_OF_THE_FIRELORD_25 : GO_CACHE_OF_THE_FIRELORD_10, 500.0f))
+                if (auto chest = me->FindNearestGameObject(Is25ManRaid() ? GO_CACHE_OF_THE_FIRELORD_25 : GO_CACHE_OF_THE_FIRELORD_10, 500.0f))
                     chest->m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GM, SEC_PLAYER);
             }
             else
             {
                 Talk(SAY_DEATH_HEROIC);
-                if (Creature* malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f, true))
+                if (auto malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f, true))
                     malfurion->AI()->DoAction(ACTION_SCHEDULE_OUTRO);
 
-                if (Creature* cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f, true))
+                if (auto cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f, true))
                     cenarius->AI()->DoAction(ACTION_SCHEDULE_OUTRO);
 
-                if (Creature* hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f, true))
+                if (auto hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f, true))
                     hamuul->AI()->DoAction(ACTION_SCHEDULE_OUTRO);
             }
 
@@ -853,7 +853,7 @@ public:
                         me->PlayOneShotAnimKit(ANIM_KIT_EMERGE);
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
                         me->NearTeleportTo(me->GetHomePosition());
-                        if (Creature* magma = me->FindNearestCreature(NPC_MAGMA_POOL_TRIGGER, 20.0f, true))
+                        if (auto magma = me->FindNearestCreature(NPC_MAGMA_POOL_TRIGGER, 20.0f, true))
                         {
                             magma->AddAura(SPELL_MAGMA_PERIODIC, magma);
                             magma->setFaction(me->getFaction());
@@ -883,7 +883,7 @@ public:
                     events.ScheduleEvent(EVENT_EMERGE, 1000);
                     break;
                 case ACTION_ACTIVATE_HEROIC:
-                    if (Creature* cenarius = me->SummonCreature(NPC_CENARIUS, CenariusSummonPosition, TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto cenarius = me->SummonCreature(NPC_CENARIUS, CenariusSummonPosition, TEMPSUMMON_MANUAL_DESPAWN, 0))
                         me->SetFacingToObject(cenarius);
                     instance->SetData(DATA_GROUND_STATE, BUILDING_STATE_DESTROYED);
                     me->SummonCreature(NPC_MALFURION, MalfurionSummonPosition, TEMPSUMMON_MANUAL_DESPAWN, 0);
@@ -975,7 +975,7 @@ public:
                         uint32 worldInFlames = sSpellMgr->GetSpellIdForDifficulty(SPELL_WOLRD_IN_FLAMES, me);
                         if (me->HasAura(worldInFlames) || me->HasUnitState(UNIT_STATE_CASTING))
                             events.ScheduleEvent(EVENT_SULFURAS_SMASH_TRIGGER, 1000);
-                        else if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
+                        else if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
                         {
                             me->SetFacingToObject(target);
                             DoCast(SPELL_SULFURAS_SMASH_DUMMY);
@@ -990,7 +990,7 @@ public:
                         break;
                     }
                     case EVENT_SULFURAS_SMASH:
-                        if (Unit* trigger = me->FindNearestCreature(NPC_SULFURAS_SMASH_TRIGGER, 60.0f, true))
+                        if (auto trigger = me->FindNearestCreature(NPC_SULFURAS_SMASH_TRIGGER, 60.0f, true))
                         {
                             Talk(SAY_ANNOUNCE_SULFURAS_SMASH);
                             me->AttackStop();
@@ -1071,7 +1071,7 @@ public:
                                 }
                             }
 
-                            if (Creature* trigger = me->SummonCreature(NPC_SPLITTING_BLOW_TRIGGER, spawnPos, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto trigger = me->SummonCreature(NPC_SPLITTING_BLOW_TRIGGER, spawnPos, TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 me->SetFacingToObject(trigger);
                                 if (IsHeroic())
@@ -1224,11 +1224,11 @@ public:
                         break;
                     case EVENT_TALK:
                         Talk(SAY_INTRO_HEROIC_1);
-                        if (Creature* cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f))
+                        if (auto cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f))
                             cenarius->CastStop();
-                        if (Creature* hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f))
+                        if (auto hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f))
                             hamuul->CastStop();
-                        if (Creature* malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f))
+                        if (auto malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f))
                             malfurion->CastStop();
                         events.ScheduleEvent(EVENT_STANDUP, 9400);
                         events.ScheduleEvent(EVENT_BREAK_PLATFORM, 9400);
@@ -1237,9 +1237,9 @@ public:
                         me->PlayOneShotAnimKit(ANIM_KIT_TAUNT);
                         break;
                     case EVENT_FREEZE_PLATFORM:
-                        if (GameObject* platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
+                        if (auto platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
                             platform->SetDestructibleState(GO_DESTRUCTIBLE_DAMAGED);
-                        if (Creature* magma = me->FindNearestCreature(NPC_MAGMA_POOL_TRIGGER, 20.0f, true))
+                        if (auto magma = me->FindNearestCreature(NPC_MAGMA_POOL_TRIGGER, 20.0f, true))
                             magma->RemoveAllAuras();
                         break;
                     case EVENT_STANDUP:
@@ -1256,13 +1256,13 @@ public:
                         events.ScheduleEvent(EVENT_DREADFLAME, 24000);
                         events.ScheduleEvent(EVENT_SUMMON_ROOTS, urand(44000, 51000));
                         events.ScheduleEvent(EVENT_EMPOWER_SULFURAS, 54000);
-                        if (Creature* malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f, true))
+                        if (auto malfurion = me->FindNearestCreature(NPC_MALFURION, 200.0f, true))
                             malfurion->AI()->DoAction(ACTION_SCHEDULE_CLOUDBURST);
-                        if (Creature* cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f, true))
+                        if (auto cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f, true))
                             cenarius->AI()->DoAction(ACTION_SCHEDULE_BREADTH);
                         break;
                     case EVENT_BREAK_PLATFORM:
-                        if (GameObject* platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
+                        if (auto platform = me->FindNearestGameObject(GO_RAGNAROS_PLATFORM, 200.0f))
                             platform->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
                         break;
                     case EVENT_ATTACK_HEROIC:
@@ -1276,7 +1276,7 @@ public:
                         DoCast(me, SPELL_TRANSFORM);
                         break;
                     case EVENT_SUMMON_ROOTS:
-                        if (Creature* hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f, true))
+                        if (auto hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f, true))
                             hamuul->AI()->DoAction(ACTION_SCHEDULE_ROOTS);
                         break;
                     case EVENT_EMPOWER_SULFURAS:
@@ -1364,7 +1364,7 @@ class npc_fl_magma_trap : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/) override
             {
-                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                     ragnaros->AI()->JustSummoned(me);
 
                 if (me->GetPositionZ() > 55.3459f)
@@ -1561,7 +1561,7 @@ class npc_fl_sulfuras_hammer : public CreatureScript // Temphack until dest area
             {
                 if (spell->Id == SPELL_INVOKE_SONS_TRIGGERED_SPELL && target->GetEntry() == NPC_SON_OF_FLAME)
                 {
-                    if (Creature* son = target->ToCreature())
+                    if (auto son = target->ToCreature())
                         son->AI()->DoAction(ACTION_ACTIVATE_SON);
                 }
             }
@@ -1621,7 +1621,7 @@ class npc_fl_son_of_flame : public CreatureScript
 
             void JustDied(Unit* /*killer*/) override
             {
-                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                     ragnaros->AI()->DoAction(ACTION_SON_KILLED);
             }
 
@@ -1659,7 +1659,7 @@ class npc_fl_son_of_flame : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_MOVE_HAMMER:
-                            if (Creature* sulfuras = me->FindNearestCreature(NPC_SULFURAS_HAND_OF_RAGNAROS, 200.0f))
+                            if (auto sulfuras = me->FindNearestCreature(NPC_SULFURAS_HAND_OF_RAGNAROS, 200.0f))
                                 if (!me->HasAuraWithMechanic(1 << MECHANIC_STUN))
                                     me->GetMotionMaster()->MovePoint(0, sulfuras->GetPositionX(), sulfuras->GetPositionY(), sulfuras->GetPositionZ());
                             events.ScheduleEvent(EVENT_MOVE_HAMMER, 500);
@@ -1729,7 +1729,7 @@ class npc_fl_molten_elemental : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/) override
             {
-                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                     ragnaros->AI()->JustSummoned(me);
 
                 DoCast(me, SPELL_INVISIBLE_PRE_VISUAL, true);
@@ -1755,7 +1755,7 @@ class npc_fl_molten_elemental : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_MOLTEN_SEED_MISSILE:
-                            if (Creature* seedCaster = me->FindNearestCreature(NPC_MOLTEN_SEED_CASTER, 100.0f, true))
+                            if (auto seedCaster = me->FindNearestCreature(NPC_MOLTEN_SEED_CASTER, 100.0f, true))
                                 seedCaster->CastSpell(me, SPELL_MOLTEN_SEED_MISSILE);
                             break;
                         case EVENT_PREPARE_ELEMENTAL:
@@ -1843,7 +1843,7 @@ class npc_fl_lava_scion : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/) override
             {
-                if (Unit* player = me->FindNearestPlayer(200.0f))
+                if (auto player = me->FindNearestPlayer(200.0f))
                     me->AI()->AttackStart(player);
             }
 
@@ -1868,7 +1868,7 @@ class npc_fl_lava_scion : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_BLAZING_HEAT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, lavaTargetSelector(me)))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, lavaTargetSelector(me)))
                                 DoCast(target, SPELL_BLAZING_HEAT);
                             events.ScheduleEvent(EVENT_BLAZING_HEAT, 21000);
                             break;
@@ -2154,7 +2154,7 @@ class npc_fl_archdruids : public CreatureScript
                         switch (me->GetEntry())
                         {
                             case NPC_CENARIUS:
-                                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                                     ragnaros->AI()->DoAction(ACTION_SUBMERGE);
                                 events.ScheduleEvent(EVENT_SAY_PULL, 3700);
                                 events.ScheduleEvent(EVENT_DRAW_RAGNAROS, 9600);
@@ -2278,7 +2278,7 @@ class npc_fl_molten_erupter : public CreatureScript
             {
                 events.ScheduleEvent(EVENT_ERUPTER_CAST_ATTACK, 8000);
                 events.ScheduleEvent(EVENT_ERUPTER_SUBMERGE, urand(20000, 450000));
-                if (Creature* spewer = me->FindNearestCreature(NPC_MOLTEN_SPEWER, 500.0f, true))
+                if (auto spewer = me->FindNearestCreature(NPC_MOLTEN_SPEWER, 500.0f, true))
                     spewer->AI()->DoAction(ACTION_DUAL_PULL_WORM);
             }
 
@@ -2305,8 +2305,8 @@ class npc_fl_molten_erupter : public CreatureScript
 
                     case ACTION_ASSIST_WORM:
                         //TC_LOG_ERROR("entities.unit", "ACTION_ASSIST_WORM activated for SPEWER %u", me->GetGUID());
-                        if (Creature* ragnaros = me->FindNearestCreature(BOSS_RAGNAROS, 500.0f, true))
-                            if (Unit* unluckyPlayer = me->FindNearestPlayer(200.f))
+                        if (auto ragnaros = me->FindNearestCreature(BOSS_RAGNAROS, 500.0f, true))
+                            if (auto unluckyPlayer = me->FindNearestPlayer(200.f))
                             {
                                 me->SetInCombatWithZone();
                                 me->getThreatManager().tauntApply(unluckyPlayer);
@@ -2367,12 +2367,12 @@ class npc_fl_molten_erupter : public CreatureScript
                         events.ScheduleEvent(EVENT_ERUPTER_SUBMERGE, urand(15000, 450000));
                         break;
                     case EVENT_ERUPTER_CAST_ATTACK:
-                        if (Unit* unluckyPlayer = PlayerInRange(16.000f))
+                        if (auto unluckyPlayer = PlayerInRange(16.000f))
                         {
                             me->CastSpell(unluckyPlayer, SPELL_MOLTEN_ERUPTER_BOLT, true);
                             //TC_LOG_ERROR("entities.unit", "ERUPTER - NEARBY PLAYER EXISTS");
                         }
-                        else if (Unit* unluckyPlayer = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
+                        else if (auto unluckyPlayer = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
                         {
                             //TC_LOG_ERROR("entities.unit", "ERUPTER - NOBODY NEAR");
                             me->CastSpell(unluckyPlayer, SPELL_MOLTEN_BLAST_PUNISH, true);
@@ -2423,7 +2423,7 @@ class npc_fl_molten_spewer : public CreatureScript
             {
                 events.ScheduleEvent(EVENT_SPEWER_CAST_ATTACK, 8000);
                 events.ScheduleEvent(EVENT_SPEWER_SUBMERGE, urand(20000, 450000));
-                if (Creature* erupter = me->FindNearestCreature(NPC_MOLTEN_ERUPTER, 500.0f, true))
+                if (auto erupter = me->FindNearestCreature(NPC_MOLTEN_ERUPTER, 500.0f, true))
                     erupter->AI()->DoAction(ACTION_DUAL_PULL_WORM);
             }
             Unit* PlayerInRange(float distance)
@@ -2461,8 +2461,8 @@ class npc_fl_molten_spewer : public CreatureScript
 
                     case ACTION_ASSIST_WORM:
                         //TC_LOG_ERROR("entities.unit", "ACTION_ASSIST_WORM activated for SPEWER %u", me->GetGUID());
-                        if (Creature* ragnaros = me->FindNearestCreature(BOSS_RAGNAROS, 500.0f, true))
-                            if (Unit* unluckyPlayer = me->FindNearestPlayer(200.f))
+                        if (auto ragnaros = me->FindNearestCreature(BOSS_RAGNAROS, 500.0f, true))
+                            if (auto unluckyPlayer = me->FindNearestPlayer(200.f))
                             {
                                 me->SetInCombatWithZone();
                                 me->getThreatManager().tauntApply(unluckyPlayer);
@@ -2505,12 +2505,12 @@ class npc_fl_molten_spewer : public CreatureScript
                         events.ScheduleEvent(EVENT_SPEWER_SUBMERGE, urand(15000, 450000));
                         break;
                     case EVENT_SPEWER_CAST_ATTACK:
-                        if (Unit* unluckyPlayer = PlayerInRange(16.000f))
+                        if (auto unluckyPlayer = PlayerInRange(16.000f))
                         {
                             me->CastSpell(unluckyPlayer, SPELL_MOLTEN_SPEWER_VOLLEY, true);
                             //TC_LOG_ERROR("entities.unit", "SPEWER - NEARBY PLAYER EXISTS");
                         }
-                        else if (Unit* unluckyPlayer = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
+                        else if (auto unluckyPlayer = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
                         {
                             //TC_LOG_ERROR("entities.unit", "SPEWER - NOBODY NEAR");
                             me->CastSpell(unluckyPlayer, SPELL_MOLTEN_BLAST_PUNISH, true);
@@ -2542,7 +2542,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+            if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                 ragnaros->AI()->JustSummoned(me);
 
             DoCast(me, SPELL_CLOUDBURST_VISUAL, true);
@@ -2579,7 +2579,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+            if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                 ragnaros->AI()->JustSummoned(me);
             DoCast(me, SPELL_DREADFLAME_PERIODIC_DAMAGE, true);
             DoCast(me, SPELL_DREADFLAME_CONTROL_AURA_2, true); // Deluge distance check
@@ -2625,7 +2625,7 @@ public:
                                 }
                             if (validPos)
                             {
-                                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                                     ragnaros->CastSpell(pos.GetPositionX(), pos.GetPositionY(), CenterPlatform.m_positionZ, SPELL_DREADFLAME_SUMMON, true);
                                 break;
                             }
@@ -2670,13 +2670,13 @@ public:
 
         void IsSummonedBy(Unit* summoner) override
         {
-            if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+            if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                 ragnaros->AI()->JustSummoned(me);
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->SetDisplayId(11686);
 
-            if (Creature* hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f))
+            if (auto hamuul = me->FindNearestCreature(NPC_HAMUUL, 200.0f))
                 hamuul->CastSpell(me, SPELL_ENTRAPPING_ROOTS_AURA_MISSILE);
         }
 
@@ -2712,12 +2712,12 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+            if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                 ragnaros->AI()->JustSummoned(me);
             me->DespawnOrUnsummon(90000);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->SetDisplayId(11686);
-            if (Creature* cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f))
+            if (auto cenarius = me->FindNearestCreature(NPC_CENARIUS, 200.0f))
                 cenarius->CastSpell(me, SPELL_BREADTH_OF_FROST_MISSILE);
 
             if (sWorld->getBoolConfig(CONFIG_DISABLE_420_NERFS))
@@ -2741,7 +2741,7 @@ public:
                             std::list<Player*> playersInRange = itr->GetPlayersInRange(5.0f, true);
                             if (playersInRange.size() >= maxPlayersinRange)
                             {
-                                if (Creature* ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
+                                if (auto ragnaros = Creature::GetCreature(*me, instance->GetData64(DATA_RAGNAROS)))
                                     ragnaros->CastSpell(itr, SPELL_MAGMA_GEYSER, true);
                                 me->DespawnOrUnsummon();
                                 break;
@@ -2886,7 +2886,7 @@ public:
         void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect* aurEff = GetEffect(EFFECT_0))
                 {
@@ -2927,7 +2927,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 switch (GetEffectValue())
                 {
@@ -3049,7 +3049,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Creature* caster = GetCaster()->ToCreature())
+            if (auto caster = GetCaster()->ToCreature())
             {
                 uint8 summonCount = caster->AI()->GetData(DATA_METEOR_SUMMON_COUNT);
 
@@ -3252,7 +3252,7 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 std::list<Player*> player = caster->GetPlayersInRange(3.0f, true);
                 for (auto itr : player)
@@ -3354,7 +3354,7 @@ class spell_ragnaros_rage_AuraScript : public AuraScript
 
     void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
     {
-        if (Creature* ragnaros = GetTarget()->FindNearestCreature(BOSS_RAGNAROS, 300.f))
+        if (auto ragnaros = GetTarget()->FindNearestCreature(BOSS_RAGNAROS, 300.f))
             ragnaros->AI()->DoAction(ACTION_HEART_OF_FLAME_FAILED);
     }
 
@@ -3446,7 +3446,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 targets.remove_if([caster](WorldObject* target)
                 {

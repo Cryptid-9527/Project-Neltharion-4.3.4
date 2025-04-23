@@ -213,7 +213,7 @@ void InstanceSave::SaveToDB()
     if (map)
     {
         ASSERT(map->IsDungeon());
-        if (InstanceScript* instanceScript = ((InstanceMap*)map)->GetInstanceScript())
+        if (auto instanceScript = ((InstanceMap*)map)->GetInstanceScript())
         {
             data = instanceScript->GetSaveData();
             completedEncounters = instanceScript->GetCompletedEncounterMask();

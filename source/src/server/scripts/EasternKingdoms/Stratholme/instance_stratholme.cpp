@@ -117,7 +117,7 @@ class instance_stratholme : public InstanceMapScript
                 if (!goGuid)
                     return;
 
-                if (GameObject* go = instance->GetGameObject(goGuid))
+                if (auto go = instance->GetGameObject(goGuid))
                 {
                     if (withRestoreTime)
                         go->UseDoorOrButton(10);
@@ -244,7 +244,7 @@ class instance_stratholme : public InstanceMapScript
                                 break;
                             case DONE:
                                 EncounterState[0] = data;
-                                if (Creature* ysidaTrigger = instance->GetCreature(ysidaTriggerGUID))
+                                if (auto ysidaTrigger = instance->GetCreature(ysidaTriggerGUID))
                                 {
                                     Position ysidaPos;
                                     ysidaTrigger->GetPosition(&ysidaPos);
@@ -289,7 +289,7 @@ class instance_stratholme : public InstanceMapScript
                             uint32 count = abomnationGUID.size();
                             for (std::set<uint64>::const_iterator i = abomnationGUID.begin(); i != abomnationGUID.end(); ++i)
                             {
-                                if (Creature* pAbom = instance->GetCreature(*i))
+                                if (auto pAbom = instance->GetCreature(*i))
                                     if (!pAbom->isAlive())
                                         --count;
                             }
@@ -298,7 +298,7 @@ class instance_stratholme : public InstanceMapScript
                             {
                                 //a bit itchy, it should close the door after 10 secs, but it doesn't. skipping it for now.
                                 //UpdateGoState(ziggurat4GUID, 0, true);
-                                if (Creature* pBaron = instance->GetCreature(baronGUID))
+                                if (auto pBaron = instance->GetCreature(baronGUID))
                                     pBaron->SummonCreature(NPC_RAMSTEIN, 4033.14f, -3401.24f, 115.33f, 4.71f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);
                             }
                         }
@@ -330,7 +330,7 @@ class instance_stratholme : public InstanceMapScript
                                 Map::PlayerList const& players = instance->GetPlayers();
                                 if (!players.isEmpty())
                                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                                        if (Player* player = itr->getSource())
+                                        if (auto player = itr->getSource())
                                             if (player->GetQuestStatus(QUEST_DEAD_MAN_PLEA) == QUEST_STATUS_INCOMPLETE)
                                             {
                                                 player->AreaExploredOrEventHappens(QUEST_DEAD_MAN_PLEA);
@@ -448,7 +448,7 @@ class instance_stratholme : public InstanceMapScript
                                 SetData(TYPE_BARON_RUN, FAIL);
                             break;
                         case EVENT_SLAUGHTER_SQUARE:
-                            if (Creature* baron = instance->GetCreature(baronGUID))
+                            if (auto baron = instance->GetCreature(baronGUID))
                             {
                                 for (uint8 i = 0; i < 4; ++i)
                                     baron->SummonCreature(NPC_BLACK_GUARD, 4032.84f, -3390.24f, 119.73f, 4.71f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 1800000);

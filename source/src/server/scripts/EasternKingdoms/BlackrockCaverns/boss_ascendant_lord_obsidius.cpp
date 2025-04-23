@@ -97,7 +97,7 @@ class boss_ascendant_lord_obsidius : public CreatureScript
                     events.ScheduleEvent(EVENT_THUNDERCLAP, 7000);
 
                 for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                    if (Creature* shadow = ObjectAccessor::GetCreature(*me, *itr))
+                    if (auto shadow = ObjectAccessor::GetCreature(*me, *itr))
                         if (shadow->isAlive() && (shadow->GetEntry() == NPC_SHADOW_OF_OBSIDIUS))
                             shadow->AI()->AttackStart(who);
             }
@@ -189,7 +189,7 @@ class boss_ascendant_lord_obsidius : public CreatureScript
                                 Talk(TALK_SHADOW);
                                 std::list<Creature*> temp;
                                 for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                                    if (Creature* shadow = ObjectAccessor::GetCreature(*me, *itr))
+                                    if (auto shadow = ObjectAccessor::GetCreature(*me, *itr))
                                         if (shadow->isAlive() && (shadow->GetEntry() == NPC_SHADOW_OF_OBSIDIUS))
                                         {
                                             temp.push_back(shadow);
@@ -199,7 +199,7 @@ class boss_ascendant_lord_obsidius : public CreatureScript
                                 if (temp.empty())
                                     break;
 
-                                if (Creature* shadow = Trinity::Containers::SelectRandomContainerElement(temp))
+                                if (auto shadow = Trinity::Containers::SelectRandomContainerElement(temp))
                                 {
                                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                     events.ScheduleEvent(EVENT_MAKE_SELECTABLE, 1000);
@@ -214,7 +214,7 @@ class boss_ascendant_lord_obsidius : public CreatureScript
                         case EVENT_MAKE_SELECTABLE:
                         {
                             for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-                                if (Creature* shadow = ObjectAccessor::GetCreature(*me, *itr))
+                                if (auto shadow = ObjectAccessor::GetCreature(*me, *itr))
                                     if (shadow->GetEntry() == NPC_SHADOW_OF_OBSIDIUS)
                                         shadow->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -257,7 +257,7 @@ public:
         void EnterCombat(Unit* attacker)
         {
             events.ScheduleEvent(EVENT_UPDATE_AGGRO, 2000);
-            if (Creature* boss = Creature::GetCreature(*me, instance->GetData64(DATA_ASCENDANT_LORD_OBSIDIUS)))
+            if (auto boss = Creature::GetCreature(*me, instance->GetData64(DATA_ASCENDANT_LORD_OBSIDIUS)))
                 if (!boss->isInCombat())
                     boss->AI()->AttackStart(attacker);
         }
@@ -274,7 +274,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_UPDATE_AGGRO:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_BOTTOMAGGRO))
+                        if (auto target = SelectTarget(SELECT_TARGET_BOTTOMAGGRO))
                         {
                             ThreatContainer::StorageType threatlist = me->getThreatManager().getThreatList();
                             for (auto itr = threatlist.begin(); itr != threatlist.end(); ++itr)
@@ -347,8 +347,8 @@ public:
         void ExtraEffect(SpellEffIndex /*effIndex*/)
         {
             if (GetHitUnit()->GetAuraCount(SPELL_CREPUSCULAR_AURA) == 4)
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                    if (Creature* obsidius = Creature::GetCreature(*GetCaster(), instance->GetData64(DATA_ASCENDANT_LORD_OBSIDIUS)))
+                if (auto instance = GetCaster()->GetInstanceScript())
+                    if (auto obsidius = Creature::GetCreature(*GetCaster(), instance->GetData64(DATA_ASCENDANT_LORD_OBSIDIUS)))
                         obsidius->AI()->DoAction(ACTION_ACHIEVEMENT_FAIL);
         }
 

@@ -26,7 +26,7 @@ public:
                 switch (point)
                 {
                 case EVENT_JUMP:
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = me->GetVehicleKit()->GetPassenger(0))
                     {
                         passenger->ExitVehicle(me);
 
@@ -55,7 +55,7 @@ public:
             if (sleapStreamRefresh <= diff)
             {
                 if (me->GetVehicleKit())
-                    if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto passenger = me->GetVehicleKit()->GetPassenger(0))
                     {
                         Position pos(*me);
                         passenger->Relocate(&pos);

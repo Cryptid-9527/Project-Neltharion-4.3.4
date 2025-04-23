@@ -162,7 +162,7 @@ class boss_janalai : public CreatureScript
                 Talk(SAY_DEATH);
 
 
-                if (Creature* norkani = me->FindNearestCreature(NPC_HOSTAGE_3, 200.f, true))
+                if (auto norkani = me->FindNearestCreature(NPC_HOSTAGE_3, 200.f, true))
                     norkani->AI()->DoAction(2);
 
                 summons.DespawnAll();
@@ -257,7 +257,7 @@ class boss_janalai : public CreatureScript
                         break;
                         case EVENT_FLAME_BREATH:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 me->CastSpell(target, SPELL_FLAME_BREATH, true);
                             events.ScheduleEvent(EVENT_FLAME_BREATH, 8000);
                             break;

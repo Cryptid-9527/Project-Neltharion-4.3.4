@@ -209,7 +209,7 @@ public:
 
             if (IsHeroic())
             {
-                if (Creature* kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
+                if (auto kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
                 {
                     if (me->HealthBelowPct(2) && !kohcrom->HealthBelowPct(2))
                         damage = 0;
@@ -289,7 +289,7 @@ public:
             GetGameObjectListWithEntryInGrid(fallingFragments, me, GO_FALLING_FRAGMENT, 300.0f);
             for (std::list<GameObject*>::const_iterator itr = fallingFragments.begin(); itr != fallingFragments.end(); ++itr)
             {
-                if (GameObject* fallingFragment = *itr)
+                if (auto fallingFragment = *itr)
                 {
                     if (fallingFragment->GetOwner() == me || fullReset)
                     {
@@ -353,7 +353,7 @@ public:
                         if (++stompCount < (firstPhase ? 3 : 4))
                         {
                             if (IsHeroic())
-                                if (Creature* kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
+                                if (auto kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
                                     kohcrom->AI()->DoAction(ACTION_STOMP);
                             events.ScheduleEvent(EVENT_STOMP, urand(12000, 14000), 0, PHASE_ONE);
                         }
@@ -477,7 +477,7 @@ public:
                     summon->m_Events.AddEvent(new VortexVisualEvent(summon), summon->m_Events.CalculateTime(3500));
                     break;
                 default:
-                    if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+                    if (auto morchok = instance->GetCreature(DATA_MORCHOK))
                         morchok->AI()->JustSummoned(summon);
                     break;
             }
@@ -490,7 +490,7 @@ public:
 
             if (IsHeroic())
             {
-                if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+                if (auto morchok = instance->GetCreature(DATA_MORCHOK))
                 {
                     if (me->HealthBelowPct(2) && !morchok->HealthBelowPct(2))
                         damage = 0;
@@ -513,7 +513,7 @@ public:
             crystalCount = 0;
             Talk(TALK_AGGRO);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
-            if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+            if (auto morchok = instance->GetCreature(DATA_MORCHOK))
             {
                 events.SetPhase(PHASE_ONE);
                 events.ScheduleEvent(EVENT_RESONATING_CRYSTAL, morchok->AI()->GetData(EVENT_RESONATING_CRYSTAL) + (Is25ManRaid() ? 5000 : 6000), 0, PHASE_ONE);
@@ -557,7 +557,7 @@ public:
             GetGameObjectListWithEntryInGrid(fallingFragments, me, GO_FALLING_FRAGMENT, 300.0f);
             for (std::list<GameObject*>::const_iterator itr = fallingFragments.begin(); itr != fallingFragments.end(); ++itr)
             {
-                if (GameObject* fallingFragment = *itr)
+                if (auto fallingFragment = *itr)
                 {
                     if (fallingFragment->GetOwner() == me)
                     {
@@ -600,7 +600,7 @@ public:
                         break;
                     }
                     case EVENT_EARTHEN_VOTEX:
-                        if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+                        if (auto morchok = instance->GetCreature(DATA_MORCHOK))
                             morchok->AI()->SetData(DATA_VEHICLE_TARGET, VEHICLE_TARGET_KOHCROM);
 
                         DoCast(me, SPELL_EARTHEN_VORTEX);
@@ -621,7 +621,7 @@ public:
                     case EVENT_BLACK_BLOOD_ENDS:
                         RemoveFragments();
                         summons.DespawnEntry(NPC_WORLD_TRIGGER_VISUAL);
-                        if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+                        if (auto morchok = instance->GetCreature(DATA_MORCHOK))
                         {
                             firstCrystal = true;
                             me->SetReactState(REACT_AGGRESSIVE);
@@ -695,11 +695,11 @@ public:
             summoner->CastSpell(me, SPELL_EARTHEN_VORTEX_RIDE_VEHICLE, true);
             DoCast(me, SPELL_BURROW, true);
 
-            if (Creature* morchok = instance->GetCreature(DATA_MORCHOK))
+            if (auto morchok = instance->GetCreature(DATA_MORCHOK))
             {
                 if (morchok->AI()->GetData(DATA_VEHICLE_TARGET) == VEHICLE_TARGET_MORCHOK)
                     me->GetMotionMaster()->MovePoint(0, morchok->GetPositionX(), morchok->GetPositionY(), morchok->GetPositionZ());
-                else if (Unit* kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
+                else if (auto kohcrom = me->FindNearestCreature(NPC_KOHCROM, 500.00f))
                     me->GetMotionMaster()->MovePoint(0, kohcrom->GetPositionX(), kohcrom->GetPositionY(), kohcrom->GetPositionZ());
             }
         }
@@ -760,7 +760,7 @@ public:
         
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 float dist2D = target->GetDistance2d(GetCaster());
                 if (dist2D > 20.0f)
@@ -776,7 +776,7 @@ public:
         {
             for (std::list<WorldObject*>::iterator itr = unauraTargets.begin(); itr != unauraTargets.end(); ++itr)
             {
-                if (Unit* unit = (*itr)->ToUnit())
+                if (auto unit = (*itr)->ToUnit())
                 {
                     unit->RemoveAurasDueToSpell(SPELL_DANGER, GetCaster()->GetGUID());
                     unit->RemoveAurasDueToSpell(SPELL_WARNING, GetCaster()->GetGUID());
@@ -819,7 +819,7 @@ public:
         {
             if (aurEff->GetTickNumber() >= 12)
             {
-                if (Creature* crystal = GetTarget()->ToCreature())
+                if (auto crystal = GetTarget()->ToCreature())
                 {
                     PreventDefaultAction();
                     crystal->CastSpell((Unit*)NULL, SPELL_CRYSTAL_EXPLOSION, true);
@@ -868,11 +868,11 @@ public:
         std::list<WorldObject*> sharedTargets;
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 targets.remove_if([caster](WorldObject* target)
                 {
-                    if (Player* player = target->ToPlayer())
+                    if (auto player = target->ToPlayer())
                         if (player->HasAura(SPELL_DANGER, caster->GetGUID()) || player->HasAura(SPELL_WARNING, caster->GetGUID()) || player->HasAura(SPELL_SAFE, caster->GetGUID()))
                             return false;
                     return true;
@@ -890,7 +890,7 @@ public:
         {
             for (std::list<WorldObject*>::iterator itr = sharedTargets.begin(); itr != sharedTargets.end(); itr++)
             {
-                if (Player* player = (*itr)->ToPlayer())
+                if (auto player = (*itr)->ToPlayer())
                 {
                     if (player->HasAura(SPELL_DANGER, GetCaster()->GetGUID()))
                         danger++;
@@ -909,7 +909,7 @@ public:
             int32 sharedDamage = ((baseDamage * danger) + ((baseDamage / 2) * warning) + ((baseDamage / 3) * safe)) / targetCount;
             SetHitDamage(sharedDamage);
 
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 target->RemoveAurasDueToSpell(SPELL_DANGER, GetCaster()->GetGUID());
                 target->RemoveAurasDueToSpell(SPELL_WARNING, GetCaster()->GetGUID());
@@ -1046,7 +1046,7 @@ public:
         std::list<WorldObject*> sharedTargets;
         void FilterEffect0(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Creature* morchokOrKohchrom = caster->FindNearestCreature((caster->GetEntry() == NPC_MORCHOK ? NPC_KOHCROM : NPC_MORCHOK), 500.00f);
                 targets.remove_if([caster, morchokOrKohchrom](WorldObject* target)
@@ -1113,7 +1113,7 @@ public:
             if (aurEff->GetTickNumber() >= 10)
                 return;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 float angle = frand(0.0f, 2.0f * M_PI);
                 float step = float(M_PI) / 16.0f;
@@ -1180,7 +1180,7 @@ public:
         std::list<WorldObject*> sharedTargets;
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 std::list<GameObject*> fragmentCollision;
                 GetGameObjectListWithEntryInGrid(fragmentCollision, GetCaster(), GO_FALLING_FRAGMENT, 90.0f);

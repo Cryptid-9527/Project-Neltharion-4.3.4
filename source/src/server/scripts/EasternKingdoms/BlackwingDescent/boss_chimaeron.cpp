@@ -98,7 +98,7 @@ public:
             events.SetPhase(PHASE_NORMAL);
             me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
-            if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+            if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                 nefarian->DespawnOrUnsummon();
             nefarianGUID = 0;
             if (instance)
@@ -118,10 +118,10 @@ public:
             _JustDied();
 
             instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
-            if (Creature* finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 200.0f))
+            if (auto finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 200.0f))
                 finkle->AI()->TalkWithDelay(10000, SAY_DEATH, NULL, CHAT_MSG_MONSTER_YELL);
 
-            if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+            if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                 nefarian->AI()->DoAction(ACTION_DEATH);
 
             me->RemoveAllAuras();
@@ -142,11 +142,11 @@ public:
             if (me->HealthBelowPctDamaged(phaseSwitch, damage) && events.IsInPhase(PHASE_NORMAL) || me->HealthBelowPctDamaged(phaseSwitch, damage) && events.IsInPhase(PHASE_FEUD))
             {
                 if (IsHeroic())
-                    if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+                    if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                         nefarian->AI()->DoAction(ACTION_PHASE_2);
 
 
-                if (Creature* finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 100.f))
+                if (auto finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 100.f))
                     finkle->AI()->DoAction(ACTION_PHASE_2);
 
                 if (events.IsInPhase(PHASE_FEUD))
@@ -173,7 +173,7 @@ public:
         {
             if (action == ACTION_START_COMBAT && !botGUID)
             {
-                if (Creature* bot = me->SummonCreature(NPC_BILE_O_TRON_800, -113.114151f, 40.103336f, 72.057617f))
+                if (auto bot = me->SummonCreature(NPC_BILE_O_TRON_800, -113.114151f, 40.103336f, 72.057617f))
                 {
                     Talk(EMOTE_BILE_O_TRON);
                     botGUID = bot->GetGUID();
@@ -201,7 +201,7 @@ public:
 
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                if (Player* player = itr->getSource())
+                if (auto player = itr->getSource())
                     player->CastSpell(player, 76143, true);
         }
 
@@ -316,7 +316,7 @@ public:
 
                         if (IsHeroic())
                         {
-                            if (Creature* nefarian = me->GetCreature(*me, nefarianGUID))
+                            if (auto nefarian = me->GetCreature(*me, nefarianGUID))
                             {
                                 nefarian->AI()->DoAction(ACTION_FEUD);
                                 events.ScheduleEvent(EVENT_FEUD_INTERRUPT, 2000);
@@ -324,7 +324,7 @@ public:
                             }
                         }
 
-                        if (Creature* bot = me->GetCreature(*me, botGUID))
+                        if (auto bot = me->GetCreature(*me, botGUID))
                         {
                             Talk(EMOTE_KNOCKOUT);
                             bot->RemoveAllAuras();
@@ -333,7 +333,7 @@ public:
                             bot->CastSpell(bot, SPELL_REROUTE_POWER, true);
                         }
 
-                        if (Creature* finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 200.0f))
+                        if (auto finkle = me->FindNearestCreature(NPC_FINKLE_EINHORN, 200.0f))
                         {
                             finkle->AI()->TalkWithDelay(2500, 3, NULL, CHAT_MSG_MONSTER_YELL);
                         }
@@ -364,7 +364,7 @@ public:
                         me->SetFacingTo(lock_angle);
 
                         // re-enable bot
-                        if (Creature* bot = me->GetCreature(*me, botGUID))
+                        if (auto bot = me->GetCreature(*me, botGUID))
                         {
                             bot->GetMotionMaster()->MovePath(PATH_BILE_O_TRON, true);
                             bot->RemoveAurasDueToSpell(SPELL_SYSTEMS_FAILURE);
@@ -499,7 +499,7 @@ class npc_finkle_einhorn : public CreatureScript
 
             if (step == 5)
             {
-                if (Creature* chimaeron = creature->FindNearestCreature(NPC_CHIMAERON, 100.0f))
+                if (auto chimaeron = creature->FindNearestCreature(NPC_CHIMAERON, 100.0f))
                     chimaeron->AI()->DoAction(ACTION_START_COMBAT);
             }
 
@@ -657,7 +657,7 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(GetHitUnit(), SPELL_CAUSTIC_SLIME, true);
         }
 
@@ -701,7 +701,7 @@ public:
 
         void Update(AuraEffect const* effect)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 if (target->GetHealth() <= 10000 && !target->HasAura(89084))
                     target->AddAura(89084, target);

@@ -299,13 +299,13 @@ class boss_xt002 : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_SEARING_LIGHT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, RAID_MODE(SPELL_SEARING_LIGHT_10, SPELL_SEARING_LIGHT_25));
 
                             events.ScheduleEvent(EVENT_SEARING_LIGHT, TIMER_SEARING_LIGHT);
                             break;
                         case EVENT_GRAVITY_BOMB:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, RAID_MODE(SPELL_GRAVITY_BOMB_10, SPELL_GRAVITY_BOMB_25));
 
                             events.ScheduleEvent(EVENT_GRAVITY_BOMB, TIMER_GRAVITY_BOMB);
@@ -520,7 +520,7 @@ class mob_scrapbot : public CreatureScript
 
                 _rangeCheckTimer = 500;
 
-                if (Creature* pXT002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
+                if (auto pXT002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
                     me->GetMotionMaster()->MoveFollow(pXT002, 0.0f, 0.0f);
             }
 
@@ -528,7 +528,7 @@ class mob_scrapbot : public CreatureScript
             {
                 if (_rangeCheckTimer <= diff)
                 {
-                    if (Creature* xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
+                    if (auto xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
                     {
                         if (me->IsWithinMeleeRange(xt002))
                         {
@@ -575,7 +575,7 @@ class mob_pummeller : public CreatureScript
                 _trampleTimer = TIMER_TRAMPLE;
                 _uppercutTimer = TIMER_UPPERCUT;
 
-                if (Creature* xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
+                if (auto xt002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
                 {
                     Position pos;
                     xt002->GetPosition(&pos);
@@ -684,7 +684,7 @@ class mob_boombot : public CreatureScript
                 me->SetFloatValue(UNIT_FIELD_MAXDAMAGE, 18000.0f);
 
                 // Todo: proper waypoints?
-                if (Creature* pXT002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
+                if (auto pXT002 = me->GetCreature(*me, _instance->GetData64(BOSS_XT002)))
                     me->GetMotionMaster()->MoveFollow(pXT002, 0.0f, 0.0f);
             }
 
@@ -838,8 +838,8 @@ class spell_xt002_searing_light_spawn_life_spark : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Player* player = GetOwner()->ToPlayer())
-                    if (Unit* xt002 = GetCaster())
+                if (auto player = GetOwner()->ToPlayer())
+                    if (auto xt002 = GetCaster())
                         if (xt002->HasAura(aurEff->GetAmount()))   // Heartbreak aura indicating hard mode
                             xt002->CastSpell(player, SPELL_SUMMON_LIFE_SPARK, true);
             }
@@ -874,8 +874,8 @@ class spell_xt002_gravity_bomb_aura : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Player* player = GetOwner()->ToPlayer())
-                    if (Unit* xt002 = GetCaster())
+                if (auto player = GetOwner()->ToPlayer())
+                    if (auto xt002 = GetCaster())
                         if (xt002->HasAura(aurEff->GetAmount()))   // Heartbreak aura indicating hard mode
                             xt002->CastSpell(player, SPELL_SUMMON_VOID_ZONE, true);
             }
@@ -960,12 +960,12 @@ class spell_xt002_heart_overload_periodic : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
-                    if (InstanceScript* instance = caster->GetInstanceScript())
+                    if (auto instance = caster->GetInstanceScript())
                     {
-                        if (Unit* toyPile = GetHitUnit())
-                            //                        if (Unit* toyPile = ObjectAccessor::GetUnit(*caster, instance->GetData64(DATA_TOY_PILE_0 + urand(0, 3))))
+                        if (auto toyPile = GetHitUnit())
+                            //                        if (auto toyPile = ObjectAccessor::GetUnit(*caster, instance->GetData64(DATA_TOY_PILE_0 + urand(0, 3))))
                         {
                             // This should probably be incorporated in a dummy effect handler, but I've had trouble getting the correct target
                             // Weighed randomization (approximation)
@@ -1152,10 +1152,10 @@ class spell_xt002_hearth_overload : public SpellScriptLoader
                 PreventDefaultAction();
                 if (Unit *caster = GetCaster())
                 {
-                    if (InstanceScript* instance = caster->GetInstanceScript())
-                        if (Unit* toyPile = ObjectAccessor::GetUnit(*caster, instance->GetData64(DATA_TOY_PILE_0 + urand(0, 3))))
+                    if (auto instance = caster->GetInstanceScript())
+                        if (auto toyPile = ObjectAccessor::GetUnit(*caster, instance->GetData64(DATA_TOY_PILE_0 + urand(0, 3))))
                             caster->CastSpell(toyPile, SPELL_ENERGY_ORB, true);
-                    if (Creature* base = caster->GetVehicleCreatureBase())
+                    if (auto base = caster->GetVehicleCreatureBase())
                         base->AI()->Talk(SAY_SUMMON);
                 }
             }

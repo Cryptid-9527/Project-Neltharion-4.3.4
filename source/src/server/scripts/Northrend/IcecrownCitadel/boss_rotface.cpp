@@ -124,7 +124,7 @@ class boss_rotface : public CreatureScript
 
                 me->setActive(true);
                 Talk(SAY_AGGRO);
-                if (Creature* professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                if (auto professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
                     professor->AI()->DoAction(ACTION_ROTFACE_COMBAT);
                 DoZoneInCombat();
 
@@ -140,7 +140,7 @@ class boss_rotface : public CreatureScript
                 instance->SetBossState(DATA_ROTFACE, DONE);
                 Talk(SAY_DEATH);
                 instance->DoRemoveAurasDueToSpellOnPlayers(MUTATED_INFECTION);
-                if (Creature* professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                if (auto professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
                     professor->AI()->DoAction(ACTION_ROTFACE_DEATH);
             }
 
@@ -160,7 +160,7 @@ class boss_rotface : public CreatureScript
             void EnterEvadeMode()
             {
                 ScriptedAI::EnterEvadeMode();
-                if (Creature* professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
+                if (auto professor = Unit::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
                     professor->AI()->EnterEvadeMode();
             }
 
@@ -190,7 +190,7 @@ class boss_rotface : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_SLIME_SPRAY:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                             {
                                 DoSummon(NPC_OOZE_SPRAY_STALKER, *target, 8000, TEMPSUMMON_TIMED_DESPAWN);
                                 Talk(EMOTE_SLIME_SPRAY);
@@ -248,7 +248,7 @@ class npc_little_ooze : public CreatureScript
                 events.ScheduleEvent(EVENT_STICKY_OOZE, 5000);
                 me->AddThreat(summoner, 500000.0f);
                 // register in Rotface's summons - not summoned with Rotface as owner
-                if (Creature* rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
+                if (auto rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
                 {
                     rotface->AI()->JustSummoned(me);
                     if (rotface->isDead())
@@ -314,13 +314,13 @@ class npc_big_ooze : public CreatureScript
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_STUN, true);
                 events.ScheduleEvent(EVENT_STICKY_OOZE, 5000);
                 // register in Rotface's summons - not summoned with Rotface as owner
-                if (Creature* rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
+                if (auto rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
                     rotface->AI()->JustSummoned(me);
             }
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
+                if (auto rotface = Unit::GetCreature(*me, instance->GetData64(DATA_ROTFACE)))
                     rotface->AI()->SummonedCreatureDespawn(me);
                 me->DespawnOrUnsummon();
             }
@@ -396,7 +396,7 @@ class npc_precious_icc : public CreatureScript
             void JustSummoned(Creature* summon)
             {
                 _summons.Summon(summon);
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     summon->AI()->AttackStart(target);
             }
 
@@ -408,7 +408,7 @@ class npc_precious_icc : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 _summons.DespawnAll();
-                if (Creature* rotface = Unit::GetCreature(*me, _instance->GetData64(DATA_ROTFACE)))
+                if (auto rotface = Unit::GetCreature(*me, _instance->GetData64(DATA_ROTFACE)))
                     if (rotface->isAlive())
                         rotface->AI()->Talk(SAY_PRECIOUS_DIES);
             }
@@ -528,8 +528,8 @@ class spell_rotface_mutated_infection : public SpellScriptLoader
             {
                 // remove targets with this aura already
                 // tank is not on this list -- doch
-                if (Unit* caster = GetCaster())
-                    if (Unit* tank = caster->getVictim())
+                if (auto caster = GetCaster())
+                    if (auto tank = caster->getVictim())
                         targets.remove_if(Trinity::ObjectGUIDCheck(tank->GetGUID()));
 
                 targets.remove_if(Trinity::UnitAuraCheck(true, GetSpellInfo()->Id));
@@ -551,8 +551,8 @@ class spell_rotface_mutated_infection : public SpellScriptLoader
 
             void NotifyTargets()
             {
-                if (Creature* caster = GetCaster()->ToCreature())
-                    if (Unit* target = GetHitUnit())
+                if (auto caster = GetCaster()->ToCreature())
+                    if (auto target = GetHitUnit())
                         caster->AI()->Talk(EMOTE_MUTATED_INFECTION, target->GetGUID());
             }
 
@@ -658,18 +658,18 @@ class spell_rotface_large_ooze_combine : public SpellScriptLoader
                     unstable->SetStackAmount(newStackAmount);
                     if (newStackAmount >= 5)
                     {
-                        if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                            if (Creature* rotface = Unit::GetCreature(*GetCaster(), instance->GetData64(DATA_ROTFACE)))
+                        if (auto instance = GetCaster()->GetInstanceScript())
+                            if (auto rotface = Unit::GetCreature(*GetCaster(), instance->GetData64(DATA_ROTFACE)))
                                 if (rotface->isAlive())
                                 {
                                     rotface->AI()->Talk(EMOTE_UNSTABLE_EXPLOSION);
                                     rotface->AI()->Talk(SAY_UNSTABLE_EXPLOSION);
                                 }
 
-                                if (Creature* cre = GetCaster()->ToCreature())
+                                if (auto cre = GetCaster()->ToCreature())
                                     cre->AI()->DoAction(EVENT_STICKY_OOZE);
                                 GetCaster()->CastSpell(GetCaster(), SPELL_UNSTABLE_OOZE_EXPLOSION, false, NULL, NULL, GetCaster()->GetGUID());
-                                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                                if (auto instance = GetCaster()->GetInstanceScript())
                                     instance->SetData(DATA_OOZE_DANCE_ACHIEVEMENT, uint32(false));
                     }
                 }
@@ -716,18 +716,18 @@ class spell_rotface_large_ooze_buff_combine : public SpellScriptLoader
                     {
                         GetCaster()->RemoveAurasDueToSpell(SPELL_LARGE_OOZE_BUFF_COMBINE);
                         GetCaster()->RemoveAurasDueToSpell(SPELL_LARGE_OOZE_COMBINE);
-                        if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                            if (Creature* rotface = Unit::GetCreature(*GetCaster(), instance->GetData64(DATA_ROTFACE)))
+                        if (auto instance = GetCaster()->GetInstanceScript())
+                            if (auto rotface = Unit::GetCreature(*GetCaster(), instance->GetData64(DATA_ROTFACE)))
                                 if (rotface->isAlive())
                                 {
                                     rotface->AI()->Talk(EMOTE_UNSTABLE_EXPLOSION);
                                     rotface->AI()->Talk(SAY_UNSTABLE_EXPLOSION);
                                 }
 
-                        if (Creature* cre = GetCaster()->ToCreature())
+                        if (auto cre = GetCaster()->ToCreature())
                             cre->AI()->DoAction(EVENT_STICKY_OOZE);
                         GetCaster()->CastSpell(GetCaster(), SPELL_UNSTABLE_OOZE_EXPLOSION, false, NULL, NULL, GetCaster()->GetGUID());
-                        if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                        if (auto instance = GetCaster()->GetInstanceScript())
                             instance->SetData(DATA_OOZE_DANCE_ACHIEVEMENT, uint32(false));
                     }
                 }
@@ -807,8 +807,8 @@ class spell_rotface_unstable_ooze_explosion : public SpellScriptLoader
                 float x, y, z;
                 GetHitDest()->GetPosition(x, y, z);
                 // let Rotface handle the cast - caster dies before this executes
-                if (InstanceScript* script = GetCaster()->GetInstanceScript())
-                    if (Creature* rotface = script->instance->GetCreature(script->GetData64(DATA_ROTFACE)))
+                if (auto script = GetCaster()->GetInstanceScript())
+                    if (auto rotface = script->instance->GetCreature(script->GetData64(DATA_ROTFACE)))
                         rotface->CastSpell(x, y, z, triggered_spell_id, true, NULL, NULL, GetCaster()->GetGUID());
             }
 

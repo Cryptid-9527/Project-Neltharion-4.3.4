@@ -219,7 +219,7 @@ class boss_anubarak_trial : public CreatureScript
                 instance->SetBossState(BOSS_ANUBARAK, FAIL);
                 //Summon Scarab Swarms neutral at random places
                 for (int i = 0; i < 10; i++)
-                    if (Creature* temp = me->SummonCreature(NPC_SCARAB, AnubarakLoc[1].GetPositionX()+urand(0, 50)-25, AnubarakLoc[1].GetPositionY()+urand(0, 50)-25, AnubarakLoc[1].GetPositionZ()))
+                    if (auto temp = me->SummonCreature(NPC_SCARAB, AnubarakLoc[1].GetPositionX()+urand(0, 50)-25, AnubarakLoc[1].GetPositionY()+urand(0, 50)-25, AnubarakLoc[1].GetPositionZ()))
                     {
                         temp->setFaction(31);
                         temp->GetMotionMaster()->MoveRandom(10);
@@ -252,7 +252,7 @@ class boss_anubarak_trial : public CreatureScript
                         break;
                     case NPC_SPIKE:
                         summoned->SetDisplayId(summoned->GetCreatureTemplate()->Modelid1);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         {
                             summoned->CombatStart(target);
                             Talk(EMOTE_SPIKE, target->GetGUID());
@@ -280,7 +280,7 @@ class boss_anubarak_trial : public CreatureScript
 
                 // Spawn 6 Frost Spheres at start
                 for (int i = 0; i < 6; i++)
-                    if (Unit* summoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
+                    if (auto summoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                         _sphereGUID[i] = summoned->GetGUID();
             }
 
@@ -343,7 +343,7 @@ class boss_anubarak_trial : public CreatureScript
                             uint32 at = urand(0, _burrowGUID.size()-1);
                             for (uint32 k = 0; k < at; k++)
                                 ++i;
-                            if (Creature* pBurrow = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto pBurrow = ObjectAccessor::GetCreature(*me, *i))
                                 pBurrow->CastSpell(pBurrow, 66340, false);
 
                             events.ScheduleEvent(EVENT_SUMMON_SCARAB, 4*IN_MILLISECONDS, 0, PHASE_SUBMERGED);
@@ -376,11 +376,11 @@ class boss_anubarak_trial : public CreatureScript
                             uint8 i = startAt;
                             do
                             {
-                                if (Unit* pSphere = ObjectAccessor::GetCreature(*me, _sphereGUID[i]))
+                                if (auto pSphere = ObjectAccessor::GetCreature(*me, _sphereGUID[i]))
                                 {
                                     if (!pSphere->HasAura(SPELL_FROST_SPHERE))
                                     {
-                                        if (Creature* summon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
+                                        if (auto summon = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                                             _sphereGUID[i] = summon->GetGUID();
                                         break;
                                     }
@@ -445,7 +445,7 @@ class npc_swarm_scarab : public CreatureScript
                 DoCast(me, SPELL_ACID_MANDIBLE);
                 me->SetInCombatWithZone();
                 if (me->isInCombat())
-                    if (Creature* Anubarak = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ANUBARAK)))
+                    if (auto Anubarak = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ANUBARAK)))
                         Anubarak->AI()->JustSummoned(me);
             }
 
@@ -519,7 +519,7 @@ class npc_nerubian_burrower : public CreatureScript
                 DoCast(me, SPELL_AWAKENED);
                 me->SetInCombatWithZone();
                 if (me->isInCombat())
-                    if (Creature* Anubarak = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ANUBARAK)))
+                    if (auto Anubarak = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ANUBARAK)))
                         Anubarak->AI()->JustSummoned(me);
             }
 
@@ -529,7 +529,7 @@ class npc_nerubian_burrower : public CreatureScript
                 {
                     case ACTION_SHADOW_STRIKE:
                         if (!me->HasAura(SPELL_AWAKENED))
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_SHADOW_STRIKE);
                         break;
                     default:
@@ -685,7 +685,7 @@ class npc_anubarak_spike : public CreatureScript
 
             void EnterCombat(Unit* who) override
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                 {
                     StartChase(target);
                     Talk(EMOTE_SPIKE, who->GetGUID());
@@ -715,7 +715,7 @@ class npc_anubarak_spike : public CreatureScript
                                 DoCast(me, SPELL_SPIKE_SPEED1);
                                 DoCast(me, SPELL_SPIKE_TRAIL);
                                 _phase = PHASE_IMPALE_NORMAL;
-                                if (Unit* target2 = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                if (auto target2 = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 {
                                     StartChase(target2);
                                     Talk(EMOTE_SPIKE, target2->GetGUID());
@@ -857,7 +857,7 @@ class spell_anubarak_leeching_swarm : public SpellScriptLoader
             void HandleEffectPeriodic(AuraEffect const* aurEff)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     int32 lifeLeeched = target->CountPctFromCurHealth(aurEff->GetAmount());
                     if (lifeLeeched < 250)

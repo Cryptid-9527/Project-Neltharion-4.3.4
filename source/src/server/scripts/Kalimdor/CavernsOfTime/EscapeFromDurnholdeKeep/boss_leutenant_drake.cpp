@@ -39,7 +39,7 @@ public:
 
     bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
         {
             if (instance->GetData(TYPE_BARREL_DIVERSION) == DONE)
                 return false;

@@ -372,7 +372,7 @@ class instance_ulduar : public InstanceMapScript
                         {
                             DoUpdateWorldState(WORLD_STATE_ALGALON_TIMER_ENABLED, 0);
                             _events.CancelEvent(EVENT_UPDATE_ALGALON_TIMER);
-                            if (Creature* algalon = instance->GetCreature(uiAlgalonGUID))
+                            if (auto algalon = instance->GetCreature(uiAlgalonGUID))
                                 algalon->AI()->DoAction(EVENT_DESPAWN_ALGALON);
                         }
                         break;
@@ -384,7 +384,7 @@ class instance_ulduar : public InstanceMapScript
             {
                 if (!guid)
                     return;
-                if (GameObject* go = instance->GetGameObject(guid))
+                if (auto go = instance->GetGameObject(guid))
                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
             }
 
@@ -392,7 +392,7 @@ class instance_ulduar : public InstanceMapScript
             {
                 if (!guid)
                     return;
-                if (GameObject* go = instance->GetGameObject(guid))
+                if (auto go = instance->GetGameObject(guid))
                     go->SetGoState(GO_STATE_READY);
             }
 
@@ -490,7 +490,7 @@ class instance_ulduar : public InstanceMapScript
 
                             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
                             {
-                                if (Player* player = i->getSource())
+                                if (auto player = i->getSource())
                                 {
                                     // has been rewarded
                                     if (player->IsAtGroupRewardDistance(creature))
@@ -515,9 +515,9 @@ class instance_ulduar : public InstanceMapScript
             {
                 InstanceScript::OnUnitDeath(unit);
 
-                if (Player* player = unit->ToPlayer())
+                if (auto player = unit->ToPlayer())
                     __OnPlayerDeath(player);
-                else if (Creature* creature = unit->ToCreature())
+                else if (auto creature = unit->ToCreature())
                     __OnCreatureDeath(creature);
             }
 
@@ -1133,13 +1133,13 @@ class instance_ulduar : public InstanceMapScript
                     case BOSS_LEVIATHAN:
                         for (std::list<uint64>::iterator i = LeviathanDoorGUIDList.begin(); i != LeviathanDoorGUIDList.end(); ++i)
                         {
-                            if (GameObject* gameObject = instance->GetGameObject(*i))
+                            if (auto gameObject = instance->GetGameObject(*i))
                                 gameObject->SetGoState(state == IN_PROGRESS ? GO_STATE_READY : GO_STATE_ACTIVE );
                         }
 
                         if (state == DONE)
                         {
-                            if (GameObject* gameObject = instance->GetGameObject(leviathanChestGUID))
+                            if (auto gameObject = instance->GetGameObject(leviathanChestGUID))
                                 gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
 
                             HandleGameObject(XT002DoorGUID, true);
@@ -1167,7 +1167,7 @@ class instance_ulduar : public InstanceMapScript
                     case BOSS_MIMIRON:
                         for (std::list<uint64>::iterator i = MimironDoorGUIDList.begin(); i != MimironDoorGUIDList.end(); ++i)
                         {
-                            if (GameObject* gameobject = instance->GetGameObject(*i))
+                            if (auto gameobject = instance->GetGameObject(*i))
                                 gameobject->SetGoState(state == IN_PROGRESS ? GO_STATE_READY : GO_STATE_ACTIVE);
                         }
                         if (state == DONE)
@@ -1183,7 +1183,7 @@ class instance_ulduar : public InstanceMapScript
                         if (state == DONE)
                         {
 /*
-                            if (GameObject* gameObject = instance->GetGameObject(KologarnChestGUID))
+                            if (auto gameObject = instance->GetGameObject(KologarnChestGUID))
                             {
                                 gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
                                 gameObject->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -1203,11 +1203,11 @@ class instance_ulduar : public InstanceMapScript
                         {
                             HandleGameObject(HodirIceDoorGUID, true);
                             HandleGameObject(HodirStoneDoorGUID, true);
-                            if (GameObject* HodirRareCache = instance->GetGameObject(HodirRareCacheGUID))
+                            if (auto HodirRareCache = instance->GetGameObject(HodirRareCacheGUID))
                                 if (GetData(DATA_HODIR_RARE_CACHE) == 1)
                                     HodirRareCache->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
 
-                            if (GameObject* HodirChest = instance->GetGameObject(HodirChestGUID))
+                            if (auto HodirChest = instance->GetGameObject(HodirChestGUID))
                                 HodirChest->SetRespawnTime(HodirChest->GetRespawnDelay());
                             instance->SummonCreature(NPC_HODIR_OBSERVATION_RING, ObservationRingKeepersPos[1]);
                         }
@@ -1216,9 +1216,9 @@ class instance_ulduar : public InstanceMapScript
                     case BOSS_THORIM:
                         if (state == DONE)
                         {
-                            if (GameObject* gameObject = instance->GetGameObject(ThorimChestGUID))
+                            if (auto gameObject = instance->GetGameObject(ThorimChestGUID))
                                 gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
-                            if (GameObject* gameObject = instance->GetGameObject(ThorimLightningFieldGUID))
+                            if (auto gameObject = instance->GetGameObject(ThorimLightningFieldGUID))
                                 gameObject->SetGoState(state == IN_PROGRESS ? GO_STATE_READY : GO_STATE_ACTIVE);
                             instance->SummonCreature(NPC_THORIM_OBSERVATION_RING, ObservationRingKeepersPos[2]);
                         }
@@ -1231,12 +1231,12 @@ class instance_ulduar : public InstanceMapScript
                             _events.CancelEvent(EVENT_DESPAWN_ALGALON);
                             DoUpdateWorldState(WORLD_STATE_ALGALON_TIMER_ENABLED, 0);
                             _algalonTimer = 61;
-                            if (GameObject* gameObject = instance->GetGameObject(GiftOfTheObserverGUID))
+                            if (auto gameObject = instance->GetGameObject(GiftOfTheObserverGUID))
                                 gameObject->SetRespawnTime(gameObject->GetRespawnDelay());
                             // get item level (recheck weapons)
                             Map::PlayerList const& players = instance->GetPlayers();
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                     for (uint8 slot = EQUIPMENT_SLOT_MAINHAND; slot <= EQUIPMENT_SLOT_RANGED; ++slot)
                                         if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
                                             if (item->GetTemplate()->ItemLevel > _maxWeaponItemLevel)
@@ -1257,7 +1257,7 @@ class instance_ulduar : public InstanceMapScript
                             Map::PlayerList const& players = instance->GetPlayers();
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                 {
                                     for (uint8 slot = EQUIPMENT_SLOT_START; slot < EQUIPMENT_SLOT_END; ++slot)
                                     {
@@ -1359,30 +1359,30 @@ class instance_ulduar : public InstanceMapScript
                         ColossusData = data;
                         if (data == 2)
                         {
-                            if (Creature* Leviathan = instance->GetCreature(LeviathanGUID))
+                            if (auto Leviathan = instance->GetCreature(LeviathanGUID))
                                 Leviathan->AI()->DoAction(ACTION_MOVE_TO_CENTER_POSITION);
-                            if (GameObject* gameObject = instance->GetGameObject(LeviathanGateGUID))
+                            if (auto gameObject = instance->GetGameObject(LeviathanGateGUID))
                                 gameObject->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
                             SaveToDB();
                         }
                         break;
                     case DATA_CALL_TRAM:
-                        if (GameObject* go = instance->GetGameObject(MimironTrainGUID))
+                        if (auto go = instance->GetGameObject(MimironTrainGUID))
                             go->SetGoState(GOState(data));
                         break;
                     case DATA_MIMIRON_ELEVATOR:
-                        if (GameObject* go = instance->GetGameObject(MimironElevatorGUID))
+                        if (auto go = instance->GetGameObject(MimironElevatorGUID))
                             go->SetGoState(GOState(data));
                         break;
                     case DATA_ILLUSION:
                         illusion = data;
                         break;
                     case DATA_RUNIC_DOOR:
-                        if (GameObject* go = instance->GetGameObject(RunicDoorGUID))
+                        if (auto go = instance->GetGameObject(RunicDoorGUID))
                             go->SetGoState(GOState(data));
                         break;
                     case DATA_STONE_DOOR:
-                        if (GameObject* go = instance->GetGameObject(StoneDoorGUID))
+                        if (auto go = instance->GetGameObject(StoneDoorGUID))
                             go->SetGoState(GOState(data));
                         break;
                     case DATA_ADD_HELP_FLAG:
@@ -1392,13 +1392,13 @@ class instance_ulduar : public InstanceMapScript
                         HodirRareCacheData = data;
                         if (!HodirRareCacheData)
                         {
-                            if (Creature* Hodir = instance->GetCreature(HodirGUID))
-                                if (GameObject* gameObject = instance->GetGameObject(HodirRareCacheGUID))
+                            if (auto Hodir = instance->GetCreature(HodirGUID))
+                                if (auto gameObject = instance->GetGameObject(HodirRareCacheGUID))
                                     Hodir->RemoveGameObject(gameObject, false);
                         }
                         break;
                     case DATA_UNBROKEN:
-                        if (Creature* Leviathan = instance->GetCreature(LeviathanGUID))
+                        if (auto Leviathan = instance->GetCreature(LeviathanGUID))
                             Leviathan->AI()->SetData(type, data);
                         break;
                     case EVENT_DESPAWN_ALGALON:
@@ -1553,7 +1553,7 @@ class instance_ulduar : public InstanceMapScript
                     case DATA_HODIR_RARE_CACHE:
                         return HodirRareCacheData;
                     case DATA_UNBROKEN:
-                        if (Creature* Leviathan = instance->GetCreature(LeviathanGUID))
+                        if (auto Leviathan = instance->GetCreature(LeviathanGUID))
                             return Leviathan->AI()->GetData(type);
                         break;
                     case DATA_ILLUSION:

@@ -142,12 +142,12 @@ class boss_general_umbriss : public CreatureScript
 
                 if (groundTimer <= uiDiff)
                 {
-                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me, true)))
+                    if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me, true)))
                     {
                         Talk(EMOTE_GROUND_SIEGE);
                         Position pos;
                         unit->GetPosition(&pos);
-                        if (Creature* temp = me->SummonCreature(NPC_GROUND_SIEGE_STALKER, pos, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                        if (auto temp = me->SummonCreature(NPC_GROUND_SIEGE_STALKER, pos, TEMPSUMMON_TIMED_DESPAWN, 5000))
                         {
                             me->StopMoving();
                             me->SetFacingToObject(temp);
@@ -163,7 +163,7 @@ class boss_general_umbriss : public CreatureScript
 
                 if (blitzTimer <= uiDiff)
                 {
-                    if (Unit* unit = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                    if (auto unit = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                     {
                         Talk(EMOTE_BLITZ, unit->GetGUID());
                         if (Creature *c = me->SummonCreature(NPC_TRIGGER_BLITZ, unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000))
@@ -304,7 +304,7 @@ public:
             {
                 DoCastAOE(SPELL_MODGUDS_MALADY, true);
                 DoCastAOE(SPELL_MODGUD_MALICE_AOE, true);
-                if (Creature* umbriss = me->FindNearestCreature(BOSS_GENERAL_UMBRISS, 100.0f, true))
+                if (auto umbriss = me->FindNearestCreature(BOSS_GENERAL_UMBRISS, 100.0f, true))
                     if (auto ai = umbriss->AI())
                         CAST_AI(boss_general_umbriss::boss_general_umbrissAI, ai)->isMalignantSpawn = false;
                 me->DespawnOrUnsummon();
@@ -312,7 +312,7 @@ public:
             else
             {
                 if (killer->IsVehicle())
-                    if (InstanceScript* scr = me->GetInstanceScript())
+                    if (auto scr = me->GetInstanceScript())
                         scr->DoOnPlayers([](Player* player)
                             {
                                 player->KilledMonsterCredit(51182);

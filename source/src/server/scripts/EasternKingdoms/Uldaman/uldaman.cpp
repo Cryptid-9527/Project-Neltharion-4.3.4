@@ -114,7 +114,7 @@ public:
 
     bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
             instance->SetData(DATA_IRONAYA_SEAL, IN_PROGRESS); //door animation and save state.
 
         return false;

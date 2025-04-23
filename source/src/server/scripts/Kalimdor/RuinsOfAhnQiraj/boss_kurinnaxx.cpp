@@ -77,7 +77,7 @@ class boss_kurinnaxx : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 _JustDied();
-                if (Creature* Ossirian = me->GetMap()->GetCreature(instance->GetData64(DATA_OSSIRIAN)))
+                if (auto Ossirian = me->GetMap()->GetCreature(instance->GetData64(DATA_OSSIRIAN)))
                     sCreatureTextMgr->SendChat(Ossirian, SAY_KURINAXX_DEATH, 0, CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_ZONE);
             }
 
@@ -100,9 +100,9 @@ class boss_kurinnaxx : public CreatureScript
                             events.ScheduleEvent(EVENT_MORTAL_WOUND, 8000);
                             break;
                         case EVENT_SANDTRAP:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                 target->CastSpell(target, SPELL_SANDTRAP, true);
-                            else if (Unit* victim = me->getVictim())
+                            else if (auto victim = me->getVictim())
                                 victim->CastSpell(victim, SPELL_SANDTRAP, true);
                             events.ScheduleEvent(EVENT_SANDTRAP, urand(5000, 15000));
                             break;

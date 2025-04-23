@@ -44,7 +44,7 @@ void HomeMovementGenerator<Creature>::DoFinalize(Creature* owner)
         if (owner->IsVehicle()) // use the same sequence of addtoworld, aireset may remove all summons!
             owner->GetVehicleKit()->Reset(false);
 
-        if (InstanceScript* script = owner->GetInstanceScript())
+        if (auto script = owner->GetInstanceScript())
             script->OnCreatureReset(owner);
     }
 }

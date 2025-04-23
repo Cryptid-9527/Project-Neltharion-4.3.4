@@ -319,7 +319,7 @@ public:
 
             if (who->GetEntry() == NPC_LITHE_STALKER && me->IsWithinDistInMap(who, 10.0f))
             {
-                if (Unit* owner = who->GetCharmer())
+                if (auto owner = who->GetCharmer())
                 {
                     if (who->HasAura(SPELL_SUBDUED_LITHE_STALKER))
                         {
@@ -426,7 +426,7 @@ class npc_tournament_training_dummy : public CreatureScript
                         {
                             DoCast(caster, SPELL_MELEE_CREDIT, true);
 
-                            if (Unit* target = caster->GetVehicleBase())
+                            if (auto target = caster->GetVehicleBase())
                                 DoCast(target, SPELL_COUNTERATTACK, true);
                         }
                         break;
@@ -637,37 +637,37 @@ public:
             {
                 case EVENT_SPAWN:
                     {
-                        if (Creature* Dalfors = DoSummon(NPC_CRUSADER_LORD_DALFORS, DalforsPos[0]))
+                        if (auto Dalfors = DoSummon(NPC_CRUSADER_LORD_DALFORS, DalforsPos[0]))
                         {
                             guidDalfors = Dalfors->GetGUID();
                             Dalfors->GetMotionMaster()->MovePoint(0, DalforsPos[1]);
                         }
-                        if (Creature* Priest1 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest1Pos[0]))
+                        if (auto Priest1 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest1Pos[0]))
                         {
                             guidPriest[0] = Priest1->GetGUID();
                             Priest1->GetMotionMaster()->MovePoint(0, Priest1Pos[1]);
                         }
-                        if (Creature* Priest2 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest2Pos[0]))
+                        if (auto Priest2 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest2Pos[0]))
                         {
                             guidPriest[1] = Priest2->GetGUID();
                             Priest2->GetMotionMaster()->MovePoint(0, Priest2Pos[1]);
                         }
-                        if (Creature* Priest3 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest3Pos[0]))
+                        if (auto Priest3 = DoSummon(NPC_ARGENT_BATTLE_PRIEST, Priest3Pos[0]))
                         {
                             guidPriest[2] = Priest3->GetGUID();
                             Priest3->GetMotionMaster()->MovePoint(0, Priest3Pos[1]);
                         }
-                        if (Creature* Mason1 = DoSummon(NPC_ARGENT_MASON, Mason1Pos[0]))
+                        if (auto Mason1 = DoSummon(NPC_ARGENT_MASON, Mason1Pos[0]))
                         {
                             guidMason[0] = Mason1->GetGUID();
                             Mason1->GetMotionMaster()->MovePoint(0, Mason1Pos[1]);
                         }
-                        if (Creature* Mason2 = DoSummon(NPC_ARGENT_MASON, Mason2Pos[0]))
+                        if (auto Mason2 = DoSummon(NPC_ARGENT_MASON, Mason2Pos[0]))
                         {
                             guidMason[1] = Mason2->GetGUID();
                             Mason2->GetMotionMaster()->MovePoint(0, Mason2Pos[1]);
                         }
-                        if (Creature* Mason3 = DoSummon(NPC_ARGENT_MASON, Mason3Pos[0]))
+                        if (auto Mason3 = DoSummon(NPC_ARGENT_MASON, Mason3Pos[0]))
                         {
                             guidMason[2] = Mason3->GetGUID();
                             Mason3->GetMotionMaster()->MovePoint(0, Mason3Pos[1]);
@@ -677,14 +677,14 @@ public:
                     break;
                 case EVENT_INTRO_1:
                     {
-                        if (Creature* Dalfors = me->GetCreature(*me, guidDalfors))
+                        if (auto Dalfors = me->GetCreature(*me, guidDalfors))
                             Dalfors->AI()->Talk(DALFORS_SAY_PRE_1);
                         events.ScheduleEvent(EVENT_INTRO_2, 5000);
                     }
                     break;
                 case EVENT_INTRO_2:
                     {
-                        if (Creature* Dalfors = me->GetCreature(*me, guidDalfors))
+                        if (auto Dalfors = me->GetCreature(*me, guidDalfors))
                         {
                             Dalfors->SetFacingTo(6.215f);
                             Dalfors->AI()->Talk(DALFORS_SAY_PRE_2);
@@ -694,37 +694,37 @@ public:
                     break;
                 case EVENT_INTRO_3:
                     {
-                        if (Creature* Dalfors = me->GetCreature(*me, guidDalfors))
+                        if (auto Dalfors = me->GetCreature(*me, guidDalfors))
                         {
                             Dalfors->GetMotionMaster()->MovePoint(0, DalforsPos[2]);
                             Dalfors->SetHomePosition(DalforsPos[2]);
                         }
-                        if (Creature* Priest1 = me->GetCreature(*me, guidPriest[0]))
+                        if (auto Priest1 = me->GetCreature(*me, guidPriest[0]))
                         {
                             Priest1->SetFacingTo(5.7421f);
                             Priest1->SetHomePosition(Priest1Pos[1]);
                         }
-                        if (Creature* Priest2 = me->GetCreature(*me, guidPriest[1]))
+                        if (auto Priest2 = me->GetCreature(*me, guidPriest[1]))
                         {
                             Priest2->SetFacingTo(5.7421f);
                             Priest2->SetHomePosition(Priest2Pos[1]);
                         }
-                        if (Creature* Priest3 = me->GetCreature(*me, guidPriest[2]))
+                        if (auto Priest3 = me->GetCreature(*me, guidPriest[2]))
                         {
                             Priest3->SetFacingTo(5.7421f);
                             Priest3->SetHomePosition(Priest3Pos[1]);
                         }
-                        if (Creature* Mason1 = me->GetCreature(*me, guidMason[0]))
+                        if (auto Mason1 = me->GetCreature(*me, guidMason[0]))
                         {
                             Mason1->GetMotionMaster()->MovePoint(0, Mason1Pos[2]);
                             Mason1->SetHomePosition(Mason1Pos[2]);
                         }
-                        if (Creature* Mason2 = me->GetCreature(*me, guidMason[1]))
+                        if (auto Mason2 = me->GetCreature(*me, guidMason[1]))
                         {
                             Mason2->GetMotionMaster()->MovePoint(0, Mason2Pos[2]);
                             Mason2->SetHomePosition(Mason2Pos[2]);
                         }
-                        if (Creature* Mason3 = me->GetCreature(*me, guidMason[2]))
+                        if (auto Mason3 = me->GetCreature(*me, guidMason[2]))
                         {
                             Mason3->GetMotionMaster()->MovePoint(0, Mason3Pos[2]);
                             Mason3->SetHomePosition(Mason3Pos[2]);
@@ -735,17 +735,17 @@ public:
                     break;
                 case EVENT_MASON_ACTION:
                     {
-                        if (Creature* Mason1 = me->GetCreature(*me, guidMason[0]))
+                        if (auto Mason1 = me->GetCreature(*me, guidMason[0]))
                         {
                             Mason1->SetFacingTo(2.8972f);
                             Mason1->AI()->SetData(1, 1); // triggers SAI actions on npc
                         }
-                        if (Creature* Mason2 = me->GetCreature(*me, guidMason[1]))
+                        if (auto Mason2 = me->GetCreature(*me, guidMason[1]))
                         {
                             Mason2->SetFacingTo(3.1241f);
                             Mason2->AI()->SetData(1, 1); // triggers SAI actions on npc
                         }
-                        if (Creature* Mason3 = me->GetCreature(*me, guidMason[2]))
+                        if (auto Mason3 = me->GetCreature(*me, guidMason[2]))
                         {
                             Mason3->SetFacingTo(3.6651f);
                             Mason3->AI()->SetData(1, 1); // triggers SAI actions on npc
@@ -754,9 +754,9 @@ public:
                     break;
                 case EVENT_START_FIGHT:
                     {
-                        if (Creature* LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
+                        if (auto LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
                             LK->AI()->Talk(LK_TALK_1);
-                        if (Creature* Dalfors = me->GetCreature(*me, guidDalfors))
+                        if (auto Dalfors = me->GetCreature(*me, guidDalfors))
                             Dalfors->AI()->Talk(DALFORS_SAY_START);
                         events.ScheduleEvent(EVENT_WAVE_SPAWN, 1000);
                     }
@@ -765,27 +765,27 @@ public:
                     {
                         if (PhaseCount == 3)
                         {
-                            if (Creature* LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
+                            if (auto LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
                                 LK->AI()->Talk(LK_TALK_2);
                         }
                         else if (PhaseCount == 6)
                         {
-                            if (Creature* LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
+                            if (auto LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
                                 LK->AI()->Talk(LK_TALK_3);
                         }
-                        if (Creature* tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason3Pos[0]))
+                        if (auto tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason3Pos[0]))
                             {
                                 tempsum->SetHomePosition(DalforsPos[2]);
                                 tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
                             }
                         if (urand(0, 1) == 0)
                         {
-                            if (Creature* tempsum = DoSummon(NPC_HIDEOUS_PLAGEBRINGER, Mason1Pos[0]))
+                            if (auto tempsum = DoSummon(NPC_HIDEOUS_PLAGEBRINGER, Mason1Pos[0]))
                             {
                                 tempsum->SetHomePosition(DalforsPos[2]);
                                 tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
                             }
-                            if (Creature* tempsum = DoSummon(NPC_HIDEOUS_PLAGEBRINGER, Mason2Pos[0]))
+                            if (auto tempsum = DoSummon(NPC_HIDEOUS_PLAGEBRINGER, Mason2Pos[0]))
                             {
                                 tempsum->SetHomePosition(DalforsPos[2]);
                                 tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
@@ -793,12 +793,12 @@ public:
                         }
                         else
                         {
-                            if (Creature* tempsum = DoSummon(NPC_REANIMATED_CAPTAIN, Mason1Pos[0]))
+                            if (auto tempsum = DoSummon(NPC_REANIMATED_CAPTAIN, Mason1Pos[0]))
                             {
                                 tempsum->SetHomePosition(DalforsPos[2]);
                                 tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
                             }
-                            if (Creature* tempsum = DoSummon(NPC_REANIMATED_CAPTAIN, Mason2Pos[0]))
+                            if (auto tempsum = DoSummon(NPC_REANIMATED_CAPTAIN, Mason2Pos[0]))
                             {
                                 tempsum->SetHomePosition(DalforsPos[2]);
                                 tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
@@ -815,19 +815,19 @@ public:
                     break;
                 case EVENT_HALOF:
                     {
-                        if (Creature* LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
+                        if (auto LK = GetClosestCreatureWithEntry(me, NPC_LK, 100))
                             LK->AI()->Talk(LK_TALK_4);
-                        if (Creature* tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason1Pos[0]))
+                        if (auto tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason1Pos[0]))
                         {
                             tempsum->SetHomePosition(DalforsPos[2]);
                             tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
                         }
-                        if (Creature* tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason2Pos[0]))
+                        if (auto tempsum = DoSummon(NPC_SCOURGE_DRUDGE, Mason2Pos[0]))
                         {
                             tempsum->SetHomePosition(DalforsPos[2]);
                             tempsum->AI()->AttackStart(GetClosestCreatureWithEntry(me, NPC_BLESSED_BANNER, 100));
                         }
-                        if (Creature* tempsum = DoSummon(NPC_HALOF_THE_DEATHBRINGER, DalforsPos[0]))
+                        if (auto tempsum = DoSummon(NPC_HALOF_THE_DEATHBRINGER, DalforsPos[0]))
                         {
                             HalofSpawned = true;
                             guidHalof = tempsum->GetGUID();
@@ -845,7 +845,7 @@ public:
             }
 
             if (PhaseCount == 8)
-                if (Creature* Halof = me->GetCreature(*me, guidHalof))
+                if (auto Halof = me->GetCreature(*me, guidHalof))
                     if (Halof->isDead())
                     {
                         DoCast(me, SPELL_CRUSADERS_SPIRE_VICTORY, true);
@@ -853,7 +853,7 @@ public:
                         Summons.DespawnEntry(NPC_REANIMATED_CAPTAIN);
                         Summons.DespawnEntry(NPC_SCOURGE_DRUDGE);
                         Summons.DespawnEntry(NPC_HALOF_THE_DEATHBRINGER);
-                        if (Creature* Dalfors = me->GetCreature(*me, guidDalfors))
+                        if (auto Dalfors = me->GetCreature(*me, guidDalfors))
                             Dalfors->AI()->Talk(DALFORS_YELL_FINISHED);
                         events.ScheduleEvent(EVENT_ENDED, 10000);
                     }

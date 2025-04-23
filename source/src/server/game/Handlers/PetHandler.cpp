@@ -218,14 +218,14 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                 if (unit_target->GetTypeId() == TYPEID_PLAYER)
                     pet->SendUpdateToPlayer((Player*)unit_target);
             }
-            else if (Unit* unit_target2 = spell->m_targets.GetUnitTarget())
+            else if (auto unit_target2 = spell->m_targets.GetUnitTarget())
             {
                 pet->SetInFront(unit_target2);
                 if (unit_target2->GetTypeId() == TYPEID_PLAYER)
                     pet->SendUpdateToPlayer((Player*)unit_target2);
             }
 
-            if (Unit* powner = pet->GetCharmerOrOwner())
+            if (auto powner = pet->GetCharmerOrOwner())
                 if (powner->GetTypeId() == TYPEID_PLAYER)
                     pet->SendUpdateToPlayer(powner->ToPlayer());
 
@@ -442,7 +442,7 @@ void WorldSession::HandlePetExecuteAction(Unit* pet, uint64 guid1, uint32 spelli
         if (!TargetUnit)
             return;
 
-        if (Unit* owner = pet->GetOwner())
+        if (auto owner = pet->GetOwner())
             if (!owner->IsValidAttackTarget(TargetUnit))
                 return;
 
@@ -463,7 +463,7 @@ void WorldSession::HandlePetExecuteAction(Unit* pet, uint64 guid1, uint32 spelli
 
                 pet->ToCreature()->AI()->AttackStart(TargetUnit);
                 if (pet->GetOwner() != NULL && pet->GetOwner()->GetTypeId() == TYPEID_PLAYER)
-                    if (Player* owner = pet->GetOwner()->ToPlayer())
+                    if (auto owner = pet->GetOwner()->ToPlayer())
                         for (auto itr = owner->m_Controlled.begin(); itr != owner->m_Controlled.end(); ++itr)
                             if ((*itr) && (*itr)->isGuardian())
                                 (*itr)->ToCreature()->AI()->AttackStart(TargetUnit);

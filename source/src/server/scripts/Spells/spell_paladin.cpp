@@ -169,7 +169,7 @@ class spell_pal_blessing_of_faith : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     uint32 spell_id = 0;
                     switch (unitTarget->getClass())
@@ -291,7 +291,7 @@ class spell_pal_divine_sacrifice : public SpellScriptLoader
             bool Load()
             {
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (caster->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -314,7 +314,7 @@ class spell_pal_divine_sacrifice : public SpellScriptLoader
             {
                 remainingAmount -= splitAmount;
                 // break when absorbed everything it could, or if the casters hp drops below 20%
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (remainingAmount <= 0 || (caster->GetHealthPct() < minHpPct))
                         caster->RemoveAura(SPELL_PALADIN_DIVINE_SACRIFICE);
             }
@@ -558,7 +558,7 @@ class spell_pal_hand_of_sacrifice : public SpellScriptLoader
 
             bool Load()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     remainingAmount = caster->GetMaxHealth();
                     return true;
@@ -600,7 +600,7 @@ class spell_pal_hand_of_salvation : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Glyph of Salvation
                     if (caster->GetAuraEffect(SPELL_PALADIN_GLYPH_OF_SALVATION, EFFECT_0, caster->GetGUID()))
@@ -649,7 +649,7 @@ class spell_pal_holy_shock : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     uint8 rank = sSpellMgr->GetSpellRank(GetSpellInfo()->Id);
                     if (caster->IsFriendlyTo(unitTarget))
@@ -662,7 +662,7 @@ class spell_pal_holy_shock : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                 {
                     if (!caster->IsFriendlyTo(target))
                     {
@@ -817,7 +817,7 @@ class spell_pal_guardian_triggered : public SpellScriptLoader
                 if (GetTargetApplication()->GetRemoveMode() != AURA_REMOVE_BY_EXPIRE)
                     return;
 
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     if (Aura* buff = target->GetAura(86700, target->GetGUID()))
                         target->CastSpell(target, 86704, true);
@@ -861,7 +861,7 @@ class spell_pal_lay_on_hands : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                     if (caster == target)
                         if (target->HasAura(SPELL_PALADIN_FORBEARANCE) || target->HasAura(SPELL_PALADIN_IMMUNE_SHIELD_MARKER))
                             return SPELL_FAILED_TARGET_AURASTATE;
@@ -918,7 +918,7 @@ class spell_pal_righteous_defense : public SpellScriptLoader
                 if (caster->GetTypeId() != TYPEID_PLAYER)
                     return SPELL_FAILED_DONT_REPORT;
 
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                 {
                     if (!target->IsFriendlyTo(caster) || target->getAttackers().empty())
                         return SPELL_FAILED_BAD_TARGETS;
@@ -937,7 +937,7 @@ class spell_pal_righteous_defense : public SpellScriptLoader
             void HandleTriggerSpellHit(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     GetCaster()->CastSpell(target, SPELL_PALADIN_RIGHTEOUS_DEFENSE_TAUNT, true);
             }
 
@@ -1018,7 +1018,7 @@ class spell_pal_templar_s_verdict : public SpellScriptLoader
 
             void HandleBeforeCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (Aura* DivinePurpose = caster->GetAura(SPELL_PALADIN_DIVINE_PURPOSE_PROC, caster->GetGUID()))
                     {
                         divine      = true;
@@ -1097,7 +1097,7 @@ class spell_pal_lod : public SpellScriptLoader
 
                 std::list<Unit*> temp;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                    if (Unit* unit = (*itr)->ToUnit())
+                    if (auto unit = (*itr)->ToUnit())
                         temp.push_back(unit);
 
                 targets.clear();
@@ -1447,7 +1447,7 @@ class spell_pal_seal_of_righteousness : public SpellScriptLoader
                         if (eventInfo.GetDamageInfo() && eventInfo.GetDamageInfo()->GetSpellInfo() && eventInfo.GetDamageInfo()->GetSpellInfo()->Id == SPELL_PALADIN_DIVINE_STORM)
                             divineStormTargetsCount = targets.size() - 1;
                     for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); ++itr)
-                        if (Unit* target = (*itr)->ToUnit())
+                        if (auto target = (*itr)->ToUnit())
                             if (caster->isInFront(target) && caster->IsWithinMeleeRange(target))
                                 caster->CastCustomSpell(SPELL_PALADIN_SEAL_OF_RIGHTEOUSNESS, SPELLVALUE_BASE_POINT0, bp, target, true, NULL, aurEff);
                 } else caster->CastCustomSpell(SPELL_PALADIN_SEAL_OF_RIGHTEOUSNESS, SPELLVALUE_BASE_POINT0, bp, eventInfo.GetProcTarget(), true, NULL, aurEff);
@@ -1481,7 +1481,7 @@ class spell_pal_avenging_wrath: public SpellScriptLoader
             void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 Unit* target = GetTarget();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_PALADIN, 3029, EFFECT_0))
                         caster->CastSpell(target, 57318, true);
             }
@@ -1575,7 +1575,7 @@ class spell_pal_holy_wrath : public SpellScriptLoader
             void FilterTargets(std::list<WorldObject*>& targets)
             {
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end();)
-                    if (Unit* unit = (*itr)->ToUnit())
+                    if (auto unit = (*itr)->ToUnit())
                     {
                         WorldObject* temp = (*itr);
 
@@ -1646,7 +1646,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     float bonus = 2.8f * caster->GetTotalAttackPowerValue(BASE_ATTACK);
                     bonus = caster->ApplyEffectModifiers(GetSpellInfo(), aurEff->GetEffIndex(), bonus);
@@ -1775,7 +1775,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
 
          void HandleApply(SpellEffIndex /*effIndex*/)
          {
-             if (Unit* caster = GetCaster())
+             if (auto caster = GetCaster())
                  if (caster->GetTypeId() == TYPEID_PLAYER && caster->getClass() != CLASS_PALADIN)
                      if (Aura* aura = GetHitAura())
                      {
@@ -1808,7 +1808,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
          void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
          {
              canBeRecalculated = true;
-             if (Unit* caster = GetUnitOwner())
+             if (auto caster = GetUnitOwner())
              {
                  int32 resist = caster->getLevel();
 
@@ -1849,7 +1849,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
          void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
          {
              // Paladin T12 Protection 4P Bonus
-             if (Unit* caster = GetCaster())
+             if (auto caster = GetCaster())
                  if (caster->HasAura(99091) && caster->isAlive())
                      caster->CastSpell(caster, 99090, true);
          }
@@ -1884,7 +1884,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
 
          void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
          {
-             if (Unit* caster = eventInfo.GetActor())
+             if (auto caster = eventInfo.GetActor())
              {
                  int32 absorb = CalculatePct(eventInfo.GetDamageInfo()->GetDamage(), aurEff->GetAmount());
                  caster->CastCustomSpell(caster, SPELL_PALADIN_DELAYED_JUDGEMENT, &absorb, NULL, NULL, true);
@@ -2016,7 +2016,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
 
          void HandleBeforeCast()
          {
-             if (Unit* caster = GetCaster())
+             if (auto caster = GetCaster())
                  if (Aura* DivinePurpose = caster->GetAura(SPELL_PALADIN_DIVINE_PURPOSE_PROC, caster->GetGUID()))
                  {
                      divine = true;
@@ -2027,7 +2027,7 @@ class spell_pal_sacred_shield : public SpellScriptLoader
 
          void HandleAfterCast()
          {
-             if (Unit* caster = GetCaster())
+             if (auto caster = GetCaster())
                  if (divine)
                      if (caster->AddAura(SPELL_PALADIN_DIVINE_PURPOSE_PROC, caster))
                  if (Aura* DivinePurpose = caster->GetAura(SPELL_PALADIN_DIVINE_PURPOSE_PROC, caster->GetGUID()))
@@ -2101,8 +2101,8 @@ class spell_pal_sacred_shield : public SpellScriptLoader
 
          void HandleEffectPeriodic(AuraEffect const* aurEff)
          {
-             if (Unit* caster = GetCaster())
-                 if (Unit* target = GetTarget())
+             if (auto caster = GetCaster())
+                 if (auto target = GetTarget())
                      if (aurEff->GetTickNumber() == 1)
                          if (target->HasAura(7302))
                              target->CastSpell(caster, 7321);

@@ -225,7 +225,7 @@ public:
 
                         if (uiImpalingChargeTimer <= diff)
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             {
                                 DoCast(target, SPELL_IMPALING_CHARGE);
                                 CheckAchievement(target->GetGUID());
@@ -293,7 +293,7 @@ class achievement_share_the_love : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* GalDarah = target->ToCreature())
+            if (auto GalDarah = target->ToCreature())
                 if (GalDarah->AI()->GetData(DATA_SHARE_THE_LOVE) >= 5)
                     return true;
 

@@ -332,21 +332,21 @@ class boss_flame_leviathan : public CreatureScript
 
             void JustReachedHome()
             {
-                if (Creature* Brann =  ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRANN_EVENT_START_ULDU)))
+                if (auto Brann =  ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRANN_EVENT_START_ULDU)))
                     Brann->AI()->SetData(TYPE_ULDUAR_EVENT, 5);
             }
 
             void Outro()
             {
-                if (Creature* BrannIntro =  ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRANN_EVENT_START_ULDU)))
+                if (auto BrannIntro =  ObjectAccessor::GetCreature(*me, instance->GetData64(NPC_BRANN_EVENT_START_ULDU)))
                     BrannIntro->AI()->SetData(TYPE_ULDUAR_EVENT, 6);
-                if (Creature* MachineBrann = me->SummonCreature(VOLANTE_BRANN_OUTRO, 140.0f, -37.0f, 460.0f, 6.2f))
+                if (auto MachineBrann = me->SummonCreature(VOLANTE_BRANN_OUTRO, 140.0f, -37.0f, 460.0f, 6.2f))
                 {
                     MachineBrann->SetCanFly(true);
                     MachineBrann->SetSpeed(MOVE_RUN , 2.0f);
                     MachineBrann->SetSpeed(MOVE_WALK , 2.0f);
                     MachineBrann->SetSpeed(MOVE_FLIGHT , 2.0f);
-                    if (Creature* BrannOutro = me->SummonCreature(NPC_BRANN_OUTRO, 140.0f, -37.0f, 460.0f, 6.2f))
+                    if (auto BrannOutro = me->SummonCreature(NPC_BRANN_OUTRO, 140.0f, -37.0f, 460.0f, 6.2f))
                     {
                         float x, y, z;
                         me->GetPosition(x, y, z);
@@ -383,20 +383,20 @@ class boss_flame_leviathan : public CreatureScript
                 {
                     for (uint8 i = RAID_MODE<uint8>(2, 0); i < 4; ++i)
                     {
-                        if (Creature* target = me->SummonCreature(NPC_SEAT, *me))
+                        if (auto target = me->SummonCreature(NPC_SEAT, *me))
                         {
                             target->EnterVehicle(me, i);
                             me->GetVehicleKit()->RelocatePassengers();
                             //printf("\n Position SIEGE %d : PositionX = %.2f PositionY = %.2f PositionZ = %.2f",i,target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
                             //target->SendMovementFlagUpdate();
-                            if (Creature* turret = target->SummonCreature(NPC_DEFENSE_TURRET, *target))
+                            if (auto turret = target->SummonCreature(NPC_DEFENSE_TURRET, *target))
                             {
                                 turret->EnterVehicle(target, SEAT_TURRET);
                                 //                                turret->SendMovementFlagUpdate();
                                 //printf("\n Position TOURRETE %d : PositionX = %.2f PositionY = %.2f PositionZ = %.2f",i,turret->GetPositionX(), turret->GetPositionY(), turret->GetPositionZ());
                             }
 
-                            if (Creature* device = target->SummonCreature(NPC_OVERLOAD_DEVICE, *target))
+                            if (auto device = target->SummonCreature(NPC_OVERLOAD_DEVICE, *target))
                             {
                                 device->EnterVehicle(target, SEAT_DEVICE);
                                 //                                device->SendMovementFlagUpdate();
@@ -405,7 +405,7 @@ class boss_flame_leviathan : public CreatureScript
                         }
                     }
 
-                    if (Creature* cannon = me->SummonCreature(NPC_DEFENSE_CANNON, *me))
+                    if (auto cannon = me->SummonCreature(NPC_DEFENSE_CANNON, *me))
                         cannon->EnterVehicle(me, SEAT_CANNON);
                 }
                 else
@@ -423,9 +423,9 @@ class boss_flame_leviathan : public CreatureScript
                 if (!me->isInCombat())
                     return;
 
-                if (Player* passenger = ObjectAccessor::GetPlayer(*me, guid))
+                if (auto passenger = ObjectAccessor::GetPlayer(*me, guid))
                     for (uint8 i = RAID_MODE(2, 0); i < 4; ++i)
-                        if (Unit* seat = vehicle->GetPassenger(i))
+                        if (auto seat = vehicle->GetPassenger(i))
                             if (seat->GetVehicleKit()->HasEmptySeat(SEAT_PLAYER) && !seat->GetVehicleKit()->HasEmptySeat(SEAT_TURRET))
                             {
                                 passenger->EnterVehicle(seat, SEAT_PLAYER);
@@ -485,7 +485,7 @@ class boss_flame_leviathan : public CreatureScript
                 Talk(SAY_DEATH);
                 // TODO: These chests should be somewhere around...
                 // Check if changing the loot-mode as shown below works as considered
-                if (GameObject* go = me->FindNearestGameObject(RAID_MODE(GO_LEVIATHAN_CHEST_10, GO_LEVIATHAN_CHEST_25), 250.0f))
+                if (auto go = me->FindNearestGameObject(RAID_MODE(GO_LEVIATHAN_CHEST_10, GO_LEVIATHAN_CHEST_25), 250.0f))
                     if (HaveActiveTowers())
                         switch (GetActiveTowersCount())
                         {
@@ -627,14 +627,14 @@ class boss_flame_leviathan : public CreatureScript
                     case 0: break;
                     case EVENT_PURSUE:
                         Talk(SAY_TARGET);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 300.0f))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 300.0f))
                             if (target->GetTypeId() == TYPEID_PLAYER || target->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_PLAYER_VEHICLE))
                                 me->AddAura(SPELL_PURSUED, target);
 
                         events.Repeat(30*IN_MILLISECONDS);
                         break;
                     case EVENT_MISSILE:
-                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 400.0f))
+                        if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 400.0f))
                             DoCast(pTarget, SPELL_MISSILE_BARRAGE);
 
                         events.Repeat(2*IN_MILLISECONDS);
@@ -649,7 +649,7 @@ class boss_flame_leviathan : public CreatureScript
                         break;
                     case EVENT_SUMMON:
                         if (summons.size() < 15)
-                            if (Creature* lift = DoSummonFlyer(NPC_MECHANOLIFT, me, 30.0f, 50.0f, 0))
+                            if (auto lift = DoSummonFlyer(NPC_MECHANOLIFT, me, 30.0f, 50.0f, 0))
                                 lift->GetMotionMaster()->MoveRandom(100);
 
                         events.Repeat(2*IN_MILLISECONDS);
@@ -683,7 +683,7 @@ class boss_flame_leviathan : public CreatureScript
                             Position pos = Misc[0];
                             pos.m_positionX += frand(-100, 105);
                             pos.m_positionY += frand(-95, 95);
-                            if (Creature* thorimBeacon = DoSummon(NPC_THORIM_BEACON, pos, 20*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
+                            if (auto thorimBeacon = DoSummon(NPC_THORIM_BEACON, pos, 20*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                                 thorimBeacon->GetMotionMaster()->MoveRandom(100);
                         }
                         events.Repeat(40*IN_MILLISECONDS);
@@ -704,7 +704,7 @@ class boss_flame_leviathan : public CreatureScript
                             Position pos = Misc[0];
                             pos.m_positionX += frand(-100, 105);
                             pos.m_positionY += frand(-95, 95);
-                            if (Creature* hodir = DoSummon(NPC_HODIR_BEACON, pos, 20*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN ))
+                            if (auto hodir = DoSummon(NPC_HODIR_BEACON, pos, 20*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN ))
                                 hodir->GetMotionMaster()->MoveRandom(100);
                         }
                         events.Repeat(40*IN_MILLISECONDS);
@@ -718,7 +718,7 @@ class boss_flame_leviathan : public CreatureScript
                             }
                             if(SpawnFreyaAdd == 4)
                                 SpawnFreyaAdd = 0;
-                            if (Creature* AddFreya = me->SummonCreature(NPC_FREYA_BEACON, FreyaBeacons[SpawnFreyaAdd]))
+                            if (auto AddFreya = me->SummonCreature(NPC_FREYA_BEACON, FreyaBeacons[SpawnFreyaAdd]))
                             {
                                 DoCast(AddFreya,SPELL_FREYA_S_WARD_EFFECT_1,true) ;
                                 DoCast(AddFreya,SPELL_FREYA_S_WARD_EFFECT_2,true) ;
@@ -750,7 +750,7 @@ class boss_flame_leviathan : public CreatureScript
                     me->AddThreat(target, std::numeric_limits<float>::max());
                     me->GetMotionMaster()->MoveChase(target);
 
-                    if (Player* player = target->GetCharmerOrOwnerPlayerOrPlayerItself())
+                    if (auto player = target->GetCharmerOrOwnerPlayerOrPlayerItself())
                         me->MonsterTextEmote(EMOTE_PURSUE, player->GetGUID(), true);
                 }
             }
@@ -821,9 +821,9 @@ class boss_flame_leviathan : public CreatureScript
 
                             // force all players to exit
                             for (uint8 i = RAID_MODE(2, 0); i < 4; ++i)
-                                if (Unit* seat = vehicle->GetPassenger(i))
+                                if (auto seat = vehicle->GetPassenger(i))
                                     if (seat->GetVehicleKit())
-                                        if (Unit* passenger = seat->GetVehicleKit()->GetPassenger(SEAT_PLAYER))
+                                        if (auto passenger = seat->GetVehicleKit()->GetPassenger(SEAT_PLAYER))
                                             passenger->ExitVehicle();
                         }
 
@@ -906,7 +906,7 @@ public:
                     {
                     case 0:
                     {
-                        if (Creature* Rhydian = me->SummonCreature(NPC_RHYDIAN_OURTO, *me))
+                        if (auto Rhydian = me->SummonCreature(NPC_RHYDIAN_OURTO, *me))
                         {
                             float x, y, z;
                             me->GetPosition(x, y, z);
@@ -914,7 +914,7 @@ public:
                             Rhydian->GetMotionMaster()->MovePoint(0, x + 1, y + 1, z);
                             Rhydian->SetFacingToObject(me);
                         }
-                        if (Unit* Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
+                        if (auto Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
                             Rhydian->MonsterYell("Our friends fought well, Brann, but we're not done yet.", LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(5000);
                         break;
@@ -924,7 +924,7 @@ public:
                         JumpToNextStepBrann(7000);
                         break;
                     case 2:
-                        if (Unit* Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
+                        if (auto Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
                             Rhydian->MonsterYell("None at all. I suspect it has something to do with that giant mechanical construct that our scouts spotted in front of the gate.", LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(8000);
                         break;
@@ -933,12 +933,12 @@ public:
                         JumpToNextStepBrann(8000);
                         break;
                     case 4:
-                        if (Unit* Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
+                        if (auto Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
                             Rhydian->MonsterYell("The Kirin Tor can't possibly spare any additional resources to take on anything that size. We may not have to though.", LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(7000);
                         break;
                     case 5:
-                        if (Unit* Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
+                        if (auto Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
                             Rhydian->MonsterYell("We can sneak past them. As long as we can take down that construct in front of the gate, we should be able to get inside.", LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(7000);
                         break;
@@ -947,7 +947,7 @@ public:
                         JumpToNextStepBrann(5000);
                         break;
                     case 7:
-                        if (Unit* Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
+                        if (auto Rhydian = me->FindNearestCreature(NPC_RHYDIAN_OURTO, 20.0f))
                             Rhydian->MonsterYell(" We're hunting an old god, Brann.", LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(4000);
                         break;
@@ -993,7 +993,7 @@ public:
 
             if (NapalmTimer <= diff)
             {
-                if (Unit* target = me->SelectNearestTarget(200.0f))
+                if (auto target = me->SelectNearestTarget(200.0f))
 
                     if (CanAIAttack(target))
                         DoCast(target, SPELL_NAPALM, true);
@@ -1074,7 +1074,7 @@ class npc_flame_leviathan_seat : public CreatureScript
                         Talk(SAY_PLAYER_RIDING);
                     }
 
-                    if (Creature* turret = me->GetVehicleKit()->GetPassenger(SEAT_TURRET)->ToCreature())
+                    if (auto turret = me->GetVehicleKit()->GetPassenger(SEAT_TURRET)->ToCreature())
                     {
                         turret->setFaction(me->GetVehicleBase()->getFaction());
                         turret->SetUInt32Value(UNIT_FIELD_FLAGS, 0); // unselectable
@@ -1082,7 +1082,7 @@ class npc_flame_leviathan_seat : public CreatureScript
                             ai->AttackStart(who);
                     }
 
-                    if (Creature* device = me->GetVehicleKit()->GetPassenger(SEAT_DEVICE)->ToCreature())
+                    if (auto device = me->GetVehicleKit()->GetPassenger(SEAT_DEVICE)->ToCreature())
                     {
                         device->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                         device->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -1095,7 +1095,7 @@ class npc_flame_leviathan_seat : public CreatureScript
                     if (apply)
                         return;
 
-                    if (Unit* device = vehicle->GetPassenger(SEAT_DEVICE))
+                    if (auto device = vehicle->GetPassenger(SEAT_DEVICE))
                     {
                         device->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                         device->SetUInt32Value(UNIT_FIELD_FLAGS, 0); // unselectable
@@ -1138,7 +1138,7 @@ class npc_flame_leviathan_defense_turret : public CreatureScript
 
                 if (damage >= me->GetHealth())
                     if (Vehicle* seat = me->GetVehicle())
-                        if (Unit* device = seat->GetPassenger(SEAT_DEVICE))
+                        if (auto device = seat->GetPassenger(SEAT_DEVICE))
                             device->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
@@ -1181,15 +1181,15 @@ class npc_flame_leviathan_overload_device : public CreatureScript
             {
                 if (me->GetVehicle())
                 {
-                    if (InstanceScript* myInst = me->GetInstanceScript())
+                    if (auto myInst = me->GetInstanceScript())
                     {
-                        if (Creature* leviathan = ObjectAccessor::GetCreature(*me, myInst->GetData64(BOSS_LEVIATHAN)))
+                        if (auto leviathan = ObjectAccessor::GetCreature(*me, myInst->GetData64(BOSS_LEVIATHAN)))
                             leviathan->AI()->DoAction(ACTION_OVERLOAD_CIRCUIT);
                     }
 
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    if (Unit* player = me->GetVehicle()->GetPassenger(SEAT_PLAYER))
+                    if (auto player = me->GetVehicle()->GetPassenger(SEAT_PLAYER))
                     {
                         me->GetVehicleBase()->CastSpell(player, SPELL_SMOKE_TRAIL, true);
                         player->GetMotionMaster()->MoveKnockbackFrom(me->GetVehicleBase()->GetPositionX(), me->GetVehicleBase()->GetPositionY(), 30.0f, 30.0f);
@@ -1260,7 +1260,7 @@ class npc_mechanolift : public CreatureScript
                     {
                         me->SetVisible(false);
                         DoCast(SPELL_DUSTY_EXPLOSION);  // Note: Spell not castable if dead, thus, moved here
-                        if (Creature* liquid = DoSummon(NPC_LIQUID, me, 0, 190*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
+                        if (auto liquid = DoSummon(NPC_LIQUID, me, 0, 190*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
                             float x, y, z;
                             me->GetPosition(x, y, z);
@@ -1282,7 +1282,7 @@ class npc_mechanolift : public CreatureScript
             void MovementInform(uint32 type, uint32 id)
             {
                 if (type == POINT_MOTION_TYPE && id == 1)
-                    if (Creature* container = me->FindNearestCreature(NPC_CONTAINER, 5, true))
+                    if (auto container = me->FindNearestCreature(NPC_CONTAINER, 5, true))
                         container->EnterVehicle(me);
             }
 
@@ -1505,7 +1505,7 @@ class npc_thorims_hammer : public CreatureScript
                         _timer = 4*IN_MILLISECONDS;
                         break;
                     case 2:
-                        if (Creature* trigger = DoSummonFlyer(NPC_THORIM_TARGET_BEACON, me, 50.0f, 0, 10*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
+                        if (auto trigger = DoSummonFlyer(NPC_THORIM_TARGET_BEACON, me, 50.0f, 0, 10*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
                             trigger->SetDisplayId(trigger->GetCreatureTemplate()->Modelid2);
                             trigger->CastSpell(me, SPELL_THORIMS_HAMMER, true);
@@ -1564,7 +1564,7 @@ class npc_mimirons_inferno : public CreatureScript
                 {
                     if (infernoTimer <= diff)
                     {
-                        if (Creature* trigger = DoSummonFlyer(NPC_MIMIRON_TARGET_BEACON, me, 20.0f, 0, 6*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
+                        if (auto trigger = DoSummonFlyer(NPC_MIMIRON_TARGET_BEACON, me, 20.0f, 0, 6*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
                             trigger->SetDisplayId(trigger->GetCreatureTemplate()->Modelid2);
                             trigger->CastSpell(trigger->GetPositionX(),trigger->GetPositionY(),trigger->GetPositionZ()-20, SPELL_MIMIRONS_INFERNO_DAMAGE, true);
@@ -1618,7 +1618,7 @@ public:
         {
             if (me->GetDistance2d(who->GetPositionX(), who->GetPositionY()) < 3.0f && who->IsVehicle() )
             {
-                if (Creature* targetBeacon = me->SummonCreature(NPC_HODIR_TARGET_BEACON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+70, 0, TEMPSUMMON_TIMED_DESPAWN, 20*IN_MILLISECONDS))
+                if (auto targetBeacon = me->SummonCreature(NPC_HODIR_TARGET_BEACON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()+70, 0, TEMPSUMMON_TIMED_DESPAWN, 20*IN_MILLISECONDS))
                 {
                     targetBeacon->SetDisplayId(targetBeacon->GetCreatureTemplate()->Modelid2);
                     targetBeacon->CastSpell(me, SPELL_HODIRS_FURY_DAMAGE, true);
@@ -1637,7 +1637,7 @@ public:
 
             if (uiTargetChangeTimer <= diff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM))
+                if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM))
                     me->GetMotionMaster()->MoveChase(pTarget);
 
                 uiTargetChangeTimer = urand(4*IN_MILLISECONDS, 7*IN_MILLISECONDS);
@@ -1695,7 +1695,7 @@ class npc_freya_ward_of_life : public CreatureScript
             {
                 me->setActive(true);
                 lashTimer = urand(2, 8) *IN_MILLISECONDS;
-                if (Unit* target = me->FindNearestPlayer(200.0f))
+                if (auto target = me->FindNearestPlayer(200.0f))
                     me->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
             }
 
@@ -1786,9 +1786,9 @@ class npc_leviathan_player_vehicle : public CreatureScript
                     else
                         me->RemoveAurasDueToSpell(SPELL_GEAR_SCALING);
 
-                    if (InstanceScript* instance = me->GetInstanceScript())
+                    if (auto instance = me->GetInstanceScript())
                     {
-                        if (Creature* leviathan = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_LEVIATHAN)))
+                        if (auto leviathan = ObjectAccessor::GetCreature(*me, instance->GetData64(BOSS_LEVIATHAN)))
                         {
                             if (leviathan->isInCombat())
                             {
@@ -1940,7 +1940,7 @@ class npc_lorekeeper : public CreatureScript
                             break;
                         case 8:
                             if (Creature *ry = me->FindNearestCreature(33696, 30))
-                                if (Creature* Brann = me->FindNearestCreature(NPC_BRANN_BRONZBEARD, 1000, true))
+                                if (auto Brann = me->FindNearestCreature(NPC_BRANN_BRONZBEARD, 1000, true))
                                     ry->GetMotionMaster()->MovePoint(0, Brann->GetPositionX()+4, Brann->GetPositionY(), Brann->GetPositionZ());
                             dellorah->AI()->Talk(SAY_DELLORAH_5);
                             break;
@@ -2002,15 +2002,15 @@ class npc_lorekeeper : public CreatureScript
             if (player)
                 player->CLOSE_GOSSIP_MENU();
 
-            if (Creature* leviathan = instance->instance->GetCreature(instance->GetData64(BOSS_LEVIATHAN)))
+            if (auto leviathan = instance->instance->GetCreature(instance->GetData64(BOSS_LEVIATHAN)))
             {
                 leviathan->AI()->DoAction(ACTION_ACTIVATE_HARD_MODE);
                 creature->SetVisible(false);
                 //                        creature->AI()->DoAction(ACTION_SPAWN_VEHICLES); // spawn the vehicles
                 creature->AI()->DoAction(ACTION_HARD_MODE_EVENT); // spawn the vehicles
-                if (Creature* Delorah = creature->FindNearestCreature(NPC_DELORAH, 1000, true))
+                if (auto Delorah = creature->FindNearestCreature(NPC_DELORAH, 1000, true))
                 {
-                    if (Creature* Brann = creature->FindNearestCreature(NPC_BRANN_BRONZBEARD, 1000, true))
+                    if (auto Brann = creature->FindNearestCreature(NPC_BRANN_BRONZBEARD, 1000, true))
                     {
                         Delorah->GetMotionMaster()->MovePoint(0, Brann->GetPositionX()-4, Brann->GetPositionY(), Brann->GetPositionZ());
                         //TODO Talk(xxxx, Delorah, Branz); when reached at Brann
@@ -2110,13 +2110,13 @@ public:
                     uiStepBrann    = 0;
                     summons.DespawnAll();
                     me->GetMotionMaster()->MoveTargetedHome();
-                    if (Unit* pIngenieur = me->FindNearestCreature(33626, 1000.0f))
+                    if (auto pIngenieur = me->FindNearestCreature(33626, 1000.0f))
                         pIngenieur->GetMotionMaster()->MoveTargetedHome();
-                    if (Unit* pBataille = me->FindNearestCreature(33662, 1000.0f))
+                    if (auto pBataille = me->FindNearestCreature(33662, 1000.0f))
                         pBataille->GetMotionMaster()->MoveTargetedHome();
-                    if (Unit* pMage = me->FindNearestCreature(33672, 1000.0f))
+                    if (auto pMage = me->FindNearestCreature(33672, 1000.0f))
                         pMage->GetMotionMaster()->MoveTargetedHome();
-                    if (Unit* pPentarus = me->FindNearestCreature(NPC_PENTARUS, 1000.0f))
+                    if (auto pPentarus = me->FindNearestCreature(NPC_PENTARUS, 1000.0f))
                         pPentarus->GetMotionMaster()->MoveTargetedHome();
                     me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     break;
@@ -2146,7 +2146,7 @@ public:
                         JumpToNextStepBrann(3000);
                         break;
                     case 1:
-                        if (Unit* pPentarus = me->FindNearestCreature(NPC_PENTARUS, 20.0f))
+                        if (auto pPentarus = me->FindNearestCreature(NPC_PENTARUS, 20.0f))
                             pPentarus->MonsterSay(SAY_PENTARUS_1, LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(3000);
                         break;
@@ -2155,19 +2155,19 @@ public:
                         JumpToNextStepBrann(8000);
                         break;
                     case 3:
-                        if (Unit* pIngenieur = me->FindNearestCreature(33626, 50.0f))
+                        if (auto pIngenieur = me->FindNearestCreature(33626, 50.0f))
                             pIngenieur->GetMotionMaster()->MovePoint(0, -777.336f,-45.084f,429.843f);
-                        if (Unit* pBataille = me->FindNearestCreature(33662, 50.0f))
+                        if (auto pBataille = me->FindNearestCreature(33662, 50.0f))
                         {
                             pBataille->GetMotionMaster()->MovePoint(0, -686.287f,-67.053f,427.960f);
                             pBataille->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY1H);
                         }
-                        if (Unit* pMage = me->FindNearestCreature(33672, 50.0f))
+                        if (auto pMage = me->FindNearestCreature(33672, 50.0f))
                         {
                             pMage->GetMotionMaster()->MovePoint(0, -701.350f,-51.397f,429.483f);
                             pMage->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY1H);
                         }
-                        if (Unit* pPentarus = me->FindNearestCreature(NPC_PENTARUS, 20.0f))
+                        if (auto pPentarus = me->FindNearestCreature(NPC_PENTARUS, 20.0f))
                         {
                             pPentarus->GetMotionMaster()->MovePoint(0, -686.287f,-34.389f,427.960f);
                             pPentarus->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY1H);
@@ -2176,7 +2176,7 @@ public:
                         JumpToNextStepBrann(1500);
                         break;
                     case 4:
-                        if (Unit* pPentarus = me->FindNearestCreature(NPC_PENTARUS, 50.0f))
+                        if (auto pPentarus = me->FindNearestCreature(NPC_PENTARUS, 50.0f))
                             pPentarus->MonsterSay(SAY_PENTARUS_2, LANG_UNIVERSAL, 0);
                         JumpToNextStepBrann(5000);
                         break;
@@ -2337,16 +2337,16 @@ public:
 
     bool OnTrigger(Player* player, const AreaTriggerEntry* /*at*/)
     {
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
         {
-            if (Creature* vehicle = player->GetVehicleCreatureBase())
+            if (auto vehicle = player->GetVehicleCreatureBase())
             {
                 if (!vehicle->HasAura(SPELL_AUTO_REPAIR))
                 {
                     player->MonsterTextEmote(EMOTE_REPAIR, player->GetGUID(), true);
                     player->CastSpell(vehicle, SPELL_AUTO_REPAIR, true);
                     vehicle->SetFullHealth();
-                    if (Creature* leviathan = ObjectAccessor::GetCreature(*player, instance->GetData64(BOSS_LEVIATHAN)))
+                    if (auto leviathan = ObjectAccessor::GetCreature(*player, instance->GetData64(BOSS_LEVIATHAN)))
                         leviathan->AI()->SetData(DATA_UNBROKEN, 0); // Unbroken failed
                 }
             }
@@ -2399,7 +2399,7 @@ public:
 
     bool OnCheck(Player* source, Unit* /*target*/)
     {
-        if (Creature* vehicle = source->GetVehicleCreatureBase())
+        if (auto vehicle = source->GetVehicleCreatureBase())
         {
             if (vehicle->GetEntry() == VEHICLE_DEMOLISHER)
                 return true;
@@ -2415,7 +2415,7 @@ public:
 
     bool OnCheck(Player* source, Unit* /*target*/)
     {
-        if (Creature* vehicle = source->GetVehicleCreatureBase())
+        if (auto vehicle = source->GetVehicleCreatureBase())
         {
             if (vehicle->GetEntry() == VEHICLE_CHOPPER)
                 return true;
@@ -2431,7 +2431,7 @@ public:
 
     bool OnCheck(Player* source, Unit* /*target*/)
     {
-        if (Creature* vehicle = source->GetVehicleCreatureBase())
+        if (auto vehicle = source->GetVehicleCreatureBase())
         {
             if (vehicle->GetEntry() == VEHICLE_SIEGE)
                 return true;
@@ -2448,7 +2448,7 @@ public:
     bool OnCheck(Player* /*source*/, Unit* target)
     {
         if (target)
-            if (Creature* leviathan = target->ToCreature())
+            if (auto leviathan = target->ToCreature())
                 return static_cast<bool>(leviathan->AI()->GetData(DATA_SHUTOUT));
 
         return false;
@@ -2463,7 +2463,7 @@ public:
     bool OnCheck(Player* /*source*/, Unit* target)
     {
         if (target)
-            if (InstanceScript* instance = target->GetInstanceScript())
+            if (auto instance = target->GetInstanceScript())
                 return static_cast<bool>(instance->GetData(DATA_UNBROKEN));
 
         return false;
@@ -2480,7 +2480,7 @@ public:
         if (!target)
             return false;
 
-        if (Creature* Leviathan = target->ToCreature())
+        if (auto Leviathan = target->ToCreature())
             if (Leviathan->AI()->GetData(DATA_ORBIT_ACHIEVEMENTS) >= 1)
                 return true;
 
@@ -2498,7 +2498,7 @@ public:
         if (!target)
             return false;
 
-        if (Creature* Leviathan = target->ToCreature())
+        if (auto Leviathan = target->ToCreature())
             if (Leviathan->AI()->GetData(DATA_ORBIT_ACHIEVEMENTS) >= 2)
                 return true;
 
@@ -2516,7 +2516,7 @@ public:
         if (!target)
             return false;
 
-        if (Creature* Leviathan = target->ToCreature())
+        if (auto Leviathan = target->ToCreature())
             if (Leviathan->AI()->GetData(DATA_ORBIT_ACHIEVEMENTS) >= 3)
                 return true;
 
@@ -2534,7 +2534,7 @@ public:
         if (!target)
             return false;
 
-        if (Creature* Leviathan = target->ToCreature())
+        if (auto Leviathan = target->ToCreature())
             if (Leviathan->AI()->GetData(DATA_ORBIT_ACHIEVEMENTS) == 4)
                 return true;
 
@@ -2570,7 +2570,7 @@ public:
 
             if (const WorldLocation* pos = GetExplTargetDest())
             {
-                if (Creature* temp = GetCaster()->SummonCreature(NPC_WORLD_TRIGGER, *pos, TEMPSUMMON_TIMED_DESPAWN, 500))
+                if (auto temp = GetCaster()->SummonCreature(NPC_WORLD_TRIGGER, *pos, TEMPSUMMON_TIMED_DESPAWN, 500))
                 {
                     temp->SetReactState(REACT_PASSIVE);
                     temp->SetCanFly(true);
@@ -2678,7 +2678,7 @@ class spell_pursued : public SpellScriptLoader
                 targets.remove_if(FlameLeviathanPursuedTargetSelector());
                 if (targets.empty())
                 {
-                    if (Creature* caster = GetCaster()->ToCreature())
+                    if (auto caster = GetCaster()->ToCreature())
                         caster->AI()->EnterEvadeMode();
                     return;
                 }
@@ -3007,7 +3007,7 @@ class spell_vehicle_throw_passenger : public SpellScriptLoader
                 if (targets.HasTraj())
                 {
                     if (Vehicle* vehicle = GetCaster()->GetVehicleKit())
-                        if (Unit* passenger = vehicle->GetPassenger(damage - 1))
+                        if (auto passenger = vehicle->GetPassenger(damage - 1))
                         {
                             std::list<Creature* > unitList;
                             Position pos;
@@ -3020,13 +3020,13 @@ class spell_vehicle_throw_passenger : public SpellScriptLoader
                             Unit* target = NULL;
                             for (std::list<Creature* >::iterator itr = unitList.begin(); itr != unitList.end(); ++itr)
                             {
-                                if (Unit* unit = (*itr)->ToUnit())
+                                if (auto unit = (*itr)->ToUnit())
                                     if (unit->GetEntry() == NPC_SEAT)
                                         if (Vehicle* seat = unit->GetVehicleKit())
                                         {
                                             if (!seat->GetPassenger(0))
                                             {
-                                                if (Unit* device = seat->GetPassenger(2))
+                                                if (auto device = seat->GetPassenger(2))
                                                 {
                                                     if (!device->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                                                     {
@@ -3092,9 +3092,9 @@ class spell_freyas_ward_summon : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);
 
-                if (Unit* caster = GetCaster())
-                    if (InstanceScript* instance = caster->GetInstanceScript())
-                        if (Creature* leviathan = ObjectAccessor::GetCreature(*caster, instance->GetData64(BOSS_LEVIATHAN)))
+                if (auto caster = GetCaster())
+                    if (auto instance = caster->GetInstanceScript())
+                        if (auto leviathan = ObjectAccessor::GetCreature(*caster, instance->GetData64(BOSS_LEVIATHAN)))
                             for (uint8 i = 0; i < urand(3, 5); ++i)
                             {
                                 Position pos;
@@ -3109,9 +3109,9 @@ class spell_freyas_ward_summon : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);
 
-                if (Unit* caster = GetCaster())
-                    if (InstanceScript* instance = caster->GetInstanceScript())
-                        if (Creature* leviathan = ObjectAccessor::GetCreature(*caster, instance->GetData64(BOSS_LEVIATHAN)))
+                if (auto caster = GetCaster())
+                    if (auto instance = caster->GetInstanceScript())
+                        if (auto leviathan = ObjectAccessor::GetCreature(*caster, instance->GetData64(BOSS_LEVIATHAN)))
                             leviathan->SummonCreature(NPC_WARD_OF_LIFE, GetExplTargetDest()->GetPositionX(), GetExplTargetDest()->GetPositionY(),
                             GetExplTargetDest()->GetPositionZ(), 0.0f, TEMPSUMMON_CORPSE_DESPAWN, 3000);
             }
@@ -3202,8 +3202,8 @@ class spell_shield_generator : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32 & amount, bool & /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
-                    if (Unit* siege = caster->GetVehicleBase())
+                if (auto caster = GetCaster())
+                    if (auto siege = caster->GetVehicleBase())
                         amount = int32(siege->CountPctFromMaxHealth(15));
             }
 

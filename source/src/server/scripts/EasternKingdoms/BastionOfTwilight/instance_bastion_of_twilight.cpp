@@ -262,7 +262,7 @@ class instance_bastion_of_twilight : public InstanceMapScript
                         break;
                     case DATA_CHOGALL:
                         if ((state == DONE || state == DONE_HM) && instance->IsHeroic())
-                            if (GameObject* trapDoor = instance->GetGameObject(chogallExitGUID))
+                            if (auto trapDoor = instance->GetGameObject(chogallExitGUID))
                                 trapDoor->SetGoState(GO_STATE_ACTIVE);
                         break;
                 }

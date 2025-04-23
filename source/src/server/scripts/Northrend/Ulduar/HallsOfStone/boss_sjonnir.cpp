@@ -136,7 +136,7 @@ public:
 
             if (instance)
             {
-                if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_SJONNIR_DOOR)))
+                if (auto pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_SJONNIR_DOOR)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -155,7 +155,7 @@ public:
 
             if (uiChainLightningTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CHAIN_LIGHTING);
                 uiChainLightningTimer = urand(10000, 15000);
             } else uiChainLightningTimer -= diff;
@@ -208,7 +208,7 @@ public:
         void JustSummoned(Creature* summon)
         {
             summon->GetMotionMaster()->MovePoint(0, CenterPoint.x, CenterPoint.y, CenterPoint.z);
-            /*if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+            /*if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                 summon->AI()->AttackStart(target);*/
             lSummons.Summon(summon);
         }
@@ -270,7 +270,7 @@ public:
         {
             if (uiMergeTimer <= diff)
             {
-                if (Creature* temp = me->FindNearestCreature(CREATURE_MALFORMED_OOZE, 3.0f, true))
+                if (auto temp = me->FindNearestCreature(CREATURE_MALFORMED_OOZE, 3.0f, true))
                 {
                     DoSpawnCreature(CREATURE_IRON_SLUDGE, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 20000);
                     temp->DisappearAndDie();
@@ -310,7 +310,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (instance)
-                if (Creature* Sjonnir = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SJONNIR)))
+                if (auto Sjonnir = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SJONNIR)))
                     Sjonnir->AI()->DoAction(ACTION_OOZE_DEAD);
         }
     };
@@ -329,7 +329,7 @@ class achievement_abuse_the_ooze : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Sjonnir = target->ToCreature())
+            if (auto Sjonnir = target->ToCreature())
                 if (Sjonnir->AI()->GetData(DATA_ABUSE_THE_OOZE) >= 5)
                     return true;
 

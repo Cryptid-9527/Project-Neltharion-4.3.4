@@ -284,9 +284,9 @@ class spell_mage_ring_of_frost_freeze : public SpellScriptLoader
                 float inRadius = 4.7f;
 
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end();)
-                    if (Unit* unit = (*itr)->ToUnit())
-                        if (Unit* caster = GetCaster())
-                            if (Player* casterPlayer = caster->ToPlayer())
+                    if (auto unit = (*itr)->ToUnit())
+                        if (auto caster = GetCaster())
+                            if (auto casterPlayer = caster->ToPlayer())
                     {
                         if ((casterPlayer && casterPlayer->getClass() == CLASS_MAGE && !caster->HasSpell(116)) //Player is a mage and does not have ice lance known. this would be done as a hardcore attempt to exploit.
                             || (casterPlayer && casterPlayer->getClass() == CLASS_MAGE && caster->GetSpellCooldownDelay(116) > 0) //mage ice lance on cooldown)
@@ -332,13 +332,13 @@ class spell_mage_ring_of_frost_freeze : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     GetTarget()->SetInCombatWith(caster);
             }
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(GetTarget(), SPELL_MAGE_RING_OF_FROST_DUMMY, true);
             }
 
@@ -367,7 +367,7 @@ class spell_mage_pyromaniac : public SpellScriptLoader
 
             void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     uint32 dotCount = 0;
                     std::map<uint64, uint32> usedGuids;
@@ -393,7 +393,7 @@ class spell_mage_pyromaniac : public SpellScriptLoader
 
             void AfterApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (AuraEffect* pyroManiac = caster->GetDummyAuraEffect(SPELLFAMILY_MAGE, 2128, EFFECT_0))
                     {
@@ -520,7 +520,7 @@ class spell_mage_polymorph : public SpellScriptLoader
                 if (removeMode != AURA_REMOVE_BY_DAMAGE)
                     return;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect* aur = caster->GetDummyAuraEffect(SPELLFAMILY_MAGE, 82, EFFECT_0))
                     {
                         uint32 triggeredId = 0;
@@ -572,7 +572,7 @@ class spell_mage_blizzard : public SpellScriptLoader
            void AddChillEffect(SpellEffIndex /*effIndex*/)
            {
                Unit* caster = GetCaster();
-               if (Unit* unitTarget = GetHitUnit())
+               if (auto unitTarget = GetHitUnit())
                {
                    if (caster->IsScriptOverriden(GetSpellInfo(), 836))
                        caster->CastSpell(unitTarget, SPELL_MAGE_CHILLED_R1, true);
@@ -655,7 +655,7 @@ class spell_mage_cold_snap : public SpellScriptLoader
             void HandleConeOfColdScript(SpellEffIndex /*effIndex*//*)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     if (caster->HasAura(SPELL_MAGE_CONE_OF_COLD_AURA_R1)) // Improved Cone of Cold Rank 1
                         unitTarget->CastSpell(unitTarget, SPELL_MAGE_CONE_OF_COLD_TRIGGER_R1, true);
@@ -688,7 +688,7 @@ public:
 		void HandleConeOfColdScript()
 		{
 			Unit* caster = GetCaster();
-			if (Unit* unitTarget = GetHitUnit())
+			if (auto unitTarget = GetHitUnit())
 			{
 				if (caster->HasAura(SPELL_MAGE_CONE_OF_COLD_AURA_R1)) // Improved Cone of Cold Rank 1
 					unitTarget->CastSpell(unitTarget, SPELL_MAGE_CONE_OF_COLD_TRIGGER_R1, true);
@@ -920,7 +920,7 @@ class spell_mage_living_bomb : public SpellScriptLoader
                 if (removeMode != AURA_REMOVE_BY_EXPIRE)
                     return;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(GetTarget(), uint32(aurEff->GetAmount()), true, NULL, aurEff);
             }
 
@@ -936,7 +936,7 @@ class spell_mage_living_bomb : public SpellScriptLoader
 
             void OnHit()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     UnitList targetList;
                     Player::appliedAurasList const& auras = caster->ToPlayer()->appliedAuras;
@@ -1000,7 +1000,7 @@ class spell_mage_ice_barrier : public SpellScriptLoader
            void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
            {
                canBeRecalculated = false;
-               if (Unit* caster = GetCaster())
+               if (auto caster = GetCaster())
                {
                    // +87.00% from sp bonus
                    amount += floor(0.87f * caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) + 0.5f);
@@ -1047,7 +1047,7 @@ class spell_mage_mage_ward : public SpellScriptLoader
            void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
            {
                canBeRecalculated = false;
-               if (Unit* caster = GetCaster())
+               if (auto caster = GetCaster())
                    // +80.70% from sp bonus
                    amount += floor(0.807f * caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) + 0.5f);
            }
@@ -1104,7 +1104,7 @@ class spell_mage_mana_shield : public SpellScriptLoader
            void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
            {
                canBeRecalculated = false;
-               if (Unit* caster = GetCaster())
+               if (auto caster = GetCaster())
                    // +80.7% from sp bonus
                    amount += floor(0.807f * caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()) + 0.5f);
            }
@@ -1151,7 +1151,7 @@ class spell_mage_polymorph_cast_visual : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetCaster()->FindNearestCreature(NPC_AUROSALIA, 30.0f))
+                if (auto target = GetCaster()->FindNearestCreature(NPC_AUROSALIA, 30.0f))
                     if (target->GetTypeId() == TYPEID_UNIT)
                         target->CastSpell(target, PolymorhForms[urand(0, 5)], true);
             }
@@ -1404,7 +1404,7 @@ class spell_mage_combustion : public SpellScriptLoader
             {
                 Unit* caster = GetCaster();
                 int32 damageSum = 0;
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     Unit::AuraEffectList const & aurasA = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_DAMAGE);
                     for (Unit::AuraEffectList::const_iterator itr = aurasA.begin(); itr != aurasA.end(); ++itr)
@@ -1454,7 +1454,7 @@ class spell_mage_impact : public SpellScriptLoader
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetExplTargetUnit())
+                if (auto unitTarget = GetExplTargetUnit())
                 {
                     Unit::AuraEffectList const & aurasA = unitTarget->GetAuraEffectsByType(SPELL_AURA_PERIODIC_DAMAGE);
                     for (Unit::AuraEffectList::const_iterator itr = aurasA.begin(); itr != aurasA.end(); ++itr)
@@ -1563,7 +1563,7 @@ class spell_mage_ritual_of_refreshment : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->GetTypeId() == TYPEID_PLAYER)
                     {
                         caster->ToPlayer()->RemoveSpellCooldown(SPELL_MAGE_RITUAL_OF_REFRESHMENT_R1, true); // Rank 1
@@ -1603,7 +1603,7 @@ public:
 
         void Apply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasAura(SPELL_MAGE_GLYPH_OF_ICY_VEINS))
                 {
@@ -1637,7 +1637,7 @@ public:
         void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
         {
             canBeRecalculated = false;
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 amount += floor(0.061f * caster->SpellBaseDamageBonusDone(GetSpellInfo()->GetSchoolMask()));
         }
 
@@ -1684,14 +1684,14 @@ public:
 
         void ApplyEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (caster->HasAura(56366)) // Glyph of invisibility
                     caster->CastSpell(caster, 87833, true);
         }
 
         void RemoveEffect(AuraEffect const* /* aurEff */, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(87833);
         }
 
@@ -1719,9 +1719,9 @@ public:
 
         void HandleOnHit()
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (target->GetTypeId() == TYPEID_UNIT && target->IsImmunedToSpellEffect(sSpellMgr->GetSpellInfo(44572), 0))
                         caster->CastSpell(target, 71757, true);
@@ -1752,9 +1752,9 @@ public:
 
         void Apply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                 {
                     switch (GetAura()->GetSpellInfo()->Id)
                     {
@@ -1903,7 +1903,7 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAurasDueToSpell(SPELL_MAGE_STOLEN_TIME);
                 caster->RemoveAurasDueToSpell(SPELL_MAGE_STOLEN_TIME_4P);
@@ -1955,7 +1955,7 @@ public:
             if (!(eventInfo.GetHitMask() & PROC_HIT_CRITICAL))
                 return false;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 uint16 t12bonus = 0;
                 if (AuraEffect* t12 = caster->GetAuraEffect(99064, EFFECT_1))
@@ -2068,7 +2068,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 if (caster->HasSpell(5143)) // Has base Arcane Missiles spell
                 {

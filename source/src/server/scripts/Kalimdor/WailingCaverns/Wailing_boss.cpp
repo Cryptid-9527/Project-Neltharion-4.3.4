@@ -158,7 +158,7 @@ public:
 					events.ScheduleEvent(ANA_EVENT_LIGHTNINGBOLT, 4000);
 					break;
 				case ANA_EVENT_SLUMBER:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, ANA_SLUMBER);
 					events.ScheduleEvent(ANA_EVENT_SLUMBER, 18000);
 					break;
@@ -275,7 +275,7 @@ public:
 					events.ScheduleEvent(PYTHAS_EVENT_THUNDERCLAP, 14000);
 					break;
 				case PYTHAS_EVENT_SLUMBER:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, PYTHAS_SLUMBERUWU);
 					events.ScheduleEvent(PYTHAS_EVENT_SLUMBER, 28000);
 					break;
@@ -390,7 +390,7 @@ public:
 					events.ScheduleEvent(COBRAHN_EVENT_LIGHTNINGBOLT, 6000);
 					break;
 				case COBRAHN_EVENT_DRUIDSLUMBER:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, COBRAHN_SLUMBER);
 					events.ScheduleEvent(COBRAHN_EVENT_DRUIDSLUMBER, 15000);
 					break;
@@ -495,7 +495,7 @@ public:
 				switch (eventId)
 				{
 				case SERPENTIS_EVENT_SLUMBER:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, SERPENTIS_SLUMBER);
 					events.ScheduleEvent(SERPENTIS_EVENT_SLUMBER, 25000);
 					break;
@@ -592,12 +592,12 @@ public:
 				switch (eventId)
 				{
 				case MUTANUS_EVENT_NIGHTMARE:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, MUTANUS_NIGHTMARE);
 					events.ScheduleEvent(MUTANUS_EVENT_NIGHTMARE, 15000);
 					break;
 				case MUTANUS_EVENT_TERRIFY:
-					if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+					if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
 						DoCast(target, MUTANUS_TERRIFY);
 					events.ScheduleEvent(MUTANUS_EVENT_TERRIFY, 20000);
 					break;

@@ -169,7 +169,7 @@ public:
                         break;
                     }
                     case JUST_VANISHED:
-                        if (Unit* pEmbraceTarget = GetEmbraceTarget())
+                        if (auto pEmbraceTarget = GetEmbraceTarget())
                         {
                             me->GetMotionMaster()->Clear();
                             me->SetSpeed(MOVE_WALK, 2.0f, true);
@@ -179,7 +179,7 @@ public:
                         uiPhaseTimer = 1300;
                         break;
                     case VANISHED:
-                        if (Unit* pEmbraceTarget = GetEmbraceTarget())
+                        if (auto pEmbraceTarget = GetEmbraceTarget())
                             DoCast(pEmbraceTarget, DUNGEON_MODE(SPELL_EMBRACE_OF_THE_VAMPYR, H_SPELL_EMBRACE_OF_THE_VAMPYR));
                         Talk(SAY_FEED);
                         me->GetMotionMaster()->Clear();
@@ -230,7 +230,7 @@ public:
                                 DoCast(me, SPELL_VANISH);
                                 Phase = JUST_VANISHED;
                                 uiPhaseTimer = 500;
-                                if (Unit* pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                                if (auto pEmbraceTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                                     uiEmbraceTarget = pEmbraceTarget->GetGUID();
 
                             }

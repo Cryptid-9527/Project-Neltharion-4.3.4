@@ -1845,7 +1845,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasAura(SPELL_ANSWER_THE_QUESTION_YES_CORRECT_NO_INCORRECT))
                     caster->CastSpell(caster, SPELL_ANSWER_YES_CORRECT);
@@ -1888,7 +1888,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAura(SPELL_ANSWER_THE_QUESTION_YES_CORRECT_NO_INCORRECT_AURA);
                 caster->CastSpell(caster, SPELL_PING_ORB);
@@ -1922,7 +1922,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAura(SPELL_ANSWER_THE_QUESTION_NO_CORRECT_YES_INCORRECT_AURA);
                 caster->CastSpell(caster, SPELL_PING_ORB);
@@ -1967,7 +1967,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasAura(SPELL_ANSWER_THE_QUESTION_NO_CORRECT_YES_INCORRECT))
                     caster->CastSpell(caster, SPELL_ANSWER_NO_CORRECT);
@@ -2005,7 +2005,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAura(SPELL_ANSWER_THE_QUESTION_NO_CORRECT_YES_INCORRECT_AURA);
                 caster->CastSpell(caster, SPELL_PING_ORB);
@@ -2053,7 +2053,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAura(SPELL_ANSWER_THE_QUESTION_YES_CORRECT_NO_INCORRECT_AURA);
                 caster->CastSpell(caster, SPELL_PING_ORB);
@@ -2966,7 +2966,7 @@ public:
             me->setActive(true);
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 

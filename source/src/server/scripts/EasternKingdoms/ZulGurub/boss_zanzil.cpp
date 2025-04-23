@@ -281,27 +281,27 @@ class boss_zanzil : public CreatureScript
                 memset(&BerserkerGUID, 0, sizeof(BerserkerGUID));
 
                 for (int i = 0; i < ID_GREEN_CAULDRON; ++i)
-                    if (Creature* gas = me->SummonCreature(NPC_ZANZIL_TOXIC_GAS, GasSP[i]))
+                    if (auto gas = me->SummonCreature(NPC_ZANZIL_TOXIC_GAS, GasSP[i]))
                         GasGUID[i] = gas->GetGUID();
 
 
                 for (int i = ID_GREEN_CAULDRON; i <= ID_GREEN_GAS; ++i)
-                    if (Creature* gas = me->SummonCreature(NPC_ZANZIL_TOXIC_GAS, GasSP[i]))
+                    if (auto gas = me->SummonCreature(NPC_ZANZIL_TOXIC_GAS, GasSP[i]))
                     {
                         GasGUID[i] = gas->GetGUID();
                         gas->CastSpell(gas, GasSpell[i - ID_GREEN_CAULDRON], false);
                     }
 
                 for (int i = 0; i < 56; ++i)
-                    if (Creature* zombie = me->SummonCreature(NPC_ZANZILI_ZOMBI, ZombieSP[i], TEMPSUMMON_CORPSE_DESPAWN))
+                    if (auto zombie = me->SummonCreature(NPC_ZANZILI_ZOMBI, ZombieSP[i], TEMPSUMMON_CORPSE_DESPAWN))
                         ZombieGUID[i] = zombie->GetGUID();
 
                 for (uint8 i = 0; i < 3; ++i)
                 {
-                    if (Creature* berserker = instance->GetCreature(BerserkerGUID[i]))
+                    if (auto berserker = instance->GetCreature(BerserkerGUID[i]))
                             berserker->DespawnOrUnsummon();
 
-                    if (Creature* berserker = me->SummonCreature(NPC_ZANZILI_BERSERKER, BerserkerSP[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
+                    if (auto berserker = me->SummonCreature(NPC_ZANZILI_BERSERKER, BerserkerSP[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
                             BerserkerGUID[i] = berserker->GetGUID();
                 }
 
@@ -338,7 +338,7 @@ class boss_zanzil : public CreatureScript
                 {
                     case POINT_BLUE_CAULDRON:
                     {
-                        if (GameObject* cauldron = me->FindNearestGameObject(208314, 20.0f))
+                        if (auto cauldron = me->FindNearestGameObject(208314, 20.0f))
                             me->SetFacingToObject(cauldron);
                         DoCast(SPELL_DRAIN_BLUE_CAULDRON);
                         events.ScheduleEvent(EVENT_RITUAL_DANCE, 4000);
@@ -347,7 +347,7 @@ class boss_zanzil : public CreatureScript
                     }
                     case POINT_RED_CAULDRON:
                     {
-                        if (GameObject* cauldron = me->FindNearestGameObject(208313, 20.0f))
+                        if (auto cauldron = me->FindNearestGameObject(208313, 20.0f))
                             me->SetFacingToObject(cauldron);
                         DoCast(SPELL_DRAIN_RED_CAULDRON);
                         events.ScheduleEvent(EVENT_RITUAL_DANCE, 4000);
@@ -356,7 +356,7 @@ class boss_zanzil : public CreatureScript
                     }
                     case POINT_GREEN_CAULDRON:
                     {
-                        if (GameObject* cauldron = me->FindNearestGameObject(208315, 20.0f))
+                        if (auto cauldron = me->FindNearestGameObject(208315, 20.0f))
                             me->SetFacingToObject(cauldron);
                         DoCast(SPELL_DRAIN_GREEN_CAULDRON);
                         events.ScheduleEvent(EVENT_RITUAL_DANCE, 4000);
@@ -368,11 +368,11 @@ class boss_zanzil : public CreatureScript
 
             void RemoveGas()
             {
-                if (Creature* gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
+                if (auto gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
                     gas->RemoveAllAuras();
 
                 for (int i = 0; i < ID_GREEN_CAULDRON; ++i)
-                    if (Creature* gas = ObjectAccessor::GetCreature(*me, GasGUID[i]))
+                    if (auto gas = ObjectAccessor::GetCreature(*me, GasGUID[i]))
                         gas->RemoveAllAuras();
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_ZANZIL_GRAVEYARD_GAZ_PERIODIC);
@@ -414,16 +414,16 @@ class boss_zanzil : public CreatureScript
                     events.ScheduleEvent(RAND(EVENT_RESURRECTION_ELIXIR_BERSERKER, EVENT_RESURRECTION_ELIXIR_ZOMBIE), 45000);
 
                     for (int i = 0; i < ID_GREEN_CAULDRON; ++i)
-                        if (Creature* gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
+                        if (auto gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
                             gas->CastSpell(gas, SPELL_TOXIC_GAS_DUMMY, true);
 
-                    if (Creature* gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
+                    if (auto gas = ObjectAccessor::GetCreature(*me, GasGUID[ID_GREEN_GAS]))
                         gas->CastSpell(gas, SPELL_GREEN_GAS, false);
 
                     Map::PlayerList const &players = me->GetMap()->GetPlayers();
 
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             player->CastSpell(player, SPELL_ZANZIL_GRAVEYARD_GAZ_PERIODIC, true, NULL, NULL, me->GetGUID());
                 }
             }
@@ -539,7 +539,7 @@ class boss_zanzil : public CreatureScript
                             me->SetReactState(REACT_AGGRESSIVE);
                             events.ScheduleEvent(RAND(EVENT_GRAVEYARD_GAS, EVENT_RESURRECTION_ELIXIR_ZOMBIE), 30000);
 
-                            if (Creature* berserker = ObjectAccessor::GetCreature(*me, BerserkerGUID[ResurrectionId]))
+                            if (auto berserker = ObjectAccessor::GetCreature(*me, BerserkerGUID[ResurrectionId]))
                             {
                                 BerserkerGUID[ResurrectionId] = 0;
                                 berserker->GetMotionMaster()->MoveFall();
@@ -552,7 +552,7 @@ class boss_zanzil : public CreatureScript
                         case EVENT_RESPAWN_BERSERKER:
                         {
                             if (ResurrectionId < 3)
-                                if (Creature* berserker = me->SummonCreature(NPC_ZANZILI_BERSERKER, BerserkerSP[ResurrectionId], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
+                                if (auto berserker = me->SummonCreature(NPC_ZANZILI_BERSERKER, BerserkerSP[ResurrectionId], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
                                     BerserkerGUID[ResurrectionId] = berserker->GetGUID();
                             break;
                         }
@@ -575,7 +575,7 @@ class boss_zanzil : public CreatureScript
                             me->SetReactState(REACT_AGGRESSIVE);
                             events.ScheduleEvent(RAND(EVENT_GRAVEYARD_GAS, EVENT_RESURRECTION_ELIXIR_BERSERKER), 30000);
                             for (int i = ResurrectionId * 14; i < ResurrectionId * 14 + 14; ++i)
-                                if (Creature* zombie = ObjectAccessor::GetCreature(*me, ZombieGUID[i]))
+                                if (auto zombie = ObjectAccessor::GetCreature(*me, ZombieGUID[i]))
                                 {
                                     zombie->SetVisible(true);
                                     ZombieGUID[i] = 0;
@@ -588,7 +588,7 @@ class boss_zanzil : public CreatureScript
                         case EVENT_RESPAWN_ZOMBIE:
                         {
                             for (int i = ResurrectionId * 14; i < ResurrectionId * 14 + 14; ++i)
-                                if (Creature* zombie = me->SummonCreature(NPC_ZANZILI_ZOMBI, ZombieSP[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
+                                if (auto zombie = me->SummonCreature(NPC_ZANZILI_ZOMBI, ZombieSP[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
                                     ZombieGUID[i] = zombie->GetGUID();
                             break;
                         }
@@ -883,7 +883,7 @@ class spell_pursuit_fixate : public SpellScriptLoader
 
             void CastSpell(SpellEffIndex effIndex)
             {
-                if (Creature* caster = GetCaster()->ToCreature())
+                if (auto caster = GetCaster()->ToCreature())
                 {
                     caster->getThreatManager().resetAllAggro();
                     caster->AddThreat(GetHitUnit(), GetSpellInfo()->Effects[effIndex].BasePoints);
@@ -1160,7 +1160,7 @@ public:
         }
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
                 if (target->ToPlayer())
                     target->SetObjectScale(1.0f);
         }

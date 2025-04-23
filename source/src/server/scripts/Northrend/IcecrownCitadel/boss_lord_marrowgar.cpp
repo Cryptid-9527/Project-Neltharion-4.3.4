@@ -376,7 +376,7 @@ class npc_bone_spike : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 if (TempSummon* summ = me->ToTempSummon())
-                    if (Unit* trapped = summ->GetSummoner())
+                    if (auto trapped = summ->GetSummoner())
                         trapped->RemoveAurasDueToSpell(SPELL_IMPALED);
 
                 me->DespawnOrUnsummon();
@@ -410,7 +410,7 @@ class npc_bone_spike : public CreatureScript
                 _events.Update(diff);
 
                 if (_events.ExecuteEvent() == EVENT_FAIL_BONED)
-                    if (InstanceScript* instance = me->GetInstanceScript())
+                    if (auto instance = me->GetInstanceScript())
                         instance->SetData(DATA_BONED_ACHIEVEMENT, uint32(false));
             }
 
@@ -553,7 +553,7 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
             void HandleSpikes(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Creature* marrowgar = GetCaster()->ToCreature())
+                if (auto marrowgar = GetCaster()->ToCreature())
                 {
                     bool didHit = false;
                     CreatureAI* marrowgarAI = marrowgar->AI();
@@ -561,7 +561,7 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
 
                     std::list<Player*> playerList;
                     std::set<Player*> playerSet;
-                    if (Unit* tank = marrowgar->getVictim())
+                    if (auto tank = marrowgar->getVictim())
                     {
                         //das ist nur um auf Nummer sicher zu gehen
                         //Tank sollte nach sortieren an erster Stelle in playerList stehen
@@ -592,7 +592,7 @@ class spell_marrowgar_bone_spike_graveyard : public SpellScriptLoader
                         return;
 
                     for (std::list<HostileReference*>::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
-                        if (Unit* refTarget = (*itr)->getTarget())
+                        if (auto refTarget = (*itr)->getTarget())
                             if ((refTarget->GetTypeId() == TYPEID_PLAYER) && (playerSet.find(refTarget->ToPlayer()) == playerSet.end()))
                                 targets.push_back(refTarget->ToPlayer());
 

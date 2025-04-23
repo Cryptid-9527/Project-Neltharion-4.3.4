@@ -109,13 +109,13 @@ bool instance_karazhan::instance_karazhan_InstanceMapScript::IsEncounterInProgre
 bool instance_karazhan::instance_karazhan_InstanceMapScript::IsCaseOccupied(Creature* creature)
 {
     for (std::list<uint64 >::const_iterator itr = m_lChessPiecesAlliance.begin(); itr != m_lChessPiecesAlliance.end(); ++itr)
-        if (Creature* pChessPiece = instance->GetCreature(*itr))
+        if (auto pChessPiece = instance->GetCreature(*itr))
             if (pChessPiece->isAlive())
                 if (pChessPiece->AI()->GetGUID() == creature->GetGUID())
                     return true;
 
     for (std::list<uint64 >::const_iterator itr = m_lChessPiecesHorde.begin(); itr != m_lChessPiecesHorde.end(); ++itr)
-        if (Creature* pChessPiece = instance->GetCreature(*itr))
+        if (auto pChessPiece = instance->GetCreature(*itr))
             if (pChessPiece->isAlive())
                 if (pChessPiece->AI()->GetGUID() == creature->GetGUID())
                     return true;
@@ -212,18 +212,18 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::SetData(uint32 type
                 {
                     //                            DoUseDoorOrButton(GO_GAMESMANS_HALL_EXIT_DOOR);
                     DoRespawnGameObject(DustCoveredChest, DAY);
-                    if (GameObject* loot = instance->GetGameObject(DustCoveredChest))
+                    if (auto loot = instance->GetGameObject(DustCoveredChest))
                         loot->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                 }
 
                 // cast game end spells
-                if (Creature* pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
+                if (auto pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
                 {
                     pMedivh->CastSpell(pMedivh, SPELL_FORCE_KILL_BUNNY, true);
                     pMedivh->CastSpell(pMedivh, SPELL_GAME_OVER, true);
                     pMedivh->CastSpell(pMedivh, SPELL_CLEAR_BOARD, true);
                 }
-                if (Creature* pController = instance->GetCreature(GetData64(NPC_CHESS_VICTORY_CONTROLLER)))
+                if (auto pController = instance->GetCreature(GetData64(NPC_CHESS_VICTORY_CONTROLLER)))
                     pController->CastSpell(pController, SPELL_VICTORY_VISUAL, true);
                 DoRemoveAurasDueToSpellOnPlayers(SPELL_GAME_IN_SESSION);
 
@@ -233,7 +233,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::SetData(uint32 type
             else if (uiData == FAIL)
             {
                 // clean the board for reset
-                if (Creature* pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
+                if (auto pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
                 {
                     pMedivh->CastSpell(pMedivh, SPELL_GAME_OVER, true);
                     pMedivh->CastSpell(pMedivh, SPELL_CLEAR_BOARD, true);
@@ -282,12 +282,12 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoPrepareChessEvent
 {
     m_uiChessDamages = 0;
 
-    if (Creature* pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
+    if (auto pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
         pMedivh->AI()->DoAction(AI_EVENT_CUSTOM_B);
 
     // Allow all the chess pieces to init start position
     for (std::list<uint64 >::const_iterator itr = m_lChessPiecesAlliance.begin(); itr != m_lChessPiecesAlliance.end(); ++itr)
-        if (Creature* pChessPiece = instance->GetCreature(*itr))
+        if (auto pChessPiece = instance->GetCreature(*itr))
         {
             Creature* pSquare = GetClosestCreatureWithEntry(pChessPiece, NPC_SQUARE_BLACK, 2.0f);
             if (!pSquare)
@@ -308,7 +308,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoPrepareChessEvent
         }
 
     for (std::list<uint64 >::const_iterator itr = m_lChessPiecesHorde.begin(); itr != m_lChessPiecesHorde.end(); ++itr)
-        if (Creature* pChessPiece = instance->GetCreature(*itr))
+        if (auto pChessPiece = instance->GetCreature(*itr))
         {
             Creature* pSquare = GetClosestCreatureWithEntry(pChessPiece, NPC_SQUARE_BLACK, 2.0f);
             if (!pSquare)
@@ -339,7 +339,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoPrepareChessEvent
     // sort stalkers depending on side
     std::list<Creature*> lStalkers;
     for (std::list<uint64 >::const_iterator itr = m_lChessHordeStalkerList.begin(); itr != m_lChessHordeStalkerList.end(); ++itr)
-        if (Creature* pTemp = instance->GetCreature(*itr))
+        if (auto pTemp = instance->GetCreature(*itr))
             lStalkers.push_back(pTemp);
 
     if (lStalkers.empty())
@@ -356,7 +356,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoPrepareChessEvent
 
     lStalkers.clear();
     for (std::list<uint64 >::const_iterator itr = m_lChessAllianceStalkerList.begin(); itr != m_lChessAllianceStalkerList.end(); ++itr)
-        if (Creature* pTemp = instance->GetCreature(*itr))
+        if (auto pTemp = instance->GetCreature(*itr))
             lStalkers.push_back(pTemp);
 
     if (lStalkers.empty())
@@ -387,7 +387,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoMoveChessPieceToS
         return;
 
     // handle stalker transformation
-    if (Creature* pStalker = instance->GetCreature(vStalkers[uiCount]))
+    if (auto pStalker = instance->GetCreature(vStalkers[uiCount]))
     {
         // need to provide specific target, in order to ensure the logic of the event
         pStatusBar->CastSpell(pStalker, uiSpellId, true);
@@ -403,7 +403,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::DoMoveChessPieceToS
 
         for (std::vector<uint64 >::const_iterator itr = vStalkers.begin(); itr != vStalkers.end(); ++itr)
         {
-            if (Creature* pStalker = instance->GetCreature(*itr))
+            if (auto pStalker = instance->GetCreature(*itr))
                 pStalker->HandleEmoteCommand(EMOTE_STATE_APPLAUD);
         }
     }
@@ -418,7 +418,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
         {
             for (std::list<uint64 >::const_iterator itr = m_lChessPiecesAlliance.begin(); itr != m_lChessPiecesAlliance.end(); ++itr)
             {
-                if (Creature* pTemp = instance->GetCreature(*itr))
+                if (auto pTemp = instance->GetCreature(*itr))
                 {
                     if (!pTemp->isAlive())
                         pTemp->Respawn();
@@ -433,7 +433,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
             }
             for (std::list<uint64 >::const_iterator itr = m_lChessPiecesHorde.begin(); itr != m_lChessPiecesHorde.end(); ++itr)
             {
-                if (Creature* pTemp = instance->GetCreature(*itr))
+                if (auto pTemp = instance->GetCreature(*itr))
                 {
                     if (!pTemp->isAlive())
                         pTemp->Respawn();
@@ -449,7 +449,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
 
             for (std::list<uint64 >::const_iterator itr = m_lChessAllianceStalkerList.begin(); itr != m_lChessAllianceStalkerList.end(); ++itr)
             {
-                if (Creature* pTemp = instance->GetCreature(*itr))
+                if (auto pTemp = instance->GetCreature(*itr))
                 {
                     if (!pTemp->isAlive())
                         pTemp->Respawn();
@@ -465,7 +465,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
             }
             for (std::list<uint64 >::const_iterator itr = m_lChessHordeStalkerList.begin(); itr != m_lChessHordeStalkerList.end(); ++itr)
             {
-                if (Creature* pTemp = instance->GetCreature(*itr))
+                if (auto pTemp = instance->GetCreature(*itr))
                 {
                     if (!pTemp->isAlive())
                         pTemp->Respawn();
@@ -481,11 +481,11 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
             }
 
             for (std::vector<uint64 >::const_iterator itr = m_vHordeStalkers.begin(); itr != m_vHordeStalkers.end(); ++itr)
-                if (Creature* pStalker = instance->GetCreature(*itr))
+                if (auto pStalker = instance->GetCreature(*itr))
                     pStalker->RemoveAllAuras();
 
             for (std::vector<uint64 >::const_iterator itr = m_vAllianceStalkers.begin(); itr != m_vAllianceStalkers.end(); ++itr)
-                if (Creature* pStalker = instance->GetCreature(*itr))
+                if (auto pStalker = instance->GetCreature(*itr))
                     pStalker->RemoveAllAuras();
 
             if (GetData(TYPE_CHESS) == FAIL || GetData(TYPE_CHESS) == IN_PROGRESS)
@@ -495,7 +495,7 @@ void instance_karazhan::instance_karazhan_InstanceMapScript::Update(uint32 uiDif
 
             m_uiChessDamages = 0;
             m_uiChessResetTimer = 0;
-            if (Creature* pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
+            if (auto pMedivh =  instance->GetCreature(GetData64(NPC_ECHO_MEDIVH)))
                 pMedivh->AI()->Reset();
         }
         else

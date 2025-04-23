@@ -154,7 +154,7 @@ class instance_magtheridons_lair : public InstanceMapScript
                             m_auiEncounter[1] = NOT_STARTED;
                             for (std::set<uint64>::const_iterator i = ChannelerGUID.begin(); i != ChannelerGUID.end(); ++i)
                             {
-                                if (Creature* Channeler = instance->GetCreature(*i))
+                                if (auto Channeler = instance->GetCreature(*i))
                                 {
                                     if (Channeler->isAlive())
                                         Channeler->AI()->EnterEvadeMode();
@@ -241,7 +241,7 @@ class instance_magtheridons_lair : public InstanceMapScript
                     {
                         for (std::set<uint64>::const_iterator i = ChannelerGUID.begin(); i != ChannelerGUID.end(); ++i)
                         {
-                            if (Creature* Channeler = instance->GetCreature(*i))
+                            if (auto Channeler = instance->GetCreature(*i))
                             {
                                 if (Channeler->isAlive())
                                     Channeler->AI()->EnterEvadeMode();

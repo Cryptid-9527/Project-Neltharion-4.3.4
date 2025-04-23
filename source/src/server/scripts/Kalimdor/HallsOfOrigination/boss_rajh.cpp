@@ -227,7 +227,7 @@ struct boss_rajh : public BossAI
                 if(spell && spell->Effects[i].Effect == SPELL_EFFECT_INTERRUPT_CAST)
                 {
                     me->InterruptSpell(CURRENT_GENERIC_SPELL, false);
-                    if (Creature* trigger = me->FindNearestCreature(NPC_INFERNO_TRIGGER, 200.0f))
+                    if (auto trigger = me->FindNearestCreature(NPC_INFERNO_TRIGGER, 200.0f))
                         trigger->DespawnOrUnsummon();
                 }
     }
@@ -510,10 +510,10 @@ struct boss_rajh : public BossAI
                     else
                     {
                         //TC_LOG_ERROR("sql.sql", "Executing EVENT_INFERNO_JUMP");
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         {
                             DoCast(target, SPELL_INFERNO_JUMP_TRIGGER, false);
-                            if (Creature* trigger = me->FindNearestCreature(NPC_INFERNO_TRIGGER, 200.0f))
+                            if (auto trigger = me->FindNearestCreature(NPC_INFERNO_TRIGGER, 200.0f))
                             {
                                 lock_orientation = me->GetAngle(trigger);
                                 me->SetReactState(REACT_PASSIVE);
@@ -654,7 +654,7 @@ struct npc_solar_wind_vortex : public ScriptedAI
         me->GetMotionMaster()->Clear();
         me->GetMotionMaster()->MovePoint(POINT_RANDOM_1, random[1]);
 
-        if (Creature* rajh = Creature::GetCreature(*me, instance->GetData64(DATA_RAJH_GUID)))
+        if (auto rajh = Creature::GetCreature(*me, instance->GetData64(DATA_RAJH_GUID)))
             rajh->AI()->JustSummoned(me);
         events.ScheduleEvent(EVENT_SUMMON_FIRE, 100);
     }
@@ -762,8 +762,8 @@ struct npc_sunball : public ScriptedAI
             switch (eventId)
             {
                 case EVENT_MOVE_DOWN:
-                    if (Player* p = me->FindNearestPlayer(200.f))
-                    if (Creature* rajh = Creature::GetCreature(*me, instance->GetData64(DATA_RAJH_GUID)))
+                    if (auto p = me->FindNearestPlayer(200.f))
+                    if (auto rajh = Creature::GetCreature(*me, instance->GetData64(DATA_RAJH_GUID)))
                     {
                         me->GetMotionMaster()->MovePoint(EVENT_JUMP, *p, false, 45.f, false);
                     }
@@ -836,7 +836,7 @@ struct npc_elementar_1 : public ScriptedAI
                     }
                     break;
                 case EVENT_SEARING_FLAME:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         if(IsHeroic())
                         {
                             DoCast(target, 89849);
@@ -917,7 +917,7 @@ struct npc_elementar_2 : public ScriptedAI
                     }
                     break;
                 case EVENT_SEARING_FLAME:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         if(IsHeroic())
                         {
                             DoCast(target, 89849);

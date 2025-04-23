@@ -29,7 +29,7 @@ public:
 
     static bool HandleSoloQueueJoinCommand(ChatHandler* handler, char const* /*args*/)
     {
-        if (Player* player = handler->GetSession()->GetPlayer())
+        if (auto player = handler->GetSession()->GetPlayer())
         {
             if (!sWorld->getBoolConfig(CONFIG_ARENA_SOLO_QUEUE_ENABLED))
             {
@@ -63,7 +63,7 @@ public:
             return true;
         }
 
-        if (Player* player = handler->GetSession()->GetPlayer())
+        if (auto player = handler->GetSession()->GetPlayer())
         {
             if (sSoloQueueMgr->RemovePlayer(player->GetGUID()))
             {
@@ -71,7 +71,7 @@ public:
             }
             else if (player->InBattlegroundQueueForBattlegroundQueueType(BATTLEGROUND_QUEUE_1v1_SOLO))
             {
-                if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+                if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
                 {
                     WorldPacket data;
                     sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, player, player->GetBattlegroundQueueIndex(BATTLEGROUND_QUEUE_1v1_SOLO), STATUS_NONE, player->GetBattlegroundQueueJoinTime(BATTLEGROUND_AA), 0, ARENA_TYPE_1v1_SOLO);
@@ -84,7 +84,7 @@ public:
             }
             else if (player->InBattlegroundQueueForBattlegroundQueueType(BATTLEGROUND_QUEUE_3v3_SOLO))
             {
-                if (Battleground* bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
+                if (auto bg = sBattlegroundMgr->GetBattlegroundTemplate(BATTLEGROUND_AA))
                 {
                     WorldPacket data;
                     sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, player, player->GetBattlegroundQueueIndex(BATTLEGROUND_QUEUE_3v3_SOLO), STATUS_NONE, player->GetBattlegroundQueueJoinTime(BATTLEGROUND_AA), 0, ARENA_TYPE_3v3_SOLO);

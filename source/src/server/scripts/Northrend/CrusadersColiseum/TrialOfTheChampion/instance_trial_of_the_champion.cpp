@@ -113,7 +113,7 @@ public:
 
             if (!players.isEmpty())
             {
-                if (Player* player = players.begin()->getSource())
+                if (auto player = players.begin()->getSource())
                     TeamInInstance = player->GetTeam();
             }
 
@@ -186,17 +186,17 @@ public:
                     if (data == SPECIAL)
                     {
                         for (std::list<uint64>::const_iterator itr = VehicleList.begin(); itr != VehicleList.end(); ++itr)
-                            if (Creature* summon = instance->GetCreature(*itr))
+                            if (auto summon = instance->GetCreature(*itr))
                                 summon->RemoveFromWorld();
                     } else if (data == IN_PROGRESS)
                     {
                         for (uint8 i=0; i<3; i++)
-                            if (Creature* boss = instance->GetCreature(grandChampionGUID[i]))
+                            if (auto boss = instance->GetCreature(grandChampionGUID[i]))
                                 AggroAllPlayers(boss);
                     } else if (data == DONE)
                     {
                         DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_CHAMPIONS);
-                        if (Creature* announcer =  instance->GetCreature(uiAnnouncerGUID))
+                        if (auto announcer =  instance->GetCreature(uiAnnouncerGUID))
                         {
                             announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
                             announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -208,7 +208,7 @@ public:
                     m_auiEncounter[1] = data;
                     if (data == DONE)
                     {
-                        if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                        if (auto announcer = instance->GetCreature(uiAnnouncerGUID))
                         {
                             DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_EADRIC);
                             announcer->GetMotionMaster()->MovePoint(0, 742.742f, 630.207f, 411.172f);
@@ -221,7 +221,7 @@ public:
                     m_auiEncounter[2] = data;
                     if (data == DONE)
                     {
-                        if (Creature* announcer = instance->GetCreature(uiAnnouncerGUID))
+                        if (auto announcer = instance->GetCreature(uiAnnouncerGUID))
                         {
                             DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_PALETRESS);
                             DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_ACHIEVEMENT_MEMORIES);

@@ -173,7 +173,7 @@ class boss_high_astromancer_solarian : public CreatureScript
                 Creature* Summoned = me->SummonCreature(entry, x, y, z, 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 5000);
                 if (Summoned)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         Summoned->AI()->AttackStart(target);
 
                     Summons.Summon(Summoned);
@@ -229,7 +229,7 @@ class boss_high_astromancer_solarian : public CreatureScript
                     if (Wrath_Timer <= diff)
                     {
                         me->InterruptNonMeleeSpells(false);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                             DoCast(target, SPELL_WRATH_OF_THE_ASTROMANCER, true);
                         Wrath_Timer = 20000+rand()%5000;
                     }
@@ -260,7 +260,7 @@ class boss_high_astromancer_solarian : public CreatureScript
                     {
                         me->InterruptNonMeleeSpells(false);
                         //Target the tank ?
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                         {
                             if (target->GetTypeId() == TYPEID_PLAYER)
                             {
@@ -307,7 +307,7 @@ class boss_high_astromancer_solarian : public CreatureScript
                         }
                         for (int i=0; i <= 2; ++i)
                         {
-                            if (Creature* Summoned = me->SummonCreature(NPC_ASTROMANCER_SOLARIAN_SPOTLIGHT, Portals[i][0], Portals[i][1], Portals[i][2], CENTER_O, TEMPSUMMON_TIMED_DESPAWN, Phase2_Timer+Phase3_Timer+AppearDelay_Timer+1700))
+                            if (auto Summoned = me->SummonCreature(NPC_ASTROMANCER_SOLARIAN_SPOTLIGHT, Portals[i][0], Portals[i][1], Portals[i][2], CENTER_O, TEMPSUMMON_TIMED_DESPAWN, Phase2_Timer+Phase3_Timer+AppearDelay_Timer+1700))
                             {
                                 Summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                                 Summoned->CastSpell(Summoned, SPELL_SPOTLIGHT, false);

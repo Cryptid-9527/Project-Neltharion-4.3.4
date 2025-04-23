@@ -589,7 +589,7 @@ void WorldSession::LogoutPlayer(bool Save)
         }
 
         //drop a flag if player is carrying it
-        if (Battleground* bg = p->GetBattleground())
+        if (auto bg = p->GetBattleground())
             bg->EventPlayerLoggedOut(p);
 
         ///- Teleport to home if the player is in an invalid instance
@@ -614,7 +614,7 @@ void WorldSession::LogoutPlayer(bool Save)
             HandleMoveWorldportAckOpcode();
 
         ///- If the player is in a guild, update the guild roster and broadcast a logout message to other guild members
-        if (Guild* guild = sGuildMgr->GetGuildById(p->GetGuildId()))
+        if (auto guild = sGuildMgr->GetGuildById(p->GetGuildId()))
             guild->HandleMemberLogout(this);
 
         ///- Remove pet

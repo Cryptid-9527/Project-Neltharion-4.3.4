@@ -204,7 +204,7 @@ public:
 
         void Reset() override
         {
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
                 portal->SetVisible(true);
             me->RemoveAllAurasOnDeath();
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
@@ -345,7 +345,7 @@ public:
             if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
                 me->SetLootMode(LOOT_MODE_LFR);
 
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
                 portal->SetVisible(false);
 
             me->CallForHelp(100.0f);
@@ -360,7 +360,7 @@ public:
 
         void JustDied(Unit* killer) override
         {
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
                 portal->SetVisible(true);
 
             RemoveEncounterFrame();
@@ -508,7 +508,7 @@ public:
 
             if (pointId == POINT_HOME_POS)
             {
-                if (Creature* yorsahj = _instance->GetCreature(DATA_YORSAHJ))
+                if (auto yorsahj = _instance->GetCreature(DATA_YORSAHJ))
                     yorsahj->AI()->DoAction(me->GetEntry());
                 DoCast(SPELL_BESTOW_BLOOD);
                 RemoveEncounterFrame();
@@ -562,7 +562,7 @@ public:
         _summon->SetReactState(REACT_AGGRESSIVE);
         _summon->SetInCombatWithZone();
         /// @hack: SPELL_FIXATE should do all this magic
-        if (Unit* target = _summon->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_FIXATE))
+        if (auto target = _summon->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_FIXATE))
         {
             _summon->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, true);
             _summon->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, true);
@@ -680,7 +680,7 @@ public:
 
         void IsSummonedBy(Unit* summoner) override
         {
-            if (Creature* yorsahj = instance->GetCreature(DATA_YORSAHJ))
+            if (auto yorsahj = instance->GetCreature(DATA_YORSAHJ))
                 yorsahj->AI()->JustSummoned(me);
 
             manaLeeched = 0;
@@ -784,7 +784,7 @@ public:
 
         void HandleActivation(SpellEffIndex /*effIndex*/)
         {
-            if (Creature* target = GetHitCreature())
+            if (auto target = GetHitCreature())
             {
                 target->SetDisplayId(target->GetCreatureTemplate()->Modelid1);
                 target->AI()->DoAction(EVENT_ACTIVATE_MINION);
@@ -837,7 +837,7 @@ public:
         {
             if (GetAura()->GetStackAmount() == GetSpellInfo()->Effects[EFFECT_1].BasePoints)
             {
-                if (Unit* owner = GetOwner()->ToUnit())
+                if (auto owner = GetOwner()->ToUnit())
                 {
                     owner->CastSpell(owner, GetSpellInfo()->Id == SPELL_DEEP_CORRUPTION_TRASH_TR ? SPELL_DEEP_CORRUPTION_TRASH : SPELL_DEEP_CORRUPTION_EXPLOSION, true);
                     Remove(AURA_REMOVE_BY_DEFAULT);

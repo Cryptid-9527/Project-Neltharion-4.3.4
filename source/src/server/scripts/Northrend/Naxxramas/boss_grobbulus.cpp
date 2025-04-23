@@ -101,7 +101,7 @@ public: boss_grobbulus() : CreatureScript("boss_grobbulus") { }
                         events.ScheduleEvent(EVENT_SPRAY, 15000+rand()%15000);
                         return;
                     case EVENT_INJECT:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                             if (!target->HasAura(SPELL_MUTATING_INJECTION))
                                 DoCast(target, SPELL_MUTATING_INJECTION);
                         events.ScheduleEvent(EVENT_INJECT, 8000 + uint32(120 * me->GetHealthPct()));

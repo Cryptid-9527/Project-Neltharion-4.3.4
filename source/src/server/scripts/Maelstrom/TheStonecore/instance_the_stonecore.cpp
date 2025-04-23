@@ -107,7 +107,7 @@ class instance_the_stonecore : public InstanceMapScript
                     case NPC_ROCK_BORER:
                     case NPC_THRASHING_CHARGE:
                     case NPC_CRYSTAL_SHARD:
-                        if (Creature* corbus = instance->GetCreature(CorborusGUID))
+                        if (auto corbus = instance->GetCreature(CorborusGUID))
                         {
                             if (GetBossState(DATA_CORBORUS) == IN_PROGRESS)
                                 corbus->AI()->JustSummoned(creature);
@@ -347,7 +347,7 @@ public:
         {
             if (passenger->isInCombat())
             {
-                if (Player* passPlayer = passenger->ToPlayer())
+                if (auto passPlayer = passenger->ToPlayer())
                     if (auto s = passPlayer->GetSession())
                         s->SendNotification(s->GetTrinityString(LANG_YOU_IN_COMBAT));
                 return;

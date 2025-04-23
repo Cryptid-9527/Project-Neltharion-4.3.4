@@ -89,14 +89,14 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
                 if (Pet* pet = caster->GetPet())
                     pet->RemoveAurasDueToSpell(SPELL_HUNTER_ASPECT_OF_THE_BEAST_PET);
         }
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
                 if (caster->GetPet())
                     caster->CastSpell(caster, SPELL_HUNTER_ASPECT_OF_THE_BEAST_PET, true);
         }
@@ -171,7 +171,7 @@ public:
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetCaster();
-            if (Unit* unitTarget = GetHitUnit())
+            if (auto unitTarget = GetHitUnit())
             {
                 // Chimera shot heal
                 caster->CastSpell(caster, 53353, true);
@@ -210,7 +210,7 @@ public:
 
         void HandleAfterHit()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect const* impSting = caster->GetAuraEffectOfRankedSpell(SPELL_HUNTER_IMPROVED_SERPENT_STING_R1, EFFECT_0, caster->GetGUID()))
                 {
@@ -255,7 +255,7 @@ public:
             if (caster->GetTypeId() == TYPEID_PLAYER && !caster->isInCombat())
                 return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
 
-            if (Player* plr = caster->ToPlayer())
+            if (auto plr = caster->ToPlayer())
                 plr->SetUnderACKmountAdvanced();
 
             return SPELL_CAST_OK;
@@ -303,7 +303,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* unitTarget = GetHitUnit())
+            if (auto unitTarget = GetHitUnit())
                 if (AuraEffect* aurEff = unitTarget->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 3487, 0))
                     if (roll_chance_i(aurEff->GetAmount()))
                         unitTarget->CastSpell(unitTarget, SPELL_HUNTER_INVIGORATION_TRIGGERED, true);
@@ -342,8 +342,8 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* ally = GetHitUnit())
-                if (Player* caster = GetCaster()->ToPlayer())
+            if (auto ally = GetHitUnit())
+                if (auto caster = GetCaster()->ToPlayer())
                     if (Pet* target = caster->GetPet())
                     {
                         TriggerCastFlags castMask = TriggerCastFlags(TRIGGERED_FULL_MASK & ~TRIGGERED_IGNORE_CASTER_AURASTATE);
@@ -353,7 +353,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 // Cannot be processed while pet is dead
                 TriggerCastFlags castMask = TriggerCastFlags(TRIGGERED_FULL_MASK & ~TRIGGERED_IGNORE_CASTER_AURASTATE);
@@ -394,9 +394,9 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Player* player = caster->ToPlayer())
+                if (auto player = caster->ToPlayer())
                 {
                     if (player->GetPet() && GetTarget()->GetRedirectThreatTarget())
                     {
@@ -415,8 +415,8 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Player* player = caster->ToPlayer())
+            if (auto caster = GetCaster())
+                if (auto player = caster->ToPlayer())
                     if (player->GetPet() && GetTarget()->GetRedirectThreatTarget())
                         if (player->GetPet()->GetGUID() == GetTarget()->GetRedirectThreatTarget()->GetGUID())
                             if (player->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 2231, EFFECT_0))
@@ -484,7 +484,7 @@ public:
         void HandleBeforeCast()
         {
             // remove old buff if exist
-            if (Unit* owner = GetCaster()->GetOwner())
+            if (auto owner = GetCaster()->GetOwner())
                 if (owner->HasAura(SPELL_HUNTER_ROAR_RECOVERY))
                     owner->RemoveAurasDueToSpell(SPELL_HUNTER_ROAR_RECOVERY, 0, 0, AURA_REMOVE_BY_EXPIRE);
         }
@@ -601,7 +601,7 @@ public:
             caster->AttackStop();
             caster->SendAttackSwingCancelAttack();
 
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
         }
 
@@ -810,7 +810,7 @@ public:
         {
             targets.clear();
             targets.push_back(GetCaster());
-            if (Unit* owner = GetCaster()->GetOwner())
+            if (auto owner = GetCaster()->GetOwner())
                 targets.push_back(owner);
         }
 
@@ -839,7 +839,7 @@ public:
 
         void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 amount = caster->CountPctFromMaxHealth(amount);
         }
 
@@ -887,7 +887,7 @@ public:
 
         void RemoveFrenzyStacks()
         {
-            if (Unit* pet = GetCaster()->GetGuardianPet())
+            if (auto pet = GetCaster()->GetGuardianPet())
                 pet->RemoveAura(SPELL_HUNTER_PET_FRENZY);
         }
 
@@ -910,7 +910,7 @@ public:
 
         uint32 GetFrenzyStackCount()
         {
-            if (Unit* pet = GetUnitOwner()->GetGuardianPet())
+            if (auto pet = GetUnitOwner()->GetGuardianPet())
             {
                 if (pet->HasAura(SPELL_HUNTER_PET_FRENZY))
                     return pet->GetAuraCount(SPELL_HUNTER_PET_FRENZY);
@@ -922,15 +922,15 @@ public:
 
         void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* caster = GetUnitOwner())
+            if (auto caster = GetUnitOwner())
                 amount = GetSpellInfo()->Effects[0].BasePoints * GetFrenzyStackCount();
         }
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetUnitOwner())
+            if (auto caster = GetUnitOwner())
             {
-                if (Unit* pet = caster->GetGuardianPet())
+                if (auto pet = caster->GetGuardianPet())
                 {
                     int32 basepoint0 = GetAura()->GetEffect(1)->GetAmount() * GetFrenzyStackCount();
                     caster->CastCustomSpell(pet, SPELL_HUNTER_FOCUS_FIRE_ENERGIZE, &basepoint0, NULL, NULL, true);
@@ -963,7 +963,7 @@ public:
 
             int32 GetHasteValue()
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 if (pet->HasAura(HUNTER_PET_AURA_FRENZY_TRIGGER))
                 {
@@ -978,7 +978,7 @@ public:
 
         void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
                 Unit* petOwner = pet->GetOwner();
 
@@ -1001,9 +1001,9 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* pet = GetUnitOwner())
+            if (auto pet = GetUnitOwner())
             {
-                if (Unit* petOwner = pet->GetOwner())
+                if (auto petOwner = pet->GetOwner())
                     petOwner->RemoveAura(SPELL_HUNTER_FOCUS_FIRE_ALERT);
             }
         }
@@ -1143,7 +1143,7 @@ public:
 
         void HandleUpdatePeriodic(AuraEffect* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Position newPos;
                 GetUnitOwner()->GetPosition(&newPos);
@@ -1191,7 +1191,7 @@ public:
         void HandleOnHit()
         {
             Unit* caster = GetCaster();
-            if (Unit* unitTarget = GetHitUnit())
+            if (auto unitTarget = GetHitUnit())
             {
                 uint32 triggeredSpell = 0;
                 if (caster->HasSpell(87934))
@@ -1428,7 +1428,7 @@ public:
         void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
         {
             canBeRecalculated = false;
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 amount += floor(0.0546f * caster->GetTotalAttackPowerValue(RANGED_ATTACK));
         }
 
@@ -1449,7 +1449,7 @@ public:
 
         void OnPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect* tnt = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_HUNTER, 355, EFFECT_0))
                     if (roll_chance_i(tnt->GetAmount()))
@@ -1550,7 +1550,7 @@ public:
 
         void ResetCooldown(SpellEffIndex /*effIndex*/)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
                 if (caster->HasSpellCooldown(53301)) // Explosive Shot
                     caster->RemoveSpellCooldown(53301, true);
         }
@@ -1578,7 +1578,7 @@ public:
 
         void HandleAfterCast()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(77769);
         }
 
@@ -1605,7 +1605,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->HasAura(82897)) // Resistance is Futile!
                 {
@@ -1639,7 +1639,7 @@ public:
         bool CheckProc(ProcEventInfo& eventInfo)
         {
             if (eventInfo.GetActionTarget() && eventInfo.GetActionTarget()->GetTypeId() == TYPEID_UNIT)
-                if (Creature* target = eventInfo.GetActionTarget()->ToCreature())
+                if (auto target = eventInfo.GetActionTarget()->ToCreature())
                     if (target->IsDungeonBoss() || target->isWorldBoss()) // Lock and Load can't trigger on boss npcs
                         return false;
             return true;
@@ -1669,7 +1669,7 @@ public:
 
         void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect* tnt = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_HUNTER, 355, EFFECT_0))
                     if (roll_chance_i(tnt->GetAmount()))

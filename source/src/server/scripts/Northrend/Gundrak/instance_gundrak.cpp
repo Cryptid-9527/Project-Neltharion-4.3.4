@@ -427,7 +427,7 @@ public:
              // Spawn the support for the bridge if necessary
              if (spawnSupport)
              {
-                 if (GameObject* pCollision = instance->GetGameObject(uiCollision))
+                 if (auto pCollision = instance->GetGameObject(uiCollision))
                      pCollision->SummonGameObject(192743, pCollision->GetPositionX(), pCollision->GetPositionY(), pCollision->GetPositionZ(), pCollision->GetOrientation(), 0, 0, 0, 0, 0);
                  spawnSupport = false;
              }
@@ -487,14 +487,14 @@ public:
                      // This is a workaround to make the beam cast properly. The caster should be ID 30298 but since the spells
                      // all are with scripted target for that same ID, it will hit itself.
                      if (pAltar)
-                         if (Creature* trigger = pAltar->SummonCreature(18721, pAltar->GetPositionX(), pAltar->GetPositionY(), pAltar->GetPositionZ() + 3, pAltar->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN, 5000))
+                         if (auto trigger = pAltar->SummonCreature(18721, pAltar->GetPositionX(), pAltar->GetPositionY(), pAltar->GetPositionZ() + 3, pAltar->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN, 5000))
                          {
                              // Set the trigger model to invisible
                              trigger->SetDisplayId(11686);
                              trigger->CastSpell(trigger, spell, false);
                          }
 
-                     if (GameObject* statueGO = instance->GetGameObject(toActivate))
+                     if (auto statueGO = instance->GetGameObject(toActivate))
                          statueGO->SetGoState(GO_STATE_READY);
 
                      toActivate = 0;
@@ -511,7 +511,7 @@ public:
 
          GOState GetObjState(uint64 guid)
          {
-             if (GameObject* go = instance->GetGameObject(guid))
+             if (auto go = instance->GetGameObject(guid))
                  return go->GetGoState();
              return GO_STATE_ACTIVE;
          }

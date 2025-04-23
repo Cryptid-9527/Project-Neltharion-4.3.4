@@ -355,7 +355,7 @@ public:
                 Map::PlayerList const &PlayerList = instance->instance->GetPlayers();
                 if (!PlayerList.isEmpty())
                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                        if (Player* player = i->getSource())
+                        if (auto player = i->getSource())
                             if (player->isAlive())
                                 player->ExitVehicle(&pos);
                 instance->FinishLfgDungeon(me);

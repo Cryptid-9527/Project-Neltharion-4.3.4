@@ -28,7 +28,7 @@ struct go_halls_of_origination_transit_device : public GameObjectAI
 
     bool CanBeSeenBy(Unit* who) override
     {
-        if (InstanceScript* script = go->GetInstanceScript())
+        if (auto script = go->GetInstanceScript())
             if (script->GetBossState(DATA_TEMPLE_GUARDIAN_ANHUUR) != DONE)
                 return false;
 
@@ -40,7 +40,7 @@ struct go_halls_of_origination_transit_device : public GameObjectAI
         if (player->isInCombat())
             return true;
 
-        if (InstanceScript* script = go->GetInstanceScript())
+        if (auto script = go->GetInstanceScript())
             if (script->GetBossState(DATA_TEMPLE_GUARDIAN_ANHUUR) != DONE)
                 return true;
 
@@ -226,10 +226,10 @@ struct go_hoo_makers_lift_controller : public GameObjectAI
             return false;
         }
 
-        if (InstanceScript* script = go->GetInstanceScript())
+        if (auto script = go->GetInstanceScript())
         {
-            //if (GameObject* go2 = script->GetGameObject(script->GetData64(GO_LIFT_OF_THE_MAKER
-            if (GameObject* go2 = go->FindNearestGameObject(GO_LIFT_OF_THE_MAKER, 500.f))
+            //if (auto go2 = script->GetGameObject(script->GetData64(GO_LIFT_OF_THE_MAKER
+            if (auto go2 = go->FindNearestGameObject(GO_LIFT_OF_THE_MAKER, 500.f))
             {
                 //go2->SetTransportState(action);
                 go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);

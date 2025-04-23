@@ -283,7 +283,7 @@ public:
             {
                 me->InterruptNonMeleeSpells(true);
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
                 {
                     if (target && target->isAlive())
                     {
@@ -394,7 +394,7 @@ public:
             holySmiteTimer    = urand(5000, 7000);
             renewTimer        = urand(2000, 5000);
 
-            if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+            if (auto memory = Unit::GetCreature(*me, memoryGUID))
                 memory->DespawnOrUnsummon();
 
             memoryGUID = 0;
@@ -407,7 +407,7 @@ public:
         {
             if (id == 1)
             {
-                if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+                if (auto memory = Unit::GetCreature(*me, memoryGUID))
                     memory->DespawnOrUnsummon();
 
                 Talk(SAY_PALETRESS_MEMORY_DIES);
@@ -455,13 +455,13 @@ public:
                 Talk(SAY_COMMON_DEATH);
                 BindPlayersToInstance(me);
 
-                if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+                if (auto memory = Unit::GetCreature(*me, memoryGUID))
                     memory->DespawnOrUnsummon();
             }
 
             if (!shielded && HealthBelowPct(25))
             {
-        if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+        if (auto memory = Unit::GetCreature(*me, memoryGUID))
           return;
                 shielded = true;
                 me->InterruptNonMeleeSpells(true);
@@ -552,7 +552,7 @@ public:
 
             if (holyFireTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_HOLY_FIRE);
@@ -565,7 +565,7 @@ public:
 
             if (holySmiteTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 250, true))
                 {
                     if (target && target->isAlive())
                         DoCast(target, SPELL_SMITE);
@@ -588,7 +588,7 @@ public:
                             DoCast(me, SPELL_RENEW);
                             break;
                         case 1:
-                            if (Creature* memory = Unit::GetCreature(*me, memoryGUID))
+                            if (auto memory = Unit::GetCreature(*me, memoryGUID))
                             {
                                 if (memory->isAlive())
                                     DoCast(memory, SPELL_RENEW);
@@ -634,7 +634,7 @@ public:
 
         void Reset()
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 instance->SetData(DATA_MEMORY_ENTRY, me->GetEntry());
 
             oldWoundsTimer = 12000;
@@ -718,14 +718,14 @@ public:
 
         void JustReachedHome()
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->GetData(MINION_ENCOUNTER) == IN_PROGRESS)
                     instance->SetData(MINION_ENCOUNTER, FAIL);
         }
 
         void EnterCombat(Unit* /*attacker*/)
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->GetData(MINION_ENCOUNTER) != IN_PROGRESS)
                     instance->SetData(MINION_ENCOUNTER, IN_PROGRESS);
         }
@@ -884,7 +884,7 @@ public:
 
         void EnterCombat(Unit* /*attacker*/)
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->GetData(MINION_ENCOUNTER) != IN_PROGRESS)
                     instance->SetData(MINION_ENCOUNTER, IN_PROGRESS);
         }
@@ -908,7 +908,7 @@ public:
 
             if (timerMindControl <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                     DoCast(target, SPELL_MIND_CONTROL);
                 timerMindControl = urand(12000, 16000);
                 return;

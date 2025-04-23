@@ -79,7 +79,7 @@ Vehicle::~Vehicle()
 
 void Vehicle::Install()
 {
-    if (Creature* creature = _me->ToCreature())
+    if (auto creature = _me->ToCreature())
     {
         switch (_vehicleInfo->m_powerType)
         {
@@ -484,7 +484,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         _pendingJoinEvents.push_back(e);
         if (!seat->second.IsEmpty())
         {
-            if (Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), seat->second.Passenger.Guid))
+            if (auto passenger = ObjectAccessor::GetUnit(*GetBase(), seat->second.Passenger.Guid))
                 passenger->ExitVehicle();
         }
 
@@ -502,7 +502,7 @@ void Vehicle::EjectPassenger(int8 seatId, EjectTargetDirectionTypes dir /*= EJEC
         TC_LOG_ERROR("entities.vehicle", "Vehicle GuidLow: %u, Entry: %u attempts to eject passennger on non existing seat %u", _me->GetGUIDLow(), _me->GetEntry(), seatId);
     else if (!seat->second.IsEmpty())
     {
-        if (Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), seat->second.Passenger.Guid))
+        if (auto passenger = ObjectAccessor::GetUnit(*GetBase(), seat->second.Passenger.Guid))
             EjectPassenger(passenger, dir, distance);
         else
             TC_LOG_ERROR("entities.vehicle", "Vehicle GuidLow: %u, Entry: %u attempts to eject passenger on seat %u but seat s empty" , _me->GetGUIDLow(), _me->GetEntry(), seatId);
@@ -620,9 +620,9 @@ void Vehicle::RemovePassenger(Unit* unit)
         When the player enters a cannon vehicle, they leave their transport behind.
         When the player then leaves the cannon vehicle, they are not brought back to the transport.
     */
-    if (Player* player = unit->ToPlayer())
+    if (auto player = unit->ToPlayer())
         if (player->GetZoneId() == 4710/*Isle of conquest*/)
-            if (Unit* vehicleUnit = GetBase())
+            if (auto vehicleUnit = GetBase())
                 if (Transport* VehicleBase_Transport = vehicleUnit->GetTransport())
                 {
                     //TC_LOG_ERROR("entities.player", "Vehicle::exitvehicle - moving player to transport");
@@ -651,7 +651,7 @@ void Vehicle::RelocatePassengers()
     // not sure that absolute position calculation is correct, it must depend on vehicle pitch angle
     for (SeatMap::const_iterator itr = Seats.begin(); itr != Seats.end(); ++itr)
     {
-        if (Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), itr->second.Passenger.Guid))
+        if (auto passenger = ObjectAccessor::GetUnit(*GetBase(), itr->second.Passenger.Guid))
         {
             ASSERT(passenger->IsInWorld());
 
@@ -903,7 +903,7 @@ public:
 
     bool Execute(uint64 /*execTime*/, uint32 /*diff*/) override
     {
-        if (Unit* passenger = ObjectAccessor::GetUnit(*_base, _passengerGUID))
+        if (auto passenger = ObjectAccessor::GetUnit(*_base, _passengerGUID))
         {
 
             sScriptMgr->OnAddPassenger(_base->GetVehicleKit(), passenger, _seatId);
@@ -1035,7 +1035,7 @@ bool VehicleJoinEvent::Execute(uint64, uint32)
     if (player)
     {
         // drop flag
-        if (Battleground* bg = player->GetBattleground())
+        if (auto bg = player->GetBattleground())
             bg->EventPlayerDroppedFlag(player);
 
         player->StopCastingCharm();
@@ -1119,7 +1119,7 @@ bool VehicleJoinEvent::Execute(uint64, uint32)
     init.SetTransportEnter();
     init.Launch();
 
-    if (Creature* base = Target->GetBase()->ToCreature())
+    if (auto base = Target->GetBase()->ToCreature())
     {
         uint32 timer = uint32(base->GetDistance2d(Passenger) * 100.0f);
         base->m_Events.AddEvent(new BoardedEvent(base, Passenger->GetGUID(), Seat->first), base->m_Events.CalculateTime(timer));
@@ -1142,7 +1142,7 @@ bool VehicleJoinEvent::Execute(uint64, uint32)
 void VehicleJoinEvent::Abort(uint64)
 {
     /// Check if the Vehicle was already uninstalled, in which case all auras were removed already
-    if (Unit* vehicle = ObjectAccessor::FindUnit(vehicleGuid))
+    if (auto vehicle = ObjectAccessor::FindUnit(vehicleGuid))
     {
         TC_LOG_DEBUG("entities.vehicle", "Passenger GuidLow: %u, Entry: %u, board on vehicle GuidLow: %u, Entry: %u SeatId: %d cancelled",
             Passenger->GetGUIDLow(), Passenger->GetEntry(), vehicle->GetGUIDLow(), vehicle->GetEntry(), Seat->first);

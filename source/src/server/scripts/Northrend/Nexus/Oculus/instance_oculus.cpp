@@ -80,7 +80,7 @@ public:
              DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, --centrifugueConstructCounter);
 
              if (!centrifugueConstructCounter)
-                if (Creature* varos = instance->GetCreature(varosGUID))
+                if (auto varos = instance->GetCreature(varosGUID))
                     varos->RemoveAllAuras();
         }
 
@@ -109,7 +109,7 @@ public:
             if (!varos)
                 return;
 
-            if (Creature* drake = varos->SummonCreature(NPC_AZURE_RING_GUARDIAN, varos->GetPositionX(), varos->GetPositionY(), varos->GetPositionZ()+40))
+            if (auto drake = varos->SummonCreature(NPC_AZURE_RING_GUARDIAN, varos->GetPositionX(), varos->GetPositionY(), varos->GetPositionZ()+40))
                 drake->AI()->DoAction(ACTION_CALL_DRAGON_EVENT);
         }
 
@@ -204,19 +204,19 @@ public:
                         DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_AMOUNT, centrifugueConstructCounter);
                         OpenCageDoors();
                         FreeDragons();
-                        if (Creature* varos = instance->GetCreature(varosGUID))
+                        if (auto varos = instance->GetCreature(varosGUID))
                             varos->SetPhaseMask(1, true);
                     }
                     break;
                 case DATA_VAROS_EVENT:
                     if (state == DONE || state == DONE_HM)
                         DoUpdateWorldState(WORLD_STATE_CENTRIFUGE_CONSTRUCT_SHOW, 0);
-                        if (Creature* urom = instance->GetCreature(uromGUID))
+                        if (auto urom = instance->GetCreature(uromGUID))
                             urom->SetPhaseMask(1, true);
                     break;
                 case DATA_UROM_EVENT:
                     if (state == DONE || state == DONE_HM)
-                        if (Creature* eregos = instance->GetCreature(eregosGUID))
+                        if (auto eregos = instance->GetCreature(eregosGUID))
                             eregos->SetPhaseMask(1, true);
                             GreaterWhelps();
                     break;
@@ -271,20 +271,20 @@ public:
 
             for (std::list<uint64>::const_iterator itr = gameObjectList.begin(); itr != gameObjectList.end(); ++itr)
             {
-                if (GameObject* go = instance->GetGameObject(*itr))
+                if (auto go = instance->GetGameObject(*itr))
                     go->SetGoState(GO_STATE_ACTIVE);
             }
         }
 
         void FreeDragons()
         {
-            if (Creature* belgaristrasz = instance->GetCreature(belgaristraszGUID))
+            if (auto belgaristrasz = instance->GetCreature(belgaristraszGUID))
                 belgaristrasz->SetWalk(true),
                 belgaristrasz->GetMotionMaster()->MovePoint(0, 941.453f, 1044.1f, 359.967f);
-            if (Creature* eternos = instance->GetCreature(eternosGUID))
+            if (auto eternos = instance->GetCreature(eternosGUID))
                 eternos->SetWalk(true),
                 eternos->GetMotionMaster()->MovePoint(0, 943.202f, 1059.35f, 359.967f);
-            if (Creature* verdisa = instance->GetCreature(verdisaGUID))
+            if (auto verdisa = instance->GetCreature(verdisaGUID))
                 verdisa->SetWalk(true),
                 verdisa->GetMotionMaster()->MovePoint(0, 949.188f, 1032.91f, 359.967f);
         }
@@ -296,7 +296,7 @@ public:
 
             for (std::list<uint64>::const_iterator itr = gwhelpList.begin(); itr != gwhelpList.end(); ++itr)
             {
-                if (Creature* gwhelp = instance->GetCreature(*itr))
+                if (auto gwhelp = instance->GetCreature(*itr))
                     gwhelp->SetPhaseMask(1, true);
             }
         }

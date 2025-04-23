@@ -171,7 +171,7 @@ public:
         void EnterCombat(Unit* /*who*/) override
         {
             AddEncounterFrame();
-            if (Creature* thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 100.0f, true))
+            if (auto thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 100.0f, true))
             {
                 thrall->SetReactState(REACT_AGGRESSIVE);
                 thrall->SetInCombatWithZone();
@@ -192,7 +192,7 @@ public:
             {
                 case NPC_INFIGHT_FROZEN_SERVITOR:
                     summon->SetInCombatWithZone();
-                    if (Creature* thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 100.0f, true))
+                    if (auto thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 100.0f, true))
                         if (thrall->IsVisible())
                         summon->CombatStart(thrall, true);
                     break;
@@ -206,7 +206,7 @@ public:
         {
             RemoveEncounterFrame();
             Talk(TALK_ARCURION_DEATH);
-            if (Creature* thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 150.0f, true))
+            if (auto thrall = me->FindNearestCreature(NPC_THRALL_EVENT_1, 150.0f, true))
             {
                 thrall->AI()->DoAction(ACTION_STOP_COMBAT);
                 thrall->DeleteThreatList();
@@ -226,13 +226,13 @@ public:
         {
             if (!_phase2 && me->HealthBelowPctDamaged(31, damage))
             {
-                if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
+                if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
                     thrall->AI()->Talk(TALK_THRALL_2_PHASE_2);
 
                 TalkWithDelay(6000, TALK_ARCURION_PHASE_TWO);
                 events.Reset();
                 events.ScheduleEvent(EVENT_TORRENT_OF_FROST, 0);
-                if (Creature* icetomb = me->FindNearestCreature(NPC_ICY_TOMB, 500.0f, true))
+                if (auto icetomb = me->FindNearestCreature(NPC_ICY_TOMB, 500.0f, true))
                     icetomb->Kill(icetomb);
                 _phase2 = true;
             }
@@ -243,7 +243,7 @@ public:
             switch (id)
             {
                 case ACTION_SPAWN:
-                    if (Creature* stalker = me->FindNearestCreature(NPC_ACURION_SPAWN_STALKER, 20.0f, true))
+                    if (auto stalker = me->FindNearestCreature(NPC_ACURION_SPAWN_STALKER, 20.0f, true))
                         stalker->CastSpell(stalker, SPELL_ARCURION_SPAWN_VISUAL, true);
                     me->SetVisible(true);
                     Talk(TALK_ARCURION_VISIBLE);
@@ -275,7 +275,7 @@ public:
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         Talk(TALK_EMOTE_TWILIGHT_FORCES, NULL, CHAT_MSG_RAID_BOSS_EMOTE);
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
                             thrall->AI()->Talk(TALK_THRALL_2_ENTER_COMBAT);
                         break;
                     case EVENT_HAND_OF_FROST:
@@ -289,7 +289,7 @@ public:
                     case EVENT_ICY_TOMB:
                         Talk(RAND(TALK_ARCURION_FREEZE, TALK_ARCURION_FREEZE_2, TALK_ARCURION_FREEZE_3));
                         Talk(TALK_EMOTE_FREEZE_THRALL, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
                         {
                             thrall->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             thrall->CastWithDelay(3000, thrall, SPELL_ICY_TOMB_TRIGGER, true);
@@ -298,7 +298,7 @@ public:
                         events.ScheduleEvent(EVENT_ICY_TOMB, 60000);
                         break;
                     case EVENT_TORRENT_OF_FROST:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_1))
                             thrall->AI()->DoAction(ACTION_BOSS_PHASE_3);
                         DoCast(SPELL_TORRENT_OF_FROST);
                         break;
@@ -309,7 +309,7 @@ public:
                         if (!trig.empty())
                             trig.remove_if([](WorldObject* target)
                                 {
-                                    if (Creature* t = target->ToCreature())
+                                    if (auto t = target->ToCreature())
                                         if (t->FindNearestCreature(NPC_INFIGHT_FROZEN_SERVITOR, 2.f, true))
                                             return true;
                                     return false;
@@ -527,7 +527,7 @@ public:
                         summons.DoZoneInCombat(NPC_SECOND_SUM);
                         break;
                     case EVENT_LAVA_BURST:
-                        if (Unit* c = me->getVictim())
+                        if (auto c = me->getVictim())
                         {
                             me->SetFacingTo(me->GetAngle(c));
                             DoCast(c, SPELL_LAVA_BURST_ADDS);
@@ -539,7 +539,7 @@ public:
                         break;
                     case EVENT_SUMMON_WAVE_2:
                         Talk(TALK_THRALL_LOOK_OUT, NULL, CHAT_MSG_MONSTER_SAY);
-                        if (Creature* arcurion = instance->GetCreature(DATA_ARCURION))
+                        if (auto arcurion = instance->GetCreature(DATA_ARCURION))
                             arcurion->AI()->Talk(TALK_ARCURION_DESTROY_ALL, 0, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
 
 
@@ -547,7 +547,7 @@ public:
                         summons.DoZoneInCombat(NPC_SECOND_SUM);
                         summons.DoZoneInCombat(NPC_FIRST_SUM);
 
-                        if (Creature* eye = me->FindNearestCreature(NPC_EYE_STALKER, 50.0f, true))
+                        if (auto eye = me->FindNearestCreature(NPC_EYE_STALKER, 50.0f, true))
                         {
                             eye->RemoveAllAuras();
                             eye->CastSpell(eye, SPELL_FROZEN_SPAWN_VISUAL, true);
@@ -567,7 +567,7 @@ public:
                         summons.DoZoneInCombat(NPC_FROZEN_SHARD);
                         break;
                     case EVENT_INTRO:
-                        if (Creature* arcurion = instance->GetCreature(DATA_ARCURION))
+                        if (auto arcurion = instance->GetCreature(DATA_ARCURION))
                             arcurion->AI()->Talk(TALK_ARCURION_INTRO, 0, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
                         me->SummonCreatureGroup(SUMMON_GROUP_1);
                         events.ScheduleEvent(EVENT_THRALL_RESPOND_TO_SPAWNS, 500);
@@ -580,15 +580,15 @@ public:
                     case EVENT_THRALL_ATTACK_FIRST_SPAWNS:
                         me->GetMotionMaster()->Clear();
                         me->SetWalk(false);
-                        if (Player* p = me->SelectNearestPlayer(100.f))
+                        if (auto p = me->SelectNearestPlayer(100.f))
                         {
 
-                            if (Creature* c = me->FindNearestCreature(NPC_FIRST_SUM, 100.f))
+                            if (auto c = me->FindNearestCreature(NPC_FIRST_SUM, 100.f))
                             {
                                 c->AddThreat(p, 100.f);
                                 me->AI()->AttackStart(c);
                             }
-                            else if (Creature* c = me->FindNearestCreature(NPC_SECOND_SUM, 100.f))
+                            else if (auto c = me->FindNearestCreature(NPC_SECOND_SUM, 100.f))
                             {
                                 c->AddThreat(p, 100.f);
                                 me->AI()->AttackStart(c);
@@ -602,7 +602,7 @@ public:
                         events.ScheduleEvent(EVENT_END_ESCORT_PART, 5000);
                         break;
                     case EVENT_END_ESCORT_PART:
-                        if (Creature* arcurion = instance->GetCreature(DATA_ARCURION))
+                        if (auto arcurion = instance->GetCreature(DATA_ARCURION))
                             arcurion->AI()->Talk(TALK_ARCURION_YOU_WILL_GO, 0, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
                         instance->SetData(DATA_EVENT_0, DONE);
                         me->DespawnOrUnsummon();
@@ -812,7 +812,7 @@ public:
         {
             if (spell->Id == SPELL_DESTROY_WALL && victim->GetEntry() == NPC_WALL_TRIGGER)
             {
-                if (GameObject* iceWall = me->FindNearestGameObject(210048, 100.0f))
+                if (auto iceWall = me->FindNearestGameObject(210048, 100.0f))
                 {
                     iceWall->SetGoState(GO_STATE_ACTIVE);
                     events.ScheduleEvent(EVENT_INTRO_3, 1000);
@@ -830,7 +830,7 @@ public:
 
             me->ClearInCombat();
 
-            if (Creature* arcurion = instance->GetCreature(DATA_ARCURION))
+            if (auto arcurion = instance->GetCreature(DATA_ARCURION))
                 arcurion->AI()->DoAction(ACTION_RESPAWN);
 
             me->Respawn(true);
@@ -850,7 +850,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_INTRO:
-                        if (Creature* arcurion = instance->GetCreature(DATA_ARCURION))
+                        if (auto arcurion = instance->GetCreature(DATA_ARCURION))
                             arcurion->AI()->DoAction(ACTION_SPAWN);
                         SetEscortPaused(false);
                         break;
@@ -872,7 +872,7 @@ public:
                         me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         break;
                     case EVENT_LAVA_BURST:
-                        if (Creature* c = me->FindNearestCreature(NPC_INFIGHT_FROZEN_SERVITOR, 500.0f, true))
+                        if (auto c = me->FindNearestCreature(NPC_INFIGHT_FROZEN_SERVITOR, 500.0f, true))
                         {
                             me->SetFacingTo(me->GetAngle(c));
                             DoCast(c, SPELL_LAVA_BURST_ADDS);
@@ -937,7 +937,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 target->RemoveAurasDueToSpell(SPELL_ICY_TOMB_TRIGGER);
             }

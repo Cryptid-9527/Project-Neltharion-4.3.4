@@ -488,7 +488,7 @@ public:
                             }
                         }
                         else if (Wave >= 6 && !EventBigWill) {
-                            if (Creature* creature = me->SummonCreature(NPC_BIG_WILL, -1722, -4341, 6.12f, 6.26f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 480000))
+                            if (auto creature = me->SummonCreature(NPC_BIG_WILL, -1722, -4341, 6.12f, 6.26f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 480000))
                             {
                                 BigWill = creature->GetGUID();
                                 //creature->GetMotionMaster()->MovePoint(0, -1693, -4343, 4.32f);
@@ -579,7 +579,7 @@ public:
                     SetRun(false);
                     break;
                 case 17:
-                    if (Creature* temp = me->SummonCreature(NPC_MERCENARY, 1128.489f, -3037.611f, 92.701f, 1.472f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000))
+                    if (auto temp = me->SummonCreature(NPC_MERCENARY, 1128.489f, -3037.611f, 92.701f, 1.472f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000))
                     {
                         temp->AI()->Talk(SAY_MERCENARY);
                         me->SummonCreature(NPC_MERCENARY, 1160.172f, -2980.168f, 97.313f, 3.690f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120000);
@@ -639,7 +639,7 @@ public:
                                 Talk(SAY_END);
                                 break;
                             case 3:
-                                if (Player* player = GetPlayerForEscort())
+                                if (auto player = GetPlayerForEscort())
                                 {
                                     player->GroupEventHappens(QUEST_ESCAPE, me);
                                     me->SummonCreature(NPC_PILOT_WIZZ, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 180000);
@@ -779,7 +779,7 @@ public:
         void IsSummonedBy(Unit* summoner) override
         {
             Position pos(*me);
-            if (Creature* gyrotilt = me->SummonCreature(NPC_GYROTILT, pos, TEMPSUMMON_TIMED_DESPAWN, 300000))
+            if (auto gyrotilt = me->SummonCreature(NPC_GYROTILT, pos, TEMPSUMMON_TIMED_DESPAWN, 300000))
                 gyrotilt->EnterVehicle(me, 0);
 
             summoner->EnterVehicle(me, 1);
@@ -798,7 +798,7 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0)){
+            if (auto passenger = me->GetVehicleKit()->GetPassenger(0)){
                 switch (point)
                 {
                 case 1:
@@ -859,22 +859,22 @@ public:
                 switch (eventId)
                 {
                     case EVENT_TIMER_3:
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (auto passenger = me->GetVehicleKit()->GetPassenger(1))
                             Talk(BROADCAST_START_IN_3, passenger->GetGUID(), CHAT_MSG_RAID_BOSS_EMOTE);
                         events.ScheduleEvent(EVENT_TIMER_2, 1000);
                         break;
                     case EVENT_TIMER_2:
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (auto passenger = me->GetVehicleKit()->GetPassenger(1))
                             Talk(BROADCAST_START_IN_2, passenger->GetGUID(), CHAT_MSG_RAID_BOSS_EMOTE);
                         events.ScheduleEvent(EVENT_TIMER_1, 1000);
                         break;
                     case EVENT_TIMER_1:
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (auto passenger = me->GetVehicleKit()->GetPassenger(1))
                             Talk(BROADCAST_START_IN_1, passenger->GetGUID(), CHAT_MSG_RAID_BOSS_EMOTE);
                         events.ScheduleEvent(EVENT_START_PATH, 1000);
                         break;
                     case EVENT_START_PATH:
-                        if (Unit* passenger = me->GetVehicleKit()->GetPassenger(1))
+                        if (auto passenger = me->GetVehicleKit()->GetPassenger(1))
                             Talk(BROADCAST_GO, passenger->GetGUID(), CHAT_MSG_RAID_BOSS_EMOTE);
                         DoCast(me, SPELL_ROCKET_TRAIL, true);
                         DoCast(me, SPELL_ROCKET_LOOP_SOUND, true);
@@ -910,7 +910,7 @@ public:
 
         void OnSpellClick(Unit* clicker, bool& /*result*/) override
         {
-            if (Player* player = clicker->ToPlayer())
+            if (auto player = clicker->ToPlayer())
             {
                 if (player->GetQuestStatus(QUEST_THE_SHORT_WAY_HOME) == QUEST_STATUS_INCOMPLETE)
                 {
@@ -1020,7 +1020,7 @@ public:
 
             if (passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                     playerGUID = player->GetGUID();
             }
             else
@@ -1033,7 +1033,7 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Unit* horton = me->GetVehicleKit()->GetPassenger(1)) // passenger seat_1 = horton in vehicle_template_accessory
+            if (auto horton = me->GetVehicleKit()->GetPassenger(1)) // passenger seat_1 = horton in vehicle_template_accessory
             {
                 if (IsPlayerBoarded == true)
                 {
@@ -1056,7 +1056,7 @@ public:
                         break;
                     case WAYPOINT_LAST_POINT:
                         me->CastSpell(me, SPELL_EJECT_PASSENGER_1);
-                        if (Player* player = Unit::GetPlayer(*me, playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, playerGUID))
                             player->GetMotionMaster()->MoveJump(1008.11f, -3806.26f, 18.59f, 10.0f, 14.0f);
                         me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
                         events.ScheduleEvent(EVENT_HOMECOMING, 2000);
@@ -1088,7 +1088,7 @@ public:
                 {
                 case EVENT_BOARDED:
                     me->NearTeleportTo(-701.72f, -3991.48f, 17.88f, 0.48f);
-                    if (Player* player = Unit::GetPlayer(*me, playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, playerGUID))
                     {
                         player->RemoveAura(SPELL_FADE_TO_BLACK);
                         player->KilledMonsterCredit(NPC_KILL_CREDIT);
@@ -1139,7 +1139,7 @@ public:
 
         void SpellHit(Unit* who, SpellInfo const* spellInfo)
         {
-            if (Player* player = who->ToPlayer())
+            if (auto player = who->ToPlayer())
                 playerGUID = player->GetGUID();
 
             if (spellInfo->Id == SPELL_DUMMY)
@@ -1159,8 +1159,8 @@ public:
                 switch (eventId)
                 {
                 case EVENT_DELAY_1: // Haxy way bcs when a riverboat is summoned in water and player ride the boat then first person view "falls" down (must be ground firstly -> later tp to water then is ok)
-                    if (Player* player = Unit::GetPlayer(*me, playerGUID))
-                        if (Creature* boat = player->SummonCreature(NPC_RIVERBOAT_BARRENS, -704.22f, -3987.28f, 19.46f, 0.49f, TEMPSUMMON_DEAD_DESPAWN, 5000)) // haxy
+                    if (auto player = Unit::GetPlayer(*me, playerGUID))
+                        if (auto boat = player->SummonCreature(NPC_RIVERBOAT_BARRENS, -704.22f, -3987.28f, 19.46f, 0.49f, TEMPSUMMON_DEAD_DESPAWN, 5000)) // haxy
                         {
                             player->CastWithDelay(1000, boat, SPELL_RIDE_VEHICLE);
                             player->RemoveAura(SPELL_INVISIBILITY_DETECT_1_MISC_8);

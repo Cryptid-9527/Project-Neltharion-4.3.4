@@ -214,7 +214,7 @@ class npc_drakkari_gutripper : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* Dred = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DRED)))
+                if (auto Dred = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DRED)))
                     Dred->AI()->DoAction(ACTION_RAPTOR_KILLED);
             }
         };
@@ -264,7 +264,7 @@ class npc_drakkari_scytheclaw : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* Dred = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DRED)))
+                if (auto Dred = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_DRED)))
                     Dred->AI()->DoAction(ACTION_RAPTOR_KILLED);
             }
         };
@@ -287,7 +287,7 @@ class achievement_king_dred : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Dred = target->ToCreature())
+            if (auto Dred = target->ToCreature())
                 if (Dred->AI()->GetData(DATA_KING_DRED) >= 6)
                     return true;
 

@@ -275,7 +275,7 @@ public:
         {
             //Infernal Cleanup
             for (std::vector<uint64>::const_iterator itr = infernals.begin(); itr != infernals.end(); ++itr)
-                if (Unit* pInfernal = Unit::GetUnit(*me, *itr))
+                if (auto pInfernal = Unit::GetUnit(*me, *itr))
                     if (pInfernal->isAlive())
                     {
                         pInfernal->SetVisible(false);
@@ -323,7 +323,7 @@ public:
             ThreatContainer::StorageType::const_iterator itr = t_list.begin();
             std::advance(itr, 1);
             for (; itr != t_list.end(); ++itr) //store the threat list in a different container
-                if (Unit* target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
+                if (auto target = Unit::GetUnit(*me, (*itr)->getUnitGuid()))
                     if (target->isAlive() && target->GetTypeId() == TYPEID_PLAYER)
                         targets.push_back(target);
 
@@ -333,7 +333,7 @@ public:
 
             uint32 i = 0;
             for (std::vector<Unit*>::const_iterator iter = targets.begin(); iter != targets.end(); ++iter, ++i)
-                if (Unit* target = *iter)
+                if (auto target = *iter)
                 {
                     enfeeble_targets[i] = target->GetGUID();
                     enfeeble_health[i] = target->GetHealth();
@@ -497,11 +497,11 @@ public:
                 {
                     AxesTargetSwitchTimer = urand(7500, 20000);
 
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     {
                         for (uint8 i = 0; i < 2; ++i)
                         {
-                            if (Unit* axe = Unit::GetUnit(*me, axes[i]))
+                            if (auto axe = Unit::GetUnit(*me, axes[i]))
                             {
                                 if (axe->getVictim())
                                     DoModifyThreatPercent(axe->getVictim(), -100);
@@ -516,7 +516,7 @@ public:
 
                 if (AmplifyDamageTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, SPELL_AMPLIFY_DAMAGE);
                     AmplifyDamageTimer = urand(20000, 30000);
                 } else AmplifyDamageTimer -= diff;

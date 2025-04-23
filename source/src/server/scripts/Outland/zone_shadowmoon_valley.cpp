@@ -134,9 +134,9 @@ public:
                 {
                     if (bCanEat && !bIsEating)
                     {
-                        if (Unit* unit = Unit::GetUnit(*me, uiPlayerGUID))
+                        if (auto unit = Unit::GetUnit(*me, uiPlayerGUID))
                         {
-                            if (GameObject* go = unit->FindNearestGameObject(GO_CARCASS, 10))
+                            if (auto go = unit->FindNearestGameObject(GO_CARCASS, 10))
                             {
                                 if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == WAYPOINT_MOTION_TYPE)
                                     me->GetMotionMaster()->MovementExpired();
@@ -154,11 +154,11 @@ public:
                         DoCast(me, SPELL_JUST_EATEN);
                         Talk(SAY_JUST_EATEN);
 
-                        if (Player* pPlr = Unit::GetPlayer(*me, uiPlayerGUID))
+                        if (auto pPlr = Unit::GetPlayer(*me, uiPlayerGUID))
                         {
                             pPlr->KilledMonsterCredit(NPC_EVENT_PINGER, 0);
 
-                            if (GameObject* go = pPlr->FindNearestGameObject(GO_CARCASS, 10))
+                            if (auto go = pPlr->FindNearestGameObject(GO_CARCASS, 10))
                                 go->Delete();
                         }
 
@@ -304,7 +304,7 @@ public:
                                 dz += 20; // so it's in the air, not ground*/
 
                                 Position pos;
-                                if (Unit* EscapeDummy = me->FindNearestCreature(CREATURE_ESCAPE_DUMMY, 30))
+                                if (auto EscapeDummy = me->FindNearestCreature(CREATURE_ESCAPE_DUMMY, 30))
                                     EscapeDummy->GetPosition(&pos);
                                 else
                                 {
@@ -928,21 +928,21 @@ public:
                     break;
                 case 29:
                     {
-                        if (Creature* Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
+                        if (auto Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
                             Yarzill->AI()->Talk(YARZILL_THE_MERC_SAY, player->GetGUID());
                         return 5000;
                     }
                     break;
                 case 30:
                     {
-                        if (Creature* Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
+                        if (auto Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
                             Yarzill->SetTarget(0);
                         return 5000;
                     }
                     break;
                 case 31:
                     {
-                        if (Creature* Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
+                        if (auto Yarzill = me->FindNearestCreature(C_YARZILL, 50.0f))
                             Yarzill->CastSpell(player, 41540, true);
                         return 1000;
                     }
@@ -1304,7 +1304,7 @@ public:
                 me->RemoveFlag(UNIT_FIELD_BYTES_1, 8);
                 break;
             case 5:
-                if (Player* AggroTarget = (Unit::GetPlayer(*me, AggroTargetGUID)))
+                if (auto AggroTarget = (Unit::GetPlayer(*me, AggroTargetGUID)))
                 {
                     me->SetTarget(AggroTarget->GetGUID());
                     me->AddThreat(AggroTarget, 1);
@@ -1312,7 +1312,7 @@ public:
                 }
                 break;
             case 6:
-                if (Player* AggroTarget = (Unit::GetPlayer(*me, AggroTargetGUID)))
+                if (auto AggroTarget = (Unit::GetPlayer(*me, AggroTargetGUID)))
                 {
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     me->ClearUnitState(UNIT_STATE_ROOT);
@@ -1376,7 +1376,7 @@ public:
             switch (killer->GetTypeId())
             {
                 case TYPEID_UNIT:
-                    if (Unit* owner = killer->GetOwner())
+                    if (auto owner = killer->GetOwner())
                         if (owner->GetTypeId() == TYPEID_PLAYER)
                             CAST_PLR(owner)->GroupEventHappens(QUEST_BATTLE_OF_THE_CRIMSON_WATCH, me);
                     break;
@@ -1387,7 +1387,7 @@ public:
                     break;
             }
 
-            if (Creature* LordIllidan = (Unit::GetCreature(*me, LordIllidanGUID)))
+            if (auto LordIllidan = (Unit::GetCreature(*me, LordIllidanGUID)))
             {
                 LordIllidan->AI()->EnterEvadeMode();
             }
@@ -1576,7 +1576,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             me->RemoveCorpse();
-            if (Creature* LordIllidan = (Unit::GetCreature(*me, LordIllidanGUID)))
+            if (auto LordIllidan = (Unit::GetCreature(*me, LordIllidanGUID)))
                 if (LordIllidan)
                     CAST_AI(npc_lord_illidan_stormrage::npc_lord_illidan_stormrageAI, LordIllidan->AI())->LiveCounter();
         }
@@ -1619,7 +1619,7 @@ public:
             {
                 if (SpellTimer1 <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         if (target->GetTypeId() == TYPEID_PLAYER)
                         {
@@ -1706,7 +1706,7 @@ void npc_lord_illidan_stormrage::npc_lord_illidan_stormrageAI::SummonNextWave()
             {
                 if (PlayerGUID)
                 {
-                    if (Player* target = Unit::GetPlayer(*me, PlayerGUID))
+                    if (auto target = Unit::GetPlayer(*me, PlayerGUID))
                     {
                         float x, y, z;
                         target->GetPosition(x, y, z);
@@ -1952,7 +1952,7 @@ public:
                 DoCast(SPELL_SHADOWMOON_TUBER);
 
                 // Despawn the tuber
-                if (GameObject* tuber = me->FindNearestGameObject(GO_SHADOWMOON_TUBER_MOUND, 5.0f))
+                if (auto tuber = me->FindNearestGameObject(GO_SHADOWMOON_TUBER_MOUND, 5.0f))
                 {
                     tuberGUID = tuber->GetGUID();
                     // @Workaround: find how to properly despawn the GO
@@ -1965,7 +1965,7 @@ public:
         {
             if (!tapped && spell->Id == SPELL_WHISTLE)
             {
-                if (Creature* boar = me->FindNearestCreature(NPC_BOAR_ENTRY, 30.0f))
+                if (auto boar = me->FindNearestCreature(NPC_BOAR_ENTRY, 30.0f))
                 {
                     // Disable trigger and force nearest boar to walk to him
                     tapped = true;
@@ -1983,7 +1983,7 @@ public:
                 {
                     // Respawn the tuber
                     if (tuberGUID)
-                        if (GameObject* tuber = GameObject::GetGameObject(*me, tuberGUID))
+                        if (auto tuber = GameObject::GetGameObject(*me, tuberGUID))
                         // @Workaround: find how to properly respawn the GO
                             tuber->SetPhaseMask(1, true);
 

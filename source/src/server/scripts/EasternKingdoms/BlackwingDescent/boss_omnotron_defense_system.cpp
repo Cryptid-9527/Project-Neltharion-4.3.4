@@ -195,7 +195,7 @@ struct generic_botAI : public BossAI
 
     void OmnotronTalk(uint8 ID)
     {
-        if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+        if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
             omnotron->AI()->Talk(ID);
     }
 
@@ -212,7 +212,7 @@ struct generic_botAI : public BossAI
         me->CastSpell(me, SPELL_POWERED_DOWN, true);
         me->CastSpell(me, SPELL_ENERGY_DRAIN, true);
         instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
-        if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+        if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
             omnotron->AI()->Reset();
         me->GetMotionMaster()->Clear();
         _Reset();
@@ -258,17 +258,17 @@ struct generic_botAI : public BossAI
         {
             if (attacker->GetTypeId() == TYPEID_PLAYER)
                 killBots(attacker);
-            else if (Unit* player = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+            else if (auto player = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                      killBots(player);
 
-            if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+            if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
                 omnotron->AI()->DoAction(ACTION_DEATH);
         }
 
         if (attacker == me)
             return;
 
-        if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+        if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
             if (omnotron->GetHealth() > me->GetHealth())
                 omnotron->SetHealth(me->GetHealth() - damage);
     }
@@ -279,7 +279,7 @@ struct generic_botAI : public BossAI
             instance->SetBossState(DATA_OMNOTRON_DEFENSE_SYSTEM, IsHeroic() ? DONE_HM : DONE);
             for (int i = 0; i < 4; ++i)
             {
-                if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
+                if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
                 {
                     bot->SetInCombatWith(killer);
                     bot->LowerPlayerDamageReq(bot->GetMaxHealth());
@@ -309,7 +309,7 @@ struct generic_botAI : public BossAI
         me->SetInCombatWithZone();
         me->GetMotionMaster()->Clear();
         me->GetMotionMaster()->MoveIdle();
-        if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+        if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
             omnotron->AI()->DoAction(ACTION_COMBAT);
 
         instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -323,7 +323,7 @@ struct generic_botAI : public BossAI
         if (instance->GetBossState(DATA_OMNOTRON_DEFENSE_SYSTEM) == IN_PROGRESS)
             if (updateHealthTimer <= diff)
             {
-                if (Creature* omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
+                if (auto omnotron = me->GetCreature(*me, instance->GetData64(DATA_OMNOTRON_GUID)))
                     me->SetHealth(omnotron->GetHealth());
                 updateHealthTimer = 1000;
             }
@@ -378,7 +378,7 @@ class boss_omnotron : public CreatureScript
                 for (uint8 i = 0; i < 4; ++i)
                 {
                     botSequenz[i] = i;
-                    if (Creature* tron = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
+                    if (auto tron = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
                     {
                         CAST_AI(generic_botAI, tron->AI())->InitTron();
 
@@ -397,7 +397,7 @@ class boss_omnotron : public CreatureScript
 
                 currentBot = botSequenz[cur];
 
-                if (Creature* tron = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
+                if (auto tron = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
                 {
                     // Enable and make us follow waypoints
                     tron->RemoveAllAurasExceptType(SPELL_AURA_SHARE_DAMAGE_PCT);
@@ -417,7 +417,7 @@ class boss_omnotron : public CreatureScript
                     cur = 0;
 
                 nextBot = botSequenz[cur];
-                if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[nextBot].data)))
+                if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[nextBot].data)))
                     DoCast(bot, bots[nextBot].beamId, true);
             }
 
@@ -425,7 +425,7 @@ class boss_omnotron : public CreatureScript
             {
                 oldBot = currentBot;
 
-                if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[oldBot].data)))
+                if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[oldBot].data)))
                 {
                     bot->CastWithDelay(IsHeroic() ? 3000 : 4500, bot, bots[oldBot].shieldId, false);
                     Talk(bots[oldBot].textId);
@@ -437,7 +437,7 @@ class boss_omnotron : public CreatureScript
             void ActivateNext()
             {
                 currentBot = nextBot;
-                if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
+                if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
                 {
                     bot->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_31);
                     bot->SetReactState(REACT_AGGRESSIVE);
@@ -455,7 +455,7 @@ class boss_omnotron : public CreatureScript
             void DeactivateOld()
             {
                 if (!first)
-                    if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[oldBot].data)))
+                    if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[oldBot].data)))
                     {
                         bot->SetReactState(REACT_PASSIVE);
                         bot->RemoveAurasDueToSpell(SPELL_ACTIVATED);
@@ -487,7 +487,7 @@ class boss_omnotron : public CreatureScript
                         Talk(SAY_DEATH);
                         _JustDied();
                         me->DespawnOrUnsummon(5000);
-                        if (Creature* nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
+                        if (auto nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
                             nefarius->AI()->DoAction(ACTION_DEATH);
                         break;
                     }
@@ -526,7 +526,7 @@ class boss_omnotron : public CreatureScript
 
                 if (mui_start_script <= diff)
                 {
-                    if (Creature* tron = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
+                    if (auto tron = Creature::GetCreature(*me, instance->GetData64(bots[currentBot].data)))
                     {
                         canStart = false;
                         if (tron->isInCombat())
@@ -562,7 +562,7 @@ class boss_omnotron : public CreatureScript
                             if (!SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             {
                                 for (int i = 0; i < 4; ++i)
-                                    if (Creature* bot = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
+                                    if (auto bot = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
                                         bot->AI()->EnterEvadeMode();
                                 events.ScheduleEvent(EVENT_RESET, 5000);
                             }
@@ -574,7 +574,7 @@ class boss_omnotron : public CreatureScript
                         case EVENT_BERSERK:
                             for (uint8 i = 0; i < 4; ++i)
                             {
-                                if (Creature* tron = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
+                                if (auto tron = Creature::GetCreature(*me, instance->GetData64(bots[i].data)))
                                     tron->AI()->DoAction(ACTION_BERSERK);
                             }
                         default:
@@ -681,7 +681,7 @@ class npc_arcanotron : public CreatureScript
                         case EVENT_GENERATOR:
                         {
                             if (IsHeroic())
-                                if (Creature* nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
+                                if (auto nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
                                     nefarius->AI()->DoAction(ACTION_OVERCHARGE_GENERATOR);
                             DoCast(SPELL_POWER_GENERATOR);
                             events.ScheduleEvent(EVENT_GENERATOR, 30000);
@@ -779,12 +779,12 @@ class npc_electron : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_CONDUCTOR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 200.0f, true))
                             {
                                 DoCast(target, SPELL_LIGHTNING_CONDUCTOR);
 
                                 if (IsHeroic())
-                                    if (Creature* nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
+                                    if (auto nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
                                         nefarius->AI()->DoAction(ACTION_SHADOW_INFUSION);
                                 Talk(EMOTE_CONDUCTOR, target->GetGUID());
                             }
@@ -892,11 +892,11 @@ class npc_magmatron : public CreatureScript
                             castCount++;
                             break;
                         case EVENT_ACQUIRING_TARGET:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                             {
                                 DoCast(target, SPELL_ACQUIRING_TARGET);
                                 if (IsHeroic())
-                                    if (Creature* nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
+                                    if (auto nefarius = me->GetCreature(*me, instance->GetData64(DATA_NEFARIUS_OMNOTRON_GUID)))
                                         nefarius->AI()->DoAction(ACTION_ENCASTING_SHADOW);
                                 Talk(EMOTE_FLAMETHROWER, target->GetGUID());
                                 OmnotronTalk(SAY_MAGMATRON_FLAMETHROWER);
@@ -962,7 +962,7 @@ class npc_toxitron : public CreatureScript
                     summon->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_SNARE, false);
                     summon->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_ROOT, false);
                     summon->CastSpell(summon, SPELL_POISON_BOMB, true);
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_FIXATE))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_FIXATE))
                     {
                         summon->CastSpell(target, SPELL_FIXATE, true);
                         summon->ClearUnitState(UNIT_STATE_CASTING);
@@ -977,7 +977,7 @@ class npc_toxitron : public CreatureScript
                     summon->SetReactState(REACT_PASSIVE);
                     summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE);
                     if (IsHeroic())
-                        if (Creature* nefarius = me->FindNearestCreature(NPC_NEFARIUS_OMNOTRON, 500.0f))
+                        if (auto nefarius = me->FindNearestCreature(NPC_NEFARIUS_OMNOTRON, 500.0f))
                             nefarius->AI()->DoAction(ACTION_GRIP);
                 }
             }
@@ -1019,7 +1019,7 @@ class npc_toxitron : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_CHEMICAL_BOMB:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -INTERACTION_DISTANCE, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, -INTERACTION_DISTANCE, true))
                                 DoCastRandom(SPELL_CHEMICAL_BOMB, 70.0f, false);
                             events.ScheduleEvent(EVENT_CHEMICAL_BOMB, 30000);
                             break;
@@ -1533,7 +1533,7 @@ class spell_magmatron_flame_launch : public SpellScriptLoader
                         {
                             ThreatContainer::StorageType const &threatList = magmatron->getThreatManager().getThreatList();
                             for (ThreatContainer::StorageType::const_iterator itr = threatList.begin(); itr != threatList.end(); ++itr)
-                                if (Unit* target = (*itr)->getTarget())
+                                if (auto target = (*itr)->getTarget())
                                     if (magmatron->isInFrontInMap(target, 200.0f, static_cast<float>(M_PI / 6)))
                                         targets.push_back(target);
 
@@ -1566,7 +1566,7 @@ public:
         {
             if (target->GetTypeId() != TYPEID_UNIT)
                 return true;
-            if (Creature* creature = target->ToCreature())
+            if (auto creature = target->ToCreature())
                 if (creature->GetEntry() == NPC_ARCANOTRON || creature->GetEntry() == NPC_ELECTRON ||
                     creature->GetEntry() == NPC_MAGMATRON || creature->GetEntry() == NPC_TOXITRON)
                     return false;

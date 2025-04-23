@@ -107,7 +107,7 @@ class boss_beauty : public CreatureScript
 
                 if(IsHeroic())
                     for (SummonList::iterator itr = summons.begin(); itr != summons.end(); ++itr)
-						    if (Creature* beautyKids = ObjectAccessor::GetCreature(*me, *itr))
+						    if (auto beautyKids = ObjectAccessor::GetCreature(*me, *itr))
 							    if (beautyKids->isAlive() && beautyKids->GetEntry() != NPC_RUNTY)
 								    beautyKids->AI()->AttackStart(who);		
             }
@@ -157,7 +157,7 @@ class boss_beauty : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_BERSERKER_CHARGE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                                 DoCast(target, SPELL_BERSERKER_CHARGE);
                             events.ScheduleEvent(EVENT_BERSERKER_CHARGE, urand(7000, 20000));
                             break;
@@ -170,7 +170,7 @@ class boss_beauty : public CreatureScript
                             events.ScheduleEvent(EVENT_TERRIFYING_ROAR, urand(10000, 15000));
                             break;
                         case EVENT_MAGMA_SPIT:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0 , 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0 , 100.0f, true))
                                 DoCast(target, SPELL_MAGMA_SPIT);
                             events.ScheduleEvent(EVENT_MAGMA_SPIT, 12000);
                             break;

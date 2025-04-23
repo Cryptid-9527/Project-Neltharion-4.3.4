@@ -180,7 +180,7 @@ public:
 
         void WaypointReached(uint32 waypointId)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 switch (waypointId)
                 {
@@ -370,7 +370,7 @@ public:
 
         void WaypointReached(uint32 waypointId)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 switch (waypointId)
                 {
@@ -385,7 +385,7 @@ public:
                         me->SummonCreature(SPAWN_SECOND_2, -7515.07f, -4797.50f, 9.35f, 6.22f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                         me->SummonCreature(SPAWN_SECOND_2, -7518.07f, -4792.50f, 9.35f, 6.22f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 25000);
                         Talk(SAY_OOX_AMBUSH);
-                        if (Creature* scoff = me->FindNearestCreature(SPAWN_SECOND_2, 30))
+                        if (auto scoff = me->FindNearestCreature(SPAWN_SECOND_2, 30))
                             scoff->AI()->Talk(SAY_OOX17_AMBUSH_REPLY);
                         break;
                     case 86:
@@ -583,7 +583,7 @@ public:
         {
             if (player)
             {
-                if (Creature* eye = creature->FindNearestCreature(54237, 200.f))
+                if (auto eye = creature->FindNearestCreature(54237, 200.f))
                 {                    
                     player->CastSpell(player, 99645, true);
 

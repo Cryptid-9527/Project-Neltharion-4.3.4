@@ -93,7 +93,7 @@ void VisibleChangesNotifier::Visit(DynamicObjectMapType &m)
 {
     for (auto iter = m.begin(); iter != m.end(); ++iter)
         if (IS_PLAYER_GUID(iter->getSource()->GetCasterGUID()))
-            if (Player* caster = (Player*)iter->getSource()->GetCaster())
+            if (auto caster = (Player*)iter->getSource()->GetCaster())
                 if (caster->m_seer == iter->getSource())
                     caster->UpdateVisibilityOf(&i_object);
 }
@@ -221,7 +221,7 @@ void DelayedUnitRelocation::Visit(PlayerMapType &m)
 void AIRelocationNotifier::Visit(CreatureMapType &m)
 {
     for (auto iter = m.begin(); iter != m.end(); ++iter)
-        if (Creature* c = iter->getSource())
+        if (auto c = iter->getSource())
         {
             CreatureUnitRelocationWorker(c, &i_unit);
             if (isCreature)

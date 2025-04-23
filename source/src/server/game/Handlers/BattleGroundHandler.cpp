@@ -236,7 +236,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket& recvData)
             avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
         }
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -309,7 +309,7 @@ void WorldSession::HandleBattlemasterJoinRatedOpcode(WorldPacket& /*recvData*/)
 
     if (!err || sBattlegroundMgr->isTesting())
     {
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -340,7 +340,7 @@ void WorldSession::HandleBattlemasterJoinRatedOpcode(WorldPacket& /*recvData*/)
         avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
     }
 
-    for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* member = itr->getSource();
         if (!member)
@@ -753,7 +753,7 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recvData)
         bgQueue.RemovePlayer(_player->GetGUID(), false);
         // this is still needed here if battleground "jumping" shouldn't add deserter debuff
         // also this is required to prevent stuck at old battleground after SetBattlegroundId set to new
-        if (Battleground* currentBg = _player->GetBattleground())
+        if (auto currentBg = _player->GetBattleground())
             currentBg->RemovePlayerAtLeave(_player->GetGUID(), false, true);
 
         // set the destination instance id
@@ -989,7 +989,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
         avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
     }
 
-    for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* member = itr->getSource();
         if (!member)

@@ -576,8 +576,8 @@ public:
 
     void BeforeDispel(DispelInfo* dispelData)
     {
-        if (Unit* target = GetTarget())
-            if (InstanceScript* script = target->GetInstanceScript())
+        if (auto target = GetTarget())
+            if (auto script = target->GetInstanceScript())
                 if (script->IsChallengeModeStarted())
                     dispelData->SetRemovedCharges(0);
     }
@@ -621,7 +621,7 @@ class spell_challenge_mode_bleeding_wound : public AuraScript
     {
         // This spell was originaly from Grim Batol boss Umbris
         // Don't change the duration if he is the caster
-        if (Unit* caster = GetCaster())
+        if (auto caster = GetCaster())
         {
             if (caster->GetEntry() != NPC_UMBRIS && caster->GetEntry() != NPC_UMBRIS_H)
             {

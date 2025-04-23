@@ -94,7 +94,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket& recvData)
                     if (Vehicle* vehicleOwnerVehicle = mainVehicle->GetBase()->GetVehicle())
                     {
                         //TC_LOG_ERROR("network.opcode", "vehicle situation 2");//this player's current vehicle is mounted on another
-                        if (Unit* VehicleUnitInSeat = vehicleOwnerVehicle->GetPassenger(2))
+                        if (auto VehicleUnitInSeat = vehicleOwnerVehicle->GetPassenger(2))
                         {
                             //TC_LOG_ERROR("network.opcode", "vehicle situation 3");//A player has clicked on a seat occupied by passenger
                             if (Vehicle* VehicleInSeat = VehicleUnitInSeat->GetVehicleKit())
@@ -109,7 +109,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket& recvData)
                                 return;
                             }
                         }
-                        else if (Unit* vehicleOwnerVehicle = mainVehicle->GetBase())
+                        else if (auto vehicleOwnerVehicle = mainVehicle->GetBase())
                         {
                             vehicleOwnerVehicle->HandleSpellClick(GetPlayer(), NEW_SEAT);
                             TC_LOG_ERROR("network.opcode", "vehicle situation 6");//A player has clicked on a seat not occupied by a vehicle
@@ -118,7 +118,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket& recvData)
                     else if (Vehicle* vehicleOwnerVehicle = mainVehicle)
                     {
                         //TC_LOG_ERROR("network.opcode", "vehicle situation 7, seat id: %u", seatId);//the player is riding on a seat of the main vehicle
-                        if (Unit* VehicleUnitInSeat = vehicleOwnerVehicle->GetPassenger(2))
+                        if (auto VehicleUnitInSeat = vehicleOwnerVehicle->GetPassenger(2))
                         {
                             //TC_LOG_ERROR("network.opcode", "vehicle situation 8");//A player has clicked on a seat occupied by passenger
                             if (Vehicle* VehicleInSeat = VehicleUnitInSeat->GetVehicleKit())
@@ -133,7 +133,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket& recvData)
                                 return;
                             }
                         }
-                        else if (Unit* vehicleOwnerVehicle = mainVehicle->GetBase())
+                        else if (auto vehicleOwnerVehicle = mainVehicle->GetBase())
                         {
                             //TC_LOG_ERROR("network.opcode", "vehicle situation 11");//A player has clicked on a seat not occupied by a vehicle
                             vehicleOwnerVehicle->HandleSpellClick(GetPlayer(), NEW_SEAT);
@@ -155,7 +155,7 @@ void WorldSession::HandleChangeSeatsOnControlledVehicle(WorldPacket& recvData)
 
             if (vehicle_base->GetGUID() == guid)
                 GetPlayer()->ChangeSeat(seatId);
-            else if (Unit* vehUnit = Unit::GetUnit(*GetPlayer(), guid))
+            else if (auto vehUnit = Unit::GetUnit(*GetPlayer(), guid))
                 if (Vehicle* vehicle = vehUnit->GetVehicleKit())
                     if (vehicle->HasEmptySeat(seatId))
                         vehUnit->HandleSpellClick(GetPlayer(), seatId);
@@ -172,7 +172,7 @@ void WorldSession::HandleEnterPlayerVehicle(WorldPacket& data)
     uint64 guid;
     data >> guid;
 
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         if (!player->GetVehicleKit())
             return;

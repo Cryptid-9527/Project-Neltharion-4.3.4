@@ -112,7 +112,7 @@ public:
             //Shadow bolt timer
             if (uiShadowBoltTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(target, SPELL_SHADOW_BOLT);
                 uiShadowBoltTimer = urand(8000, 12000);
             } else uiShadowBoltTimer -= diff;
@@ -121,7 +121,7 @@ public:
             if (uiStealFleshTimer <= diff)
             {
                 Talk(SAY_STEAL_FLESH);
-                if (Unit* random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(random_pTarget, SPELL_STEAL_FLESH);
                 uiStealFleshTimer = 10000;
             } else uiStealFleshTimer -= diff;
@@ -130,7 +130,7 @@ public:
             if (uiSummonGhoulsTimer <= diff)
             {
                 Talk(SAY_SUMMON_GHOULS);
-                if (Unit* random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto random_pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     DoCast(random_pTarget, SPELL_SUMMON_GHOULS);
                 uiSummonGhoulsTimer = 10000;
             } else uiSummonGhoulsTimer -= diff;

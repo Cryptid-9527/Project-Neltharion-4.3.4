@@ -112,7 +112,7 @@ template <> void PointMovementGenerator<Creature>::MovementInform(Creature* unit
         unit->AI()->MovementInform(POINT_MOTION_TYPE, id);
 
         if (TempSummon* summon = unit->ToTempSummon())
-            if (Unit* summoner = summon->GetSummoner())
+            if (auto summoner = summon->GetSummoner())
                 if (summoner->ToCreature() && summoner->IsAIEnabled)
                     summoner->ToCreature()->AI()->SummonedMovementInform(summon, POINT_MOTION_TYPE, id);
     }
@@ -166,7 +166,7 @@ void EffectMovementGenerator::Finalize(Unit* unit)
     // Need restore previous movement since we have no proper states system
     if (unit->isAlive() && !unit->HasUnitState(UNIT_STATE_CONFUSED | UNIT_STATE_FLEEING))
     {
-        if (Unit* victim = unit->getVictim())
+        if (auto victim = unit->getVictim())
             unit->GetMotionMaster()->MoveChase(victim);
         else
             unit->GetMotionMaster()->Initialize();
@@ -177,7 +177,7 @@ void EffectMovementGenerator::Finalize(Unit* unit)
         unit->ToCreature()->AI()->MovementInform(EFFECT_MOTION_TYPE, m_Id);
 
         if (TempSummon* summon = unit->ToTempSummon())
-            if (Unit* summoner = summon->GetSummoner())
+            if (auto summoner = summon->GetSummoner())
                 if (summoner->ToCreature() && summoner->IsAIEnabled)
                     summoner->ToCreature()->AI()->SummonedMovementInform(summon, POINT_MOTION_TYPE, m_Id);
     }

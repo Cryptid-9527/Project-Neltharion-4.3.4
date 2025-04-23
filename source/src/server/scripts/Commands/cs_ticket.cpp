@@ -160,7 +160,7 @@ public:
         handler->SendGlobalGMSysMessage(msg.c_str());
 
         // Inform player, who submitted this ticket, that it is closed
-        if (Player* submitter = ticket->GetPlayer())
+        if (auto submitter = ticket->GetPlayer())
         {
             if (submitter->IsInWorld())
             {
@@ -231,7 +231,7 @@ public:
             return true;
         }
 
-        if (Player* player = ticket->GetPlayer())
+        if (auto player = ticket->GetPlayer())
             if (player->IsInWorld())
                 ticket->SendResponse(player->GetSession());
 
@@ -264,7 +264,7 @@ public:
         sTicketMgr->RemoveTicket(ticket->GetId());
         sTicketMgr->UpdateLastChange();
 
-        if (Player* player = ticket->GetPlayer())
+        if (auto player = ticket->GetPlayer())
         {
             if (player->IsInWorld())
             {
@@ -293,7 +293,7 @@ public:
 
         ticket->SetEscalatedStatus(TICKET_IN_ESCALATION_QUEUE);
 
-        if (Player* player = ticket->GetPlayer())
+        if (auto player = ticket->GetPlayer())
             if (player->IsInWorld())
                 sTicketMgr->SendTicket(player->GetSession(), ticket);
 
@@ -428,7 +428,7 @@ public:
 
         // Detect target's GUID
         uint64 guid = 0;
-        if (Player* player = sObjectAccessor->FindPlayerByName(name))
+        if (auto player = sObjectAccessor->FindPlayerByName(name))
             guid = player->GetGUID();
         else
             guid = sObjectMgr->GetPlayerGUIDByName(name);

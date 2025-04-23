@@ -192,7 +192,7 @@ public:
         {
             me->setActive(true);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 me->SetPhaseMask(4, false);
                 _playerGUID = player->GetGUID();
@@ -212,7 +212,7 @@ public:
             }
             else if (!apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     _summons.DespawnAll();
                     me->DespawnOrUnsummon(1000);
@@ -229,7 +229,7 @@ public:
         {
             if (spellInfo->Id == SPELL_PING_FINISH_EVENT)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     _summons.DespawnAll();
                     me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
@@ -258,8 +258,8 @@ public:
                     return;
                 else
                 {
-                    if (Creature* zazil = me->SummonCreature(NPC_BACKDOOR_ZAZIL, -13657.547f, -306.09f, 8.174f, 3.227307f, TEMPSUMMON_TIMED_DESPAWN, 120000))
-                        if (Creature* hexxer = me->SummonCreature(NPC_BLACKDOOR_JINDO, -13683.792f, -309.109f, 7.749f, 0.1202f, TEMPSUMMON_TIMED_DESPAWN, 120000))
+                    if (auto zazil = me->SummonCreature(NPC_BACKDOOR_ZAZIL, -13657.547f, -306.09f, 8.174f, 3.227307f, TEMPSUMMON_TIMED_DESPAWN, 120000))
+                        if (auto hexxer = me->SummonCreature(NPC_BLACKDOOR_JINDO, -13683.792f, -309.109f, 7.749f, 0.1202f, TEMPSUMMON_TIMED_DESPAWN, 120000))
                         {
                             zazil->setActive(true);
                             hexxer->setActive(true);
@@ -289,7 +289,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (me->GetDistance(player) >= 100.f)
                     {
@@ -309,8 +309,8 @@ public:
                     DoCast(me, SPELL_FLY_STATE_TILTED);
                     break;
                 case EVENT_BACKDOOR_BAT_2:
-                    if (Creature* zazil = Unit::GetCreature(*me, _zazilGUID))
-                        if (Creature* hexxer = Unit::GetCreature(*me, _hexxerGUID))
+                    if (auto zazil = Unit::GetCreature(*me, _zazilGUID))
+                        if (auto hexxer = Unit::GetCreature(*me, _hexxerGUID))
                         {
                             zazil->AI()->Talk(0);
                             zazil->AI()->TalkWithDelay(4000, 1);
@@ -459,7 +459,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 me->setActive(true);
                 me->SetPhaseMask(8, false);
@@ -488,9 +488,9 @@ public:
 
             if (spellInfo->Id == SPELL_DUMMY_PING_3)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
-                    if (Creature* duncan = me->FindNearestCreature(NPC_DUNCAN, 40.0f))
+                    if (auto duncan = me->FindNearestCreature(NPC_DUNCAN, 40.0f))
                     {
                         duncan->AI()->Talk(1, _playerGUID);
                     }
@@ -506,12 +506,12 @@ public:
 
             if (spellInfo->Id == SPELL_DUMMY_PING_4)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (_step1)
                     {
-                        if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 _summons.Summon(stain1);
                                 _summons.Summon(stain2);
@@ -540,7 +540,7 @@ public:
                     }
                     else
                     {
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             player->RemoveAura(SPELL_SWABBING_THE_DECKS_AURA);
                             DoCast(me, SPELL_SWABBING_DUTY_CREDIT);
@@ -557,7 +557,7 @@ public:
 
             if (_started)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -599,16 +599,16 @@ public:
                     _events.ScheduleEvent(EVENT_SWABBING_2, 5000);
                     break;
                 case EVENT_SWABBING_2:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         _step1 = true;
                         _summons.Summon(stain1);
                     }
                     break;
                 case EVENT_SWABBING_6:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 _summons.Summon(stain1);
                                 _summons.Summon(stain2);
@@ -617,9 +617,9 @@ public:
                             }
                     break;
                 case EVENT_SWABBING_7:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 _summons.Summon(stain1);
                                 _summons.Summon(stain2);
@@ -628,9 +628,9 @@ public:
                             }
                     break;
                 case EVENT_SWABBING_8:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 _summons.Summon(stain1);
                                 _summons.Summon(stain2);
@@ -640,12 +640,12 @@ public:
                             }
                     break;
                 case EVENT_SWABBING_9:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                    if (Creature* stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                        if (Creature* stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                    if (auto stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                        if (auto stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                         {
                                             _summons.Summon(stain1);
                                             _summons.Summon(stain2);
@@ -657,12 +657,12 @@ public:
                                         }
                     break;
                 case EVENT_SWABBING_10:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                    if (Creature* stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                        if (Creature* stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                    if (auto stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                        if (auto stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                         {
                                             _summons.Summon(stain1);
                                             _summons.Summon(stain2);
@@ -674,10 +674,10 @@ public:
                                         }
                     break;
                 case EVENT_SWABBING_11:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                 {
                                     _summons.Summon(stain1);
                                     _summons.Summon(stain2);
@@ -687,14 +687,14 @@ public:
                                 }
                     break;
                 case EVENT_SWABBING_12:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                    if (Creature* stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                        if (Creature* stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                            if (Creature* stain7 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                                if (Creature* stain8 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                    if (auto stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                        if (auto stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                            if (auto stain7 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                                if (auto stain8 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                                 {
                                                     _summons.Summon(stain1);
                                                     _summons.Summon(stain2);
@@ -708,11 +708,11 @@ public:
                                                 }
                     break;
                 case EVENT_SWABBING_13:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                    if (Creature* stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                    if (auto stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                     {
                                         _summons.Summon(stain1);
                                         _summons.Summon(stain2);
@@ -723,12 +723,12 @@ public:
                                     }
                     break;
                 case EVENT_SWABBING_14:
-                    if (Creature* stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                if (Creature* stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                    if (Creature* stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
-                                        if (Creature* stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto stain1 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto stain2 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto stain3 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                if (auto stain4 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                    if (auto stain5 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
+                                        if (auto stain6 = me->SummonCreature(NPC_STAIN, StainLocations[urand(0, 87)], TEMPSUMMON_MANUAL_DESPAWN))
                                         {
                                             _summons.Summon(stain1);
                                             _summons.Summon(stain2);
@@ -772,7 +772,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* controller = summoner->ToCreature())
+            if (auto controller = summoner->ToCreature())
             {
                 _controllerGUID = controller->GetGUID();
                 _events.ScheduleEvent(EVENT_SWABBING_3, 8500);
@@ -781,7 +781,7 @@ public:
 
         void OnSpellClick(Unit* player, bool& result)
         {
-            if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+            if (auto controller = Unit::GetCreature(*me, _controllerGUID))
             {
                 player->CastSpell(me, SPELL_ANIM_MOP_STAIN);
                 _events.Reset();
@@ -804,17 +804,17 @@ public:
                     DoCast(me, SPELL_WARNING_MARK);
                     _events.ScheduleEvent(EVENT_SWABBING_4, 5000);
 
-                    if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                    if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                         DoCast(controller, SPELL_DUMMY_PING);
                     break;
                 case EVENT_SWABBING_4:
                     _events.ScheduleEvent(EVENT_SWABBING_5, 5000);
 
-                    if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                    if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                         DoCast(controller, SPELL_DUMMY_PING_2);
                     break;
                 case EVENT_SWABBING_5:
-                    if (Creature* controller = Unit::GetCreature(*me, _controllerGUID))
+                    if (auto controller = Unit::GetCreature(*me, _controllerGUID))
                         DoCast(controller, SPELL_DUMMY_PING_3);
                     break;
                 default:
@@ -859,7 +859,7 @@ public:
                 _onUse = true;
                 me->SetRooted(true);
 
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                     _playerGUID = player->GetGUID();
             }
 
@@ -874,7 +874,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->KilledMonsterCredit(NPC_SMILLIN_TIMMY_STICKS);
 
@@ -893,7 +893,7 @@ public:
             {
                 _checkTimer = 2000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_OL_BLASTY) == QUEST_STATUS_NONE)
                     {
@@ -1113,7 +1113,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
 
             me->SetPhaseMask(16, false);
@@ -1131,7 +1131,7 @@ public:
             case 1:
                 if (point == 7)
                 {
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         oarman->AI()->TalkWithDelay(1000, 4, _playerGUID);
                         _events.ScheduleEvent(EVENT_DRIVEBYPIRACY_4, 21000, 0);
@@ -1141,7 +1141,7 @@ public:
             case 2:
                 if (point == 4)
                 {
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         oarman->AI()->TalkWithDelay(1000, 6, _playerGUID);
                         _events.ScheduleEvent(EVENT_DRIVEBYPIRACY_5, 15000, 0);
@@ -1151,7 +1151,7 @@ public:
             case 3:
                 if (point == 3)
                 {
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         oarman->AI()->TalkWithDelay(1000, 8, _playerGUID);
                         _events.ScheduleEvent(EVENT_DRIVEBYPIRACY_6, 21000, 0);
@@ -1161,7 +1161,7 @@ public:
             case 4:
                 if (point == 3)
                 {
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         oarman->AI()->TalkWithDelay(1000, 10, _playerGUID);
                         _events.ScheduleEvent(EVENT_DRIVEBYPIRACY_7, 15000, 0);
@@ -1171,7 +1171,7 @@ public:
             case 5: // return not completed
                 if (point == 13)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         _summons.DespawnAll();
@@ -1183,7 +1183,7 @@ public:
             case 10: // return with completed q
                 if (point == 9)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         _summons.DespawnAll();
@@ -1215,7 +1215,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (onBoat)
                     {
@@ -1240,7 +1240,7 @@ public:
                     {
                         if (player->GetQuestStatus(QUEST_DRIVE_BY_PIRACY) == QUEST_STATUS_COMPLETE)
                         {
-                            if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                            if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                             {
                                 _complete = true;
                                 me->GetMotionMaster()->Clear();
@@ -1261,8 +1261,8 @@ public:
                 switch (eventId)
                 {
                 case EVENT_DRIVEBYPIRACY_1:
-                    if (Creature* oarman = me->SummonCreature(NPC_SUMMONED_OARMAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* cannon = me->SummonCreature(NPC_DRIVE_BY_PIRACY_CANNON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto oarman = me->SummonCreature(NPC_SUMMONED_OARMAN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto cannon = me->SummonCreature(NPC_DRIVE_BY_PIRACY_CANNON, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _oarmanGUID = oarman->GetGUID();
                             _cannonGUID = cannon->GetGUID();
@@ -1275,8 +1275,8 @@ public:
                         }
                     break;
                 case EVENT_DRIVEBYPIRACY_2:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
-                        if (Creature* cannon = Unit::GetCreature(*me, _cannonGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto cannon = Unit::GetCreature(*me, _cannonGUID))
                         {
                             onBoat = true;
                             player->CastSpell(cannon, SPELL_RIDE_VEHICLE);
@@ -1284,7 +1284,7 @@ public:
                         }
                     break;
                 case EVENT_DRIVEBYPIRACY_3:
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         _pauseCounter = 1;
                         me->GetMotionMaster()->MoveSmoothPath(DriveByPiracyBoatPath, DriveByPiracyBoatPathSize);
@@ -1294,7 +1294,7 @@ public:
                     }
                     break;
                 case EVENT_DRIVEBYPIRACY_4:
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         _pauseCounter++;
                         oarman->AI()->TalkWithDelay(500, 5, _playerGUID);
@@ -1303,7 +1303,7 @@ public:
                     }
                     break;
                 case EVENT_DRIVEBYPIRACY_5:
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         _pauseCounter++;
                         oarman->AI()->TalkWithDelay(500, 7, _playerGUID);
@@ -1312,7 +1312,7 @@ public:
                     }
                     break;
                 case EVENT_DRIVEBYPIRACY_6:
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         _pauseCounter++;
                         oarman->AI()->TalkWithDelay(500, 9, _playerGUID);
@@ -1320,7 +1320,7 @@ public:
                     }
                     break;
                 case EVENT_DRIVEBYPIRACY_7:
-                    if (Creature* oarman = Unit::GetCreature(*me, _oarmanGUID))
+                    if (auto oarman = Unit::GetCreature(*me, _oarmanGUID))
                     {
                         _pauseCounter++;
                         me->GetMotionMaster()->MoveSmoothPath(DriveByPiracyBoatPath5, DriveByPiracyBoatPathSize5);
@@ -1359,7 +1359,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* boat = summoner->ToCreature())
+            if (auto boat = summoner->ToCreature())
                 _cannonGUID = boat->GetGUID();
         }
 
@@ -1374,8 +1374,8 @@ public:
             if (!apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
                 if (_onBoard)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
-                        if (Creature* cannon = Unit::GetCreature(*me, _cannonGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto cannon = Unit::GetCreature(*me, _cannonGUID))
                         {
                             if (player->GetQuestStatus(QUEST_DRIVE_BY_PIRACY) == QUEST_STATUS_COMPLETE)
                             {
@@ -1425,7 +1425,7 @@ public:
             me->CastWithDelay(2000, me, SPELL_DETECT_NINJAS);
             TalkWithDelay(2000, 0, _playerGUID);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1435,7 +1435,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive() || me->GetAreaId() != 297)
                         me->DespawnOrUnsummon();
@@ -1543,7 +1543,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 player->CastSpell(player, SPELL_SANCTUARY_NO_COMBAT);
                 player->CastSpell(player, SPELL_DISMOUNT_AND_CANCEL_ALL_SHAPESHIFTS);
@@ -1598,7 +1598,7 @@ public:
 
             if (_phase == 2 && point == 7)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     _events.Reset();
@@ -1616,7 +1616,7 @@ public:
 
                 if (!_complete)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (player->GetQuestStatus(26697) == QUEST_STATUS_COMPLETE)
                         {
@@ -1704,7 +1704,7 @@ public:
             summoner->CastSpell(summoner, SPELL_SANCTUARY_NO_COMBAT);
             summoner->CastSpell(summoner, SPELL_DISMOUNT_AND_CANCEL_ALL_SHAPESHIFTS);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
 
             me->SetReactState(REACT_PASSIVE);
@@ -1751,7 +1751,7 @@ public:
             case 5:
                 if (me->GetEntry() == NPC_ROPE_TO_DOCK)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         me->GetMotionMaster()->Clear();
@@ -1763,7 +1763,7 @@ public:
             case 6:
                 if (me->GetEntry() == NPC_ROPE_FROM_DOCK)
                 {
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->ExitVehicle();
                         me->GetMotionMaster()->Clear();
@@ -1820,7 +1820,7 @@ public:
             summoner->CastSpell(summoner, SPELL_SANCTUARY_NO_COMBAT);
             summoner->CastSpell(summoner, SPELL_DISMOUNT_AND_CANCEL_ALL_SHAPESHIFTS);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -1847,7 +1847,7 @@ public:
             switch (point)
             {
             case 14:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     me->GetMotionMaster()->Clear();
@@ -1998,7 +1998,7 @@ public:
                 _killCount = 0;
                 _events.ScheduleEvent(EVENT_UNBAGBWA_1, 3000);
 
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                     _playerGUID = player->GetGUID();
             }
 
@@ -2044,7 +2044,7 @@ public:
                 {
                     _checkTimer = 1000;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (me->GetDistance(player) > 38.f)
                         {
@@ -2066,21 +2066,21 @@ public:
                 switch (eventId)
                 {
                 case EVENT_UNBAGBWA_1:
-                    if (Creature* enemy1 = me->SummonCreature(NPC_SILVERBACK_GORILLA, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy1 = me->SummonCreature(NPC_SILVERBACK_GORILLA, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy1);
                         enemy1->SetHomePosition(me->GetPositionX() + 2, me->GetPositionY() + 2, me->GetPositionZ(), me->GetOrientation());
                     }
                     break;
                 case EVENT_UNBAGBWA_2:
-                    if (Creature* enemy2 = me->SummonCreature(NPC_KONDA, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy2 = me->SummonCreature(NPC_KONDA, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy2);
                         enemy2->SetHomePosition(me->GetPositionX() + 2, me->GetPositionY() + 2, me->GetPositionZ(), me->GetOrientation());
                     }
                     break;
                 case EVENT_UNBAGBWA_3:
-                    if (Creature* enemy3 = me->SummonCreature(NPC_MOKK, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto enemy3 = me->SummonCreature(NPC_MOKK, HeartOfMokkSpawnPosition[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         _summons.Summon(enemy3);
                         enemy3->SetHomePosition(me->GetPositionX() + 2, me->GetPositionY() + 2, me->GetPositionZ(), me->GetOrientation());
@@ -2136,7 +2136,7 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetHitUnit();
-            if (Player* player = caster->ToPlayer())
+            if (auto player = caster->ToPlayer())
             {
                 if (player->GetAreaId() == 311)
                 {
@@ -2631,7 +2631,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* zanzil = summoner->ToCreature())
+            if (auto zanzil = summoner->ToCreature())
                 _zanzilGUID = zanzil->GetGUID();
 
             me->SetReactState(REACT_PASSIVE);
@@ -2640,7 +2640,7 @@ public:
 
         void DoAction(int32 const actionId)
         {
-            if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+            if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
             {
                 switch (actionId)
                 {
@@ -2715,7 +2715,7 @@ public:
             DoCast(me, SPELL_HIGH_PRIESTESS_JEKLIK_BLOODY_MEAT);
             DoCast(me, SPELL_HIGH_PRIESTESS_JEKLIK_BLOODY_MEAT);
 
-            if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+            if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
             {
                 if (zanzil->IsVisible())
                     zanzil->AI()->DoAction(ACTION_ZANZIL_2);
@@ -2730,7 +2730,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+                if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
                 {
                     if (!zanzil->isAlive())
                         me->DespawnOrUnsummon();
@@ -2848,7 +2848,7 @@ public:
             _fightInProgress = true;
             _sayStartText = true;
 
-            if (Creature* venoxis = me->SummonCreature(NPC_HIGH_PRIESTESS_VENOXIS, -12028.5f, -1705.92f, 41.97f, 5.218f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000))
+            if (auto venoxis = me->SummonCreature(NPC_HIGH_PRIESTESS_VENOXIS, -12028.5f, -1705.92f, 41.97f, 5.218f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000))
             {
                 _summons.Summon(venoxis);
                 _venoxisGUID = venoxis->GetGUID();
@@ -2888,7 +2888,7 @@ public:
                 TalkWithDelay(3000, 4);
                 _events.Reset();
 
-                if (Creature* hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     _summons.Summon(hexxer);
                     _hexxerGUID = hexxer->GetGUID();
@@ -2909,7 +2909,7 @@ public:
                 TalkWithDelay(1000, 4);
                 _events.Reset();
 
-                if (Creature* hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     _summons.Summon(hexxer);
                     _hexxerGUID = hexxer->GetGUID();
@@ -2929,7 +2929,7 @@ public:
                 TalkWithDelay(1000, 6);
                 _events.Reset();
 
-                if (Creature* hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     _summons.Summon(hexxer);
                     _hexxerGUID = hexxer->GetGUID();
@@ -2950,7 +2950,7 @@ public:
                 TalkWithDelay(1000, 6);
                 _events.Reset();
 
-                if (Creature* hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto hexxer = me->SummonCreature(NPC_SHADE_OF_THE_HEXXER, HexxerLocations[0], TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     _summons.Summon(hexxer);
                     _hexxerGUID = hexxer->GetGUID();
@@ -2994,7 +2994,7 @@ public:
                 {
                     me->CastStop();
 
-                    if (Creature* target = me->FindNearestCreature(NPC_ZANZIL_ELIKSIR_SUMMON_TARGET, 39.9f))
+                    if (auto target = me->FindNearestCreature(NPC_ZANZIL_ELIKSIR_SUMMON_TARGET, 39.9f))
                         DoCast(target, SPELL_HIGH_PRIEST_VENOXIS_SUMMON_SPIRIT);
 
                     _events.ScheduleEvent(EVENT_ZANZIL_VENOXIS_SUMMON_SPIRIT, urand(11000, 12000));
@@ -3030,11 +3030,11 @@ public:
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
 
-                    if (Player* player = me->FindNearestPlayer(70.0f))
+                    if (auto player = me->FindNearestPlayer(70.0f))
                         me->AI()->AttackStart(player);
                     break;
                 case EVENT_ZANZIL_VENOXIS_5:
-                    if (Creature* hexxer = Unit::GetCreature(*me, _hexxerGUID))
+                    if (auto hexxer = Unit::GetCreature(*me, _hexxerGUID))
                     {
                         hexxer->AI()->Talk(1);
                         TalkWithDelay(4000, 5);
@@ -3062,7 +3062,7 @@ public:
                 }
                 case EVENT_ZANZIL_VENOXIS_10:
 
-                    if (Creature* hexxer = Unit::GetCreature(*me, _hexxerGUID))
+                    if (auto hexxer = Unit::GetCreature(*me, _hexxerGUID))
                     {
                         if (hexxer->GetPhaseMask() == 1024) // ALLIANCE PHASE
                         {
@@ -3084,21 +3084,21 @@ public:
                     }
                     break;
                 case EVENT_ZANZIL_VENOXIS_11:
-                    if (Creature* plane = me->SummonCreature(44156, HexxerLocations[2], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto plane = me->SummonCreature(44156, HexxerLocations[2], TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         _transportGUID = plane->GetGUID();
                         _events.ScheduleEvent(EVENT_ZANZIL_VENOXIS_13, 22500);
                     }
                     break;
                 case EVENT_ZANZIL_VENOXIS_12:
-                    if (Creature* ballon = me->SummonCreature(43335, HexxerLocations[2], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto ballon = me->SummonCreature(43335, HexxerLocations[2], TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         _transportGUID = ballon->GetGUID();
                         _events.ScheduleEvent(EVENT_ZANZIL_VENOXIS_13, 22500);
                     }
                     break;
                 case EVENT_ZANZIL_VENOXIS_13:
-                    if (Creature* transport = Unit::GetCreature(*me, _transportGUID))
+                    if (auto transport = Unit::GetCreature(*me, _transportGUID))
                     {
                         DoCast(transport, SPELL_DUMMY_PING);
                         _summons.DespawnAll();
@@ -3139,7 +3139,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* zanzil = summoner->ToCreature())
+            if (auto zanzil = summoner->ToCreature())
                 _zanzilGUID = zanzil->GetGUID();
 
             me->SetReactState(REACT_PASSIVE);
@@ -3172,7 +3172,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+                if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
                 {
                     if (!zanzil->isAlive())
                         me->DespawnOrUnsummon();
@@ -3182,7 +3182,7 @@ public:
                 {
                     std::list<Unit*> spirit = me->SelectNearbyUnits(NPC_SPIRIT_OF_HEXXER, 5.0f);
                     for (std::list<Unit*>::iterator itr = spirit.begin(); itr != spirit.end(); ++itr)
-                        if (Unit* spirit = (*itr))
+                        if (auto spirit = (*itr))
                         {
                             if (!spirit->GetAura(SPELL_AURA_CHECK))
                             {
@@ -3201,7 +3201,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ZANZIL_VENOXIS_4:
-                    if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+                    if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
                     {
                         if (zanzil->IsVisible())
                             zanzil->AI()->DoAction(ACTION_ZANZIL_3);
@@ -3210,7 +3210,7 @@ public:
                     }
                     break;
                 case EVENT_ZANZIL_VENOXIS_6:
-                    if (Creature* zanzil = Unit::GetCreature(*me, _zanzilGUID))
+                    if (auto zanzil = Unit::GetCreature(*me, _zanzilGUID))
                     {
                         if (zanzil->IsVisible())
                             zanzil->AI()->DoAction(ACTION_ZANZIL_5);
@@ -3249,7 +3249,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* zanzil = summoner->ToCreature())
+            if (auto zanzil = summoner->ToCreature())
                 _zanzilGUID = zanzil->GetGUID();
 
             me->SetReactState(REACT_PASSIVE);
@@ -3265,7 +3265,7 @@ public:
             switch (point)
             {
             case 1:
-                if (Creature* venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 20.0f))
+                if (auto venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 20.0f))
                 {
                     DoCast(me, SPELL_ROOT);
                     DoCast(venoxis, SPELL_HEAL_5SEC);
@@ -3287,11 +3287,11 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ZANZIL_VENOXIS_7:
-                    if (Creature* venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 50.0f))
+                    if (auto venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 50.0f))
                         me->GetMotionMaster()->MoveChase(venoxis, 1.0f, frand(0.0, 6.0));
                     break;
                 case EVENT_ZANZIL_VENOXIS_8:
-                    if (Creature* venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 50.0f))
+                    if (auto venoxis = me->FindNearestCreature(NPC_HIGH_PRIESTESS_VENOXIS, 50.0f))
                     {
                         DoCast(venoxis, SPELL_HEAL_5SEC);
                         _events.ScheduleEvent(EVENT_ZANZIL_VENOXIS_8, 8000);
@@ -3360,8 +3360,8 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Creature* actor = Unit::GetCreature(*me, _actorGUID))
-                    if (Creature* ladder = Unit::GetCreature(*me, _ladderGUID))
+                if (auto actor = Unit::GetCreature(*me, _actorGUID))
+                    if (auto ladder = Unit::GetCreature(*me, _ladderGUID))
                     {
                         actor->DespawnOrUnsummon();
                         ladder->DespawnOrUnsummon();
@@ -3379,8 +3379,8 @@ public:
                 switch (eventId)
                 {
                 case EVENT_VENOXIS_TRANSPORT_1:
-                    if (Creature* hewstrike = me->SummonCreature(NPC_BRONWYN_HEWSTRIKE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* ladder = me->SummonCreature(NPC_ROPE_LADDER_A, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto hewstrike = me->SummonCreature(NPC_BRONWYN_HEWSTRIKE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto ladder = me->SummonCreature(NPC_ROPE_LADDER_A, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _actorGUID = hewstrike->GetGUID();
                             _ladderGUID = ladder->GetGUID();
@@ -3390,8 +3390,8 @@ public:
                         }
                     break;
                 case EVENT_VENOXIS_TRANSPORT_2:
-                    if (Creature* sassy = me->SummonCreature(NPC_SASSY_HARDWRENCH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
-                        if (Creature* ladder = me->SummonCreature(NPC_ROPE_LADDER_H, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto sassy = me->SummonCreature(NPC_SASSY_HARDWRENCH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                        if (auto ladder = me->SummonCreature(NPC_ROPE_LADDER_H, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
                         {
                             _actorGUID = sassy->GetGUID();
                             _ladderGUID = ladder->GetGUID();
@@ -3403,7 +3403,7 @@ public:
                 case EVENT_VENOXIS_TRANSPORT_3:
                     me->GetMotionMaster()->MoveSmoothPath(TransportPath, TransportPathSize);
 
-                    if (Creature* actor = Unit::GetCreature(*me, _actorGUID))
+                    if (auto actor = Unit::GetCreature(*me, _actorGUID))
                     {
                         actor->AI()->TalkWithDelay(2000, 0);
                         actor->AI()->TalkWithDelay(5000, 1);
@@ -3443,7 +3443,7 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             Unit* caster = GetHitUnit();
-            if (Player* player = caster->ToPlayer())
+            if (auto player = caster->ToPlayer())
             {
                 if (player->GetQuestStatus(QUEST_HIGH_PRIESTESS_VENOXIS_H) == QUEST_STATUS_INCOMPLETE ||
                     player->GetQuestStatus(QUEST_HIGH_PRIESTESS_VENOXIS_H) == QUEST_STATUS_COMPLETE)
@@ -3512,7 +3512,7 @@ public:
                 {
                     _checkTimer = 1000;
 
-                    if (Creature* shortjohn = me->FindNearestCreature(NPC_SHORT_JOHN_MITHRIL, 200.f))
+                    if (auto shortjohn = me->FindNearestCreature(NPC_SHORT_JOHN_MITHRIL, 200.f))
                         DoCast(shortjohn, SPELL_DUMMY_PING);
                 }
                 else _checkTimer -= diff;
@@ -3643,7 +3643,7 @@ public:
                         _pathStep = 1;
                         me->GetMotionMaster()->MoveSmoothPath(JohnMithrilPath2, JohnMithrilPathSize2);
 
-                        if (GameObject* treasure = GameObject::GetGameObject(*me, _treasureGUID))
+                        if (auto treasure = GameObject::GetGameObject(*me, _treasureGUID))
                         {
                             treasure->Delete();
                             _treasureGUID = 0;
@@ -3702,7 +3702,7 @@ public:
                 case EVENT_SHORT_JOHN_MITHRIL_2:
                     //me->RemoveByteFlag(UNIT_FIELD_BYTES_1, 0, 8);
 
-                    if (GameObject* treasure = me->SummonGameObject(OBJECT_ARENA_TREASURE_CHEST, -13203.682f, 274.122f, 21.8601f, 4.208324f, 0, 0, 0, 0, 0))
+                    if (auto treasure = me->SummonGameObject(OBJECT_ARENA_TREASURE_CHEST, -13203.682f, 274.122f, 21.8601f, 4.208324f, 0, 0, 0, 0, 0))
                     {
                         treasure->setActive(true);
                         _treasureGUID = treasure->GetGUID();

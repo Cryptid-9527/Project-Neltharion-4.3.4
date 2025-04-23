@@ -221,7 +221,7 @@ public:
             }
             else
             {
-                if (Unit* target = Unit::GetUnit(*me, instance->GetData64(DATA_PL_JEDOGA_TARGET)))
+                if (auto target = Unit::GetUnit(*me, instance->GetData64(DATA_PL_JEDOGA_TARGET)))
                 {
                     AttackStart(target);
                     instance->SetData(DATA_JEDOGA_RESET_INITIANDS, 0);
@@ -313,7 +313,7 @@ public:
 
                 if (uiBoltTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_LIGHTNING_BOLT, SPELL_LIGHTNING_BOLT_H), false);
 
                     uiBoltTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
@@ -321,7 +321,7 @@ public:
 
                 if (uiThunderTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         me->CastSpell(target, DUNGEON_MODE(SPELL_THUNDERSHOCK, SPELL_THUNDERSHOCK_H), false);
 
                     uiThunderTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
@@ -395,7 +395,7 @@ public:
 
             if (bWalking)
             {
-                if (Creature* boss = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JEDOGA_SHADOWSEEKER)))
+                if (auto boss = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JEDOGA_SHADOWSEEKER)))
                 {
                     if (!CAST_AI(boss_jedoga_shadowseeker::boss_jedoga_shadowseekerAI, boss->AI())->bOpFerok)
                         CAST_AI(boss_jedoga_shadowseeker::boss_jedoga_shadowseekerAI, boss->AI())->bOpFerokFail = true;
@@ -611,7 +611,7 @@ class achievement_volunteer_work : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Jedoga = target->ToCreature())
+            if (auto Jedoga = target->ToCreature())
                 if (Jedoga->AI()->GetData(DATA_VOLUNTEER_WORK))
                     return true;
 

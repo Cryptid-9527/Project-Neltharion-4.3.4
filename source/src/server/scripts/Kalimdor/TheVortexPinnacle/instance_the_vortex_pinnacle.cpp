@@ -79,7 +79,7 @@ public:
                 break;
             case NPC_WIND:
                 if (npcWindGUID != 0)
-                    if (Creature* c = instance->GetCreature(npcWindGUID))
+                    if (auto c = instance->GetCreature(npcWindGUID))
                         c->DespawnOrUnsummon();
                 npcWindGUID = creature->GetGUID();
                 break;
@@ -191,12 +191,12 @@ public:
                 Map::PlayerList const& players = instance->GetPlayers();
                 for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
                 {
-                    if (Player* player = i->getSource())
+                    if (auto player = i->getSource())
                     {
                         player->GetPosition(&pos);
                         if (player->GetPositionZ() <= 600.0f && !player->GetVehicle())
                             player->NearTeleportTo(-356.16f, -2.96f, 633.0f, 3.97f);
-                        /*    if (Creature* sp = instance->SummonCreature(NPC_SLIPSTREAM, pos))
+                        /*    if (auto sp = instance->SummonCreature(NPC_SLIPSTREAM, pos))
                             {
                                 sp->AI()->SetGUID(player->GetGUID());
                                 sp->GetMotionMaster()->MoveJump(savePlayersPos[player->GetGUID()], 20, 50, 42);

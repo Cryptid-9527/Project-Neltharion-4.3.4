@@ -126,7 +126,7 @@ public:
                 {
                     case 9:
                     case 14:
-                        if (GameObject* go = instance->GetGameObject(uiGongGUID))
+                        if (auto go = instance->GetGameObject(uiGongGUID))
                             go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                         break;
                     case 1:
@@ -160,13 +160,13 @@ public:
                                 break;
                         }
 
-                        if (Creature* creature = go->SummonCreature(uiCreature, 2502.635f, 844.140f, 46.896f, 0.633f))
+                        if (auto creature = go->SummonCreature(uiCreature, 2502.635f, 844.140f, 46.896f, 0.633f))
                         {
                             if (uiGongWaves == 10 || uiGongWaves == 1)
                             {
                                 for (uint8 i = 0; i < uiSummonTimes; ++i)
                                 {
-                                    if (Creature* summon = go->SummonCreature(uiCreature, 2502.635f + float(irand(-5, 5)), 844.140f + float(irand(-5, 5)), 46.896f, 0.633f))
+                                    if (auto summon = go->SummonCreature(uiCreature, 2502.635f + float(irand(-5, 5)), 844.140f + float(irand(-5, 5)), 46.896f, 0.633f))
                                         summon->GetMotionMaster()->MovePoint(0, 2533.479f + float(irand(-5, 5)), 870.020f + float(irand(-5, 5)), 47.678f);
                                 }
                             }

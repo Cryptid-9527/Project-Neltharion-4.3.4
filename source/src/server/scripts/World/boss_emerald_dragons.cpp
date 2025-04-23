@@ -150,7 +150,7 @@ struct emerald_dragonAI : public WorldBossAI
         while (uint32 eventId = events.ExecuteEvent())
             ExecuteEvent(eventId);
 
-        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, -50.0f, true))
+        if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, -50.0f, true))
             DoCast(target, SPELL_SUMMON_PLAYER);
 
         DoMeleeAttackIfReady();
@@ -185,7 +185,7 @@ class npc_dream_fog : public CreatureScript
                 if (!_roamTimer)
                 {
                     // Chase target, but don't attack - otherwise just roam around
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                     {
                         _roamTimer = urand(15000, 30000);
                         me->GetMotionMaster()->Clear(false);
@@ -675,7 +675,7 @@ class DreamFogTargetSelector
 
         bool operator()(WorldObject* object)
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 return unit->HasAura(SPELL_SLEEP);
             return true;
         }
@@ -719,7 +719,7 @@ class MarkOfNatureTargetSelector
         bool operator()(WorldObject* object)
         {
             // return those not tagged or already under the influence of Aura of Nature
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 return !(unit->HasAura(SPELL_MARK_OF_NATURE) && !unit->HasAura(SPELL_AURA_OF_NATURE));
             return true;
         }

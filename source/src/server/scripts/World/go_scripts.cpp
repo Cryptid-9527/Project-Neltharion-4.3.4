@@ -199,7 +199,7 @@ public:
         {
             if (player->GetQuestStatus(9678) == QUEST_STATUS_INCOMPLETE)
             {
-                if (Creature* Stillblade = player->SummonCreature(NPC_STILLBLADE, 8106.11f, -7542.06f, 151.775f, 3.02598f, TEMPSUMMON_DEAD_DESPAWN, 60000))
+                if (auto Stillblade = player->SummonCreature(NPC_STILLBLADE, 8106.11f, -7542.06f, 151.775f, 3.02598f, TEMPSUMMON_DEAD_DESPAWN, 60000))
                     Stillblade->AI()->AttackStart(player);
             }
         }
@@ -313,7 +313,7 @@ public:
         go->UseDoorOrButton();
         int Random = rand() % (sizeof(NpcPrisonEntry) / sizeof(uint32));
 
-        if (Creature* creature = player->SummonCreature(NpcPrisonEntry[Random], go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), go->GetAngle(player),
+        if (auto creature = player->SummonCreature(NpcPrisonEntry[Random], go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), go->GetAngle(player),
             TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 30000))
         {
             if (!creature->IsHostileTo(player))
@@ -480,7 +480,7 @@ public:
         //implicitTarget=48 not implemented as of writing this code, and manual summon may be just ok for our purpose
         //player->CastSpell(player, SPELL_SUMMON_RIZZLE, false);
 
-        if (Creature* creature = player->SummonCreature(NPC_RIZZLE, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0))
+        if (auto creature = player->SummonCreature(NPC_RIZZLE, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_DEAD_DESPAWN, 0))
             creature->CastSpell(player, SPELL_BLACKJACK, false);
 
         return false;
@@ -733,7 +733,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* go)
     {
         go->UseDoorOrButton();
-        if (Creature* pNearestPrisoner = go->FindNearestCreature(NPC_SCOURGE_PRISONER, 5.0f, true))
+        if (auto pNearestPrisoner = go->FindNearestCreature(NPC_SCOURGE_PRISONER, 5.0f, true))
         {
             player->KilledMonsterCredit(NPC_SCOURGE_PRISONER, pNearestPrisoner->GetGUID());
             pNearestPrisoner->DisappearAndDie();
@@ -961,7 +961,7 @@ class go_soulwell : public GameObjectScript
                 {
                     case GO_SOUL_WELL_R1:
                         _stoneSpell = SPELL_CREATE_MASTER_HEALTH_STONE_R0;
-                        if (Unit* owner = go->GetOwner())
+                        if (auto owner = go->GetOwner())
                         {
                             if (owner->HasAura(SPELL_IMPROVED_HEALTH_STONE_R1))
                                 _stoneSpell = SPELL_CREATE_MASTER_HEALTH_STONE_R1;
@@ -971,7 +971,7 @@ class go_soulwell : public GameObjectScript
                         break;
                     case GO_SOUL_WELL_R2:
                         _stoneSpell = SPELL_CREATE_FEL_HEALTH_STONE_R0;
-                        if (Unit* owner = go->GetOwner())
+                        if (auto owner = go->GetOwner())
                         {
                             if (owner->HasAura(SPELL_IMPROVED_HEALTH_STONE_R1))
                                 _stoneSpell = SPELL_CREATE_FEL_HEALTH_STONE_R1;
@@ -1238,7 +1238,7 @@ class go_gjalerbron_cage : public GameObjectScript
             if ((player->GetTeamId() == TEAM_ALLIANCE && player->GetQuestStatus(QUEST_ALLIANCE_OF_KEYS_AND_CAGES) == QUEST_STATUS_INCOMPLETE) ||
                 (player->GetTeamId() == TEAM_HORDE && player->GetQuestStatus(QUEST_HORDE_OF_KEYS_AND_CAGES) == QUEST_STATUS_INCOMPLETE))
             {
-                if (Creature* prisoner = go->FindNearestCreature(NPC_GJALERBRON_PRISONER, 5.0f))
+                if (auto prisoner = go->FindNearestCreature(NPC_GJALERBRON_PRISONER, 5.0f))
                 {
                     if (player)
                         player->KilledMonsterCredit(NPC_GJALERBRON_PRISONER, 0);

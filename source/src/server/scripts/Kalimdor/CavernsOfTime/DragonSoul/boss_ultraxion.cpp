@@ -469,7 +469,7 @@ public:
             Trinity::WorldObjectListSearcher<Trinity::AllWorldObjectsInRange> searcher(me, targetList, objects);
             me->VisitNearbyObject(100.0f, searcher);
             for (std::list<WorldObject*>::const_iterator i = targetList.begin(); i != targetList.end(); ++i)
-                if (GameObject* go = (*i)->ToGameObject())
+                if (auto go = (*i)->ToGameObject())
                     if (go->GetEntry() == GO_ESSENCE_OF_DREAMS || go->GetEntry() == GO_SOURCE_OF_MAGIC || go->GetEntry() == GO_GIFT_OF_LIFE)
                         go->Delete();
         }
@@ -488,7 +488,7 @@ public:
             Position pos(*me);
             for (int32 i = 0; i < 6; i++)
             {
-                if (Creature* passenger = me->SummonCreature(NPC_ULTRAXION_VEHICLE, pos))
+                if (auto passenger = me->SummonCreature(NPC_ULTRAXION_VEHICLE, pos))
                 {
                     passenger->CastCustomSpell(me, SPELL_RIDE_VEHICLE, &i, NULL, NULL, TRIGGERED_FULL_MASK);
                     passenger->m_Events.AddEvent(new UltraxionVehicleVisualEvent(passenger), passenger->m_Events.CalculateTime(urand(300, 1000)));
@@ -537,7 +537,7 @@ public:
             RemoveEncounterFrame();
             CleanupEncounter();
             _JustDied();
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+            if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
             {
                 thrall->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 thrall->InterruptNonMeleeSpells(false);
@@ -546,7 +546,7 @@ public:
                 thrall->NearTeleportTo(thrall->GetHomePosition());
             }
 
-            if (Creature* alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+            if (auto alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
             {
                 alex->InterruptNonMeleeSpells(false);
                 alex->RemoveAllAuras();
@@ -554,7 +554,7 @@ public:
                 alex->NearTeleportTo(alex->GetHomePosition());
             }
 
-            if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+            if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
             {
                 kalecgos->InterruptNonMeleeSpells(false);
                 kalecgos->RemoveAllAuras();
@@ -563,7 +563,7 @@ public:
                 kalecgos->AI()->DoAction(ACTION_START_ULTRAXION_OUTRO);
             }
 
-            if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+            if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
             {
                 nozdormu->InterruptNonMeleeSpells(false);
                 nozdormu->RemoveAllAuras();
@@ -571,7 +571,7 @@ public:
                 nozdormu->NearTeleportTo(nozdormu->GetHomePosition());
             }
 
-            if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+            if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
             {
                 ysera->InterruptNonMeleeSpells(false);
                 ysera->RemoveAllAuras();
@@ -579,10 +579,10 @@ public:
                 ysera->NearTeleportTo(ysera->GetHomePosition());
             }
 
-            if (Creature* dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
+            if (auto dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
                 dragonSoul->NearTeleportTo(dragonSoul->GetHomePosition());
 
-            if (GameObject* chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_ULTRAXION_CHEST_LFR : DATA_ULTRAXION_CHEST))
+            if (auto chest = instance->GetGameObject((instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR) ? DATA_ULTRAXION_CHEST_LFR : DATA_ULTRAXION_CHEST))
             {
                 chest->SetRespawnTime(chest->GetRespawnDelay());
                 chest->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -615,7 +615,7 @@ public:
             {
                 RemoveEncounterFrame();
                 CleanupEncounter();
-                if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                     thrall->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                 me->DespawnOrUnsummon(1000);
                 BossAI::EnterEvadeMode();
@@ -745,7 +745,7 @@ public:
                         events.ScheduleEvent(EVENT_FADING_LIGHT, IsHeroic() ? 13000 : 20000);
                         break;
                     case EVENT_LAST_DEFENDER:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                         {
                             Talk(EMOTE_LAST_DEFENDER, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                             thrall->AI()->Talk(TALK_LAST_DEFENDER);
@@ -753,7 +753,7 @@ public:
                         }
                         break;
                     case EVENT_GIFT_OF_LIFE:
-                        if (Creature* alexstrasza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alexstrasza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                         {
                             alexstrasza->AI()->Talk(TALK_GIFT_OF_LIFE);
                             Position alex_current_pos{ *alexstrasza };
@@ -767,14 +767,14 @@ public:
                         }
                         break;
                     case EVENT_ESSENCE_OF_DREAMS:
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                         {
                             ysera->AI()->Talk(TALK_ESSENCE_OF_DREAMS);
                             ysera->CastSpell(ysera, SPELL_ESSENCE_OF_DREAMS_SUMMON, true);
                         }
                         break;
                     case EVENT_SOURCE_OF_MAGIC:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                         {
                             Talk(EMOTE_SOURCE_OF_MAGIC, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                             kalecgos->AI()->Talk(TALK_SOURCE_OF_MAGIC);
@@ -782,7 +782,7 @@ public:
                         }
                         break;
                     case EVENT_TIME_LOOP:
-                        if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                        if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                         {
                             Talk(EMOTE_TIMELOOP, 0, CHAT_MSG_RAID_BOSS_EMOTE);
                             nozdormu->AI()->Talk(TALK_TIMELOOP);
@@ -791,7 +791,7 @@ public:
                         break;
                     case EVENT_DESPAWN_ALL_INTRO_PASSENGERS:
                         for (int8 i = 0; i < 7; i++)
-                            if (Unit* passenger = me->GetVehicleKit()->GetPassenger(i))
+                            if (auto passenger = me->GetVehicleKit()->GetPassenger(i))
                                 passenger->ToCreature()->DespawnOrUnsummon();
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                         events.SetPhase(PHASE_NONE);
@@ -842,7 +842,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
             if ((instance->IsDone(DATA_HAGARA) || instance->GetData(DATA_LFR_PART) == LFR_PART_TWO) && !instance->IsDone(DATA_ULTRAXION))
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "We were successful, Kalecgos.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
@@ -887,55 +887,55 @@ public:
                 switch (eventId)
                 {
                     case EVENT_YSERA_DIALOGUE:
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                             DoCast(ysera, SPELL_DIALOGUE_YSERA, true);
                         events.ScheduleEvent(EVENT_NOZDORMU_DIALOGUE, 6000);
                         break;
                     case EVENT_NOZDORMU_DIALOGUE:
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                             DoCast(ysera, SPELL_EVENTS_UNFOLD_YSERA, true);
-                        if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                        if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                             DoCast(nozdormu, SPELL_DIALOGUE_NOZDORMU, true);
                         events.ScheduleEvent(EVENT_KALECGOS_DIALOGUE, 3000);
                         break;
                     case EVENT_KALECGOS_DIALOGUE:
-                        if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                        if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                             DoCast(nozdormu, SPELL_EVENTS_UNFOLD_NOZDORMU, true);
                         DoCast(me, SPELL_DIALOGUE_KALECGOS, true);
                         events.ScheduleEvent(EVENT_ALEXSTRAZA_DIALOGUE, 6000);
                         break;
                     case EVENT_ALEXSTRAZA_DIALOGUE:
-                        if (Creature* alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                             DoCast(alexstraza, SPELL_DIALOGUE_ALEXSTRAZA, true);
                         DoCast(me, SPELL_CHARGING_UP_KALECGOS, true);
                         events.ScheduleEvent(EVENT_THRALL_DIALOGUE, 8000);
                         break;
                     case EVENT_THRALL_DIALOGUE:
-                        if (Creature* alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                             DoCast(alexstraza, SPELL_EVENTS_UNFOLD_ALEXSTAZA, true);
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                             DoCast(thrall, SPELL_DIALOGUE_THRALL, true);
                         events.ScheduleEvent(EVENT_THRALL_DIALOGUE_2, 6000);
                         break;
                     case EVENT_THRALL_DIALOGUE_2:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                             DoCast(thrall, SPELL_DIALOGUE_2_THRALL, true);
                         events.ScheduleEvent(EVENT_THRALL_DIALOGUE_3, 10000);
                         break;
                     case EVENT_THRALL_DIALOGUE_3:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                             DoCast(thrall, SPELL_DIALOGUE_3_THRALL, true);
                         events.ScheduleEvent(EVENT_THRALL_EVENT_UNFOLD, 5000);
                         break;
                     case EVENT_THRALL_EVENT_UNFOLD:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                         {
                             DoCast(thrall, SPELL_EVENTS_UNFOLD_THRALL, true);
                             thrall->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         }
                         break;
                     case EVENT_DEATHWING_OUTRO:
-						if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+						if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
 						{
 							deathwing->TalkWithDelay(1000, TALK_GAUNTLET_OUTRO_DEATHWING, NULL, CHAT_MSG_MONSTER_YELL);
                             deathwing->AI()->DoAction(DEATHWING_POSITION_TALK_2);
@@ -943,12 +943,12 @@ public:
                         events.ScheduleEvent(EVENT_DEATHWING_OUTRO_2, 15000);
                         break;
                     case EVENT_DEATHWING_OUTRO_2:
-                        if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+                        if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
                             deathwing->AI()->Talk(TALK_GAUNTLET_OUTRO_DEATHWING_2, NULL, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
                         events.ScheduleEvent(EVENT_DEATHWING_OUTRO_3, 14000);
                         break;
                     case EVENT_DEATHWING_OUTRO_3:
-						if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+						if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
 						{
 							deathwing->AI()->Talk(TALK_GAUNTLET_OUTRO_DEATHWING_3, NULL, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
                             deathwing->AI()->DoAction(DEATHWING_POSITION_DURING_ULTRAXION);
@@ -956,7 +956,7 @@ public:
                         events.ScheduleEvent(EVENT_YSERA_OUTRO, 12000);
                         break;
                     case EVENT_YSERA_OUTRO:
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                             ysera->AI()->Talk(TALK_GAUNTLET_ULTRAXION_SUMMON_YSERA, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                         events.ScheduleEvent(EVENT_SUMMON_ULTRAXION, 6000);
                         break;
@@ -964,12 +964,12 @@ public:
                         me->SummonCreature(NPC_ULTRAXION, ultraxionPositions[0], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000);
                         break;
                     case EVENT_OUTRO_ALEXSTRAZA:
-                        if (Creature* alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alexstraza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                             alexstraza->AI()->Talk(TALK_OUTRO_ALEXSTRASZA);
                         events.ScheduleEvent(EVENT_OUTRO_THRALL, 9000);
                         break;
                     case EVENT_OUTRO_THRALL:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                             thrall->AI()->Talk(TALK_OUTRO_TRAHLL);
                         events.ScheduleEvent(EVENT_OUTRO_START_CINEMATIC, 12000);
                         break;
@@ -977,41 +977,41 @@ public:
                     {
                         DoCast(me, SPELL_PLAY_MOVIE_DEATHWING_1, true);
 
-                        if (GameObject* hordeShip = instance->GetGameObject(DATA_HORDE_SHIP_CINEMATIC))
+                        if (auto hordeShip = instance->GetGameObject(DATA_HORDE_SHIP_CINEMATIC))
                             hordeShip->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
 
-                        if (GameObject* allianceShip = instance->GetGameObject(DATA_ALLIANCE_SHIP_CINEMATIC))
+                        if (auto allianceShip = instance->GetGameObject(DATA_ALLIANCE_SHIP_CINEMATIC))
                             allianceShip->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
 
-                        if (GameObject* battleShip = instance->GetGameObject(DATA_ALLIANCE_BATTLE_SHIP))
+                        if (auto battleShip = instance->GetGameObject(DATA_ALLIANCE_BATTLE_SHIP))
                             battleShip->SetDestructibleState(GO_DESTRUCTIBLE_INTACT);
 
                         // summon part is a workaround because we don't get TARGET_DEST_NEARBY_ENTRY working correctly
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                         {
                             thrall->SetVisible(false);
                             thrall->SummonCreature(NPC_OUTRO_THRALL, thrall->GetHomePosition());
                         }
 
-                        if (Creature* alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                         {
                             alex->SetVisible(false);
                             alex->SummonCreature(NPC_OUTRO_ALEXSTRAZA, alex->GetHomePosition());
                         }
 
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                         {
                             ysera->SetVisible(false);
                             ysera->SummonCreature(NPC_OUTRO_YSERA, ysera->GetHomePosition());
                         }
 
-                        if (Creature* noz = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                        if (auto noz = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                         {
                             noz->SetVisible(false);
                             noz->SummonCreature(NPC_OUTRO_NOZDORMU, noz->GetHomePosition());
                         }
 
-                        if (Creature* dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
+                        if (auto dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
                         {
                             dragonSoul->SetVisible(false);
                             dragonSoul->SummonCreature(NPC_OUTRO_THE_DRAGON_SOUL, dragonSoul->GetHomePosition());
@@ -1130,7 +1130,7 @@ public:
                 summons.DespawnAll();
                 me->DespawnCreaturesInArea(NPC_TWILIGHT_FLAME_TARGET, 300.0f);
 
-                if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                 {
                     thrall->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     thrall->InterruptNonMeleeSpells(false);
@@ -1139,7 +1139,7 @@ public:
                     thrall->NearTeleportTo(thrall->GetHomePosition());
                 }
 
-                if (Creature* alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                if (auto alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                 {
                     alex->InterruptNonMeleeSpells(false);
                     alex->RemoveAllAuras();
@@ -1147,7 +1147,7 @@ public:
                     alex->NearTeleportTo(alex->GetHomePosition());
                 }
 
-                if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                 {
                     kalecgos->InterruptNonMeleeSpells(false);
                     kalecgos->RemoveAllAuras();
@@ -1155,7 +1155,7 @@ public:
                     kalecgos->NearTeleportTo(kalecgos->GetHomePosition());
                 }
 
-                if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                 {
                     nozdormu->InterruptNonMeleeSpells(false);
                     nozdormu->RemoveAllAuras();
@@ -1163,7 +1163,7 @@ public:
                     nozdormu->NearTeleportTo(nozdormu->GetHomePosition());
                 }
 
-                if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                 {
                     ysera->InterruptNonMeleeSpells(false);
                     ysera->RemoveAllAuras();
@@ -1171,7 +1171,7 @@ public:
                     ysera->NearTeleportTo(ysera->GetHomePosition());
                 }
 
-                if (Creature* dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
+                if (auto dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
                     dragonSoul->NearTeleportTo(dragonSoul->GetHomePosition());
             }
         }
@@ -1189,9 +1189,9 @@ public:
         {
             if (++killCount >= 15)
             {
-                if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                     kalecgos->AI()->DoAction(ACTION_ULTRAXION_GAUNTLET_FINISHED);
-                if (Creature* thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
+                if (auto thrall = instance->GetCreature(DATA_THRALL_ULTRAXION))
                     thrall->AI()->DoAction(ACTION_ULTRAXION_GAUNTLET_FINISHED);
                 events.Reset();
                 summons.DespawnAll();
@@ -1290,7 +1290,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             if ((instance->IsDone(DATA_HAGARA) || instance->GetData(DATA_LFR_PART) == LFR_PART_TWO) && !instance->IsDone(DATA_ULTRAXION))
             {
@@ -1334,19 +1334,19 @@ public:
                 case ACTION_START_ULTRAXION_GAUNTLET:
                     if (gauntletDone)
                     {
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                             kalecgos->AI()->DoAction(ACTION_SKIP_GAUNTLET);
                     }
                     else
                     {
                         if (gauntlet_rp_done)
                         {
-                            if (Creature* gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
+                            if (auto gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
                                 gauntlet->AI()->DoAction(ACTION_RUSH_ULTRAXION_GAUNTLET);
                         }
                         else
                         {
-                            if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+                            if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
                             {
                                 deathwing->AI()->DoAction(DEATHWING_POSITION_TALK_1);
                             }
@@ -1385,22 +1385,22 @@ public:
 				{
 					// Gauntlet Intro
 				case EVENT_DEATHWING_INTRO:
-                    if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+                    if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
                     {
                         deathwing->AI()->Talk(TALK_GAUNTLET_INTRO_DEATHWING, NULL, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
                     }
 					events.ScheduleEvent(EVENT_DEATHWING_INTRO_2, 11000);
 					break;
 				case EVENT_DEATHWING_INTRO_2:
-					if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+					if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
 						deathwing->AI()->Talk(TALK_GAUNTLET_INTRO_DEATHWING_2, NULL, CHAT_MSG_MONSTER_YELL, TEXT_RANGE_MAP);
 
-					if (Creature* gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
+					if (auto gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
 						gauntlet->AI()->DoAction(ACTION_START_ULTRAXION_GAUNTLET);
 					events.ScheduleEvent(EVENT_DEATHWING_INTRO_3, 20000);
 					break;
 				case EVENT_DEATHWING_INTRO_3:
-                    if (Creature* deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
+                    if (auto deathwing = instance->GetCreature(DATA_DEATHWING_ULTRAXION))
                     {
                         deathwing->AI()->DoAction(DEATHWING_POSITION_DRAKE_GAUNTLET);
                     }
@@ -1412,7 +1412,7 @@ public:
                         me->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
                         DoCast(me, SPELL_WARD_OF_EARTH);
 
-                        if (Creature* alexstrasza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alexstrasza = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                         {
                             alexstrasza->AI()->Talk(TALK_GAUNTLET_INTRO_ALEXSTRASZA, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_MAP);
                             alexstrasza->InterruptSpell(CURRENT_CHANNELED_SPELL);
@@ -1423,7 +1423,7 @@ public:
                             alexstrasza->CastSpell(alexstrasza, SPELL_WARD_OF_LIFE);
                         }
 
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                         {
                             kalecgos->InterruptSpell(CURRENT_CHANNELED_SPELL);
                             kalecgos->SetDisableGravity(true);
@@ -1433,7 +1433,7 @@ public:
                             kalecgos->CastSpell(kalecgos, SPELL_WARD_OF_MAGIC);
                         }
 
-                        if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
+                        if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU_ULTRAXION))
                         {
                             nozdormu->InterruptSpell(CURRENT_CHANNELED_SPELL);
                             nozdormu->SetDisableGravity(true);
@@ -1443,7 +1443,7 @@ public:
                             nozdormu->CastSpell(nozdormu, SPELL_WARD_OF_TIME);
                         }
 
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                         {
                             ysera->InterruptSpell(CURRENT_CHANNELED_SPELL);
                             ysera->SetDisableGravity(true);
@@ -1453,7 +1453,7 @@ public:
                             ysera->CastSpell(ysera, SPELL_WARD_OF_DREAM);
                         }
 
-                        if (Creature* dragonsoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
+                        if (auto dragonsoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
                             dragonsoul->GetMotionMaster()->MovePoint(0, -1786.71f, -2393.264f, 355.0229f, false);
                         break;
                     // Hagara intro
@@ -1462,17 +1462,17 @@ public:
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_ALEX, 14000);
                         break;
                     case EVENT_PORTAL_DIALOGUE_ALEX:
-                        if (Creature* alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
+                        if (auto alex = instance->GetCreature(DATA_ALEXSTRASZA_ULTRAXION))
                             alex->CastSpell(alex, SPELL_PORTAL_DIALOGUE_ALEX, true);
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_KALEC, 5200);
                         break;
                     case EVENT_PORTAL_DIALOGUE_KALEC:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                             kalecgos->CastSpell(kalecgos, SPELL_PORTAL_DIALOGUE_KALEC, true);
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_KALEC_2, 9600);
                         break;
                     case EVENT_PORTAL_DIALOGUE_KALEC_2:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                             kalecgos->CastSpell(kalecgos, SPELL_PORTAL_DIALOGUE_KALEC_2, true);
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_THRALL_2, 10000);
                         break;
@@ -1481,7 +1481,7 @@ public:
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_YSERA, 10000);
                         break;
                     case EVENT_PORTAL_DIALOGUE_YSERA:
-                        if (Creature* ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
+                        if (auto ysera = instance->GetCreature(DATA_YSERA_ULTRAXION))
                             ysera->CastSpell(ysera, SPELL_PORTAL_DIALOGUE_YSERA, true);
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_THRALL_3, 11500);
                         break;
@@ -1490,13 +1490,13 @@ public:
                         events.ScheduleEvent(EVENT_PORTAL_DIALOGUE_KALEC_3, 6000);
                         break;
                     case EVENT_PORTAL_DIALOGUE_KALEC_3:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
                             kalecgos->CastSpell(kalecgos, SPELL_PORTAL_DIALOGUE_KALEC_3, true);
                         events.ScheduleEvent(EVENT_PORTAL_OPEN_EYE_OF_ETERNITY, 15000);
                         break;
                     case EVENT_PORTAL_OPEN_EYE_OF_ETERNITY:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
-                            if (Creature* portal = me->FindNearestCreature(57377, 50.0f))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                            if (auto portal = me->FindNearestCreature(57377, 50.0f))
                             {
                                 kalecgos->CastSpell(portal, SPELL_OPEN_EYE_OF_ETERNITY);
                                 portal->CastSpell(portal, SPELL_EYE_OF_ETERNITY_PORTAL_VIS, true);
@@ -1504,11 +1504,11 @@ public:
                         events.ScheduleEvent(EVENT_PORTAL_CORRECT_KALECGOS_ORIENTATION, 8000);
                         break;
                     case EVENT_PORTAL_CORRECT_KALECGOS_ORIENTATION:
-                        if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
-                            if (Creature* dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
+                        if (auto kalecgos = instance->GetCreature(DATA_KALECGOS_ULTRAXION))
+                            if (auto dragonSoul = instance->GetCreature(DATA_THE_DRAGON_SOUL_ULTRAXION))
                                 kalecgos->SetFacingToObject(dragonSoul);
 
-                        if (Creature* portal = me->FindNearestCreature(57377, 50.0f))
+                        if (auto portal = me->FindNearestCreature(57377, 50.0f))
                         {
                             portal->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
                             portal->CastSpell(portal, SPELL_EYE_OF_ETERNITY_PORTAL_VIS, true);
@@ -1580,7 +1580,7 @@ public:
                 //}
                 //else
                 //{
-                //    if (Player* player = me->FindNearestPlayer(100.0f))
+                //    if (auto player = me->FindNearestPlayer(100.0f))
                 //        me->AI()->AttackStart(player);
                 //    events.ScheduleEvent(EVENT_TWILIGHT_BREATH, 3000);
                 //}
@@ -1742,45 +1742,45 @@ public:
                 switch (eventId)
                 {
                     case EVENT_OUTRO_ASPECTS_MOVE_TO_GUNSHIP:
-                        if (Creature* ysera = me->FindNearestCreature(NPC_OUTRO_YSERA, 50.0f))
+                        if (auto ysera = me->FindNearestCreature(NPC_OUTRO_YSERA, 50.0f))
                             ysera->GetMotionMaster()->MovePath(ysera->GetEntry() * 10, false);
-                        if (Creature* nozdormu = me->FindNearestCreature(NPC_OUTRO_NOZDORMU, 50.0f))
+                        if (auto nozdormu = me->FindNearestCreature(NPC_OUTRO_NOZDORMU, 50.0f))
                             nozdormu->GetMotionMaster()->MovePath(nozdormu->GetEntry() * 10, false);
                         me->GetMotionMaster()->MovePoint(0, -1788.256f, -2392.104f, 341.354f);
                         events.ScheduleEvent(EVENT_OUTRO_TAKE_DRAGON_SOUL, 2000);
                         break;
                     case EVENT_OUTRO_TAKE_DRAGON_SOUL:
-                        if (Creature* dragonSoul = me->FindNearestCreature(NPC_OUTRO_THE_DRAGON_SOUL, 10.0f))
+                        if (auto dragonSoul = me->FindNearestCreature(NPC_OUTRO_THE_DRAGON_SOUL, 10.0f))
                             dragonSoul->CastSpell(me, SPELL_RIDE_VEHICLE, true);
                         events.ScheduleEvent(EVENT_OUTRO_THRALL_MOVE_TO_GUNSHIP, 5000);
                         break;
                     case EVENT_OUTRO_THRALL_MOVE_TO_GUNSHIP:
-                        if (Creature* alex = me->FindNearestCreature(NPC_OUTRO_ALEXSTRAZA, 50.0f))
+                        if (auto alex = me->FindNearestCreature(NPC_OUTRO_ALEXSTRAZA, 50.0f))
                             alex->GetMotionMaster()->MovePath(alex->GetEntry() * 10, false);
-                        if (Creature* kalecgos = me->FindNearestCreature(NPC_OUTRO_KALECGOS, 50.0f))
+                        if (auto kalecgos = me->FindNearestCreature(NPC_OUTRO_KALECGOS, 50.0f))
                             kalecgos->GetMotionMaster()->MovePath(kalecgos->GetEntry() * 10, false);
                         me->GetMotionMaster()->MovePath(me->GetEntry() * 10, false);
                         break;
                     case EVENT_OUTRO_START_GUNSHIP_VISUAL:
                         DoCast(me, SPELL_CHARGED_DRAGON_SOUL, true);
-                        if (Creature* dragonSoul = me->FindNearestCreature(NPC_OUTRO_THE_DRAGON_SOUL, 10.0f))
+                        if (auto dragonSoul = me->FindNearestCreature(NPC_OUTRO_THE_DRAGON_SOUL, 10.0f))
                         {
-                            if (Creature* alex = me->FindNearestCreature(NPC_OUTRO_ALEXSTRAZA, 50.0f))
+                            if (auto alex = me->FindNearestCreature(NPC_OUTRO_ALEXSTRAZA, 50.0f))
                             {
                                 alex->SetFacingToObject(dragonSoul);
                                 alex->CastSpell(dragonSoul, SPELL_CHARGE_DRAGON_SOUL_ALEX, true);
                             }
-                            if (Creature* kalecgos = me->FindNearestCreature(NPC_OUTRO_KALECGOS, 50.0f))
+                            if (auto kalecgos = me->FindNearestCreature(NPC_OUTRO_KALECGOS, 50.0f))
                             {
                                 kalecgos->SetFacingToObject(dragonSoul);
                                 kalecgos->CastSpell(dragonSoul, SPELL_CHARGE_DRAGON_SOUL_KALECGOS, true);
                             }
-                            if (Creature* nozdormu = me->FindNearestCreature(NPC_OUTRO_NOZDORMU, 50.0f))
+                            if (auto nozdormu = me->FindNearestCreature(NPC_OUTRO_NOZDORMU, 50.0f))
                             {
                                 nozdormu->SetFacingToObject(nozdormu);
                                 nozdormu->CastSpell(dragonSoul, SPELL_CHARGE_DRAGON_SOUL_NOZDORMU, true);
                             }
-                            if (Creature* ysera = me->FindNearestCreature(NPC_OUTRO_YSERA, 50.0f))
+                            if (auto ysera = me->FindNearestCreature(NPC_OUTRO_YSERA, 50.0f))
                             {
                                 ysera->SetFacingToObject(dragonSoul);
                                 ysera->CastSpell(dragonSoul, SPELL_CHARGE_DRAGON_SOUL_YSERA, true);
@@ -1860,9 +1860,9 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
-                if (Creature* gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
+                if (auto gauntlet = instance->GetCreature(DATA_GAUNTLET_TRIGGER))
                 {
                     Position pos(centerPosition);
                     float angle = gauntlet->GetAngle(GetHitUnit());
@@ -1905,7 +1905,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 targets.remove_if([caster](WorldObject* target)
             {
                 if (!target->ToCreature() || !target->ToCreature()->ToTempSummon())
@@ -2040,7 +2040,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+            if (auto instance = GetCaster()->GetInstanceScript())
             {
                 if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
                 {
@@ -2117,8 +2117,8 @@ public:
                 GetTarget()->CastSpell(GetTarget(), SPELL_FADING_LIGHT_KILL, true);
             else
             {
-                if (InstanceScript* instance = GetTarget()->GetInstanceScript())
-                    if (Creature* ultraxion = instance->GetCreature(DATA_ULTRAXION))
+                if (auto instance = GetTarget()->GetInstanceScript())
+                    if (auto ultraxion = instance->GetCreature(DATA_ULTRAXION))
                         GetTarget()->CastSpell(ultraxion, SPELL_FADED_INTO_TWILIGHT, true);
             }
         }
@@ -2157,9 +2157,9 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Player* target = GetTarget()->ToPlayer())
+            if (auto target = GetTarget()->ToPlayer())
                 if (target->GetPetGUID())
-                    if (Unit* pet = ObjectAccessor::GetUnit(*target, target->GetPetGUID()))
+                    if (auto pet = ObjectAccessor::GetUnit(*target, target->GetPetGUID()))
                         pet->AddAura(GetId(), pet);
         }
 
@@ -2223,7 +2223,7 @@ public:
 
             if (targets.size() < minTargets)
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto instance = GetCaster()->GetInstanceScript())
                     if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
                         return;
 
@@ -2384,7 +2384,7 @@ public:
 
         void Absorb(AuraEffect* aurEff, DamageInfo & dmgInfo, uint32 & absorbAmount)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 int32 remainingHealth = target->GetHealth() - dmgInfo.GetDamage();
                 if (remainingHealth <= 0)
@@ -2452,7 +2452,7 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (AuraEffect* aurEff = GetAura()->GetEffect(EFFECT_0))
                 {

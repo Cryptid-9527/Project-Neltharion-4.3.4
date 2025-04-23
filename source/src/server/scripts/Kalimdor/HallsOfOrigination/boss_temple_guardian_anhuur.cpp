@@ -116,32 +116,32 @@ public:
 
                 DoCast(me, SPELL_SHIELD_OF_LIGHT);
 
-                if (GameObject* go2 = me->FindNearestGameObject(GOBJ_LEVER_LEFT_NM, 100.f))
+                if (auto go2 = me->FindNearestGameObject(GOBJ_LEVER_LEFT_NM, 100.f))
                 {
                     go2->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     go2->SetGoState(GO_STATE_READY);
-                    if (Creature* g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                         g->AddAura(94424, g);
                 }
-                if (GameObject* go2 = me->FindNearestGameObject(GOBJ_LEVER_LEFT_HC, 100.f))
+                if (auto go2 = me->FindNearestGameObject(GOBJ_LEVER_LEFT_HC, 100.f))
                 {
                     go2->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     go2->SetGoState(GO_STATE_READY);
-                    if (Creature* g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                         g->AddAura(94424, g);
                 }
-                if (GameObject* go2 = me->FindNearestGameObject(GOBJ_LEVER_RIGHT_NM, 100.f))
+                if (auto go2 = me->FindNearestGameObject(GOBJ_LEVER_RIGHT_NM, 100.f))
                 {
                     go2->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     go2->SetGoState(GO_STATE_READY);
-                    if (Creature* g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                         g->AddAura(94424, g);
                 }
-                if (GameObject* go2 = me->FindNearestGameObject(GOBJ_LEVER_RIGHT_HC, 100.f))
+                if (auto go2 = me->FindNearestGameObject(GOBJ_LEVER_RIGHT_HC, 100.f))
                 {
                     go2->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     go2->SetGoState(GO_STATE_READY);
-                    if (Creature* g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto g = go2->SummonCreature(54638, go2->GetPositionX(), go2->GetPositionY(), go2->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                         g->AddAura(94424, g);
                 }
 
@@ -326,9 +326,9 @@ class spell_anhuur_shield_of_light : public SpellScriptLoader
             {
                 if (InstanceMap* instance = GetCaster()->GetMap()->ToInstanceMap())
                 {
-                    if (InstanceScript* const script = instance->GetInstanceScript())
+                    if (auto const script = instance->GetInstanceScript())
                     {
-                        if (GameObject* go = ObjectAccessor::GetGameObject(*GetCaster(), script->GetData64(DATA_ANHUUR_DOOR)))
+                        if (auto go = ObjectAccessor::GetGameObject(*GetCaster(), script->GetData64(DATA_ANHUUR_DOOR)))
                         {
                             targets.remove_if(Trinity::HeightDifferenceCheck(go, 5.0f, false));
                             targets.remove(GetCaster());
@@ -367,36 +367,36 @@ class spell_anhuur_disable_beacon_beams : public SpellScriptLoader
 
             void CheckPhase()
             {
-                if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                    if (Creature* anhuur = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(DATA_ANHUUR_GUID)))
+                if (auto instance = GetCaster()->GetInstanceScript())
+                    if (auto anhuur = ObjectAccessor::GetCreature(*GetCaster(), instance->GetData64(DATA_ANHUUR_GUID)))
                         anhuur->AI()->DoAction(ACTION_CHECK_BEACONS);
 
-                if (GameObject* go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_LEFT_NM, 15.f))
+                if (auto go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_LEFT_NM, 15.f))
                 {
                     go2->SetGoState(GO_STATE_ACTIVE);
                     go2->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (Creature* g = go2->FindNearestCreature(54638, 5.f))
+                    if (auto g = go2->FindNearestCreature(54638, 5.f))
                         g->DespawnOrUnsummon();
                 }
-                if (GameObject* go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_LEFT_HC, 15.f))
+                if (auto go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_LEFT_HC, 15.f))
                 {
                     go2->SetGoState(GO_STATE_ACTIVE);
                     go2->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (Creature* g = go2->FindNearestCreature(54638, 5.f))
+                    if (auto g = go2->FindNearestCreature(54638, 5.f))
                         g->DespawnOrUnsummon();
                 }
-                if (GameObject* go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_RIGHT_NM, 15.f))
+                if (auto go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_RIGHT_NM, 15.f))
                 {
                     go2->SetGoState(GO_STATE_ACTIVE);
                     go2->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (Creature* g = go2->FindNearestCreature(54638, 5.f))
+                    if (auto g = go2->FindNearestCreature(54638, 5.f))
                         g->DespawnOrUnsummon();
                 }
-                if (GameObject* go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_RIGHT_HC, 15.f))
+                if (auto go2 = GetCaster()->FindNearestGameObject(GOBJ_LEVER_RIGHT_HC, 15.f))
                 {
                     go2->SetGoState(GO_STATE_ACTIVE);
                     go2->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (Creature* g = go2->FindNearestCreature(54638, 5.f))
+                    if (auto g = go2->FindNearestCreature(54638, 5.f))
                         g->DespawnOrUnsummon();
                 }
 
@@ -460,7 +460,7 @@ public:
 
         void OnPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 CustomSpellValues values;
                 values.AddSpellMod(SPELLVALUE_BASE_POINT0, aurEff->GetAmount());
@@ -686,8 +686,8 @@ public:
 
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes mode)
         {
-            if (Unit* caster = GetCaster())
-                if (Creature* c = caster->ToCreature())
+            if (auto caster = GetCaster())
+                if (auto c = caster->ToCreature())
                 c->SetReactState(REACT_AGGRESSIVE);
         }
         void Register()

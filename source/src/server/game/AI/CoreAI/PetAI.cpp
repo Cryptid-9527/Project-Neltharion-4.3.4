@@ -156,7 +156,7 @@ void PetAI::AttemptBasicAttack()
                     {
                         AttackStart(v);
                     }
-                    else if (Unit* nextTarget = SelectNextTarget(me->HasReactState(REACT_AGGRESSIVE)))
+                    else if (auto nextTarget = SelectNextTarget(me->HasReactState(REACT_AGGRESSIVE)))
                     {
                         AttackStart(nextTarget);
                     }
@@ -190,7 +190,7 @@ Unit* PetAI::GetAutoCastTarget(bool friendly, float dist)
             if (charm_info->HasCommandState(COMMAND_ATTACK))
             {
 
-                if (Unit* nextTarget = SelectNextTarget(true))
+                if (auto nextTarget = SelectNextTarget(true))
                     return nextTarget;
             }
                 else return nullptr;
@@ -518,7 +518,7 @@ void PetAI::UpdateAllies()
     m_AllySet.insert(me->GetGUID());
     if (group)                                              //add group
     {
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* Target = itr->getSource();
             if (!Target || !group->SameSubGroup((Player*)owner, Target))
@@ -551,7 +551,7 @@ void PetAI::KilledUnit(Unit* victim)
     me->SendMeleeAttackStop();  // Stops the pet's 'Attack' button from flashing
 
     // Before returning to owner, see if there are more things to attack
-    if (Unit* nextTarget = SelectNextTarget(false))
+    if (auto nextTarget = SelectNextTarget(false))
         AttackStart(nextTarget);
     else
         HandleReturnMovement(); // Return
@@ -668,7 +668,7 @@ Unit* PetAI::SelectNextTarget(bool allowAutoSelect) const
         return NULL;
 
     // Check pet attackers first so we don't drag a bunch of targets to the owner
-    if (Unit* myAttacker = me->getAttackerForHelper())
+    if (auto myAttacker = me->getAttackerForHelper())
         if (!myAttacker->HasBreakableByDamageCrowdControlAura())
             return myAttacker;
 
@@ -678,14 +678,14 @@ Unit* PetAI::SelectNextTarget(bool allowAutoSelect) const
 
     // Check owner attackers
     if (auto o = me->GetCharmerOrOwner())
-    if (Unit* ownerAttacker = o->getAttackerForHelper())
+    if (auto ownerAttacker = o->getAttackerForHelper())
         if (!ownerAttacker->HasBreakableByDamageCrowdControlAura())
             return ownerAttacker;
 
     // Check owner victim
     // 3.0.2 - Pets now start attacking their owners victim in defensive mode as soon as the hunter does
     if (auto o = me->GetCharmerOrOwner())
-    if (Unit* ownerVictim = o->getVictim())
+    if (auto ownerVictim = o->getVictim())
             return ownerVictim;
 
     // Neither pet or owner had a target and aggressive pets can pick any target
@@ -698,7 +698,7 @@ Unit* PetAI::SelectNextTarget(bool allowAutoSelect) const
             || charmInfo->IsFollowing()
             || charmInfo->IsAtStay())
             if (auto me_cr = me->ToCreature())
-            if (Unit* nearTarget = me_cr->SelectNearestHostileUnitInAggroRange(true))
+            if (auto nearTarget = me_cr->SelectNearestHostileUnitInAggroRange(true))
                 return nearTarget;
     }
 
@@ -858,7 +858,7 @@ bool PetAI::CanAttack(Unit* target)
     {
         // Check if our owner selected this target and clicked "attack"
         Unit* ownerTarget = NULL;
-        if (Player* owner = me->GetCharmerOrOwner()->ToPlayer())
+        if (auto owner = me->GetCharmerOrOwner()->ToPlayer())
             ownerTarget = owner->GetSelectedUnit();
         else
             ownerTarget = me->GetCharmerOrOwner()->getVictim();

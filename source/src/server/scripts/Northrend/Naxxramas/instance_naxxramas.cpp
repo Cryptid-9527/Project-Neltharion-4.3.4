@@ -347,7 +347,7 @@ public:
                 case GO_BIRTH:
                     if (sapphironGUID)
                     {
-                        if (Creature* pSapphiron = instance->GetCreature(sapphironGUID))
+                        if (auto pSapphiron = instance->GetCreature(sapphironGUID))
                             pSapphiron->AI()->DoAction(DATA_SAPPHIRON_BIRTH);
                         return;
                     }
@@ -378,7 +378,7 @@ public:
                     HeiganErupt(value);
                     break;
                 case DATA_GOTHIK_GATE:
-                    if (GameObject* gothikGate = instance->GetGameObject(gothikGateGUID))
+                    if (auto gothikGate = instance->GetGameObject(gothikGateGUID))
                         gothikGate->SetGoState(GOState(value));
                     gothikDoorState = GOState(value);
                     break;
@@ -472,27 +472,27 @@ public:
                 switch (id)
                 {
                     case BOSS_MAEXXNA:
-                    if (GameObject* pPortal = instance->GetGameObject(m_uiAracPortalGUID))
+                    if (auto pPortal = instance->GetGameObject(m_uiAracPortalGUID))
                         pPortal->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (GameObject* pPortalVis = instance->GetGameObject(m_uiAracPortalVisGUID))
+                    if (auto pPortalVis = instance->GetGameObject(m_uiAracPortalVisGUID))
                         pPortalVis->SetGoState(GO_STATE_ACTIVE);
                     break;
                     case BOSS_HORSEMEN:
-                    if (GameObject* pPortal = instance->GetGameObject(m_uiMiliPortalGUID))
+                    if (auto pPortal = instance->GetGameObject(m_uiMiliPortalGUID))
                         pPortal->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (GameObject* pPortalVis = instance->GetGameObject(m_uiMiliPortalVisGUID))
+                    if (auto pPortalVis = instance->GetGameObject(m_uiMiliPortalVisGUID))
                         pPortalVis->SetGoState(GO_STATE_ACTIVE);
                     break;
                     case BOSS_THADDIUS:
-                    if (GameObject* pPortal = instance->GetGameObject(m_uiConsPortalGUID))
+                    if (auto pPortal = instance->GetGameObject(m_uiConsPortalGUID))
                         pPortal->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (GameObject* pPortalVis = instance->GetGameObject(m_uiConsPortalVisGUID))
+                    if (auto pPortalVis = instance->GetGameObject(m_uiConsPortalVisGUID))
                         pPortalVis->SetGoState(GO_STATE_ACTIVE);
                     break;
                     case BOSS_LOATHEB:
-                    if (GameObject* pPortal = instance->GetGameObject(m_uiPlagPortalGUID))
+                    if (auto pPortal = instance->GetGameObject(m_uiPlagPortalGUID))
                         pPortal->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                    if (GameObject* pPortalVis = instance->GetGameObject(m_uiPlagPortalVisGUID))
+                    if (auto pPortalVis = instance->GetGameObject(m_uiPlagPortalVisGUID))
                         pPortalVis->SetGoState(GO_STATE_ACTIVE);
                     break;
                     default:
@@ -502,7 +502,7 @@ public:
 
             if (id == BOSS_HORSEMEN && state == DONE)
             {
-                if (GameObject* pHorsemenChest = instance->GetGameObject(horsemenChestGUID))
+                if (auto pHorsemenChest = instance->GetGameObject(horsemenChestGUID))
                 {
                     pHorsemenChest->SetRespawnTime(pHorsemenChest->GetRespawnDelay());
                     pHorsemenChest->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -521,7 +521,7 @@ public:
 
                 for (std::set<uint64>::const_iterator itr = heiganEruptionGUID[i].begin(); itr != heiganEruptionGUID[i].end(); ++itr)
                 {
-                    if (GameObject* pHeiganEruption = instance->GetGameObject(*itr))
+                    if (auto pHeiganEruption = instance->GetGameObject(*itr))
                     {
                         pHeiganEruption->SendCustomAnim(pHeiganEruption->GetGoAnimProgress());
                         pHeiganEruption->CastSpell(NULL, SPELL_ERUPTION);

@@ -164,9 +164,9 @@ public:
             }
 
 
-            if (Creature* eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
+            if (auto eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
                 eyea->DespawnOrUnsummon();
-            if (Creature* eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
+            if (auto eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
                 eyeb->DespawnOrUnsummon();
 
         }
@@ -179,9 +179,9 @@ public:
             me->DeleteThreatList();
 
 
-            if (Creature* eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
+            if (auto eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
                 eyea->DespawnOrUnsummon();
-            if (Creature* eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
+            if (auto eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
                 eyeb->DespawnOrUnsummon();
         }
 
@@ -218,7 +218,7 @@ public:
                 {
                     me->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND);
                     me->HandleEmoteCommand(EMOTE_STATE_STAND);
-                    if (Creature* c = me->FindNearestCreature(NPC_GEN_BUNNY, 20.0f))
+                    if (auto c = me->FindNearestCreature(NPC_GEN_BUNNY, 20.0f))
                     {
                         me->AddAura(102414, me);
                         c->AddAura(108642, c);
@@ -270,7 +270,7 @@ public:
                             moonwell[GetMoonWell(true)]->AI()->Talk(5);
 
 
-                            if (Creature* moonlight = moonwell[GetMoonWell(true)])
+                            if (auto moonlight = moonwell[GetMoonWell(true)])
                                 moonlight->SetObjectScale(0.1f);
 
                             moonwell[GetMoonWell(true)]->AI()->DoAction(ACTION_MOONWELL_DESPAWN);
@@ -332,7 +332,7 @@ public:
                     //TC_LOG_ERROR("sql.sql", "NPC SPAWNING FOR CREDIT");
                     Position pos(*moonwell_c);
                     moonwell_c->MoveBlink(pos, 20.f, frand(0, M_PI * 2.f));
-                    if (Creature* c = me->SummonCreature(GetSummon(), pos))
+                    if (auto c = me->SummonCreature(GetSummon(), pos))
                         {
                             //TC_LOG_ERROR("sql.sql", "Setting NPC %u in combat with zone: %u", c->GetGUID());
                             c->SetReactState(REACT_AGGRESSIVE);
@@ -552,7 +552,7 @@ public:
 
         void ManageMoonLightScale()
         {
-            if (Creature* moonlight = moonwell[GetMoonWell(true)])
+            if (auto moonlight = moonwell[GetMoonWell(true)])
                 moonlight->SetObjectScale(moonlight->GetFloatValue(OBJECT_FIELD_SCALE_X)*0.93f);
         }
 
@@ -591,9 +591,9 @@ public:
                     events.ScheduleEvent(GetNextEvent(eventId), 3000);
                     break;
                 case SPELL_TEARS_OF_ELUNE:
-                    if (Creature* eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
+                    if (auto eyea = me->FindNearestCreature(NPC_GODDESS_EYES_A, 100.0))
                         eyea->DespawnOrUnsummon();
-                    if (Creature* eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
+                    if (auto eyeb = me->FindNearestCreature(NPC_GODDESS_EYES_B, 100.0))
                         eyeb->DespawnOrUnsummon();
                     bolt_rotation = 0;
                     Talk(TALK_TEARS);
@@ -652,7 +652,7 @@ public:
                                 Moonwell_state[GetMoonWell()] = true;
 
                                 //TC_LOG_ERROR("sql.sql", "Talking to map: %u", GetMoonWell(true));
-                                if (Creature* c = moonwell[GetMoonWell(true)])
+                                if (auto c = moonwell[GetMoonWell(true)])
                                     sCreatureTextMgr->SendChat(c, GetMoonWell(true), 0, CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_MAP);
                             }
                     }
@@ -878,7 +878,7 @@ public:
         {
             me->SetReactState(REACT_DEFENSIVE);
             events.Reset();
-            if (Creature* tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
+            if (auto tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
                 tyrande->AI()->DoAction(ACTION_START_INTRO_EVENT);
                 //tyrande->AI()->DoAction(ACTION_START_COMBAT);       //DEV PURPOSES ONLY
                 //instance->SetData(DATA_TYRANDE_GAUNTLET, DONE);     //DEV PURPOSES ONLY
@@ -900,7 +900,7 @@ public:
                     me->RemoveAura(SPELL_NIGHTSABER_MOONLIT, AURA_REMOVE_BY_CANCEL);
                     break;
                 case EVENT_CHECK_FOR_LIGHT:
-                    if (Creature* tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
+                    if (auto tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
                     {
                         //TC_LOG_ERROR("sql.sql", "%u %u %u ", tyrande->HasReactState(REACT_AGGRESSIVE), tyrande->isDead(), tyrande->isInCombat());
 
@@ -1071,8 +1071,8 @@ public:
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
             PreventDefaultAction();
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
-                if (Creature* tyrande = ObjectAccessor::GetCreature(*GetTarget(), instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
+            if (auto instance = GetTarget()->GetInstanceScript())
+                if (auto tyrande = ObjectAccessor::GetCreature(*GetTarget(), instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
                     tyrande->AI()->DoAction(ACTION_ACHIEVMENT_FAIL);
         }
 
@@ -1106,7 +1106,7 @@ public:
         void HandleOnEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (GetOwner())
-            if (Unit* owner = GetOwner()->ToUnit())
+            if (auto owner = GetOwner()->ToUnit())
             {
                 if (!owner->isInCombat())
                 {
@@ -1152,7 +1152,7 @@ public:
             };
 
             if (GetOwner())
-            if (Unit* owner = GetOwner()->ToUnit())
+            if (auto owner = GetOwner()->ToUnit())
             if (std::find(begin(myArray), end(myArray), owner->GetEntry()) != end(myArray)) //DOES INCLUDE, would be == end(myArray) to be "not includes".
                     owner->AddAura(SPELL_NIGHTSABER_DARK, owner);
         }
@@ -1161,7 +1161,7 @@ public:
         {
             PreventDefaultAction();
             bool cast{ false };
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
 
                 std::list<Creature*> units;
@@ -1171,7 +1171,7 @@ public:
                 GetCreatureListWithEntryInGrid(units, caster, NPC_TIME_TWISTED_SENTINEL,        5.0f);
                 GetCreatureListWithEntryInGrid(units, caster, NPC_TIME_TWISTED_HUNTRESS,        5.0f);
                 for (std::list<Creature*>::iterator itr = units.begin(); itr != units.end(); ++itr)
-                    if (Creature* c = (*itr))
+                    if (auto c = (*itr))
                         if (c->isInCombat())
                             if (c->HasAura(SPELL_NIGHTSABER_DARK) || !c->HasAura(101842))
                                 cast = true;
@@ -1270,14 +1270,14 @@ public:
             };
 
             if (std::find(begin(myArray), end(myArray), summon->GetEntry()) != end(myArray)) //DOES INCLUDE, would be == end(myArray) to be "not includes".
-                if (Creature* tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
+                if (auto tyrande = Unit::GetCreature(*me, instance->GetData64(DATA_ECHO_OF_TYRANDE_GUID)))
                     tyrande->AI()->DoAction(ACTION_MOONWELL_KILLCOUNT);
         }
         void MobSpawn(bool credit)
         {
             auto players = me->GetPlayersInRange(10.f, true);
             if (players.size())
-                if (Creature* tyrande = me->FindNearestCreature(NPC_ECHO_OF_TYRANDE, 500.0))
+                if (auto tyrande = me->FindNearestCreature(NPC_ECHO_OF_TYRANDE, 500.0))
                     tyrande->AI()->DoAction(EVENT_ACTIVATE_NPCS);
         }
 

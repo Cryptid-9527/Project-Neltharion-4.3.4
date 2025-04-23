@@ -138,7 +138,7 @@ class boss_commander_springvale : public CreatureScript
             {
                 if (action == ACTION_RANDOM_CAST)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
                     {
                         if (IsHeroic())
                         {
@@ -268,7 +268,7 @@ public:
             if (Aura* aura = GetAura())
                 if (aura->GetStackAmount() == 3)
                 {
-                    if (Creature* springvale = ObjectAccessor::GetCreature(*GetCaster(), _instance->GetData64(DATA_COMMANDER_SPRINGVALE)))
+                    if (auto springvale = ObjectAccessor::GetCreature(*GetCaster(), _instance->GetData64(DATA_COMMANDER_SPRINGVALE)))
                         springvale->AI()->DoAction(ACTION_RANDOM_CAST);
 
                     aura->Remove();
@@ -304,7 +304,7 @@ public:
             if (!GetCaster() || !GetTarget())
                 return;
 
-            if (Player* target = GetTarget()->ToPlayer())
+            if (auto target = GetTarget()->ToPlayer())
                 GetCaster()->AddAura(RAND(7038, 7039, 7040, 7041, 7042), target);
         }
 
@@ -375,7 +375,7 @@ public:
                     break;
                 case EVENT_UNHOLY_EMPOWERMENT:
                     if (pInstance)
-                        if (Creature* springvale = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_COMMANDER_SPRINGVALE)))
+                        if (auto springvale = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_COMMANDER_SPRINGVALE)))
                             DoCast(springvale, SPELL_UNHOLY_EMPOWERMENT);
                     events.ScheduleEvent(EVENT_UNHOLY_EMPOWERMENT, 15000);
                     break;
@@ -440,7 +440,7 @@ public:
                     break;
                 case EVENT_UNHOLY_EMPOWERMENT:
                     if (pInstance)
-                        if (Creature* springvale = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_COMMANDER_SPRINGVALE)))
+                        if (auto springvale = ObjectAccessor::GetCreature(*me, pInstance->GetData64(DATA_COMMANDER_SPRINGVALE)))
                             DoCast(springvale, SPELL_UNHOLY_EMPOWERMENT);
                     events.ScheduleEvent(EVENT_UNHOLY_EMPOWERMENT, 15000);
                     break;

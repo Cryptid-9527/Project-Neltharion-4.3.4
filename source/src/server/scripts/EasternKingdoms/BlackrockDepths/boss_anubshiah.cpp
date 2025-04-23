@@ -75,7 +75,7 @@ public:
             //CurseOfTongues_Timer
             if (CurseOfTongues_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_CURSEOFTONGUES);
                 CurseOfTongues_Timer = 18000;
             } else CurseOfTongues_Timer -= diff;
@@ -97,7 +97,7 @@ public:
             //EnvelopingWeb_Timer
             if (EnvelopingWeb_Timer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_ENVELOPINGWEB);
                 EnvelopingWeb_Timer = 12000;
             } else EnvelopingWeb_Timer -= diff;

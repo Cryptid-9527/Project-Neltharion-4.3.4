@@ -70,7 +70,7 @@ class instance_pit_of_saron : public InstanceMapScript
                 {
                     Map::PlayerList const &players = instance->GetPlayers();
                     if (!players.isEmpty())
-                        if (Player* player = players.begin()->getSource())
+                        if (auto player = players.begin()->getSource())
                             _teamInInstance = player->GetTeam();
                 }
 
@@ -201,7 +201,7 @@ class instance_pit_of_saron : public InstanceMapScript
                     case DATA_GARFROST:
                         if (state == DONE || state == DONE_HM)
                         {
-                            if (Creature* summoner = instance->GetCreature(_garfrostGUID))
+                            if (auto summoner = instance->GetCreature(_garfrostGUID))
                             {
                                 if (_teamInInstance == ALLIANCE)
                                     summoner->SummonCreature(NPC_MARTIN_VICTUS_1, SlaveLeaderPos, TEMPSUMMON_MANUAL_DESPAWN);
@@ -213,7 +213,7 @@ class instance_pit_of_saron : public InstanceMapScript
                     case DATA_TYRANNUS:
                         if (state == DONE || state == DONE_HM)
                         {
-                            if (Creature* summoner = instance->GetCreature(_tyrannusGUID))
+                            if (auto summoner = instance->GetCreature(_tyrannusGUID))
                             {
                                 if (_teamInInstance == ALLIANCE)
                                     summoner->SummonCreature(NPC_JAINA_PART2, EventLeaderPos2, TEMPSUMMON_MANUAL_DESPAWN);

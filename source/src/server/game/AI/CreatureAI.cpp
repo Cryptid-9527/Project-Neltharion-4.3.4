@@ -93,11 +93,11 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
 
     if (!creature->HasReactState(REACT_PASSIVE) && !creature->getVictim())
     {
-        if (Unit* nearTarget = creature->SelectNearestTarget(maxRangeToNearestTarget))
+        if (auto nearTarget = creature->SelectNearestTarget(maxRangeToNearestTarget))
             creature->AI()->AttackStart(nearTarget);
         else if (creature->isSummon())
         {
-            if (Unit* summoner = creature->ToTempSummon()->GetSummoner())
+            if (auto summoner = creature->ToTempSummon()->GetSummoner())
             {
                 Unit* target = summoner->getAttackerForHelper();
                 if (!target && summoner->CanHaveThreatList() && !summoner->getThreatManager().isThreatListEmpty())
@@ -121,7 +121,7 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
 
     for (Map::PlayerList::const_iterator itr = playerList.begin(); itr != playerList.end(); ++itr)
     {
-        if (Player* player = itr->getSource())
+        if (auto player = itr->getSource())
         {
             if (player->isGameMaster())
                 continue;
@@ -148,7 +148,7 @@ void CreatureAI::DoZoneInCombat(Creature* creature /*= NULL*/, float maxRangeToN
 // MoveInLineOfSight can be called inside another MoveInLineOfSight and cause stack overflow
 void CreatureAI::MoveInLineOfSight_Safe(Unit* who)
 {
-    if (Player* player = who->ToPlayer())
+    if (auto player = who->ToPlayer())
         if (player->isGameMaster())
             return;
 
@@ -190,7 +190,7 @@ void CreatureAI::EnterEvadeMode()
 
     if (!me->GetVehicle()) // otherwise me will be in evade mode forever
     {
-        if (Unit* owner = me->GetCharmerOrOwner())
+        if (auto owner = me->GetCharmerOrOwner())
         {
             me->GetMotionMaster()->Clear(false);
             me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
@@ -388,12 +388,12 @@ Creature* CreatureAI::DoSummonFlyer(uint32 entry, WorldObject* obj, float flight
 
 void CreatureAI::AddEncounterFrame()
 {
-    if (InstanceScript* instance = me->GetInstanceScript())
+    if (auto instance = me->GetInstanceScript())
         instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
 }
 
 void CreatureAI::RemoveEncounterFrame()
 {
-    if (InstanceScript* instance = me->GetInstanceScript())
+    if (auto instance = me->GetInstanceScript())
         instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
 }

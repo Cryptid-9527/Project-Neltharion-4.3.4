@@ -601,8 +601,8 @@ bool Loot::FillLoot(uint32 lootId, LootStore const& store, Player* lootOwner, bo
     {
         roundRobinPlayer = lootOwner->GetGUID();
 
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
-            if (Player* player = itr->getSource())   // should actually be looted object instead of lootOwner but looter has to be really close so doesnt really matter
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (auto player = itr->getSource())   // should actually be looted object instead of lootOwner but looter has to be really close so doesnt really matter
             {
                 AddLooter(player->GetGUID());
                 FillNotNormalLootFor(player, player->IsAtGroupRewardDistance(lootOwner));
@@ -793,7 +793,7 @@ void Loot::NotifyItemRemoved(uint8 lootIndex)
     {
         i_next = i;
         ++i_next;
-        if (Player* player = ObjectAccessor::FindPlayer(*i))
+        if (auto player = ObjectAccessor::FindPlayer(*i))
             player->SendNotifyLootItemRemoved(lootIndex);
         else
             PlayersLooting.erase(i);
@@ -808,7 +808,7 @@ void Loot::NotifyMoneyRemoved()
     {
         i_next = i;
         ++i_next;
-        if (Player* player = ObjectAccessor::FindPlayer(*i))
+        if (auto player = ObjectAccessor::FindPlayer(*i))
             player->SendNotifyLootMoneyRemoved();
         else
             PlayersLooting.erase(i);
@@ -827,7 +827,7 @@ void Loot::NotifyQuestItemRemoved(uint8 questIndex)
     {
         i_next = i;
         ++i_next;
-        if (Player* player = ObjectAccessor::FindPlayer(*i))
+        if (auto player = ObjectAccessor::FindPlayer(*i))
         {
             QuestItemMap::const_iterator pq = PlayerQuestItems.find(player->GetGUIDLow());
             if (pq != PlayerQuestItems.end() && pq->second)

@@ -275,7 +275,7 @@ public:
 
         void OnPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell((Unit*)NULL, SPELL_PISTOL_BARRAGE_DAMAGE, true);
 
             if (auto c = GetCaster())

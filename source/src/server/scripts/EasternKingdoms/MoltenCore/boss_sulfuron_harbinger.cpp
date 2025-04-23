@@ -114,7 +114,7 @@ class boss_sulfuron : public CreatureScript
                             events.ScheduleEvent(EVENT_KNOCKDOWN, urand(12000, 15000));
                             break;
                         case EVENT_FLAMESPEAR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_FLAMESPEAR);
                             events.ScheduleEvent(EVENT_FLAMESPEAR, urand(12000, 16000));
                             break;
@@ -177,17 +177,17 @@ class mob_flamewaker_priest : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_HEAL:
-                            if (Unit* target = DoSelectLowestHpFriendly(60.0f, 1))
+                            if (auto target = DoSelectLowestHpFriendly(60.0f, 1))
                                 DoCast(target, SPELL_HEAL);
                             events.ScheduleEvent(EVENT_HEAL, urand(15000, 20000));
                             break;
                         case EVENT_SHADOW_WORD_PAIN:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_SHADOWWORDPAIN))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_SHADOWWORDPAIN))
                                 DoCast(target, SPELL_SHADOWWORDPAIN);
                             events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, urand(18000, 26000));
                             break;
                         case EVENT_IMMOLATE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_IMMOLATE))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_IMMOLATE))
                                 DoCast(target, SPELL_IMMOLATE);
                             events.ScheduleEvent(EVENT_IMMOLATE, urand(15000, 25000));
                             break;

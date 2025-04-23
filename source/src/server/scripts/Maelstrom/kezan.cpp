@@ -113,7 +113,7 @@ public:
 
         void SpellHit(Unit* who, const SpellInfo* spell)
         {
-            if (Player* pl = who->ToPlayer())
+            if (auto pl = who->ToPlayer())
             {
                 switch (spell->Id)
                 {
@@ -392,7 +392,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
         }
 
@@ -400,7 +400,7 @@ public:
         {
             if (!apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->CastSpell(player, SPELL_SANCTUARY_NO_COMBAT);
                     player->RemoveAura(SPELL_RIDE_HOT_ROD_AURA);
@@ -412,21 +412,21 @@ public:
 
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     player->CastSpell(player, SPELL_SANCTUARY_NO_COMBAT);
             }
         }
 
         void SpellHit(Unit* who, SpellInfo const* spellInfo)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (spellInfo->Id == SPELL_DUMMY_PING && !_izzyBoarded)
                 {
                     player->RemoveAura(49417);
                     player->KilledMonsterCredit(NPC_CREDIT_IZZY);
 
-                    if (Creature* izzy = me->SummonCreature(NPC_SUMMONED_IZZY, SummonHomies[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto izzy = me->SummonCreature(NPC_SUMMONED_IZZY, SummonHomies[0], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         izzy->EnterVehicle(me, 1);
                         _summons.Summon(izzy);
@@ -439,7 +439,7 @@ public:
                     player->RemoveAura(60922);
                     player->KilledMonsterCredit(NPC_CREDIT_GOBBER);
 
-                    if (Creature* gobber = me->SummonCreature(NPC_SUMMONED_GOBBER, SummonHomies[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto gobber = me->SummonCreature(NPC_SUMMONED_GOBBER, SummonHomies[1], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         gobber->EnterVehicle(me, 2);
                         _summons.Summon(gobber);
@@ -452,7 +452,7 @@ public:
                     player->RemoveAura(49416);
                     player->KilledMonsterCredit(NPC_CREDIT_ACE);
 
-                    if (Creature* ace = me->SummonCreature(NPC_SUMMONED_ACE, SummonHomies[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto ace = me->SummonCreature(NPC_SUMMONED_ACE, SummonHomies[2], TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         ace->EnterVehicle(me, 3);
                         _summons.Summon(ace);
@@ -468,7 +468,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (me->GetDistance(player) > 20.f || !me->GetMap()->IsOutdoors(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ()))
                     {
@@ -507,7 +507,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 me->SetReactState(REACT_PASSIVE);
@@ -522,7 +522,7 @@ public:
             {
                 _checkTimer = 500;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_WALTZ_RIGHT_IN) == QUEST_STATUS_NONE)
                     {
@@ -568,7 +568,7 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 if (caster->GetAreaId() != AREA_GALLYWIX_VILLA)
                     return;
@@ -584,7 +584,7 @@ public:
 
                             std::list<Unit*> mook = caster->SelectNearbyUnits(NPC_MOOK_DISGUISE, 10.0f);
                             for (std::list<Unit*>::iterator itr = mook.begin(); itr != mook.end(); ++itr)
-                                if (Unit* mook = (*itr))
+                                if (auto mook = (*itr))
                                 {
                                     if (mook->ToCreature())
                                         if (mook->GetOwnerGUID() == caster->GetGUID())
@@ -652,7 +652,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 me->SetRooted(true);
                 _playerGUID = player->GetGUID();
@@ -663,7 +663,7 @@ public:
         {
             if (apply && passenger->GetGUID() == _playerGUID)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     me->SetRooted(true);
                     player->RemoveAura(49416);
@@ -684,7 +684,7 @@ public:
 
         void SpellHit(Unit* who, SpellInfo const* spellInfo)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (spellInfo->Id == SPELL_DUMMY_PING)
                     player->KilledMonsterCredit(NPC_SUMMONED_STEAMWHEEDLE_SHARK);
@@ -697,7 +697,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (player->GetQuestStatus(QUEST_NECESSARY_ROUGHNESS) == QUEST_STATUS_INCOMPLETE)
                         player->RemoveAura(49416);
@@ -718,9 +718,9 @@ public:
                 {
                     _summonTimer = 4500;
 
-                    if (Creature* enemy1 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[0], TEMPSUMMON_TIMED_DESPAWN, 21000))
-                        if (Creature* enemy2 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[1], TEMPSUMMON_TIMED_DESPAWN, 21000))
-                            if (Creature* enemy3 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[2], TEMPSUMMON_TIMED_DESPAWN, 21000))
+                    if (auto enemy1 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[0], TEMPSUMMON_TIMED_DESPAWN, 21000))
+                        if (auto enemy2 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[1], TEMPSUMMON_TIMED_DESPAWN, 21000))
+                            if (auto enemy3 = me->SummonCreature(NPC_SUMMONED_STEAMWHEEDLE_SHARK, SummonMechs[2], TEMPSUMMON_TIMED_DESPAWN, 21000))
                             {
                                 _summons.Summon(enemy1);
                                 _summons.Summon(enemy2);
@@ -834,7 +834,7 @@ public:
                 case EVENT_DEATHWING_2:
                     _flightMode++;
 
-                    if (Creature* owner = Unit::GetCreature(*me, _ownerGUID))
+                    if (auto owner = Unit::GetCreature(*me, _ownerGUID))
                     {
                         owner->AI()->SetData(2, 2);
                         me->GetMotionMaster()->MoveSmoothPath(DeathwingPath3, DeathwingPathSize3);
@@ -890,7 +890,7 @@ public:
             if (st)
                 return;
 
-            if (Unit* caster = GetCaster()->GetOwner())
+            if (auto caster = GetCaster()->GetOwner())
             {
                 if (caster->GetTypeId() == TYPEID_PLAYER)
                     GetCaster()->PlayDistanceSound(RADIO, caster->ToPlayer());
@@ -1004,10 +1004,10 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
 
-            if (Creature* sassy = me->SummonCreature(NPC_SASSY_HARDWRENCH_IN_VEH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (auto sassy = me->SummonCreature(NPC_SASSY_HARDWRENCH_IN_VEH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 sassy->EnterVehicle(me, 0);
                 _sassyGUID = sassy->GetGUID();
@@ -1023,7 +1023,7 @@ public:
 
             if (!apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Creature* sassy = Unit::GetCreature(*me, _sassyGUID))
+                if (auto sassy = Unit::GetCreature(*me, _sassyGUID))
                 {
                     sassy->DespawnOrUnsummon(100);
                     me->DespawnOrUnsummon(100);
@@ -1036,7 +1036,7 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Creature* sassy = Unit::GetCreature(*me, _sassyGUID))
+            if (auto sassy = Unit::GetCreature(*me, _sassyGUID))
             {
                 if (_pathMode == 1)
                 {
@@ -1074,7 +1074,7 @@ public:
                     me->GetMotionMaster()->MoveSmoothPath(HotRodSavingPath1, HotRodSavingPathSize1);
                     break;
                 case EVENT_LIFE_SAVING_2:
-                    if (Creature* sassy = Unit::GetCreature(*me, _sassyGUID))
+                    if (auto sassy = Unit::GetCreature(*me, _sassyGUID))
                     {
                         me->GetMotionMaster()->Clear();
                         _pathMode++;
@@ -1083,12 +1083,12 @@ public:
                     }
                     break;
                 case EVENT_LIFE_SAVING_3:
-                    if (Creature* sassy = Unit::GetCreature(*me, _sassyGUID))
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto sassy = Unit::GetCreature(*me, _sassyGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             me->GetMotionMaster()->Clear();
 
-                            if (Creature* facetarget = me->FindNearestCreature(NPC_WONDI_BUNNY_TARGET, 15.f))
+                            if (auto facetarget = me->FindNearestCreature(NPC_WONDI_BUNNY_TARGET, 15.f))
                             {
                                 me->CastSpell(facetarget, SPELL_ROD_TURN);
                                 sassy->AI()->TalkWithDelay(1000, 2);

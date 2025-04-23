@@ -223,7 +223,7 @@ class spell_hallow_end_trick_or_treat : public SpellScriptLoader
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                 {
                     caster->CastSpell(target, roll_chance_i(50) ? SPELL_TRICK : SPELL_TREAT, true);
                     caster->CastSpell(target, SPELL_TRICKED_OR_TREATED, true);
@@ -308,7 +308,7 @@ class spell_winter_veil_mistletoe : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                 {
                     uint32 spellId = RAND(SPELL_CREATE_HOLLY, SPELL_CREATE_MISTLETOE, SPELL_CREATE_SNOWFLAKES);
                     GetCaster()->CastSpell(target, spellId, true);
@@ -367,7 +367,7 @@ class spell_winter_veil_px_238_winter_wondervolt : public SpellScriptLoader
                     SPELL_PX_238_WINTER_WONDERVOLT_TRANSFORM_4
                 };
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     for (uint8 i = 0; i < 4; ++i)
                         if (target->HasAura(spells[i]))
@@ -417,11 +417,11 @@ public:
             if (GetCaster()->GetTypeId() != TYPEID_UNIT)
                 return;
 
-            if (Creature* caster = GetCaster()->ToCreature())
+            if (auto caster = GetCaster()->ToCreature())
             {
                 Position pos;
                 GetCaster()->GetNearPosition(pos, 20.0f, 0.0f);
-                if (Creature* target = caster->SummonCreature(27674, pos, TEMPSUMMON_TIMED_DESPAWN, 5000))
+                if (auto target = caster->SummonCreature(27674, pos, TEMPSUMMON_TIMED_DESPAWN, 5000))
                 {
                     GetCaster()->CastSpell(target, SPELL_CHARGE_DEST, true);
                     GetCaster()->CastSpell(target, SPELL_CHARGE_CHECK, true);
@@ -452,7 +452,7 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 if (target->GetTypeId() != TYPEID_UNIT)
                     return;
@@ -466,10 +466,10 @@ public:
                     target->CastSpell(target, SPELL_RACER_DEATH_ROOT, true);
                     target->ToCreature()->DespawnOrUnsummon(2000);
 
-                    if (Unit* targetOwner = target->GetOwner())
+                    if (auto targetOwner = target->GetOwner())
                         targetOwner->RemoveAurasDueToSpell(SPELL_AURA_KILL_COUNT);
 
-                    if (Unit* owner = GetCaster()->GetOwner())
+                    if (auto owner = GetCaster()->GetOwner())
                     {
                         GetCaster()->AddAura(SPELL_AURA_KILL_COUNT, owner);
                         owner->ToPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_AURA_KILL_COUNT);

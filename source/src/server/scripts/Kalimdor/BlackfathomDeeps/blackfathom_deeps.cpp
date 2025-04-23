@@ -117,7 +117,7 @@ public:
 
             for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                 {
                     if (player->isGameMaster())
                         continue;
@@ -162,7 +162,7 @@ public:
                 {
                     if (frostBoltVolleyTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_FROST_BOLT_VOLLEY);
                         frostBoltVolleyTimer = urand(5000, 8000);
                     }

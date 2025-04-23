@@ -295,10 +295,10 @@ public:
                         me->CombatStop(true);
                         me->RemoveAurasDueToSpell(SPELL_SHROUD_OF_LUMINOSITY);
                         instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_SERVANT_OF_THE_QUEEN);
-                        if (GameObject* elune = instance->GetGameObject(DATA_LIGHT_OF_ELUNE))
+                        if (auto elune = instance->GetGameObject(DATA_LIGHT_OF_ELUNE))
                             elune->SetRespawnTime(elune->GetRespawnDelay());
 
-                        if (GameObject* cache = instance->GetGameObject(DATA_ROYAL_CACHE))
+                        if (auto cache = instance->GetGameObject(DATA_ROYAL_CACHE))
                         {
                             cache->SetRespawnTime(cache->GetRespawnDelay());
                             cache->SetLootRecipient(me->GetLootRecipient());
@@ -306,16 +306,16 @@ public:
 
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->GetQuestStatus(QUEST_THE_VAINGLORIOUS) == QUEST_STATUS_INCOMPLETE)
                                     player->KilledMonsterCredit(me->GetEntry());
 
-                        if (Creature* nozdormu = instance->GetCreature(DATA_NOZDORMU))
+                        if (auto nozdormu = instance->GetCreature(DATA_NOZDORMU))
                             nozdormu->NearTeleportTo(NozdormuPositions[1]);
 
                         //me->DespawnOrUnsummon(10000);
                         _JustDied();
-                        if (Creature* bat = me->SummonCreature(57117, shadowbatSpawn, TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto bat = me->SummonCreature(57117, shadowbatSpawn, TEMPSUMMON_MANUAL_DESPAWN))
                         {
                             bat->AddAura(103760, bat);
                             bat->setFaction(me->getFaction());
@@ -325,8 +325,8 @@ public:
                         }
                         events.ScheduleEvent(EVENT_AZSHARA_FLEE_1, 10000);
 
-                        if (Creature* serve_N = me->SummonCreature(54645/*Royal Handmaiden*/, serve_spawn_N, TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* serve_S = me->SummonCreature(54645/*Royal Handmaiden*/, serve_spawn_S, TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto serve_N = me->SummonCreature(54645/*Royal Handmaiden*/, serve_spawn_N, TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto serve_S = me->SummonCreature(54645/*Royal Handmaiden*/, serve_spawn_S, TEMPSUMMON_MANUAL_DESPAWN))
                         {
                             serve_N->DeleteThreatList();
                             serve_N->setFaction(me->getFaction());
@@ -394,20 +394,20 @@ public:
                 {
                     case EVENT_SERVANT_OF_THE_QUEEN:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me)))
                         {
                             Position pos(*target);
-                            if (Creature* hand = me->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos, TEMPSUMMON_DEAD_DESPAWN))
+                            if (auto hand = me->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos, TEMPSUMMON_DEAD_DESPAWN))
                             {
                                 hand->CastSpell(target, SPELL_SERVANT_OF_THE_QUEEN, true);
                                 hand->m_Events.AddEvent(new HandPositionRelocateHack(hand), hand->m_Events.CalculateTime(1000));
                             }
                         }
                         else
-                            if (Player* target = SelectRandomTarget(false))
+                            if (auto target = SelectRandomTarget(false))
                             {
                                 Position pos(*target);
-                                if (Creature* hand = me->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos, TEMPSUMMON_DEAD_DESPAWN))
+                                if (auto hand = me->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos, TEMPSUMMON_DEAD_DESPAWN))
                                 {
                                     hand->CastSpell(target, SPELL_SERVANT_OF_THE_QUEEN, true);
                                     hand->m_Events.AddEvent(new HandPositionRelocateHack(hand), hand->m_Events.CalculateTime(1000));
@@ -447,11 +447,11 @@ public:
                         Map::PlayerList const& PlayerList = me->GetMap()->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
                         {
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                             {
                                 if (player->isCharmed() && !player->HasUnitState(UNIT_STATE_CASTING) && player->isAlive())
                                 {
-                                    if (Player* target = 
+                                    if (auto target = 
                                         player->getVictim() 
                                         ? 
                                         ((player->getVictim()->ToPlayer() && player->getVictim()->isAlive() && !player->isCharmed()) 
@@ -535,7 +535,7 @@ public:
                         events.ScheduleEvent(EVENT_AZSHARA_FLEE_4, 2000);
                         break;
                     case EVENT_AZSHARA_FLEE_4:
-                        if (Creature* bat = me->FindNearestCreature(57117, 20.00f))
+                        if (auto bat = me->FindNearestCreature(57117, 20.00f))
                         {
                             me->EnterVehicle(bat);
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -579,7 +579,7 @@ public:
                 return NULL;
 
             for (std::list<HostileReference*>::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
-                if (Unit* refTarget = (*itr)->getTarget())
+                if (auto refTarget = (*itr)->getTarget())
                     if (refTarget->GetTypeId() == TYPEID_PLAYER && !refTarget->isCharmed())
                         tempTargets.push_back(refTarget->ToPlayer());
 
@@ -655,9 +655,9 @@ public:
                     break;
                 case 55:
                     instance->SetData(DATA_RP_SCENE_STATE, 1);
-                    if (Creature* varothen = me->FindNearestCreature(57118, 20.00f))
+                    if (auto varothen = me->FindNearestCreature(57118, 20.00f))
                         varothen->DespawnOrUnsummon(5000);
-                    if (Creature* azshara = me->FindNearestCreature(NPC_QUEEN_AZSHARA, 20.00f))
+                    if (auto azshara = me->FindNearestCreature(NPC_QUEEN_AZSHARA, 20.00f))
                         azshara->DespawnOrUnsummon(5000);
                     me->DespawnOrUnsummon(5000);
                     break;
@@ -671,10 +671,10 @@ public:
                 {
                     if (currentPath == PATH_BAT_ESCAPE)
                     {
-                        if (Creature* varothen = me->FindNearestCreature(57118, 20.00f))
+                        if (auto varothen = me->FindNearestCreature(57118, 20.00f))
                         varothen->AI()->Talk(0);
 
-                        if (Creature* azshara = me->FindNearestCreature(NPC_QUEEN_AZSHARA, 20.00f))
+                        if (auto azshara = me->FindNearestCreature(NPC_QUEEN_AZSHARA, 20.00f))
                             azshara->AI()->DoAction(EVENT_AZSHARA_FLEE_2);
                     }
                 }
@@ -1001,7 +1001,7 @@ public:
                         events.ScheduleEvent(EVENT_FIREBALL, 3000);
                         events.ScheduleEvent(EVENT_FIREBOMB, urand(20000, 30000));
                         events.ScheduleEvent(EVENT_BLAST_WAVE, urand(20000, 30000));
-                        if (Player* player = me->FindNearestPlayer(200.00f))
+                        if (auto player = me->FindNearestPlayer(200.00f))
                             me->AI()->AttackStart(player);
                         break;
                     case EVENT_FIREBALL:
@@ -1102,7 +1102,7 @@ public:
             if (summon->GetEntry() == NPC_HAMMER_OF_DIVINITY)
             {
                 summon->RemoveAurasDueToSpell(SPELL_ARCANE_BOMB_VISUAL);
-                if (Creature* groundVisual = summon->FindNearestCreature(NPC_HAMMER_OF_DIVINITY_2, 20.00f))
+                if (auto groundVisual = summon->FindNearestCreature(NPC_HAMMER_OF_DIVINITY_2, 20.00f))
                     groundVisual->RemoveAurasDueToSpell(SPELL_ARCANE_BOMB_GROUND);
                 summon->CastSpell(summon, SPELL_ARCANE_BOMB, true, NULL, NULL, me->GetGUID());
             }
@@ -1128,11 +1128,11 @@ public:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                         events.ScheduleEvent(EVENT_ARCANE_BOMB, urand(5000, 10000));
                         events.ScheduleEvent(EVENT_ARCANE_SHOCK, urand(10000, 15000));
-                        if (Player* player = me->FindNearestPlayer(200.00f))
+                        if (auto player = me->FindNearestPlayer(200.00f))
                             me->AI()->AttackStart(player);
                         break;
                     case EVENT_ARCANE_BOMB:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.00f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.00f, true))
                         {
                             DoCast(target, SPELL_HAMMER_OF_RECKONING, true);
                             DoCast(target, SPELL_HAMMER_OF_RECKONING_2, true);
@@ -1223,7 +1223,7 @@ public:
                         events.ScheduleEvent(EVENT_ICE_FLING, urand(5000, 10000));
                         events.ScheduleEvent(EVENT_COLD_FLAME, urand(10000, 15000));
                         events.ScheduleEvent(EVENT_BLADES_OF_ICE, urand(15000, 20000));
-                        if (Player* player = me->FindNearestPlayer(200.00f))
+                        if (auto player = me->FindNearestPlayer(200.00f))
                             me->AI()->AttackStart(player);
                         break;
                     case EVENT_ICE_FLING:
@@ -1255,7 +1255,7 @@ public:
                     me->SetFacingTo(me->GetOrientation());
                     
                     Position pos(*me);
-                    if (Creature* c = me->SummonCreature(54635, pos, TEMPSUMMON_TIMED_DESPAWN, 15000))
+                    if (auto c = me->SummonCreature(54635, pos, TEMPSUMMON_TIMED_DESPAWN, 15000))
                         me->Kill(c);
                     
                     DoCast(random_target, SPELL_COLDFLAME_PERIODIC);
@@ -1307,14 +1307,14 @@ public:
         
         void ColdFlameDummy()
         {
-            if (Creature* fmage = me->FindNearestCreature(54883, 5.f, true))
+            if (auto fmage = me->FindNearestCreature(54883, 5.f, true))
             {
                 Position pos(*me);
 
                 for (auto i = 0; i <= 10; ++i)
                 {
                     me->MoveBlink(pos, 2.f * i, 0);
-                    if (Creature* c = me->SummonCreature(54638, pos, TEMPSUMMON_TIMED_DESPAWN, 1500))
+                    if (auto c = me->SummonCreature(54638, pos, TEMPSUMMON_TIMED_DESPAWN, 1500))
                         fmage->CastWithDelay(i * 300, c, SPELL_COLDFLAME_AREA, true);
                 }
             }
@@ -1358,7 +1358,7 @@ public:
 
             void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes mode)
             {
-                if (Unit* owner = GetOwner()->ToUnit())
+                if (auto owner = GetOwner()->ToUnit())
                 {
                     owner->StopMoving();
                 }
@@ -1381,9 +1381,9 @@ public:
 
         void AfterApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* hand = GetCaster())
+            if (auto hand = GetCaster())
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     if (target->HasAuraType(SPELL_AURA_MOD_STEALTH))
                         target->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
                 
@@ -1451,9 +1451,9 @@ public:
         void AfterApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
             Position pos(*GetTarget());
-            if (Unit* hand = GetTarget()->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos))
+            if (auto hand = GetTarget()->SummonCreature(NPC_HAND_OF_THE_QUEEN, pos))
             {
-                if (Unit* target = GetTarget())
+                if (auto target = GetTarget())
                     if (target->HasAuraType(SPELL_AURA_MOD_STEALTH))
                         target->RemoveAurasByType(SPELL_AURA_MOD_STEALTH);
                 

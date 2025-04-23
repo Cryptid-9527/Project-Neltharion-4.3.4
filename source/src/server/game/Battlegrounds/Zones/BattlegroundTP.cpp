@@ -109,7 +109,7 @@ void BattlegroundTP::PostUpdateImpl(uint32 diff) //Tick tock this is the clock
                     RespawnFlag(team, 2);
 
                     /// Delete flag from ground
-                    if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
+                    if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
                         obj->Delete();
                     else
                         TC_LOG_ERROR("bg.battleground", "BattlegroundTP: An error has occurred in PostUpdateImpl: Unknown dropped flag GUID: %u", GUID_LOPART(_droppedFlagGUID[team]));
@@ -143,7 +143,7 @@ void BattlegroundTP::PostUpdateImpl(uint32 diff) //Tick tock this is the clock
         //end door removal
         //waterfall killzone mechanic
         for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr) {
-            if (Player* p = ObjectAccessor::FindPlayer(itr->first)) {
+            if (auto p = ObjectAccessor::FindPlayer(itr->first)) {
                 if (p->GetPositionZ() < -95) {
                     if (!p->isDead()) {
                         p->Kill(p, 0);
@@ -354,7 +354,7 @@ void BattlegroundTP::EndBattleground(uint32 winner)
 {
     /// If BG ends with equal flag captured (draw) and both flags are kept the debuffs + flag aura stays on player, and it shouldn't
     for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-        if (Player* player = ObjectAccessor::FindPlayer(_flagKeepers[team]))
+        if (auto player = ObjectAccessor::FindPlayer(_flagKeepers[team]))
         {
             //remove brutal assault on BG end
             player->RemoveAurasDueToSpell(TP_SPELL_FOCUSED_ASSAULT);
@@ -633,7 +633,7 @@ void BattlegroundTP::EventPlayerCapturedFlag(Player* source)
         source->RemoveAurasDueToSpell(team == TEAM_ALLIANCE ? BG_TP_SPELL_HORDE_FLAG : BG_TP_SPELL_ALLIANCE_FLAG);
         _flagsDropTimer[team ^ 1] = 0;
         RespawnFlag(team ^ 1, 4);
-        if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team ^ 1]))
+        if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team ^ 1]))
             obj->Delete();
         _droppedFlagGUID[team ^ 1] = 0;
         PlaySoundToAll(BG_TP_SOUND_FLAG_PLACED);
@@ -748,7 +748,7 @@ void BattlegroundTP::RespawnFlag(uint32 team, uint8 respawnReason)
     if (respawnReason == 1 || respawnReason == 2 || respawnReason == 4)
         for (uint8 teamTemp = TEAM_ALLIANCE; teamTemp <= TEAM_HORDE; ++teamTemp)
         {
-            if (Player* activeCarrier = ObjectAccessor::FindPlayer(_flagKeepers[teamTemp]))
+            if (auto activeCarrier = ObjectAccessor::FindPlayer(_flagKeepers[teamTemp]))
             {
                 if (activeCarrier->GetDistance((team == TEAM_ALLIANCE ? 2118.210f : 1578.380f), (team == TEAM_ALLIANCE ? 191.621f : 344.037f), (team == TEAM_ALLIANCE ? 44.052f : 2.419f)) <= 3.0f)
                 { //exact duplicates of flag locations
@@ -865,7 +865,7 @@ void BattlegroundTP::apply_correct_ASSAULT(Player* target) {
 }
 void BattlegroundTP::update_ALL_ASSAULTS() {
     for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-        if (Player* carrier = ObjectAccessor::FindPlayer(_flagKeepers[team])) {
+        if (auto carrier = ObjectAccessor::FindPlayer(_flagKeepers[team])) {
             apply_correct_ASSAULT(carrier);
         }
     return;
@@ -873,7 +873,7 @@ void BattlegroundTP::update_ALL_ASSAULTS() {
 void BattlegroundTP::remove_REMAINING_ASSAULTS()
 {
     for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-        if (Player* carrier = ObjectAccessor::FindPlayer(_flagKeepers[team])) {
+        if (auto carrier = ObjectAccessor::FindPlayer(_flagKeepers[team])) {
             remove_ASSAULTS(carrier);
         }
 }
@@ -884,7 +884,7 @@ void BattlegroundTP::setup_ASSAULT_VALUES() {
 }
     void BattlegroundTP::reset_flag_in_GY() {
         for (uint8 team = TEAM_ALLIANCE; team <= TEAM_HORDE; ++team)
-            if (Player* carrier = ObjectAccessor::FindPlayer(_flagKeepers[team]))
+            if (auto carrier = ObjectAccessor::FindPlayer(_flagKeepers[team]))
             {
                 if (team == TEAM_HORDE)
                 {
@@ -898,7 +898,7 @@ void BattlegroundTP::setup_ASSAULT_VALUES() {
                         carrier->RemoveAurasDueToSpell(team == TEAM_HORDE ? BG_TP_SPELL_HORDE_FLAG : BG_TP_SPELL_ALLIANCE_FLAG);
                         _flagsDropTimer[team] = 0;
                         RespawnFlag(team, 4);
-                        if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
+                        if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
                             obj->Delete();
                         _droppedFlagGUID[team] = 0;
                         PlaySoundToAll(BG_TP_SOUND_FLAG_PLACED);
@@ -915,7 +915,7 @@ void BattlegroundTP::setup_ASSAULT_VALUES() {
                         carrier->RemoveAurasDueToSpell(team == TEAM_HORDE ? BG_TP_SPELL_HORDE_FLAG : BG_TP_SPELL_ALLIANCE_FLAG);
                         _flagsDropTimer[team] = 0;
                         RespawnFlag(team, 4);
-                        if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
+                        if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
                             obj->Delete();
                         _droppedFlagGUID[team] = 0;
                         PlaySoundToAll(BG_TP_SOUND_FLAG_PLACED);
@@ -935,7 +935,7 @@ void BattlegroundTP::setup_ASSAULT_VALUES() {
                         carrier->RemoveAurasDueToSpell(team == TEAM_HORDE ? BG_TP_SPELL_HORDE_FLAG : BG_TP_SPELL_ALLIANCE_FLAG);
                         _flagsDropTimer[team] = 0;
                         RespawnFlag(team, 4);
-                        if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
+                        if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
                             obj->Delete();
                         _droppedFlagGUID[team] = 0;
                         PlaySoundToAll(BG_TP_SOUND_FLAG_PLACED);
@@ -952,7 +952,7 @@ void BattlegroundTP::setup_ASSAULT_VALUES() {
                         carrier->RemoveAurasDueToSpell(team == TEAM_HORDE ? BG_TP_SPELL_HORDE_FLAG : BG_TP_SPELL_ALLIANCE_FLAG);
                         _flagsDropTimer[team] = 0;
                         RespawnFlag(team, 4);
-                        if (GameObject* obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
+                        if (auto obj = GetBgMap()->GetGameObject(_droppedFlagGUID[team]))
                             obj->Delete();
                         _droppedFlagGUID[team] = 0;
                         PlaySoundToAll(BG_TP_SOUND_FLAG_PLACED);

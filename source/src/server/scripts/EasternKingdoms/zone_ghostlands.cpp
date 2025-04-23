@@ -107,7 +107,7 @@ public:
             {
                 case 0:
                     me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
-                    if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 20))
+                    if (auto Cage = me->FindNearestGameObject(GO_CAGE, 20))
                         Cage->SetGoState(GO_STATE_ACTIVE);
                     Talk(SAY_START, player->GetGUID());
                     break;
@@ -157,7 +157,7 @@ public:
 
         void Reset()
         {
-            if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 20))
+            if (auto Cage = me->FindNearestGameObject(GO_CAGE, 20))
                 Cage->SetGoState(GO_STATE_READY);
         }
     };

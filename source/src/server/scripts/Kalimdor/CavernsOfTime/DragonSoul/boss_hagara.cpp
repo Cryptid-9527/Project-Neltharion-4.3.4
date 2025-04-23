@@ -307,7 +307,7 @@ public:
             if (instance->GetBossState(DATA_HAGARA) != SPECIAL)
                 _Reset();
 
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
                 portal->SetVisible(true);
 
             if (urand(0, 1))
@@ -400,7 +400,7 @@ public:
                                 break;
                             case 5:
                                 Talk(TALK_INTRO_5);
-                                if (Creature* veh = me->GetVehicleCreatureBase())
+                                if (auto veh = me->GetVehicleCreatureBase())
                                 {
                                     veh->GetMotionMaster()->MovePoint(0, 13587.886f, 13612.227f, 122.419f);
                                     veh->DespawnOrUnsummon(7000);
@@ -453,7 +453,7 @@ public:
                         uint8 AchievementCount = 0;
                         Map::PlayerList const& PlayerList = instance->instance->GetPlayers();
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->HasAura(sSpellMgr->GetSpellIdForDifficulty(SPELL_LIGHTNING_CONDUIT_DAMAGE, me)))
                                     AchievementCount++;
 
@@ -514,7 +514,7 @@ public:
             if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
                 me->SetLootMode(LOOT_MODE_LFR);
 
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
                 portal->SetVisible(false);
 
             Talk(TALK_AGGRO);
@@ -529,7 +529,7 @@ public:
         void JustDied(Unit* killer) override
         {
             Talk(TALK_DEATH);
-            if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
+            if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_SUMMIT, 150.00f))
                 portal->SetVisible(true);
 
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
@@ -582,7 +582,7 @@ public:
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             if (!players.isEmpty())
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (player->GetAreaId() == me->GetAreaId())
                             player->GetSession()->SendPacket(data);
         }
@@ -744,7 +744,7 @@ public:
                             Map::PlayerList const &PlList = me->GetMap()->GetPlayers();
                             for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
                             {
-                                if (Player* player = i->getSource())
+                                if (auto player = i->getSource())
                                 {
                                     bool isInFrostFlake = false;
                                     for (AreaTrigger* trigger : triggerList)
@@ -842,7 +842,7 @@ public:
                                     break;
                             }
 
-                            if (Creature* iceWave = me->SummonCreature(NPC_ICE_WAVE, pos, TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto iceWave = me->SummonCreature(NPC_ICE_WAVE, pos, TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 iceWave->CastSpell(iceWave, SPELL_ICE_WAVE, true);
                                 iceWave->SetOrientation(orientation);
@@ -926,9 +926,9 @@ public:
 
         bool GossipHello(Player* player)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
                 if (!instance->IsDone(DATA_HAGARA) && instance->GetBossState(DATA_HAGARA) != SPECIAL)
-                    if (Creature* hagara = instance->GetCreature(DATA_HAGARA))
+                    if (auto hagara = instance->GetCreature(DATA_HAGARA))
                     {
                         instance->SetBossState(DATA_HAGARA, SPECIAL);
                         hagara->AI()->DoAction(ACTION_START_INTRO_EVENT);
@@ -968,7 +968,7 @@ public:
         void UpdateAI(uint32 const diff) override
         {
             if (!me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
-                if (Player* player = me->FindNearestPlayer(100.0f))
+                if (auto player = me->FindNearestPlayer(100.0f))
                     DoCast(player, SPELL_ICE_LANCE_TARGETING);
         }
     };
@@ -997,7 +997,7 @@ public:
         void JustDied(Unit* killer)
         {
             uint32 spellId = sSpellMgr->GetSpellIdForDifficulty(SPELL_ICE_TOMB_MISSILE, me);
-            if (Unit* owner = me->ToTempSummon()->GetSummoner())
+            if (auto owner = me->ToTempSummon()->GetSummoner())
             {
                 owner->RemoveAurasDueToSpell(spellId);
                 owner->RemoveAllGameObjects();
@@ -1013,7 +1013,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CHECK_OWNER:
-                        if (Unit* owner = me->ToTempSummon()->GetSummoner())
+                        if (auto owner = me->ToTempSummon()->GetSummoner())
                         {
                             if (!owner->isAlive())
                             {
@@ -1065,7 +1065,7 @@ public:
             {
                 if (spellInfo->Id == SPELL_LIGHTNING_CONDUIT_VISUAL_JUMP)
                 {
-                    if (Creature* hagara = instance->GetCreature(DATA_HAGARA))
+                    if (auto hagara = instance->GetCreature(DATA_HAGARA))
                         hagara->AI()->DoAction(ACTION_CRYSTAL_CONDUCTOR_ACTIVATED);
                     me->InterruptNonMeleeSpells(false);
                     me->RemoveAurasDueToSpell(SPELL_CONDUCTOR_INACTIVE);
@@ -1117,7 +1117,7 @@ public:
         _trigger->CastSpell(_trigger, SPELL_ICICLE_FALL_TRIGGER, true);
         _trigger->CastSpell(_trigger, SPELL_ICICLE_FALL_VISUAL, false);
 
-        if (Creature* caster = ObjectAccessor::GetCreature(*_trigger, _casterGUID))
+        if (auto caster = ObjectAccessor::GetCreature(*_trigger, _casterGUID))
             caster->DespawnOrUnsummon();
         /// @todo: fix snowfall visual after collapse
 
@@ -1174,7 +1174,7 @@ public:
                 me->RemoveAllAuras();
                 me->SetReactState(REACT_PASSIVE);
                 me->AttackStop();
-                if (Creature* crystal = me->FindNearestCreature(NPC_CRYSTAL_CONDUCTOR, 100.0f))
+                if (auto crystal = me->FindNearestCreature(NPC_CRYSTAL_CONDUCTOR, 100.0f))
                 {
                     DoCast(crystal, SPELL_LIGHTNING_CONDUIT_VISUAL_JUMP, true);
                     DoCast(crystal, SPELL_OVERLOAD, true);
@@ -1203,9 +1203,9 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& targets)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (Unit* channelTarget = ObjectAccessor::GetUnit(*GetCaster(), caster->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
+                if (auto channelTarget = ObjectAccessor::GetUnit(*GetCaster(), caster->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
                 {
                     targets.remove_if([caster, channelTarget](WorldObject* target) 
                     { 
@@ -1251,7 +1251,7 @@ public:
 
     bool Execute(uint64 /*time*/, uint32 /*diff*/) override
     {
-        if (Unit* target = ObjectAccessor::GetUnit(*_caster, _targetGUID))
+        if (auto target = ObjectAccessor::GetUnit(*_caster, _targetGUID))
         {
             if (target->isAlive())
             {
@@ -1329,8 +1329,8 @@ public:
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
-                if (Unit* target = ObjectAccessor::GetUnit(*caster, caster->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
+            if (auto caster = GetCaster())
+                if (auto target = ObjectAccessor::GetUnit(*caster, caster->GetUInt64Value(UNIT_FIELD_CHANNEL_OBJECT)))
                     caster->CastSpell(target, GetSpellInfo()->Effects[EFFECT_1].TriggerSpell, true);
         }
 
@@ -1363,7 +1363,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes mode)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(GetTarget(), GetSpellInfo()->Effects[EFFECT_1].BasePoints, true);
         }
 
@@ -1426,12 +1426,12 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 uint32 conduitDebuff = sSpellMgr->GetSpellIdForDifficulty(SPELL_LIGHTNING_CONDUIT_DAMAGE, caster);
                 Map::PlayerList const& players = caster->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* target = itr->getSource())
+                    if (auto target = itr->getSource())
                         if (target->isAlive() && !target->HasAura(conduitDebuff, GetTarget()->GetGUID()))
                             if (caster->GetDistance2d(target) <= 10.0f)
                                 caster->CastSpell(target, SPELL_LIGHTNING_CONDUIT_DAMAGE, true);
@@ -1462,17 +1462,17 @@ public:
 
         void AfterApply(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(GetTarget(), SPELL_LIGHTNING_CONDUIT_VISUAL_JUMP, true);
         }
 
         void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             uint32 conduitDebuff = GetId();
-            if (InstanceScript* instance = GetTarget()->GetInstanceScript())
+            if (auto instance = GetTarget()->GetInstanceScript())
                 instance->DoRemoveAurasDueToSpellOnPlayers(conduitDebuff, GetTarget()->GetGUID());
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 GetTarget()->RemoveAurasDueToSpell(SPELL_LIGHTNING_CONDUIT_VISUAL_JUMP, caster->GetGUID());
         }
 
@@ -1480,7 +1480,7 @@ public:
         {
             uint32 conduitDebuff = GetId();
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (GetTarget()->GetDistance2d(caster) > 10.0f || (caster->ToPlayer() && !caster->HasAura(conduitDebuff)))
                 {
@@ -1492,7 +1492,7 @@ public:
 
             Map::PlayerList const& players = GetTarget()->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                if (Player* player = itr->getSource())
+                if (auto player = itr->getSource())
                     if (GetTarget()->GetDistance2d(player) <= 10.0f)
                         if (player->isAlive() && !player->HasAura(conduitDebuff))
                             GetTarget()->CastSpell(player, SPELL_LIGHTNING_CONDUIT_DAMAGE, true);

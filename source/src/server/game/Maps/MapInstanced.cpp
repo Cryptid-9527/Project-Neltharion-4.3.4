@@ -136,7 +136,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
         map = sMapMgr->FindMap(mapId, newInstanceId);
         if (!map)
         {
-            if (Battleground* bg = player->GetBattleground())
+            if (auto bg = player->GetBattleground())
                 map = CreateBattleground(newInstanceId, bg);
             else
             {
@@ -164,7 +164,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
             if (Map* pMap = sMapMgr->FindMap(mapId, pSave->GetInstanceId()))
             {
                 ASSERT(pMap->IsDungeon());
-                if (InstanceScript* instanceScript = ((InstanceMap*) pMap)->GetInstanceScript())
+                if (auto instanceScript = ((InstanceMap*) pMap)->GetInstanceScript())
                 {
                     playerHardMode = instanceScript->GetHardModeDifficulty();
                     playerCompletedEncounterMask = instanceScript->GetCompletedEncounterMask();
@@ -198,7 +198,7 @@ Map* MapInstanced::CreateInstanceForPlayer(const uint32 mapId, Player* player)
             if (Map* gMap = sMapMgr->FindMap(mapId, groupBind->save->GetInstanceId()))
             {
                 ASSERT(gMap->IsDungeon());
-                if (InstanceScript* instanceScript = ((InstanceMap*) gMap)->GetInstanceScript())
+                if (auto instanceScript = ((InstanceMap*) gMap)->GetInstanceScript())
                 {
                     groupHardMode = instanceScript->GetHardModeDifficulty();
                     groupCompletedEncounterMask = instanceScript->GetCompletedEncounterMask();

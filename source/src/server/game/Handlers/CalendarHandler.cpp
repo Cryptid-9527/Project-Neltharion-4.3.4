@@ -203,7 +203,7 @@ void WorldSession::HandleCalendarGuildFilter(WorldPacket& recvData)
 
     recvData >> minLevel >> maxLevel >> minRank;
 
-    if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
+    if (auto guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
         guild->MassInviteToEvent(this, minLevel, maxLevel, minRank);
 
     TC_LOG_DEBUG("network.opcode", "CMSG_CALENDAR_GUILD_FILTER: Min level [%d], Max level [%d], Min rank [%d]", minLevel, maxLevel, minRank);
@@ -251,7 +251,7 @@ void WorldSession::HandleCalendarAddEvent(WorldPacket& recvData)
         time_t(eventPackedTime), flags, time_t(unkPackedTime), title, description);
 
     if (calendarEvent->IsGuildEvent() || calendarEvent->IsGuildAnnouncement())
-        if (Player* creator = ObjectAccessor::FindPlayer(guid))
+        if (auto creator = ObjectAccessor::FindPlayer(guid))
             calendarEvent->SetGuildId(creator->GetGuildId());
 
     if (calendarEvent->IsGuildAnnouncement())
@@ -439,7 +439,7 @@ void WorldSession::HandleCalendarEventInvite(WorldPacket& recvData)
 
     recvData >> eventId >> inviteId >> name >> isPreInvite >> isGuildEvent;
 
-    if (Player* player = sObjectAccessor->FindPlayerByName(name.c_str()))
+    if (auto player = sObjectAccessor->FindPlayerByName(name.c_str()))
     {
         // Invitee is online
         inviteeGuid = player->GetGUID();

@@ -92,13 +92,13 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             break;
         case CONDITION_AURA:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = unit->HasAuraEffect(ConditionValue1, ConditionValue2);
             break;
         }
         case CONDITION_ITEM:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                 {
                     // don't allow 0 items (it's checked during table load)
                     ASSERT(ConditionValue2);
@@ -109,7 +109,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_ITEM_EQUIPPED:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                     condMeets = player->HasItemOrGemWithIdEquipped(ConditionValue1, 1);
             break;
         }
@@ -118,7 +118,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
             break;
         case CONDITION_REPUTATION_RANK:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
             {
                 if (FactionEntry const* faction = sFactionStore.LookupEntry(ConditionValue1))
                     condMeets = (ConditionValue2 & (1 << player->GetReputationMgr().GetRank(faction)));
@@ -138,43 +138,43 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_TEAM:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
                 condMeets = player->GetTeam() == ConditionValue1;
             break;
         }
         case CONDITION_CLASS:
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 condMeets = unit->getClassMask() & ConditionValue1;
             break;
         }
         case CONDITION_RACE:
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 condMeets = unit->getRaceMask() & ConditionValue1;
             break;
         }
         case CONDITION_GENDER:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                     condMeets = player->getGender() == ConditionValue1;
             break;
         }
         case CONDITION_SKILL:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
                 condMeets = player->HasSkill(ConditionValue1) && player->GetBaseSkillValue(ConditionValue1) >= ConditionValue2;
             break;
         }
         case CONDITION_QUESTREWARDED:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                     condMeets = player->GetQuestRewardStatus(ConditionValue1);
             break;
         }
         case CONDITION_QUESTTAKEN:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                 {
                     QuestStatus status = player->GetQuestStatus(ConditionValue1);
                     condMeets = (status == QUEST_STATUS_INCOMPLETE);
@@ -183,7 +183,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_QUEST_COMPLETE:
         {
-                if (Player* player = object->ToPlayer())
+                if (auto player = object->ToPlayer())
                 {
                     QuestStatus status = player->GetQuestStatus(ConditionValue1);
                     condMeets = (status == QUEST_STATUS_COMPLETE && !player->GetQuestRewardStatus(ConditionValue1));
@@ -192,7 +192,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_QUEST_NONE:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
             {
                 QuestStatus status = player->GetQuestStatus(ConditionValue1);
                 condMeets = (status == QUEST_STATUS_NONE);
@@ -235,19 +235,19 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_SPELL:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
                 condMeets = player->HasSpell(ConditionValue1);
             break;
         }
         case CONDITION_LEVEL:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = CompareValues(static_cast<ComparisionType>(ConditionValue2), static_cast<uint32>(unit->getLevel()), ConditionValue1);
             break;
         }
         case CONDITION_DRUNKENSTATE:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
                 condMeets = (uint32)Player::GetDrunkenstateByValue(player->GetDrunkValue()) >= ConditionValue1;
             break;
         }
@@ -287,7 +287,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_HAS_UNIT_STATE:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = unit->HasUnitState(ConditionValue1);
             break;
         }
@@ -392,19 +392,19 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_ALIVE:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = unit->isAlive();
             break;
         }
         case CONDITION_HP_VAL:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = CompareValues(static_cast<ComparisionType>(ConditionValue2), unit->GetHealth(), static_cast<uint32>(ConditionValue1));
             break;
         }
         case CONDITION_HP_PCT:
         {
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = CompareValues(static_cast<ComparisionType>(ConditionValue2), unit->GetHealthPct(), static_cast<float>(ConditionValue1));
             break;
         }
@@ -420,7 +420,7 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_TITLE:
         {
-            if (Player* player = object->ToPlayer())
+            if (auto player = object->ToPlayer())
                 condMeets = player->HasTitle(ConditionValue1);
             break;
         }
@@ -431,14 +431,14 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
         }
         case CONDITION_UNIT_STATE:
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 condMeets = unit->HasUnitState(ConditionValue1);
             break;
         }
         case CONDITION_IN_WATER:
         {
                 LiquidData liqData;
-                if (Unit* unit = object->ToUnit())
+                if (auto unit = object->ToUnit())
                     condMeets = unit->GetMap()->IsInWater(unit->GetPositionX(), unit->GetPositionY(), unit->GetPositionZ(), &liqData);
             break;
         }

@@ -144,13 +144,13 @@ public:
         {          
             if (apply && passenger->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                 {
                     playerGUID = player->GetGUID();
                     me->GetMotionMaster()->MovePoint(1, BoatPos);
                     events.ScheduleEvent(EVENT_BOARDED, 3000);
 
-                    if (Creature* messner = me->FindNearestCreature(10.f, NPC_MESSNER))
+                    if (auto messner = me->FindNearestCreature(10.f, NPC_MESSNER))
                         messner->UpdateOrientation(2.0f * M_PI);
                 }
             }
@@ -163,15 +163,15 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Unit* messner = me->GetVehicleKit()->GetPassenger(1)) {
-                if (Unit* keeshan = me->GetVehicleKit()->GetPassenger(0)) {
+            if (auto messner = me->GetVehicleKit()->GetPassenger(1)) {
+                if (auto keeshan = me->GetVehicleKit()->GetPassenger(0)) {
                     switch (point)
                     {
                     case WAYPOINT_LAST_POINT:
                         keeshan->ToCreature()->AI()->Talk(SAY_GROUP_1);
                         messner->RemoveAura(SPELL_MESSNER_BOAT_ENGINE);
                         events.ScheduleEvent(EVENT_LAST_WAYPOINT, 3000);
-                        if (Player* player = Unit::GetPlayer(*me, playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, playerGUID))
                         {
                             player->KilledMonsterCredit(43443);
                             me->CastSpell(me, SPELL_QUEST_COMPLETE);
@@ -193,7 +193,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_BOARDED:
-                    if (Unit* keeshan = me->GetVehicleKit()->GetPassenger(0)) // passenger seat_0 = kesshan in vehicle_template_accessory
+                    if (auto keeshan = me->GetVehicleKit()->GetPassenger(0)) // passenger seat_0 = kesshan in vehicle_template_accessory
                     {
                         keeshan->ToCreature()->AI()->Talk(SAY_GROUP_0);
                         events.ScheduleEvent(EVENT_TALK_1, 4000);
@@ -201,7 +201,7 @@ public:
                     }
                     break;
                 case EVENT_TALK_1:
-                    if (Unit* messner = me->GetVehicleKit()->GetPassenger(1)) // passenger seat_1 = messner in vehicle_template_accessory
+                    if (auto messner = me->GetVehicleKit()->GetPassenger(1)) // passenger seat_1 = messner in vehicle_template_accessory
                     {
                         messner->ToCreature()->AI()->Talk(SAY_GROUP_0);
                         messner->CastSpell(messner, SPELL_MESSNER_BOAT_ENGINE);
@@ -214,9 +214,9 @@ public:
                 case EVENT_LAST_WAYPOINT:
                     me->CastSpell(me, SPELL_EJECT_PASSENGER_6);
                     me->DespawnOrUnsummon(1000);
-                    if (Player* player = Unit::GetPlayer(*me, playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, playerGUID))
                         player->GetMotionMaster()->MoveJump(PlayerJumpPos, 12.0f, 14.0f);
-                    if (Unit* pkeeshan = me->FindNearestCreature(NPC_KEESHAN, 60.0f, true))
+                    if (auto pkeeshan = me->FindNearestCreature(NPC_KEESHAN, 60.0f, true))
                         pkeeshan->CastSpell(pkeeshan, SPELL_PING); // ping to start dialogue
                     break;
                 default:
@@ -256,7 +256,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY)
             {
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     player->CastSpell(player, SPELL_FADE_TO_BLACK_3);
@@ -274,8 +274,8 @@ public:
                 switch (eventId)
                 {
                 case EVENT_DELAY_1:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
-                        if (Creature* boat = player->SummonCreature(NPC_KEESHANS_RIVERBOAT_VEHICLE, -9295.115f, -2355.662f, 56.647f, 3.9f, TEMPSUMMON_DEAD_DESPAWN, 5000))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto boat = player->SummonCreature(NPC_KEESHANS_RIVERBOAT_VEHICLE, -9295.115f, -2355.662f, 56.647f, 3.9f, TEMPSUMMON_DEAD_DESPAWN, 5000))
                         {
                             player->RemoveAura(SPELL_INVISIBILITY_DETECTION_3_MISC_9);
                             player->CastWithDelay(700, boat, 46598);
@@ -341,7 +341,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 _PhaseTalk_2 = true;
@@ -355,7 +355,7 @@ public:
         {
             if (spellInfo->Id == SPELL_PING_JORGENSEN_1 && !_RunSpellItem)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     if (who->GetGUID() == _playerGUID)
                     {
                         me->AI()->Talk(0, _playerGUID);
@@ -365,7 +365,7 @@ public:
             if (_ReachedATFirst == false && _IsPrisonerQuestComleted == false)
             {
                 if (spellInfo->Id == SPELL_PING_JORGENSEN_2)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         if (who->GetGUID() == _playerGUID)
                         {
                             me->AI()->Talk(1, _playerGUID);
@@ -375,7 +375,7 @@ public:
             if (_ReachedATSecond == false && _IsPrisonerQuestComleted == false)
             {
                 if (spellInfo->Id == SPELL_PING_JORGENSEN_3)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         if (who->GetGUID() == _playerGUID)
                         {
                             _PhaseTalk_2 = false;
@@ -387,7 +387,7 @@ public:
             if (_ReachedATThird == false && _IsPrisonerQuestComleted == false)
             {
                 if (spellInfo->Id == SPELL_PING_JORGENSEN_4)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         if (who->GetGUID() == _playerGUID)
                         {
                             me->AI()->Talk(5, _playerGUID);
@@ -397,7 +397,7 @@ public:
             if (_IsPrisonerQuestComleted)
             {
                 if (spellInfo->Id == SPELL_PING_JORGENSEN_5)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         if (who->GetGUID() == _playerGUID)
                         {
                             me->AI()->Talk(11, _playerGUID);
@@ -406,14 +406,14 @@ public:
             if (_IsPrisonerQuestComleted)
             {
                 if (spellInfo->Id == SPELL_PING_JORGENSEN_6)
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         if (who->GetGUID() == _playerGUID)
                         {
                             me->AI()->Talk(12, _playerGUID);
                         }
             }
             if (spellInfo->Id == SPELL_PING_JORGENSEN_8)
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     if (who->GetGUID() == _playerGUID)
                     {
                         player->RemoveAura(SPELL_SUMMON_AURA);
@@ -424,7 +424,7 @@ public:
         {
             if (_PhaseTalk_2 && (_PhaseTalk_2_TIMER <= diff))
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     _PhaseTalk_2_TIMER = 100000;
                     me->AI()->Talk(10, _playerGUID);
@@ -439,7 +439,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_SAY_TIP_1:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->AI()->Talk(3, _playerGUID);
                         events.ScheduleEvent(EVENT_SAY_TIP_2, 9000);
@@ -448,28 +448,28 @@ public:
                     }
                     break;
                 case EVENT_SAY_TIP_2:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->AI()->Talk(6, _playerGUID);
                         events.ScheduleEvent(EVENT_SAY_TIP_3, 20000);
                     }
                     break;
                 case EVENT_SAY_TIP_3:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->AI()->Talk(7, _playerGUID);
                         events.ScheduleEvent(EVENT_SAY_TIP_4, 25000);
                     }
                     break;
                 case EVENT_SAY_TIP_4:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->AI()->Talk(8, _playerGUID);
                         events.ScheduleEvent(EVENT_SAY_TIP_5, 25000);
                     }
                     break;
                 case EVENT_SAY_TIP_5:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->AI()->Talk(9, _playerGUID);
                         _PhaseTalk_1 = false;
@@ -477,7 +477,7 @@ public:
                     }
                     break;
                 case EVENT_UPDATE_2ND_SPELL_BAR:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->RemoveAura(SPELL_BRAVO_COMPANY_FIELD_KIT_2);
                         player->CastSpell(player, SPELL_UPDATE_ZONE_AURAS);
@@ -489,7 +489,7 @@ public:
                 }
             }
 
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 if (player->GetQuestStatus(QUEST_PRISONERS_OF_WAR) == QUEST_STATUS_REWARDED && player->HasAura(SPELL_BRAVO_COMPANY_FIELD_KIT_1) && !player->HasAura(SPELL_BRAVO_COMPANY_FIELD_KIT_2))
                 {
@@ -570,7 +570,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(caster, SPELL_PING_JORGENSEN_1);
         }
         void Register()
@@ -661,7 +661,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
             me->SetCanFly(true);
             me->SetDisableGravity(true);
@@ -686,7 +686,7 @@ public:
             if (type != SPLINE_MOTION_TYPE)
                 return;
 
-            if (Unit* passenger = me->GetVehicleKit()->GetPassenger(0)) {
+            if (auto passenger = me->GetVehicleKit()->GetPassenger(0)) {
                 switch (point)
                 {
                 case 5:
@@ -709,19 +709,19 @@ public:
                 {
                 case EVENT_START:
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         player->RemoveAura(SPELL_FADE_TO_BLACK_1);
                     me->GetMotionMaster()->MoveSmoothPath(DetonationCameraPath, DetonationCameraPathSize);
                     _IsCinematicInProgress = true;
                     break;
                 case EVENT_TO_FADE:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->CastSpell(player, SPELL_FADE_TO_BLACK_2);
                         events.ScheduleEvent(EVENT_EJECT, 500);
                     }
                 case EVENT_EJECT:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         me->CastWithDelay(200, player, SPELL_TELEPORT_TO_CAMP);
                         me->CastSpell(me, SPELL_EJECT_PASSENGER);
@@ -773,7 +773,7 @@ public:
         {
             me->SetPhaseMask(128, true);
             me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
-            if (Creature* colonel = me->SummonCreature(NPC_COLONEL, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 30000))
+            if (auto colonel = me->SummonCreature(NPC_COLONEL, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 30000))
             {
                 colonel->CastSpell(me, SPELL_RIDE_VEHICLE);
                 _colonelGUID = colonel->GetGUID();
@@ -782,7 +782,7 @@ public:
             me->CastSpell(me, SPELL_PARACHUTE);
             me->GetMotionMaster()->MovePoint(1, TankMovePoint);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
             }
@@ -823,7 +823,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_DELAY:
-                    if (Unit* colonel = me->GetVehicleKit()->GetPassenger(0))
+                    if (auto colonel = me->GetVehicleKit()->GetPassenger(0))
                     {
                         me->CastSpell(me, SPELL_EJECT_PASSENGER);
                         colonel->GetMotionMaster()->MoveJump(ColonelJumpPosition, 12.0f, 15.0f);
@@ -831,7 +831,7 @@ public:
                     }
                     break;
                 case EVENT_COLONEL_SAY:
-                    if (Creature* colonel = Unit::GetCreature(*me, _colonelGUID))
+                    if (auto colonel = Unit::GetCreature(*me, _colonelGUID))
                     {
                         colonel->AI()->Talk(0);
                         colonel->DespawnOrUnsummon(5000);
@@ -841,7 +841,7 @@ public:
                     }
                     break;
                 case EVENT_HAXY_AREA_UPDATE:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         player->GetPosition(_x, _y, _z, _o);
                         // haxy area update
@@ -883,7 +883,7 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->SummonCreature(NPC_BRAVO_COMPANY_SIEGE_TANK, SceneTankPos, TEMPSUMMON_TIMED_DESPAWN, 30000);
             }
@@ -947,13 +947,13 @@ public:
             me->SetPhaseMask(512, true);
             me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_NONE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
                 player->RemoveAura(60922);
             }
 
-            if (Creature* gun = me->SummonCreature(NPC_MACHINE_GUN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (auto gun = me->SummonCreature(NPC_MACHINE_GUN, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
             {
                 _machineGUID = gun->GetGUID();
                 gun->EnterVehicle(me, 1);
@@ -964,7 +964,7 @@ public:
         {
             if (actionId == ACTION_AAAAAA_CREDIT)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     player->CastSpell(player, SPELL_KILL_CREDIT);
             }
 
@@ -973,13 +973,13 @@ public:
         {
             if (!apply)
             {
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->RemoveAura(SPELL_SUMMON_BRAVO_COMPANY_SIEGE_TANK);
                     player->RemoveAura(SPELL_RIDE_VEHICLE);
                 }
 
-                if (Creature* gun = Unit::GetCreature(*me, _machineGUID))
+                if (auto gun = Unit::GetCreature(*me, _machineGUID))
                 {
                     gun->AI()->DoAction(ACTION_DESPAWN_MACHINE);
                     me->DespawnOrUnsummon(100);
@@ -991,13 +991,13 @@ public:
         }
         void JustDied(Unit* killer)
         {
-            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+            if (auto player = Unit::GetPlayer(*me, _playerGUID))
             {
                 player->RemoveAura(SPELL_SUMMON_BRAVO_COMPANY_SIEGE_TANK);
                 player->RemoveAura(SPELL_RIDE_VEHICLE);
             }
 
-            if (Creature* gun = Unit::GetCreature(*me, _machineGUID))
+            if (auto gun = Unit::GetCreature(*me, _machineGUID))
             {
                 gun->AI()->DoAction(ACTION_DESPAWN_MACHINE);
             }
@@ -1042,7 +1042,7 @@ public:
         {
             if (actionId == ACTION_DESPAWN_MACHINE)
             {
-                if (Creature* keeshan = Unit::GetCreature(*me, _keeshanGUID))
+                if (auto keeshan = Unit::GetCreature(*me, _keeshanGUID))
                 {
                     keeshan->DespawnOrUnsummon();
                     me->DespawnOrUnsummon(100);
@@ -1054,14 +1054,14 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Creature* tank = Unit::GetCreature(*me, _tankGUID))
+                if (auto tank = Unit::GetCreature(*me, _tankGUID))
                 {
                     tank->AI()->DoAction(ACTION_AAAAAA_CREDIT);
                     _randomYell = urand(1, 10);
                     switch (_randomYell)
                     {
                     case 5:
-                        if (Creature* keeshan = Unit::GetCreature(*me, _keeshanGUID))
+                        if (auto keeshan = Unit::GetCreature(*me, _keeshanGUID))
                             keeshan->AI()->Talk(0);
                         break;
                     default:
@@ -1083,7 +1083,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_DELAY_ENTER_VEH:
-                    if (Creature* keeshan = me->SummonCreature(NPC_KEESHAN_ON_VEH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto keeshan = me->SummonCreature(NPC_KEESHAN_ON_VEH, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         keeshan->CastSpell(me, SPELL_RIDE_VEHICLE);
                         _keeshanGUID = keeshan->GetGUID();
@@ -1290,7 +1290,7 @@ public:
                     me->SetByteFlag(UNIT_FIELD_BYTES_1, 0, 0);
                     me->canWalk();
 
-                    if (Player* player = me->FindNearestPlayer(35))
+                    if (auto player = me->FindNearestPlayer(35))
                         player->CastSpell(me, 98442);
 
                     break;
@@ -1311,7 +1311,7 @@ public:
                 case EVENT_KEESHAN_FIND:
                     if (!me->FindNearestCreature(NPC_KEESHAN_DARKBLADE, 35.0f))
                     {
-                        if (Creature* keeshan = me->SummonCreature(NPC_KEESHAN_DARKBLADE, me->GetPositionX() + 3, me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 40000))
+                        if (auto keeshan = me->SummonCreature(NPC_KEESHAN_DARKBLADE, me->GetPositionX() + 3, me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 40000))
                         {
                             keeshan->CastSpell(me, SPELL_MOUNT_DARKBLAZE);
                             keeshan->AI()->Talk(0);
@@ -1320,7 +1320,7 @@ public:
                     }
                     else
                     {
-                        if (Creature* keeshan = me->FindNearestCreature(NPC_KEESHAN_DARKBLADE, 35.0f))
+                        if (auto keeshan = me->FindNearestCreature(NPC_KEESHAN_DARKBLADE, 35.0f))
                         {
                             keeshan->CastSpell(me, SPELL_MOUNT_DARKBLAZE);
                             keeshan->AI()->Talk(0);
@@ -1356,7 +1356,7 @@ public:
                     me->GetMotionMaster()->MoveSmoothPath(DarkblazePath2, DarkblazePathSize2);
                     break;
                 case EVENT_FALL_WITH_KEESHAN:
-                    if (Creature* keeshan = me->FindNearestCreature(NPC_KEESHAN_DARKBLADE, 15))
+                    if (auto keeshan = me->FindNearestCreature(NPC_KEESHAN_DARKBLADE, 15))
                         keeshan->DespawnOrUnsummon();
                     me->Kill(me);
                     break;
@@ -1447,7 +1447,7 @@ public:
         {
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
             else
                 return;
@@ -1530,7 +1530,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (me->GetEntry() == NPC_MESSNER_UNGEARED)
                     {
@@ -1632,7 +1632,7 @@ public:
                         }
 
 
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (auto player = Unit::GetPlayer(*me, _playerGUID))
                         {
                             if (player->GetHealthPct() < 40)
                             {
@@ -1841,7 +1841,7 @@ public:
                             _isFollowing = true;
                         }
 
-                        if (Unit* darkblaze = me->getVictim())
+                        if (auto darkblaze = me->getVictim())
                         {
                             if (darkblaze->GetEntry() == NPC_DARKBLAZE)
                             {
@@ -2024,8 +2024,8 @@ public:
             me->CastSpell(me, SPELL_CREEPER_ANIM);
             me->CastSpell(me, SPELL_ROOT);
 
-            if (Creature* target1 = me->SummonCreature(NPC_DANFORTH_TARGET_1, -8802.50f, -2195.45f, 149.984f, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0))
-                if (Creature* target2 = me->SummonCreature(NPC_DANFORTH_TARGET_2, -8810.36f, -2216.82f, 149.685f, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0))
+            if (auto target1 = me->SummonCreature(NPC_DANFORTH_TARGET_1, -8802.50f, -2195.45f, 149.984f, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0))
+                if (auto target2 = me->SummonCreature(NPC_DANFORTH_TARGET_2, -8810.36f, -2216.82f, 149.685f, 0.0f, TEMPSUMMON_MANUAL_DESPAWN, 0))
                 {
                     _target1GUID = target1->GetGUID();
                     _target2GUID = target2->GetGUID();

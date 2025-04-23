@@ -245,7 +245,7 @@ public:
                 {
                     if ((*i) && (*i)->getSource())
                     {
-                        if (Unit* unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
+                        if (auto unit = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                         {
                             //Cast affliction
                             DoCast(unit, RAND(SPELL_BROODAF_BLUE, SPELL_BROODAF_BLACK,

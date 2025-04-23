@@ -90,7 +90,7 @@ public:
         handler->PSendSysMessage(LANG_LFG_GROUP_INFO, grp->isLFGGroup(),
             state.c_str(), sLFGMgr->GetDungeon(guid));
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
             GetPlayerInfo(handler, itr->getSource());
 
         return true;

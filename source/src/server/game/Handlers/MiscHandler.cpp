@@ -1029,7 +1029,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (Battleground* bg = player->GetBattleground())
+    if (auto bg = player->GetBattleground())
         if (bg->GetStatus() == STATUS_IN_PROGRESS)
         {
             bg->HandleAreaTrigger(player, triggerId);
@@ -1397,7 +1397,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket& recvData)
     }
 
     player->BuildEnchantmentsInfoData(&data);
-    if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
+    if (auto guild = sGuildMgr->GetGuildById(player->GetGuildId()))
     {
         data << uint64(guild->GetGUID());
         data << uint32(guild->GetLevel());
@@ -1746,7 +1746,7 @@ void WorldSession::HandleSetDungeonDifficultyOpcode(WorldPacket& recvData)
     {
         if (group->IsLeader(_player->GetGUID()))
         {
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* groupGuy = itr->getSource();
                 if (!groupGuy)
@@ -1802,7 +1802,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket& recvData)
 
     if (Group* group = _player->GetGroup())
         if (group->IsLeader(_player->GetGUID()))
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* member = itr->getSource();
                 if (!member || !member->GetSession())
@@ -1821,7 +1821,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket& recvData)
         if (group->IsLeader(_player->GetGUID()))
         {
             group->SwitchBoundInstance(0, (Difficulty)oldDifficulty, (Difficulty)mode);
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* member = itr->getSource();
                 if (!member || !member->GetSession())
@@ -1896,7 +1896,7 @@ void WorldSession::HandleGuildAchievementProgressQuery(WorldPacket& recvData)
     uint32 achievementId;
     recvData >> achievementId;
 
-    if (Guild* guild = _player->GetGuild())
+    if (auto guild = _player->GetGuild())
         guild->GetAchievementMgr().SendAchievementInfo(_player, achievementId);
 }
 
@@ -2422,7 +2422,7 @@ void WorldSession::HandleChangeRaidDifficulty(WorldPacket& recvData)
             return;
         }
 
-    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* member = itr->getSource();
         if (!member || !member->GetSession())

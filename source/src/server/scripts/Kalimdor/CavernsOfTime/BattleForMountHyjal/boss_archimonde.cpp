@@ -119,7 +119,7 @@ public:
         {
             if (CheckTimer <= diff)
             {
-                if (Unit* Archimonde = Unit::GetUnit(*me, ArchimondeGUID))
+                if (auto Archimonde = Unit::GetUnit(*me, ArchimondeGUID))
                 {
                     if (Archimonde->HealthBelowPct(2) || !Archimonde->isAlive())
                         DoCast(me, SPELL_DENOUEMENT_WISP);
@@ -204,7 +204,7 @@ public:
         {
             if (ChangeTargetTimer <= diff)
             {
-                if (Unit* temp = Unit::GetUnit(*me, TargetGUID))
+                if (auto temp = Unit::GetUnit(*me, TargetGUID))
                 {
                     me->GetMotionMaster()->MoveFollow(temp, 0.0f, 0.0f);
                     TargetGUID = 0;
@@ -409,7 +409,7 @@ public:
                 summoned->CastSpell(summoned, SPELL_DOOMFIRE_SPAWN, false);
                 summoned->CastSpell(summoned, SPELL_DOOMFIRE, true, 0, 0, me->GetGUID());
 
-                if (Unit* DoomfireSpirit = Unit::GetUnit(*me, DoomfireSpiritGUID))
+                if (auto DoomfireSpirit = Unit::GetUnit(*me, DoomfireSpiritGUID))
                 {
                     summoned->GetMotionMaster()->MoveFollow(DoomfireSpirit, 0.0f, 0.0f);
                     DoomfireSpiritGUID = 0;
@@ -493,7 +493,7 @@ public:
                         if (temp)
                             WorldTreeGUID = temp->GetGUID();
 
-                        if (Unit* Nordrassil = Unit::GetUnit(*me, WorldTreeGUID))
+                        if (auto Nordrassil = Unit::GetUnit(*me, WorldTreeGUID))
                         {
                             Nordrassil->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             Nordrassil->SetDisplayId(11686);
@@ -502,7 +502,7 @@ public:
                         }
                     }
 
-                    if (Unit* Nordrassil = Unit::GetUnit(*me, WorldTreeGUID))
+                    if (auto Nordrassil = Unit::GetUnit(*me, WorldTreeGUID))
                     {
                         Nordrassil->CastSpell(me, SPELL_DRAIN_WORLD_TREE_2, true);
                         DrainNordrassilTimer = 1000;

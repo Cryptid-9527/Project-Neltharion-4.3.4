@@ -103,7 +103,7 @@ public:
             {
                 if (Group* group = CAST_PLR(done_by)->GetGroup())
                 {
-                    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+                    for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
                     {
                         Player* groupie = itr->getSource();
                         if (groupie &&
@@ -478,7 +478,7 @@ public:
             switch (waypointId)
             {
                 case 0:
-                    if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 10))
+                    if (auto Cage = me->FindNearestGameObject(GO_CAGE, 10))
                         Cage->SetGoState(GO_STATE_ACTIVE);
                     break;
                 case 2:
@@ -515,7 +515,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
             {
                 if (player->GetTeam() == ALLIANCE)
                     player->FailQuest(QUEST_EFTW_A);

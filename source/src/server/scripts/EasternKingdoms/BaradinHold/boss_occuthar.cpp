@@ -53,7 +53,7 @@ public:
         {
             _EnterCombat();
             for (int i = 0; i <= 6; ++i)
-                if (Creature* eye = me->SummonCreature(NPC_OCCUTHAR_EYE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto eye = me->SummonCreature(NPC_OCCUTHAR_EYE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                     eye->EnterVehicle(me, i);
                    // eye->CastSpell(me, SPELL_RIDE_VEHICLE);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -89,7 +89,7 @@ public:
                 summon->CastWithDelay(2500, summon, 97212, true);
 
                 for (uint8 i = 0; i < 7; ++i)
-                    if (Unit* seat = me->GetVehicleKit()->GetPassenger(i))
+                    if (auto seat = me->GetVehicleKit()->GetPassenger(i))
                         seat->CastSpell(summon, SPELL_FOCUSED_FIRE_CHANNEL, false);
                 DoCast(summon, SPELL_FOCUSED_FIRE);
             }
@@ -201,7 +201,7 @@ public:
 
         void HandleScript(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 if (target->GetTypeId() == TYPEID_PLAYER)
                     GetCaster()->CastSpell(target, uint32(GetEffectValue()), true);
         }
@@ -229,10 +229,10 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 if (Unit *caster = GetCaster())
-                    if (Creature* eye = caster->SummonCreature(NPC_EYE_OF_OCCUTHAR, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 12000))
+                    if (auto eye = caster->SummonCreature(NPC_EYE_OF_OCCUTHAR, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 12000))
                     {
                         eye->AddAura(SPELL_EYE_VISUAL, eye);
                         eye->CastSpell(target, SPELL_RIDE_VEHICLE_PLAYER, true);

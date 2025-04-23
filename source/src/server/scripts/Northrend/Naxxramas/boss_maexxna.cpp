@@ -106,12 +106,12 @@ public:
                         // TODO : Add missing text
                         for (uint8 i = 0; i < RAID_MODE(1, 2); ++i)
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true, -SPELL_WEB_WRAP))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0, true, -SPELL_WEB_WRAP))
                             {
                                 target->RemoveAura(RAID_MODE(SPELL_WEB_SPRAY_10, SPELL_WEB_SPRAY_25));
                                 uint8 pos = rand()%MAX_POS_WRAP;
                                 target->GetMotionMaster()->MoveJump(PosWrap[pos].GetPositionX(), PosWrap[pos].GetPositionY(), PosWrap[pos].GetPositionZ(), 20, 20);
-                                if (Creature* wrap = DoSummon(MOB_WEB_WRAP, PosWrap[pos], 0, TEMPSUMMON_CORPSE_DESPAWN))
+                                if (auto wrap = DoSummon(MOB_WEB_WRAP, PosWrap[pos], 0, TEMPSUMMON_CORPSE_DESPAWN))
                                     wrap->AI()->SetGUID(target->GetGUID());
                             }
                         }
@@ -169,14 +169,14 @@ public:
         {
             victimGUID = guid;
             if (me->m_spells[0] && victimGUID)
-                if (Unit* victim = Unit::GetUnit(*me, victimGUID))
+                if (auto victim = Unit::GetUnit(*me, victimGUID))
                     victim->CastSpell(victim, me->m_spells[0], true, NULL, NULL, me->GetGUID());
         }
 
         void JustDied(Unit* /*killer*/)
         {
             if (me->m_spells[0] && victimGUID)
-                if (Unit* victim = Unit::GetUnit(*me, victimGUID))
+                if (auto victim = Unit::GetUnit(*me, victimGUID))
                     victim->RemoveAurasDueToSpell(me->m_spells[0], me->GetGUID());
         }
     };

@@ -104,13 +104,13 @@ public:
                     case 1:
                         DoCast(me, SPELL_EXPLODE_CART, true);
                         DoCast(me, SPELL_SUMMON_CART, true);
-                        if (GameObject* cart = me->FindNearestGameObject(188160, 3))
+                        if (auto cart = me->FindNearestGameObject(188160, 3))
                             cart->SetUInt32Value(GAMEOBJECT_FACTION, 14);
                         phaseTimer = 3000;
                         phase = 2;
                         break;
                     case 2:
-                        if (GameObject* cart = me->FindNearestGameObject(188160, 3))
+                        if (auto cart = me->FindNearestGameObject(188160, 3))
                             cart->UseDoorOrButton();
                         DoCast(me, SPELL_EXPLODE_CART, true);
                         phaseTimer = 3000;
@@ -122,7 +122,7 @@ public:
                         phase = 4;
                     case 5:
                         DoCast(me, SPELL_SUMMON_WORM, true);
-                        if (Unit* worm = me->FindNearestCreature(26250, 3))
+                        if (auto worm = me->FindNearestCreature(26250, 3))
                         {
                             worm->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             worm->HandleEmoteCommand(EMOTE_ONESHOT_EMERGE);
@@ -132,7 +132,7 @@ public:
                         break;
                     case 6:
                         DoCast(me, SPELL_EXPLODE_CART, true);
-                        if (Unit* worm = me->FindNearestCreature(26250, 3))
+                        if (auto worm = me->FindNearestCreature(26250, 3))
                         {
                             me->Kill(worm);
                             worm->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
@@ -142,7 +142,7 @@ public:
                         break;
                     case 7:
                         DoCast(me, SPELL_EXPLODE_CART, true);
-                        if (Player* caster = Unit::GetPlayer(*me, casterGuid))
+                        if (auto caster = Unit::GetPlayer(*me, casterGuid))
                             caster->KilledMonster(me->GetCreatureTemplate(), me->GetGUID());
                         phaseTimer = 5000;
                         phase = 8;
@@ -185,7 +185,7 @@ public:
 
             if (who->GetEntry() == 25861 && me->IsWithinDistInMap(who, 10.0f))
             {
-                if (Unit* owner = who->GetOwner())
+                if (auto owner = who->GetOwner())
                 {
                     if (owner->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -480,7 +480,7 @@ public:
 
             if (who->GetEntry() == NPC_JENNY && me->IsWithinDistInMap(who, 10.0f))
             {
-                if (Unit* owner = who->GetOwner())
+                if (auto owner = who->GetOwner())
                 {
                     if (owner->GetTypeId() == TYPEID_PLAYER)
                     {
@@ -563,16 +563,16 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (GameObject* go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
+            if (auto go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
                 go_caribou->SetLootState(GO_JUST_DEACTIVATED);
 
             if (TempSummon* summon = me->ToTempSummon())
                 if (summon->isSummon())
-                    if (Unit* temp = summon->GetSummoner())
+                    if (auto temp = summon->GetSummoner())
                         if (temp->GetTypeId() == TYPEID_PLAYER)
                             CAST_PLR(temp)->KilledMonsterCredit(me->GetEntry(), 0);
 
-            if (GameObject* go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
+            if (auto go_caribou = me->GetMap()->GetGameObject(go_caribouGUID))
                 go_caribou->SetGoState(GO_STATE_READY);
         }
 
@@ -588,7 +588,7 @@ public:
                         phase = 2;
                         break;
                     case 2:
-                        if (GameObject* go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
+                        if (auto go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
                             me->GetMotionMaster()->MovePoint(0, go_fur->GetPositionX(), go_fur->GetPositionY(), go_fur->GetPositionZ());
                         phaseTimer = 1500;
                         phase = 3;
@@ -609,7 +609,7 @@ public:
                         phase = 6;
                         break;
                     case 6:
-                        if (GameObject* go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
+                        if (auto go_fur = me->FindNearestGameObject(GO_HIGH_QUALITY_FUR, 11.0f))
                             go_fur->Delete();
                         phaseTimer = 500;
                         phase = 7;
@@ -736,7 +736,7 @@ public:
                             break;
 
                         case 6:
-                            if (Player* player = GetPlayerForEscort())
+                            if (auto player = GetPlayerForEscort())
                                 player->AreaExploredOrEventHappens(QUEST_ESCAPE_WINTERFIN_CAVERNS);
                             IntroPhase = 7;
                             IntroTimer = 2500;
@@ -766,7 +766,7 @@ public:
     {
         if (quest->GetQuestId() == QUEST_ESCAPE_WINTERFIN_CAVERNS)
         {
-            if (GameObject* go = creature->FindNearestGameObject(GO_CAGE, 5.0f))
+            if (auto go = creature->FindNearestGameObject(GO_CAGE, 5.0f))
             {
                 go->SetRespawnTime(0);
                 go->SetGoType(GAMEOBJECT_TYPE_BUTTON);
@@ -855,7 +855,7 @@ public:
             {
                 if (me->IsWithinDistInMap(who, INTERACTION_DISTANCE))
                 {
-                    if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                    if (auto pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
                     {
                         pHarpooner->KilledMonsterCredit(26175, 0);
                         pHarpooner->RemoveAura(SPELL_DRAKE_HATCHLING_SUBDUED);
@@ -871,7 +871,7 @@ public:
         {
             if (WithRedDragonBlood && HarpoonerGUID && !me->HasAura(SPELL_RED_DRAGONBLOOD))
             {
-                if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                if (auto pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
                 {
                     EnterEvadeMode();
                     StartFollow(pHarpooner, 35, NULL);
@@ -994,7 +994,7 @@ public:
             {
                 case 3:
                     SetEscortPaused(true);
-                    if (Creature* arthas = me->SummonCreature(NPC_IMAGE_LICH_KING, 3730.313f, 3518.689f, 473.324f, 1.562f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                    if (auto arthas = me->SummonCreature(NPC_IMAGE_LICH_KING, 3730.313f, 3518.689f, 473.324f, 1.562f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                     {
                         arthasGUID = arthas->GetGUID();
                         arthas->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -1002,7 +1002,7 @@ public:
                         arthas->SetWalk(true);
                         arthas->GetMotionMaster()->MovePoint(0, 3737.374756f, 3564.841309f, 477.433014f);
                     }
-                    if (Creature* talbot = me->SummonCreature(NPC_COUNSELOR_TALBOT, 3747.23f, 3614.936f, 473.321f, 4.462012f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                    if (auto talbot = me->SummonCreature(NPC_COUNSELOR_TALBOT, 3747.23f, 3614.936f, 473.321f, 4.462012f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                     {
                         talbotGUID = talbot->GetGUID();
                         talbot->SetWalk(true);
@@ -1083,13 +1083,13 @@ public:
                         break;
 
                     case 6:
-                        if (Creature* arlos = me->SummonCreature(NPC_GENERAL_ARLOS, 3745.527100f, 3615.655029f, 473.321533f, 4.447805f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                        if (auto arlos = me->SummonCreature(NPC_GENERAL_ARLOS, 3745.527100f, 3615.655029f, 473.321533f, 4.447805f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                         {
                             arlosGUID = arlos->GetGUID();
                             arlos->SetWalk(true);
                             arlos->GetMotionMaster()->MovePoint(0, 3735.570068f, 3572.419922f, 477.441010f);
                         }
-                        if (Creature* leryssa = me->SummonCreature(NPC_LERYSSA, 3749.654541f, 3614.959717f, 473.323486f, 4.524959f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
+                        if (auto leryssa = me->SummonCreature(NPC_LERYSSA, 3749.654541f, 3614.959717f, 473.323486f, 4.524959f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 120000))
                         {
                             leryssaGUID = leryssa->GetGUID();
                             leryssa->SetWalk(false);
@@ -1176,9 +1176,9 @@ public:
                         break;
 
                    case 17:
-                        if (Creature* leryssa = me->GetCreature(*me, leryssaGUID))
+                        if (auto leryssa = me->GetCreature(*me, leryssaGUID))
                             leryssa->RemoveFromWorld();
-                        if (Creature* arlos= me->GetCreature(*me, arlosGUID))
+                        if (auto arlos= me->GetCreature(*me, arlosGUID))
                             arlos->RemoveFromWorld();
                         if (talbot)
                             talbot->RemoveFromWorld();
@@ -1197,16 +1197,16 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Creature* talbot = me->GetCreature(*me, talbotGUID))
+            if (auto talbot = me->GetCreature(*me, talbotGUID))
                 talbot->RemoveFromWorld();
 
-            if (Creature* leryssa = me->GetCreature(*me, leryssaGUID))
+            if (auto leryssa = me->GetCreature(*me, leryssaGUID))
                 leryssa->RemoveFromWorld();
 
-            if (Creature* arlos = me->GetCreature(*me, arlosGUID))
+            if (auto arlos = me->GetCreature(*me, arlosGUID))
                 arlos->RemoveFromWorld();
 
-            if (Creature* arthas = me->GetCreature(*me, arthasGUID))
+            if (auto arthas = me->GetCreature(*me, arthasGUID))
                 arthas->RemoveFromWorld();
         }
     };
@@ -1267,7 +1267,7 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (auto summoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->arthasInPosition = true;
         }
     };
@@ -1299,7 +1299,7 @@ public:
             me->AddUnitState(UNIT_STATE_STUNNED);
             me->CastSpell(me, SPELL_STUN, true);
             if (me->isSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (auto summoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->arlosInPosition = true;
         }
     };
@@ -1356,7 +1356,7 @@ public:
                 return;
 
             if (me->isSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (auto summoner = me->ToTempSummon()->GetSummoner())
                     CAST_AI(npc_thassarian::npc_thassarianAI, CAST_CRE(summoner)->AI())->talbotInPosition = true;
         }
 
@@ -1364,9 +1364,9 @@ public:
         {
             if (bCheck)
             {
-                if (Creature* leryssa = me->FindNearestCreature(NPC_LERYSSA, 50.0f, true))
+                if (auto leryssa = me->FindNearestCreature(NPC_LERYSSA, 50.0f, true))
                     leryssaGUID = leryssa->GetGUID();
-                if (Creature* arlos = me->FindNearestCreature(NPC_GENERAL_ARLOS, 50.0f, true))
+                if (auto arlos = me->FindNearestCreature(NPC_GENERAL_ARLOS, 50.0f, true))
                     arlosGUID = arlos->GetGUID();
                 bCheck = false;
             }
@@ -1417,7 +1417,7 @@ public:
             leryssa->SetWalk(false);
             leryssa->GetMotionMaster()->MovePoint(0, 3722.114502f, 3564.201660f, 477.441437f);
 
-            if (Player* player = killer->ToPlayer())
+            if (auto player = killer->ToPlayer())
                 player->RewardPlayerAndGroupAtEvent(NPC_PRINCE_VALANAR, 0);
         }
     };
@@ -1460,14 +1460,14 @@ public:
 
             if (!bDone)
             {
-                if (Creature* talbot = me->FindNearestCreature(NPC_PRINCE_VALANAR, 50.0f, true))
+                if (auto talbot = me->FindNearestCreature(NPC_PRINCE_VALANAR, 50.0f, true))
                     CAST_AI(npc_counselor_talbot::npc_counselor_talbotAI, talbot->GetAI())->bCheck = true;
 
                 me->AddUnitState(UNIT_STATE_STUNNED);
                 me->CastSpell(me, SPELL_STUN, true);
 
                 if (me->isSummon())
-                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    if (auto summoner = me->ToTempSummon()->GetSummoner())
                         CAST_AI(npc_thassarian::npc_thassarianAI, summoner->GetAI())->leryssaInPosition = true;
                 bDone = true;
             }
@@ -1475,7 +1475,7 @@ public:
             {
                 me->SetStandState(UNIT_STAND_STATE_SIT);
                 if (me->isSummon())
-                    if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                    if (auto summoner = me->ToTempSummon()->GetSummoner())
                     summoner->SetStandState(UNIT_STAND_STATE_SIT);
                 phaseTimer = 1500;
                 phase = 1;
@@ -1492,8 +1492,8 @@ public:
                 {
                     case 1:
                         if (me->isSummon())
-                            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
-                                if (Creature* thassarian = summoner->ToCreature())
+                            if (auto summoner = me->ToTempSummon()->GetSummoner())
+                                if (auto thassarian = summoner->ToCreature())
                                     thassarian->AI()->Talk(SAY_THASSARIAN_4);
                         phaseTimer = 5000;
                         ++phase;
@@ -1505,8 +1505,8 @@ public:
                         break;
                     case 3:
                         if (me->isSummon())
-                            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
-                                if (Creature* thassarian = summoner->ToCreature())
+                            if (auto summoner = me->ToTempSummon()->GetSummoner())
+                                if (auto thassarian = summoner->ToCreature())
                                     thassarian->AI()->Talk(SAY_THASSARIAN_5);
                         phaseTimer = 5000;
                         ++phase;
@@ -1518,8 +1518,8 @@ public:
                         break;
                     case 5:
                         if (me->isSummon())
-                            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
-                                if (Creature* thassarian = summoner->ToCreature())
+                            if (auto summoner = me->ToTempSummon()->GetSummoner())
+                                if (auto thassarian = summoner->ToCreature())
                                     thassarian->AI()->Talk(SAY_THASSARIAN_6);
                         phaseTimer = 5000;
                         ++phase;
@@ -1532,8 +1532,8 @@ public:
                         break;
                     case 7:
                         if (me->isSummon())
-                            if (Unit* summoner = me->ToTempSummon()->GetSummoner())
-                                if (Creature* thassarian = summoner->ToCreature())
+                            if (auto summoner = me->ToTempSummon()->GetSummoner())
+                                if (auto thassarian = summoner->ToCreature())
                                 {
                                     thassarian->AI()->Talk(SAY_THASSARIAN_7);
                                     CAST_AI(npc_thassarian::npc_thassarianAI, thassarian->GetAI())->phase = 16;
@@ -1604,7 +1604,7 @@ public:
                 me->UpdateEntry(NPC_CAPTURED_BERLY_SORCERER, TEAM_NEUTRAL);
                 DoCast(me, SPELL_COSMETIC_ENSLAVE_CHAINS_SELF, true);
 
-                if (Player* player = pCaster->ToPlayer())
+                if (auto player = pCaster->ToPlayer())
                     player->KilledMonsterCredit(NPC_CAPTURED_BERLY_SORCERER, 0);
 
                 bEnslaved = true;
@@ -1700,7 +1700,7 @@ public:
         {
             if (spell->Id == SPELL_NEURAL_NEEDLE && unit->GetTypeId() == TYPEID_PLAYER)
             {
-                if (Player* player = unit->ToPlayer())
+                if (auto player = unit->ToPlayer())
                 {
                     GotStinged(player->GetGUID());
                 }
@@ -1709,7 +1709,7 @@ public:
 
         void GotStinged(uint64 casterGUID)
         {
-            if (Player* caster = Player::GetPlayer(*me, casterGUID))
+            if (auto caster = Player::GetPlayer(*me, casterGUID))
             {
                 uint32 step = caster->GetAuraCount(SPELL_NEURAL_NEEDLE) + 1;
                 switch (step)
@@ -1798,7 +1798,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player=GetPlayerForEscort())
+            if (auto player=GetPlayerForEscort())
                 player->FailQuest(QUEST_ESCAPING_THE_MIST);
         }
 
@@ -1881,7 +1881,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 player->FailQuest(QUEST_GET_ME_OUTA_HERE);
         }
 
@@ -2112,9 +2112,9 @@ public:
                 DoCast(SPELL_SEAFORIUM_DEPTH_CHARGE_EXPLOSION);
                 for (uint8 i = 0; i < 4; ++i)
                 {
-                    if (Creature* cCredit = me->FindNearestCreature(25402 + i, 10.0f))//25402-25405 credit markers
+                    if (auto cCredit = me->FindNearestCreature(25402 + i, 10.0f))//25402-25405 credit markers
                     {
-                        if (Unit* uOwner = me->GetOwner())
+                        if (auto uOwner = me->GetOwner())
                         {
                             Player* owner = uOwner->ToPlayer();
                             if (owner && owner->GetQuestStatus(QUEST_BURY_THOSE_COCKROACHES) == QUEST_STATUS_INCOMPLETE)
@@ -2237,7 +2237,7 @@ public:
                         {
                             for (std::list<Creature*>::const_iterator itr = orbList.begin(); itr != orbList.end(); ++itr)
                             {
-                                if (Creature* pOrb = *itr)
+                                if (auto pOrb = *itr)
                                     if (pOrb->GetPositionY() > 6680)
                                         DoCast(pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
                             }
@@ -2251,7 +2251,7 @@ public:
                         {
                             for (std::list<Creature*>::const_iterator itr = orbList.begin(); itr != orbList.end(); ++itr)
                             {
-                                if (Creature* pOrb = *itr)
+                                if (auto pOrb = *itr)
                                     if ((pOrb->GetPositionY() < 6680) && (pOrb->GetPositionY() > 6630))
                                         DoCast(pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
                             }
@@ -2265,7 +2265,7 @@ public:
                         {
                             for (std::list<Creature*>::const_iterator itr = orbList.begin(); itr != orbList.end(); ++itr)
                             {
-                                if (Creature* pOrb = *itr)
+                                if (auto pOrb = *itr)
                                     if (pOrb->GetPositionY() < 6630)
                                         DoCast(pOrb, SPELL_TRANSITUS_SHIELD_BEAM);
                             }
@@ -2362,7 +2362,7 @@ public:
         {
             me->StopMoving();
             me->SetUInt32Value(UNIT_NPC_FLAGS, 0);
-            if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+            if (auto player = me->GetPlayer(*me, uiPlayerGUID))
             {
                 me->SetFacingToObject(player);
             }
@@ -2378,7 +2378,7 @@ public:
         void AttackPlayer()
         {
             me->setFaction(14);
-            if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+            if (auto player = me->GetPlayer(*me, uiPlayerGUID))
                 me->AI()->AttackStart(player);
         }
 
@@ -2414,7 +2414,7 @@ public:
                         {
                             case NPC_SALTY_JOHN_THORPE:
                                 Talk(SAY_HIDDEN_CULTIST_4);
-                                if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+                                if (auto player = me->GetPlayer(*me, uiPlayerGUID))
                                 {
                                     me->SetFacingToObject(player);
                                 }

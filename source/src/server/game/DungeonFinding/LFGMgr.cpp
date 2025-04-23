@@ -313,7 +313,7 @@ void LFGMgr::LoadLFGDungeons(bool reload /* = false */)
         CachedDungeonMapStore.clear();
         // Recalculate locked dungeons
         for (auto it = PlayersStore.begin(); it != PlayersStore.end(); ++it)
-            if (Player* player = ObjectAccessor::FindPlayer(it->first))
+            if (auto player = ObjectAccessor::FindPlayer(it->first))
                 InitializeLockedDungeons(player);
     }
 }
@@ -567,7 +567,7 @@ void LFGMgr::JoinLfg(Player* player, uint8 roles, LfgDungeonSet& dungeons, const
             uint8 memberCount = 0;
             for (auto itr = grp->GetFirstMember(); itr != NULL && joinData.result == LFG_JOIN_OK; itr = itr->next())
             {
-                if (Player* plrg = itr->getSource())
+                if (auto plrg = itr->getSource())
                 {
                     if (plrg->HasAura(LFG_SPELL_DUNGEON_DESERTER))
                         joinData.result = LFG_JOIN_PARTY_DESERTER;
@@ -677,7 +677,7 @@ void LFGMgr::JoinLfg(Player* player, uint8 roles, LfgDungeonSet& dungeons, const
         LfgUpdateData updateData = LfgUpdateData(LFG_UPDATETYPE_JOIN_QUEUE, dungeons, comment);
         for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
-            if (Player* plrg = itr->getSource())
+            if (auto plrg = itr->getSource())
             {
                 uint64 pguid = plrg->GetGUID();
                 plrg->GetSession()->SendLfgUpdateStatus(updateData, true);
@@ -1051,7 +1051,7 @@ void LFGMgr::MakeNewGroup(LfgProposal const& proposal)
             {
                 for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
                 {
-                    if (Player* plrg = itr->getSource())
+                    if (auto plrg = itr->getSource())
                     {
                         SetIsPremade(plrg->GetGUID(), true);
 
@@ -1123,7 +1123,7 @@ void LFGMgr::MakeNewGroup(LfgProposal const& proposal)
 
     // Teleport Player
     for (auto it = playersToTeleport.begin(); it != playersToTeleport.end(); ++it)
-        if (Player* player = ObjectAccessor::FindPlayer(*it))
+        if (auto player = ObjectAccessor::FindPlayer(*it))
             TeleportPlayer(player, false);
 }
 
@@ -1567,7 +1567,7 @@ void LFGMgr::FinishDungeon(uint64 gguid, const uint32 dungeonId)
         const LfgGuidSet& players = GetPlayers(gguid);
         for (auto it = players.begin(); it != players.end(); ++it)
         {
-            if (Player* player = ObjectAccessor::FindPlayer((*it)))
+            if (auto player = ObjectAccessor::FindPlayer((*it)))
             {
                 if (player->GetMapId() == 967)
                 {
@@ -2041,43 +2041,43 @@ bool LFGMgr::HasIgnore(uint64 guid1, uint64 guid2)
 
 void LFGMgr::SendLfgRoleChosen(uint64 guid, uint64 pguid, uint8 roles)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgRoleChosen(pguid, roles);
 }
 
 void LFGMgr::SendLfgRoleCheckUpdate(uint64 guid, LfgRoleCheck const& roleCheck)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgRoleCheckUpdate(roleCheck);
 }
 
 void LFGMgr::SendLfgUpdateStatus(uint64 guid, LfgUpdateData const& data, bool party)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgUpdateStatus(data, party);
 }
 
 void LFGMgr::SendLfgJoinResult(uint64 guid, LfgJoinResultData const& data)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgJoinResult(data);
 }
 
 void LFGMgr::SendLfgBootProposalUpdate(uint64 guid, LfgPlayerBoot const& boot)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgBootProposalUpdate(boot);
 }
 
 void LFGMgr::SendLfgUpdateProposal(uint64 guid, LfgProposal const& proposal)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgUpdateProposal(proposal);
 }
 
 void LFGMgr::SendLfgQueueStatus(uint64 guid, LfgQueueStatusData const& data)
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         player->GetSession()->SendLfgQueueStatus(data);
 }
 

@@ -91,7 +91,7 @@ class example_escort : public CreatureScript
                         me->SummonCreature(NPC_FELBOAR, me->GetPositionX()+5.0f, me->GetPositionY()+7.0f, me->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 3000);
                         break;
                     case 4:
-                        if (Player* player = GetPlayerForEscort())
+                        if (auto player = GetPlayerForEscort())
                         {
                             //pTmpPlayer is the target of the text
                             Talk(SAY_WP_3, player->GetGUID());
@@ -106,7 +106,7 @@ class example_escort : public CreatureScript
             {
                 if (HasEscortState(STATE_ESCORT_ESCORTING))
                 {
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                         Talk(SAY_AGGRO1, player->GetGUID());
                 }
                 else
@@ -123,7 +123,7 @@ class example_escort : public CreatureScript
             {
                 if (HasEscortState(STATE_ESCORT_ESCORTING))
                 {
-                    if (Player* player = GetPlayerForEscort())
+                    if (auto player = GetPlayerForEscort())
                     {
                         // not a likely case, code here for the sake of example
                         if (killer == me)

@@ -835,7 +835,7 @@ public:
 
         if (!err)
         {
-            for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* member = itr->getSource();
                 if (!member)
@@ -866,7 +866,7 @@ public:
             avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
         }
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -936,7 +936,7 @@ public:
         handler->PSendSysMessage("Hostil reference list of %s (guid %u)", target->GetName().c_str(), target->GetGUIDLow());
         while (ref)
         {
-            if (Unit* unit = ref->getSource()->getOwner())
+            if (auto unit = ref->getSource()->getOwner())
             {
                 ++count;
                 handler->PSendSysMessage("   %u.   %s   (guid %u)  - threat %f", count, unit->GetName().c_str(), unit->GetGUIDLow(), ref->getThreat());
@@ -1173,7 +1173,7 @@ public:
 
     static bool HandleDebugLoSCommand(ChatHandler* handler, char const* /*args*/)
     {
-        if (Unit* unit = handler->getSelectedUnit())
+        if (auto unit = handler->getSelectedUnit())
             handler->PSendSysMessage("Unit %s (GuidLow: %u) is %sin LoS", unit->GetName().c_str(), unit->GetGUIDLow(), handler->GetSession()->GetPlayer()->IsWithinLOSInMap(unit) ? "" : "not ");
         return true;
     }

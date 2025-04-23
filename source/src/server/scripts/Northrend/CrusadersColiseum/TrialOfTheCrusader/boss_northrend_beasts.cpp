@@ -214,7 +214,7 @@ class boss_gormok : public CreatureScript
 
                 for (uint8 i = 0; i < MAX_SNOBOLDS; i++)
                 {
-                    if (Creature* pSnobold = DoSpawnCreature(NPC_SNOBOLD_VASSAL, 0, 0, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
+                    if (auto pSnobold = DoSpawnCreature(NPC_SNOBOLD_VASSAL, 0, 0, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 0))
                     {
                         pSnobold->EnterVehicle(me, i);
                         pSnobold->SetInCombatWithZone();
@@ -228,7 +228,7 @@ class boss_gormok : public CreatureScript
                 // despawn the remaining passengers on death
                 if (damage >= me->GetHealth())
                     for (uint8 i = 0; i < MAX_SNOBOLDS; ++i)
-                        if (Unit* pSnobold = me->GetVehicleKit()->GetPassenger(i))
+                        if (auto pSnobold = me->GetVehicleKit()->GetPassenger(i))
                             pSnobold->ToCreature()->DespawnOrUnsummon();
             }
 
@@ -257,7 +257,7 @@ class boss_gormok : public CreatureScript
                         case EVENT_THROW:
                             for (uint8 i = 0; i < MAX_SNOBOLDS; ++i)
                             {
-                                if (Unit* pSnobold = me->GetVehicleKit()->GetPassenger(i))
+                                if (auto pSnobold = me->GetVehicleKit()->GetPassenger(i))
                                 {
                                     pSnobold->ExitVehicle();
                                     pSnobold->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -346,7 +346,7 @@ class npc_snobold_vassal : public CreatureScript
 
             void JustDied(Unit* /*killer*/) override
             {
-                if (Unit* target = ObjectAccessor::GetPlayer(*me, _targetGUID))
+                if (auto target = ObjectAccessor::GetPlayer(*me, _targetGUID))
                     if (target->isAlive())
                         target->RemoveAurasDueToSpell(SPELL_SNOBOLLED);
                 _instance->SetData(DATA_SNOBOLD_COUNT, DECREASE);
@@ -422,16 +422,16 @@ class npc_snobold_vassal : public CreatureScript
                     {
                         case EVENT_FIRE_BOMB:
                             if (me->GetVehicleBase())
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, -me->GetVehicleBase()->GetCombatReach(), true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, -me->GetVehicleBase()->GetCombatReach(), true))
                                     me->CastSpell(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), SPELL_FIRE_BOMB, true);
                             _events.ScheduleEvent(EVENT_FIRE_BOMB, 20*IN_MILLISECONDS);
                             return;
                         case EVENT_HEAD_CRACK:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 if (Player *player = target->ToPlayer())
                                 {
                                     if (target->GetVehicleKit())
-                                        if (Unit* pSnobold = target->GetVehicleKit()->GetPassenger(0))
+                                        if (auto pSnobold = target->GetVehicleKit()->GetPassenger(0))
                                         {
                                             _events.ScheduleEvent(EVENT_HEAD_CRACK, 2*IN_MILLISECONDS);
                                             break;
@@ -448,7 +448,7 @@ class npc_snobold_vassal : public CreatureScript
                             return;
                         case EVENT_BATTER:
                             // commented out while SPELL_SNOBOLLED gets fixed
-                            if (Unit* target = ObjectAccessor::GetPlayer(*me, _targetGUID))
+                            if (auto target = ObjectAccessor::GetPlayer(*me, _targetGUID))
                             {
                                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                                 target->AddAura(SPELL_BATTER, target);
@@ -536,7 +536,7 @@ struct boss_jormungarAI : public BossAI
 
     void JustDied(Unit* /*killer*/) override
     {
-        if (Creature* otherWorm = ObjectAccessor::GetCreature(*me, instance->GetData64(OtherWormEntry)))
+        if (auto otherWorm = ObjectAccessor::GetCreature(*me, instance->GetData64(OtherWormEntry)))
         {
             if (!otherWorm->isAlive())
             {
@@ -614,7 +614,7 @@ struct boss_jormungarAI : public BossAI
                     events.ScheduleEvent(EVENT_SLIME_POOL, 30*IN_MILLISECONDS, 0, PHASE_MOBILE);
                     return;
                 case EVENT_SUMMON_ACIDMAW:
-                    if (Creature* acidmaw = me->SummonCreature(NPC_ACIDMAW, ToCCommonLoc[9].GetPositionX(), ToCCommonLoc[9].GetPositionY(), ToCCommonLoc[9].GetPositionZ(), 5, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto acidmaw = me->SummonCreature(NPC_ACIDMAW, ToCCommonLoc[9].GetPositionX(), ToCCommonLoc[9].GetPositionY(), ToCCommonLoc[9].GetPositionZ(), 5, TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         acidmaw->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
                         acidmaw->SetReactState(REACT_AGGRESSIVE);
@@ -623,7 +623,7 @@ struct boss_jormungarAI : public BossAI
                     }
                     return;
                 case EVENT_SPRAY:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         DoCast(target, SpraySpell);
                     events.ScheduleEvent(EVENT_SPRAY, urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS), 0, PHASE_STATIONARY);
                     return;
@@ -853,7 +853,7 @@ class spell_gormok_fire_bomb : public SpellScriptLoader
             {
                 if (const WorldLocation* pos = GetExplTargetDest())
                 {
-                    if (Unit* caster = GetCaster())
+                    if (auto caster = GetCaster())
                         caster->SummonCreature(NPC_FIRE_BOMB, pos->GetPositionX(), pos->GetPositionY(), pos->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 30*IN_MILLISECONDS);
                 }
             }
@@ -1002,7 +1002,7 @@ class boss_icehowl : public CreatureScript
                                     events.ScheduleEvent(EVENT_FEROCIOUS_BUTT, urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS));
                                     return;
                                 case EVENT_ARCTIC_BREATH:
-                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                         DoCast(target, SPELL_ARCTIC_BREATH);
                                     return;
                                 case EVENT_WHIRL:
@@ -1029,7 +1029,7 @@ class boss_icehowl : public CreatureScript
                         _stage = 2;
                         break;
                     case 2:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         {
                             me->StopMoving();
                             me->AttackStop();
@@ -1053,7 +1053,7 @@ class boss_icehowl : public CreatureScript
                             {
                                 case EVENT_TRAMPLE:
                                 {
-                                    if (Unit* target = ObjectAccessor::GetPlayer(*me, _trampleTargetGUID))
+                                    if (auto target = ObjectAccessor::GetPlayer(*me, _trampleTargetGUID))
                                     {
                                         me->StopMoving();
                                         me->AttackStop();
@@ -1078,7 +1078,7 @@ class boss_icehowl : public CreatureScript
                     case 4:
                         me->StopMoving();
                         me->AttackStop();
-                        if (Player* target = ObjectAccessor::GetPlayer(*me, _trampleTargetGUID))
+                        if (auto target = ObjectAccessor::GetPlayer(*me, _trampleTargetGUID))
                             Talk(EMOTE_TRAMPLE_START, target->GetGUID());
                         me->GetMotionMaster()->MoveCharge(_trampleTargetX, _trampleTargetY, _trampleTargetZ, 42, 1);
                         me->SetTarget(0);
@@ -1097,7 +1097,7 @@ class boss_icehowl : public CreatureScript
                             Map::PlayerList const &lPlayers = me->GetMap()->GetPlayers();
                             for (Map::PlayerList::const_iterator itr = lPlayers.begin(); itr != lPlayers.end(); ++itr)
                             {
-                                if (Unit* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                 {
                                     if (player->isAlive() && player->IsWithinDistInMap(me, 6.0f))
                                     {

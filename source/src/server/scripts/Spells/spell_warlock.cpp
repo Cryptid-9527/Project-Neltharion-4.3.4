@@ -128,7 +128,7 @@ class spell_warl_banish : public SpellScriptLoader
             {
                 /// Casting Banish on a banished target will cancel the effect
                 /// Check if the target already has Banish, if so, do nothing.
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (target->GetAuraEffect(SPELL_AURA_SCHOOL_IMMUNITY, SPELLFAMILY_WARLOCK, 0, 0x08000000, 0))
                     {
@@ -259,7 +259,7 @@ class spell_warl_conflagrate : public SpellScriptLoader
 
             SpellCastResult CheckCast()
             {
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                     if (AuraEffect const* aurEff = target->GetAuraEffect(SPELL_WARLOCK_IMMOLATE, EFFECT_2, GetCaster()->GetGUID()))
                         immolateAmount = aurEff->GetAmount() * aurEff->GetTotalTicks();
 
@@ -271,7 +271,7 @@ class spell_warl_conflagrate : public SpellScriptLoader
                 if (!GetSpellInfo())
                     return;
 
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     int32 damage = CalculatePct(immolateAmount, GetSpellInfo()->Effects[EFFECT_1].CalcValue(GetCaster()));
                     damage *= target->GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, GetSpellInfo()->GetSchoolMask());
@@ -384,7 +384,7 @@ class spell_warl_create_healthstone : public SpellScriptLoader
 
             SpellCastResult CheckCast()
             {
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                 {
                     uint32 healthstoneId = sSpellMgr->GetSpellInfo(SPELL_WARLOCK_CREATE_HEALTHSTONE)->Effects[0].ItemType;
                     ItemPosCountVec dest;
@@ -483,7 +483,7 @@ class spell_warl_demonic_circle_summon : public SpellScriptLoader
 
             void HandleDummyTick(AuraEffect const* /*aurEff*/)
             {
-                if (GameObject* circle = GetTarget()->GetGameObject(GetId()))
+                if (auto circle = GetTarget()->GetGameObject(GetId()))
                 {
                     // Here we check if player is in demonic circle teleport range, if so add
                     // WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST; allowing him to cast the WARLOCK_DEMONIC_CIRCLE_TELEPORT.
@@ -527,9 +527,9 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
 
             void HandleTeleport(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Player* player = GetTarget()->ToPlayer())
+                if (auto player = GetTarget()->ToPlayer())
                 {
-                    if (GameObject* circle = player->GetGameObject(SPELL_WARLOCK_DEMONIC_CIRCLE_SUMMON))
+                    if (auto circle = player->GetGameObject(SPELL_WARLOCK_DEMONIC_CIRCLE_SUMMON))
                     {
                         player->NearTeleportTo(circle->GetPositionX(), circle->GetPositionY(), circle->GetPositionZ(), circle->GetOrientation());
                         player->RemoveAurasWithMechanic((1 << MECHANIC_SNARE));
@@ -551,7 +551,7 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(SPELL_WARLOCK_SOULBURN))
                     {
                         GetSpell()->SetChangeBySoulBurn(true);
@@ -562,8 +562,8 @@ class spell_warl_demonic_circle_teleport : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(SPELL_WARLOCK_DEMONIC_CIRCLE_TELEPORT))
-                    if (Player* player = GetCaster()->ToPlayer())
-                        if (GameObject* circle = player->GetGameObject(SPELL_WARLOCK_DEMONIC_CIRCLE_SUMMON))
+                    if (auto player = GetCaster()->ToPlayer())
+                        if (auto circle = player->GetGameObject(SPELL_WARLOCK_DEMONIC_CIRCLE_SUMMON))
                             if (player->IsWithinDist(circle, spellInfo->GetMaxRange(true)))
                                 return SPELL_CAST_OK;
                 return SPELL_FAILED_OUT_OF_RANGE;
@@ -615,7 +615,7 @@ class spell_warl_demon_soul : public SpellScriptLoader
             void OnHitTarget(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Creature* targetCreature = GetHitCreature())
+                if (auto targetCreature = GetHitCreature())
                 {
                     if (targetCreature->isPet())
                     {
@@ -676,7 +676,7 @@ class spell_warl_demonic_empowerment : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* targetCreature = GetHitCreature())
+                if (auto targetCreature = GetHitCreature())
                 {
                     if (targetCreature->isPet())
                     {
@@ -734,7 +734,7 @@ class spell_warl_everlasting_affliction : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     // Refresh corruption on target
                     if (AuraEffect* aur = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARLOCK, 0x2, 0, 0, GetCaster()->GetGUID()))
                     {
@@ -778,7 +778,7 @@ class spell_warl_soulfire : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (AuraEffect* aurEff = caster->GetAuraEffect(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, WARLOCK_ICON_SOULFIRE, EFFECT_0))
                     {
@@ -926,7 +926,7 @@ class spell_warl_haunt : public SpellScriptLoader
 
             void HandleRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 amount = aurEff->GetAmount();
                     GetTarget()->CastCustomSpell(caster, SPELL_WARLOCK_HAUNT_HEAL, &amount, NULL, NULL, true, NULL, aurEff, GetCasterGUID());
@@ -1039,7 +1039,7 @@ class spell_warl_life_tap : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     int32 damage = caster->CountPctFromMaxHealth(GetSpellInfo()->Effects[EFFECT_2].CalcValue());
                     int32 mana = CalculatePct(damage, GetSpellInfo()->Effects[EFFECT_1].CalcValue());
@@ -1125,7 +1125,7 @@ class spell_warl_seed_of_corruption : public SpellScriptLoader
                 }
 
                 if (inSoulBurn)
-                    if (Unit* target = GetHitUnit())
+                    if (auto target = GetHitUnit())
                         caster->CastSpell(target, 172, true);
             }
 
@@ -1156,7 +1156,7 @@ class spell_warl_wards : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // +80.70% from sp bonus
                     float bonus = 0.807f;
@@ -1240,7 +1240,7 @@ class spell_warl_soulshatter : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     if (target->CanHaveThreatList() && target->getThreatManager().getThreat(caster) > 0.0f)
                         caster->CastSpell(target, SPELL_WARLOCK_SOULSHATTER, true);
             }
@@ -1440,7 +1440,7 @@ class spell_warl_drain_life : public SpellScriptLoader
 
             void onPeriodicTick(AuraEffect const* /*aurEff*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     int32 baseAmount = caster->CalculateSpellDamage(caster, sSpellMgr->GetSpellInfo(SPELL_WARLOCK_DRAIN_LIFE_HEALTH), 0);
 
@@ -1566,7 +1566,7 @@ class spell_warl_soul_swap_exhale : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     dotsList = caster->GetSoulSwapDotsList();
                     caster->RemoveAurasDueToSpell(SPELL_WARLOCK_SOUL_SWAP_OVERRIDE);
@@ -1630,7 +1630,7 @@ class spell_warl_soul_swap_override : public SpellScriptLoader
 
             void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     caster->ClearSoulSwapDotsList();
 
@@ -1673,7 +1673,7 @@ class spell_warl_soulburn : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasSpell(SPELL_WARLOCK_SOULBURN_SEED_OF_CORRUPTION))
                         caster->CastSpell(caster, SPELL_WARLOCK_SOULBURN_SOC_VISUAL, true);
             }
@@ -1711,7 +1711,7 @@ class spell_warl_soulburn_seed_of_corruption : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(SPELL_WARLOCK_SOULBURN) && caster->HasSpell(SPELL_WARLOCK_SOULBURN_SEED_OF_CORRUPTION))
                     {
                         GetSpell()->SetChangeBySoulBurn(true);
@@ -1742,7 +1742,7 @@ class spell_warl_pandemic : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     // Refresh untable affliction on target
                     if (AuraEffect* aur = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARLOCK, 0, 0x100, 0, GetCaster()->GetGUID()))
                     {
@@ -1875,7 +1875,7 @@ class spell_warl_searing_pain : public SpellScriptLoader
 
             void HandleOnHit(SpellEffIndex /*effIndex*/)
             {
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                     if (GetHitUnit())
                         if (GetSpell()->IsChangeBySoulBurn())
                             caster->CastSpell(caster, SPELL_WARLOCK_SOULBURN_SEARING_PAIN, true);
@@ -1883,7 +1883,7 @@ class spell_warl_searing_pain : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(SPELL_WARLOCK_SOULBURN))
                     {
                         GetSpell()->SetChangeBySoulBurn(true);
@@ -1922,7 +1922,7 @@ class spell_warl_soul_harvest : public SpellScriptLoader
 
             void onPeriodicTick(AuraEffect const* /*aurEff*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->GetPower(POWER_SOUL_SHARDS) != caster->GetMaxPower(POWER_SOUL_SHARDS))
                         caster->CastSpell(caster, SPELL_WARLOCK_SOUL_HARVEST_SOULSHARD, true);
             }
@@ -1983,7 +1983,7 @@ class spell_warl_fel_armor : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (caster->HasAura(SPELL_WARLOCK_NETHER_WARD_TALENT)) // Nether Ward
                         amount = SPELL_WARLOCK_NETHER_WARD;
@@ -2109,7 +2109,7 @@ class spell_warl_cremation : public SpellScriptLoader
 
             void HandleScriptEffect(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     // Refresh immolate on target
                     if (AuraEffect* aur = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARLOCK, 0x00000004, 0, 0, GetCaster()->GetGUID()))
                     {
@@ -2197,7 +2197,7 @@ class spell_warl_demon_armor : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if (caster->HasAura(SPELL_WARLOCK_NETHER_WARD_TALENT)) // Nether Ward
                         amount = SPELL_WARLOCK_NETHER_WARD;
@@ -2232,8 +2232,8 @@ class spell_warl_soul_link : public SpellScriptLoader
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& canBeRecalculated)
             {
                 canBeRecalculated = false;
-                if (Unit* caster = GetCaster())
-                    if (Unit* owner = caster->GetOwner())
+                if (auto caster = GetCaster())
+                    if (auto owner = caster->GetOwner())
                         if (AuraEffect* glyph = owner->GetDummyAuraEffect(SPELLFAMILY_WARLOCK, 173, EFFECT_0))
                             amount += glyph->GetAmount();
             }
@@ -2271,7 +2271,7 @@ class spell_warl_shadowburn_aura : public SpellScriptLoader
             {
                 if (GetCaster() && GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_DEATH)
                 {
-                    if (Player* caster = GetCaster()->ToPlayer())
+                    if (auto caster = GetCaster()->ToPlayer())
                     {
                         if (caster->isHonorOrXPTarget(GetTarget()))
                         {
@@ -2350,7 +2350,7 @@ class spell_warl_devour: public SpellScriptLoader
             void HandleOnDispel()
             {
                 Unit* caster = GetCaster();
-                if (Unit* owner = caster->GetOwner())
+                if (auto owner = caster->GetOwner())
                 {
                     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(19658);
                     int32 heal_amount = spellInfo->Effects[EFFECT_0].CalcValue(caster) + (owner->SpellBaseDamageBonusDone(spellInfo->GetSchoolMask()) * 0.5f * 0.3f);
@@ -2415,7 +2415,7 @@ public:
 
         void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastSpell(caster, SPELL_WARLOCK_BANE_OF_HAVOC_TRACK, true);
         }
 
@@ -2453,7 +2453,7 @@ public:
 
             int32 damage = int32(eventInfo.GetDamageInfo()->GetDamage()) * 0.15f;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Unit::AuraList& scAuras = caster->GetSingleCastAuras();
 
@@ -2461,7 +2461,7 @@ public:
                 {
                     if ((*itr)->GetSpellInfo()->Id == SPELL_WARLOCK_BANE_OF_HAVOC)
                     {
-                        if (Unit* target = (*itr)->GetUnitOwner())
+                        if (auto target = (*itr)->GetUnitOwner())
                             if (caster->GetDistance2d(target) < 40.0f && target != eventInfo.GetActionTarget())
                                 caster->CastCustomSpell(target, SPELL_WARLOCK_BANE_OF_HAVOC_DAMAGE, &damage, NULL, NULL, true);
                         break;
@@ -2493,7 +2493,7 @@ public:
 
         void HandleHit(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 if (target->HasAuraState(AURA_STATE_CONFLAGRATE))
                     if (target->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_WARLOCK, 0x4, 0, 0))

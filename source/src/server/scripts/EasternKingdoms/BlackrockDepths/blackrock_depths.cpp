@@ -31,7 +31,7 @@ public:
 
     bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
         {
             if (instance->GetData(TYPE_LYCEUM) == IN_PROGRESS)
                 instance->SetData(TYPE_LYCEUM, DONE);
@@ -84,7 +84,7 @@ public:
 
     bool OnTrigger(Player* player, const AreaTriggerEntry* /*at*/)
     {
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
         {
             if (instance->GetData(TYPE_RING_OF_LAW) == IN_PROGRESS || instance->GetData(TYPE_RING_OF_LAW) == DONE)
                 return false;
@@ -163,7 +163,7 @@ public:
         //TODO: move them to center
         void SummonRingMob()
         {
-            if (Creature* tmp = me->SummonCreature(RingMob[MobSpawnId], 608.960f, -235.322f, -53.907f, 1.857f, TEMPSUMMON_DEAD_DESPAWN, 0))
+            if (auto tmp = me->SummonCreature(RingMob[MobSpawnId], 608.960f, -235.322f, -53.907f, 1.857f, TEMPSUMMON_DEAD_DESPAWN, 0))
                 RingMobGUID[MobCount] = tmp->GetGUID();
 
             ++MobCount;
@@ -175,7 +175,7 @@ public:
         //TODO: move them to center
         void SummonRingBoss()
         {
-            if (Creature* tmp = me->SummonCreature(RingBoss[rand()%6], 644.300f, -175.989f, -53.739f, 3.418f, TEMPSUMMON_DEAD_DESPAWN, 0))
+            if (auto tmp = me->SummonCreature(RingBoss[rand()%6], 644.300f, -175.989f, -53.739f, 3.418f, TEMPSUMMON_DEAD_DESPAWN, 0))
                 RingBossGUID = tmp->GetGUID();
 
             MobDeath_Timer = 2500;
@@ -1254,7 +1254,7 @@ public:
 
         void DoGo(uint32 id, uint32 state)
         {
-            if (GameObject* go = instance->instance->GetGameObject(instance->GetData64(id)))
+            if (auto go = instance->instance->GetGameObject(instance->GetData64(id)))
                 go->SetGoState((GOState)state);
         }
 
@@ -1307,7 +1307,7 @@ public:
                     DoGo(DATA_GO_BAR_KEG_TRAP, 0);               //doesn't work very well, leaving code here for future
                     //spell by trap has effect61, this indicate the bar go hostile
 
-                    if (Unit* tmp = Unit::GetUnit(*me, instance->GetData64(DATA_PHALANX)))
+                    if (auto tmp = Unit::GetUnit(*me, instance->GetData64(DATA_PHALANX)))
                         tmp->setFaction(14);
 
                     //for later, this event(s) has alot more to it.

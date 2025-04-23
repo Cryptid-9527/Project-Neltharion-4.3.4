@@ -196,7 +196,7 @@ public:
             if (Aura* aura = caster->GetAura(castedSpell))
             {
                 int32 duration = aura->GetMaxDuration();
-                if (Guild* guild = sGuildMgr->GetGuildById(caster->ToPlayer()->GetGuildId()))
+                if (auto guild = sGuildMgr->GetGuildById(caster->ToPlayer()->GetGuildId()))
                 {
                     if (guild->GetLevel() >= 22) //Guild Perk rank 2
                         duration *= 2;
@@ -236,7 +236,7 @@ public:
             if (!caster)
                 return;
 
-            if (Guild* guild = sGuildMgr->GetGuildById(caster->GetGuildId()))
+            if (auto guild = sGuildMgr->GetGuildById(caster->GetGuildId()))
             {
                 if (guild->GetLevel() >= 20)
                     caster->CastSpell(caster, caster->GetTeamId() == TEAM_ALLIANCE ? 92652 : 92654, true);
@@ -279,7 +279,7 @@ public:
             if (!caster)
                 return;
 
-            if (Guild* guild = sGuildMgr->GetGuildById(caster->GetGuildId()))
+            if (auto guild = sGuildMgr->GetGuildById(caster->GetGuildId()))
             {
                 if (guild->GetLevel() >= 20)
                     caster->CastSpell(caster, caster->GetTeamId() == TEAM_ALLIANCE ? 92645 : 92635, true);
@@ -311,7 +311,7 @@ public:
 
         SpellCastResult CheckZone()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->GetMap()->IsBattlegroundOrArena())
                     return SPELL_FAILED_NOT_IN_BATTLEGROUND;

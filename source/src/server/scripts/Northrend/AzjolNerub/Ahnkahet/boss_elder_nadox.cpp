@@ -324,7 +324,7 @@ public:
         if (!target)
             return false;
 
-        if (Creature* Nadox = target->ToCreature())
+        if (auto Nadox = target->ToCreature())
             if (Nadox->AI()->GetData(DATA_RESPECT_YOUR_ELDERS))
                 return true;
 

@@ -100,7 +100,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             Talk(SAY_DEATH);
-            if (Unit* midnight = Unit::GetUnit(*me, Midnight))
+            if (auto midnight = Unit::GetUnit(*me, Midnight))
                 midnight->Kill(midnight);
         }
 
@@ -148,7 +148,7 @@ public:
         {
             if (Phase == 2)
             {
-                if (Unit* unit = Unit::GetUnit(*me, Attumen))
+                if (auto unit = Unit::GetUnit(*me, Attumen))
                     Talk(SAY_MIDNIGHT_KILL, unit->GetGUID());
             }
         }
@@ -161,7 +161,7 @@ public:
             if (Phase == 1 && HealthBelowPct(95))
             {
                 Phase = 2;
-                if (Creature* attumen = me->SummonCreature(SUMMON_ATTUMEN, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                if (auto attumen = me->SummonCreature(SUMMON_ATTUMEN, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
                 {
                     Attumen = attumen->GetGUID();
                     attumen->AI()->AttackStart(me->getVictim());
@@ -171,7 +171,7 @@ public:
             }
             else if (Phase == 2 && HealthBelowPct(25))
             {
-                if (Unit* pAttumen = Unit::GetUnit(*me, Attumen))
+                if (auto pAttumen = Unit::GetUnit(*me, Attumen))
                     Mount(pAttumen);
             }
             else if (Phase == 3)
@@ -183,7 +183,7 @@ public:
                         Mount_Timer = 0;
                         me->SetVisible(false);
                         me->GetMotionMaster()->MoveIdle();
-                        if (Unit* pAttumen = Unit::GetUnit(*me, Attumen))
+                        if (auto pAttumen = Unit::GetUnit(*me, Attumen))
                         {
                             pAttumen->SetDisplayId(MOUNTED_DISPLAYID);
                             pAttumen->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);

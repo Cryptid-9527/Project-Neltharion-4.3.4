@@ -289,7 +289,7 @@ class boss_mandokir : public CreatureScript
                     if (!urand(0, 5))
                     {
                         Talk(SAY_LEVEL_UP);
-                        if (Creature* jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
+                        if (auto jindo = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_JINDO)))
                             sCreatureTextMgr->SendChat(jindo, JINDO_SAY_GRATS, 0, CHAT_MSG_ADDON, LANG_ADDON, TEXT_RANGE_MAP);
                     }
                 }
@@ -343,7 +343,7 @@ class boss_mandokir : public CreatureScript
             {
                 if (!SummonedSpirit.empty())
                 {
-                    if (Creature* chainedSpirit = ObjectAccessor::GetCreature(*me, Trinity::Containers::SelectRandomContainerElement(SummonedSpirit)))
+                    if (auto chainedSpirit = ObjectAccessor::GetCreature(*me, Trinity::Containers::SelectRandomContainerElement(SummonedSpirit)))
                     {
                         DiedPlayer _player;
                         _player.playerGUID = player->GetGUID();
@@ -389,7 +389,7 @@ class boss_mandokir : public CreatureScript
                         std::list<HostileReference*> const& tList = me->getThreatManager().getThreatList();
 
                         for (auto itr = tList.begin(); itr != tList.end(); ++itr)
-                            if (Unit* target = Unit::GetUnit((*me), (*itr)->getUnitGuid()))
+                            if (auto target = Unit::GetUnit((*me), (*itr)->getUnitGuid()))
                                 if (target->GetTypeId() == TYPEID_PLAYER && (target->isAlive()))
                                 {
                                     evade = false;
@@ -466,7 +466,7 @@ class boss_mandokir : public CreatureScript
                                 events.ScheduleEvent(eventId, 250);
                             else
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 {
                                     me->ClearUnitState(UNIT_STATE_CASTING);
                                     me->CastSpell(target, SPELL_BLOODLETTING, true);
@@ -670,7 +670,7 @@ class npc_ohgan : public CreatureScript
                     me->StopMoving();
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                     if (me->ToTempSummon())
-                        if (Creature* summoner = dynamic_cast<Creature *>(me->ToTempSummon()->GetSummoner()))
+                        if (auto summoner = dynamic_cast<Creature *>(me->ToTempSummon()->GetSummoner()))
                             summoner->AI()->DoAction(ACTION_OHGAN_IS_DEATH);
                 }
             }
@@ -754,7 +754,7 @@ class npc_chained_spirit : public CreatureScript
                 {
                     _revivePlayerGUID = guid;
 
-                    if (Player* player = ObjectAccessor::GetPlayer(*me, _revivePlayerGUID))
+                    if (auto player = ObjectAccessor::GetPlayer(*me, _revivePlayerGUID))
                     {
                         float x, y;
                         player->GetNearPoint2D(x, y, 5.0f, player->GetAngle(me));
@@ -763,7 +763,7 @@ class npc_chained_spirit : public CreatureScript
                     if (me->HasAura(96722))
                     {
                         me->RemoveAura(96722);
-                        if (Creature* c = me->FindNearestCreature(52157, 100))
+                        if (auto c = me->FindNearestCreature(52157, 100))
                         {
                             c->CastSpell(c, SPELL_OHGAN_ORDERS, true);
                             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
@@ -790,7 +790,7 @@ class npc_chained_spirit : public CreatureScript
 
                 if (point == POINT_START_REVIVE)
                 {
-                    if (Player* player = ObjectAccessor::GetPlayer(*me, _revivePlayerGUID))
+                    if (auto player = ObjectAccessor::GetPlayer(*me, _revivePlayerGUID))
                     {
                         Talk(0, _revivePlayerGUID);
                         player->RemoveAura(SPELL_BLOODLORD_AURA);
@@ -798,7 +798,7 @@ class npc_chained_spirit : public CreatureScript
                     }
 
                     if (Aura* aura = me->GetAura(SPELL_OHGAN_ORDERS_TRIGGER))
-                        if (Unit* caster = aura->GetCaster())
+                        if (auto caster = aura->GetCaster())
                         {
                             caster->CastSpell((Unit*)NULL, SPELL_OHGAN_ORDERS, true);
                             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);

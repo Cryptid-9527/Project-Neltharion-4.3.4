@@ -263,9 +263,9 @@ public:
             switch (actionId)
             {
                 case ACTION_TAKE_SPEAR:
-                    if (Creature* riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
+                    if (auto riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
                     {
-                        if (Creature* spear = me->SummonCreature(NPC_SHANNOX_GRIP_SPEAR, riplimb->GetPositionX(), riplimb->GetPositionY(), riplimb->GetPositionZ(), riplimb->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 1000))
+                        if (auto spear = me->SummonCreature(NPC_SHANNOX_GRIP_SPEAR, riplimb->GetPositionX(), riplimb->GetPositionY(), riplimb->GetPositionZ(), riplimb->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 1000))
                         {
                             spear->AddAura(SPELL_SPEAR_VISUAL, spear);
                             DoCast(spear, SPELL_CALL_SPEAR, true);
@@ -282,7 +282,7 @@ public:
             if (me->HealthBelowPctDamaged(30, damage) && !IsHeroic())
             {
                 for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                    if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                    if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                         if (summon->GetEntry() == NPC_RIPLIMB || summon->GetEntry() == NPC_RAGEFACE)
                             if (summon->isAlive())
                                 summon->AddAura(SPELL_FRENZIED_DEVOLUTION, summon);
@@ -304,7 +304,7 @@ public:
             events.ScheduleEvent(EVENT_CHECK_LOCATION, 1000);
             instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
             for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                     if (summon->GetEntry() == NPC_RIPLIMB || summon->GetEntry() == NPC_RAGEFACE)
                         if (summon->isAlive())
                         {
@@ -394,7 +394,7 @@ public:
                         events.ScheduleEvent(EVENT_ARCING_SLASH, 11000);
                         break;
                     case EVENT_HURL_SPEAR_OR_MAGMA_RUPTURE:
-                        if (Creature* riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
+                        if (auto riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
                         {
                             if (riplimb->isDead())
                             {
@@ -439,18 +439,18 @@ public:
                         events.ScheduleEvent(EVENT_IMMOLATION_TRAP, urand(10000, 35000));
                         break;
                     case EVENT_RIPLIMB_RESPAWN_H:
-                        if (Creature* riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
+                        if (auto riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
                         {
                             riplimb->Respawn();
                             riplimb->SetInCombatWithZone();
                         }
                         break;
                     case EVENT_CHECK_PET_DISTANCE:
-                        if (Creature* riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
+                        if (auto riplimb = Creature::GetCreature(*me, instance->GetData64(NPC_RIPLIMB)))
                             if (riplimb->isAlive() && riplimb->GetDistance2d(me) >= 60.f && !me->HasAura(SPELL_SEPERATION_ANXIETY))
                                 DoCast(me, SPELL_SEPERATION_ANXIETY);
 
-                        if (Creature* rageface = Creature::GetCreature(*me, instance->GetData64(NPC_RAGEFACE)))
+                        if (auto rageface = Creature::GetCreature(*me, instance->GetData64(NPC_RAGEFACE)))
                             if (rageface->isAlive() && rageface->GetDistance2d(me) >= 60.f && !me->HasAura(SPELL_SEPERATION_ANXIETY))
                                 DoCast(me, SPELL_SEPERATION_ANXIETY);
 
@@ -459,7 +459,7 @@ public:
                     case EVENT_BERSERK:
                         DoCast(me, SPELL_BERSERK, true);
                         for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                                 if (summon->GetEntry() == NPC_RIPLIMB || summon->GetEntry() == NPC_RAGEFACE)
                                     if (summon->isAlive())
                                         summon->CastSpell(summon, SPELL_BERSERK, true);
@@ -499,7 +499,7 @@ public:
                         uint32 spellId = sSpellMgr->GetSpellIdForDifficulty(SPELL_FRENZY_SHANNOX, me);
                         me->RemoveAuraFromStack(spellId);
                         for (auto i = summons.begin(); i != summons.end(); ++i)
-                            if (Creature* summon = ObjectAccessor::GetCreature(*me, *i))
+                            if (auto summon = ObjectAccessor::GetCreature(*me, *i))
                                 if (summon->GetEntry() == NPC_RIPLIMB)
                                 {
                                     summon->setDeathState(JUST_RESPAWNED);
@@ -586,7 +586,7 @@ public:
 
             events.Update(diff);
 
-            if (Creature* shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
+            if (auto shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
                 if (me->GetDistance2d(shannox) > 60.0f && !me->HasAura(SPELL_SEPERATION_ANXIETY))
                     DoCast(me, SPELL_SEPERATION_ANXIETY, true);
 
@@ -598,9 +598,9 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CHANGE_TARGET:
-                        if (Creature* shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
+                        if (auto shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
                         {
-                            if (Unit* target = shannox->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me, true)))
+                            if (auto target = shannox->AI()->SelectTarget(SELECT_TARGET_RANDOM, 0, NonTankTargetSelector(me, true)))
                             {
                                 me->getThreatManager().resetAllAggro();
                                 me->AddThreat(target, 50000000.0f);
@@ -678,7 +678,7 @@ public:
 
             events.Update(diff);
 
-            if (Creature* shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
+            if (auto shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
                 if (me->GetDistance2d(shannox) > 60.0f && !me->HasAura(SPELL_SEPERATION_ANXIETY))
                     DoCast(me, SPELL_SEPERATION_ANXIETY, true);
 
@@ -693,7 +693,7 @@ public:
                         me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_SNARE, true);
                         me->SetReactState(REACT_PASSIVE);
                         DoCast(me, SPELL_DOGGED_DETERMINATION, true);
-                        if (Creature* spear = me->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f, true))
+                        if (auto spear = me->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f, true))
                         {
                             me->GetMotionMaster()->Clear();
                             me->GetMotionMaster()->MovePoint(0, spear->GetPositionX(), spear->GetPositionY(), spear->GetPositionZ());
@@ -707,7 +707,7 @@ public:
                         events.ScheduleEvent(EVENT_LIMB_RIP, urand(6000, 10000));
                         break;
                     case EVENT_TAKING_SPEAR_DELAY:
-                        if (Creature* spear = me->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f, true))
+                        if (auto spear = me->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f, true))
                         {
                             if (me->GetExactDist2d(spear) <= 1.0f)
                             {
@@ -724,7 +724,7 @@ public:
                         }
                         break;
                     case EVENT_HURL_SPEAR_3:
-                        if (Creature* shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
+                        if (auto shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
                         {
                             if (!me->HasAura(CRYSTAL_PRISON_EFFECT))
                             {
@@ -811,7 +811,7 @@ public:
                     me->GetMap();
                     me->CastSpell(me->GetPositionX() + X, me->GetPositionY() + Y, Z, SPELL_MAGMA_RUPTURE_VISUAL, true);
                 }
-                if (Creature* shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
+                if (auto shannox = Creature::GetCreature(*me, instance->GetData64(DATA_SHANNOX)))
                     shannox->AI()->Talk(TALK_RUPTURE);
                
             }
@@ -884,7 +884,7 @@ public:
                         targetList.sort(Trinity::ObjectDistanceOrderPred(me));
                         for (std::list<WorldObject*>::const_iterator i = targetList.begin(); i != targetList.end(); ++i)
                         {
-                            if (Unit* target = (*i)->ToUnit())
+                            if (auto target = (*i)->ToUnit())
                             {
                                 if (!isDespawning && !target->HasAura(sSpellMgr->GetSpellIdForDifficulty(SPELL_WARY, me)) && target->isAlive())
                                 {
@@ -892,7 +892,7 @@ public:
                                     {
                                         if (!IsHeroic() || IsHeroic() && !target->HasAura(SPELL_DOGGED_DETERMINATION))
                                         {
-                                            if (Creature* prison = me->SummonCreature(NPC_CRYSTAL_PRISON, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                                            if (auto prison = me->SummonCreature(NPC_CRYSTAL_PRISON, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                                             {
                                                 target->SummonGameObject(GO_ICE_BLOCK_COLLISION, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, DAY);
                                                 prison->CastSpell(target, CRYSTAL_PRISON_EFFECT, true);
@@ -967,7 +967,7 @@ public:
                         targetList.sort(Trinity::ObjectDistanceOrderPred(me));
                         for (std::list<WorldObject*>::const_iterator i = targetList.begin(); i != targetList.end(); ++i)
                         {
-                            if (Unit* target = (*i)->ToUnit())
+                            if (auto target = (*i)->ToUnit())
                             {
                                 if (!isDespawning && !target->HasAura(sSpellMgr->GetSpellIdForDifficulty(SPELL_WARY, me)) && target->isAlive())
                                 {
@@ -1020,7 +1020,7 @@ private:
                 {
                     for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                     {
-                        if (Player* player = i->getSource())
+                        if (auto player = i->getSource())
                         {
                             if (player->GetQuestStatus(QUEST_DELEGATION) == QUEST_STATUS_INCOMPLETE) // legendary questline
                             {
@@ -1036,7 +1036,7 @@ private:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes mode)
         {
-            if (Unit* owner = GetUnitOwner())
+            if (auto owner = GetUnitOwner())
                 owner->RemoveAllGameObjects();
         }
 
@@ -1072,12 +1072,12 @@ public:
 
         void OnProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAurasDueToSpell(sSpellMgr->GetSpellIdForDifficulty(SPELL_FACE_RAGE_BUFF, caster));
                 caster->InterruptNonMeleeSpells(false, SPELL_FACE_RAGE);
 
-                if (Unit* attacker = eventInfo.GetDamageInfo()->GetAttacker())
+                if (auto attacker = eventInfo.GetDamageInfo()->GetAttacker())
                 {
                     caster->getThreatManager().resetAllAggro();
                     caster->AddThreat(attacker, 5000.0f);
@@ -1210,7 +1210,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes mode)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->TauntFadeOut(GetTarget());
         }
 
@@ -1269,7 +1269,7 @@ public:
 
         void OnSpellClick(Unit* player, bool& result) override
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
                 if (instance->IsEncounterInProgress())
                     return;
 
@@ -1302,7 +1302,7 @@ public:
             if (!caster)
                 return;
 
-            if (Creature* SpearNPC = caster->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f))
+            if (auto SpearNPC = caster->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f))
             {
                 SpearNPC->AddAura(SPELL_SPEAR_VISUAL, SpearNPC);
                 SpearNPC->RemoveAura(SPELL_FLAME_STRIKE_MARKER);
@@ -1315,7 +1315,7 @@ public:
             GetCaster()->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 1, uint32(0));
             GetCaster()->SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID + 2, uint32(0));
             if (GetCaster())
-                if (Creature* SpearNPC = GetCaster()->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f))
+                if (auto SpearNPC = GetCaster()->FindNearestCreature(NPC_SHANNOX_SPEAR, 200.0f))
                     SpearNPC->SetFacingTo(Position::NormalizeOrientation(GetCaster()->GetOrientation() + 3.14159f));
         }
 
@@ -1361,28 +1361,28 @@ public:
             if (me->HealthBelowPctDamaged(75, damage) && !motivation_1)
             {
                 //TC_LOG_ERROR("misc", "damaged below 75%");
-                if (Creature* animator_to_activate = SelectAnimatorToActivate(80.000f))
+                if (auto animator_to_activate = SelectAnimatorToActivate(80.000f))
                     DoCast(animator_to_activate, SPELL_BURNING_MOTIVATION);
                 motivation_1 = true;
             }
             if (me->HealthBelowPctDamaged(55, damage) && !motivation_2)
             {
                 //TC_LOG_ERROR("misc", "damaged below 55%");
-                if (Creature* animator_to_activate = SelectAnimatorToActivate(80.000f))
+                if (auto animator_to_activate = SelectAnimatorToActivate(80.000f))
                     DoCast(animator_to_activate, SPELL_BURNING_MOTIVATION);
                 motivation_2 = true;
             }
             if (me->HealthBelowPctDamaged(35, damage) && !motivation_3)
             {
                 //TC_LOG_ERROR("misc", "damaged below 35%");
-                if (Creature* animator_to_activate = SelectAnimatorToActivate(80.000f))
+                if (auto animator_to_activate = SelectAnimatorToActivate(80.000f))
                     DoCast(animator_to_activate, SPELL_BURNING_MOTIVATION);
                 motivation_3 = true;
             }
             if (me->HealthBelowPctDamaged(15, damage) && !motivation_4)
             {
                 //TC_LOG_ERROR("misc", "damaged below 10%");
-                if (Creature* animator_to_activate = SelectAnimatorToActivate(80.000f))
+                if (auto animator_to_activate = SelectAnimatorToActivate(80.000f))
                     DoCast(animator_to_activate, SPELL_BURNING_MOTIVATION);
                 motivation_4 = true;
             }
@@ -1577,7 +1577,7 @@ public:
                         me->SetReactState(REACT_AGGRESSIVE);
                         me->SetInCombatWithZone();
                         me->AddAura(SPELL_CONSUMING_FLAMES, me);
-                        if (Player* newTarget = me->FindNearestPlayer(100.000f))
+                        if (auto newTarget = me->FindNearestPlayer(100.000f))
                             AttackStart(newTarget);
                     }
                     break;
@@ -1816,7 +1816,7 @@ public:
                 {
                     //TC_LOG_ERROR("misc", "animator %u (entry %u) acknowledging fight commence.", me->GetGUID(), me->GetEntry());
                     m_fight_started = true;
-                    if (Creature* unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 30.0f))
+                    if (auto unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 30.0f))
                         me->CastSpell(unstableMagma, SPELL_ANIMATE_MAGMA, true);
                 }
                 break;
@@ -1824,13 +1824,13 @@ public:
                 //TC_LOG_ERROR("misc", "animator %u (entry %u) burning motivation acknowledged, removing aura", me->GetGUID(), me->GetEntry());
                 me->RemoveAurasDueToSpell(SPELL_DEFENSIVE_CASTING);
                 me->InterruptSpell(CURRENT_CHANNELED_SPELL);
-                if (Creature* unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 100.0f))
+                if (auto unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 100.0f))
                     DoCast(unstableMagma, SPELL_ANIMATE_MAGMA);
                 activated = true;
                 me->SetReactState(REACT_DEFENSIVE);
                 /*
                 me->SetInCombatWithZone();
-                if (Unit* inRangePlayerUnit = PlayerInRange(40.000f))
+                if (auto inRangePlayerUnit = PlayerInRange(40.000f))
                     AttackStart(inRangePlayerUnit);
                 */
                 break;
@@ -1865,7 +1865,7 @@ public:
             {
                 ////TC_LOG_ERROR("misc", "unit %u (entry %u) fight started is FALSE: %u", me->GetGUID(), me->GetEntry(), fight_started());
                 if (!me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
-                    if (Creature* unstableMagmaStalker = me->FindNearestCreature(NPC_UNSTABLE_MAGMA_STALKER, 100.0f))
+                    if (auto unstableMagmaStalker = me->FindNearestCreature(NPC_UNSTABLE_MAGMA_STALKER, 100.0f))
                     {
                         DoCast(unstableMagmaStalker, SPELL_FIRE_CHANNELING);
                         return;
@@ -1876,7 +1876,7 @@ public:
                 if (!activated)
                 {
                     if (!me->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
-                        if (Creature* unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 30.0f))
+                        if (auto unstableMagma = me->FindNearestCreature(NPC_UNSTABLE_MAGMA, 30.0f))
                             DoCast(unstableMagma, SPELL_ANIMATE_MAGMA);
                 }
                 else
@@ -1915,7 +1915,7 @@ public:
                 return;
 
             if (GetHitUnit())
-                if (Creature* animator_activated = GetHitUnit()->ToCreature())
+                if (auto animator_activated = GetHitUnit()->ToCreature())
                     if (animator_activated->AI())
                         animator_activated->AI()->DoAction(ACTION_FLAMEWAKER_BURNING_MOTIVATION);
         }
@@ -2005,8 +2005,8 @@ public:
 
         void OnHitTarget(SpellEffIndex effIndex)
         {
-            if (Unit* victim = GetHitUnit())
-                if (Unit* caster = GetCaster())
+            if (auto victim = GetHitUnit())
+                if (auto caster = GetCaster())
                     if
                         (victim->ToPlayer()
                             || caster->GetDistance(victim) > 40.00f
@@ -2042,7 +2042,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* victim = GetCaster())
+            if (auto victim = GetCaster())
                 if (victim->ToCreature() && !victim->isPet())
                     return SPELL_FAILED_DONT_REPORT;
             return SPELL_CAST_OK;

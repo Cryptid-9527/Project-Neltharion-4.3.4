@@ -462,7 +462,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -611,7 +611,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -736,7 +736,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -843,7 +843,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -1124,7 +1124,7 @@ public:
                     auto list_of_players = me->GetPlayersInRange(40.f, true);
 
                     /*if (me->getVictim())
-                        if (Player* player = me->getVictim()->ToPlayer())
+                        if (auto player = me->getVictim()->ToPlayer())
                             list_of_players.remove(player);*/
 
                     if (list_of_players.size())
@@ -1263,7 +1263,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -1391,7 +1391,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -1655,7 +1655,7 @@ public:
             for (auto i = 0; i < 3; ++i)
                 if ((BeguilerGUID[i] == NULL) || !me->GetCreature((*me), BeguilerGUID[i]))
                 {
-                    if (Creature* begger = me->SummonCreature(CREATURE_BEGUILER, BeguilarSpawns[i + set], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
+                    if (auto begger = me->SummonCreature(CREATURE_BEGUILER, BeguilarSpawns[i + set], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
                     {
                         BeguilerGUID[i] = begger->GetGUID();
                         begger->SetFacingTo(begger->GetAngle(me));
@@ -1666,13 +1666,13 @@ public:
                     switch (i)
                     {
                     case 0:
-                        if (Creature* leftChainer = me->GetCreature((*me), BeguilerGUID[i]))
+                        if (auto leftChainer = me->GetCreature((*me), BeguilerGUID[i]))
                             if (leftChainer->isAlive())
                                 if (!me->HasAura(SPELL_LEFT_HAND_CHAIN))
                                     leftChainer->CastSpell(me, SPELL_LEFT_HAND_CHAIN, true);
                         break;
                     case 2:
-                        if (Creature* rightChainer = me->GetCreature((*me), BeguilerGUID[i]))
+                        if (auto rightChainer = me->GetCreature((*me), BeguilerGUID[i]))
                             if (rightChainer->isAlive())
                                 if (!me->HasAura(SPELL_RIGHT_HAND_CHAIN))
                                     rightChainer->CastSpell(me, SPELL_RIGHT_HAND_CHAIN, true);
@@ -1696,7 +1696,7 @@ public:
                     if (!me->isInCombat())
                     {
                         SummonAds();
-                        if (Creature* middleAbuser = me->GetCreature((*me), BeguilerGUID[1]))
+                        if (auto middleAbuser = me->GetCreature((*me), BeguilerGUID[1]))
                         {
                             me->RemoveAurasDueToSpell(SPELL_CHAINED_MIND);
                             me->RemoveAurasDueToSpell(SPELL_BEGUILE);
@@ -2673,7 +2673,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -2789,7 +2789,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -2905,7 +2905,7 @@ public:
         {
             if (UpdateVictim())
             {
-                if (Unit* victim = me->getVictim())
+                if (auto victim = me->getVictim())
                     if (me->GetDistance(victim) <= sSpellMgr->GetSpellInfo(spell)->GetMaxRange())
                     {
                         if (!me->HasUnitState(UNIT_STATE_CASTING))
@@ -2951,12 +2951,12 @@ public:
 
         void HandleDummyHitTarget(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 /*
                 if (Vehicle* veh = caster->GetVehicleKit())
-                    if (Unit* player = veh->GetPassenger(0))
-                        if (Unit* targ = GetHitUnit())
-                            if (Creature* target = targ->ToCreature())
+                    if (auto player = veh->GetPassenger(0))
+                        if (auto targ = GetHitUnit())
+                            if (auto target = targ->ToCreature())
                 */
             {
                 caster->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -3096,7 +3096,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             //myCorpseSpawner->GetAI()->DoAction(ACTION_RESPAWN_DRAKE);
-            if (Creature* corpseSpawner = me->FindNearestCreature(NPC_BATTERED_TRIGGER, 2.0f))
+            if (auto corpseSpawner = me->FindNearestCreature(NPC_BATTERED_TRIGGER, 2.0f))
             {
                 Position pos;
                 corpseSpawner->GetPosition(&pos);
@@ -3257,7 +3257,7 @@ public:
                 if (Vehicle* kit = me->GetVehicleKit())
                     kit->RemoveAllPassengers();
                 Position pos = me->GetHomePosition();
-                if (Creature* newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
                     newDrake->SetPhaseMask(1, true);
                 me->DespawnOrUnsummon(1500);
             }
@@ -3268,7 +3268,7 @@ public:
                 if (Vehicle* kit = me->GetVehicleKit())
                     kit->RemoveAllPassengers();
                 Position pos = me->GetHomePosition();
-                if (Creature* newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
                     newDrake->SetPhaseMask(1, true);
                 me->DespawnOrUnsummon(3000);
             }
@@ -3279,7 +3279,7 @@ public:
                 if (Vehicle* kit = me->GetVehicleKit())
                     kit->RemoveAllPassengers();
                 Position pos = me->GetHomePosition();
-                if (Creature* newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto newDrake = me->SummonCreature(NPC_BATTERED_DRAKE, pos, TEMPSUMMON_MANUAL_DESPAWN))
                     newDrake->SetPhaseMask(1, true);
                 me->DespawnOrUnsummon(3000);
             }
@@ -3311,7 +3311,7 @@ public:
 
         void HandleDummy(SpellEffIndex effIndex)
         {
-            if (Creature* creature = GetHitCreature())
+            if (auto creature = GetHitCreature())
                 creature->setRegeneratingHealth(false);
         }
 
@@ -3338,7 +3338,7 @@ public:
 
         void HandleDmg(SpellEffIndex effIndex)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 SetHitDamage(target->GetMaxHealth() * ((float)GetSpellInfo()->Effects[0].BasePoints / 100.f));
         }
 
@@ -3388,12 +3388,12 @@ public:
             if (GetSpellInfo()->Id != 74039)
                 return;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->AddSpellCooldown(74039, 0, time(NULL) + 2);
                 if (Vehicle* kit = caster->GetVehicleKit())
-                    if (Unit* casterRider = kit->GetPassenger(0))
-                        if (Player* casterPlayer = casterRider->ToPlayer())
+                    if (auto casterRider = kit->GetPassenger(0))
+                        if (auto casterPlayer = casterRider->ToPlayer())
                         {
                             caster->AddSpellAndCategoryCooldowns(GetSpellInfo(), NULL, GetSpell(), false);
                             casterPlayer->AddSpellAndCategoryCooldowns(GetSpellInfo(), NULL, GetSpell(), false);
@@ -3405,7 +3405,7 @@ public:
                             return;
                         }
 
-                if (Player* casterPlayer = caster->ToPlayer())
+                if (auto casterPlayer = caster->ToPlayer())
                 {
                     WorldPacket data;
                     casterPlayer->BuildCooldownPacket(data, 0x3, 74039, 2000);
@@ -4002,7 +4002,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* c = GetCaster())
+            if (auto c = GetCaster())
                 if ((c->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED)) || c->HasAuraWithMechanic(MECHANIC_DISARM))
                 {
                     c->RemoveAurasDueToSpell(SPELL_MEAT_GRINDER);

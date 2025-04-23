@@ -207,7 +207,7 @@ public:
                     {
                         if (Creature *c = me->FindNearestCreature(NPC_FIXATE_STALKER, 100))
                             c->DespawnOrUnsummon();
-                        if (Unit* tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
+                        if (auto tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 500.0f, true))
                         {
                             tempTarget->CastSpell(tempTarget, 74926, true);
                             me->CastSpell(me, SPELL_PERSONAL_PHALANX_FIX, true);
@@ -217,7 +217,7 @@ public:
                     }
                     case EVENT_IMPALING_SLAM:
                     {
-                        if (Unit* tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto tempTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         {
                             DoCast(tempTarget, SPELL_IMPALING_SLAM);
                             Talk(EMOTE_IMPALE, tempTarget->GetGUID());

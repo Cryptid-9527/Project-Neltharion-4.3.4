@@ -140,7 +140,7 @@ class boss_auriaya : public CreatureScript
 
                 // Guardians are despawned by _Reset, but since they walk around with Auriaya, summon them again.
                 for (uint8 i = 0; i < SENTRY_NUMBER; i++)
-                    if (Creature* sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, *me, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000)) // 30 secs equal the automated respawn time (due to script)
+                    if (auto sentry = me->SummonCreature(NPC_SANCTUM_SENTRY, *me, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 30000)) // 30 secs equal the automated respawn time (due to script)
                     {
                         sentry->GetMotionMaster()->MoveFollow(me, (i < 2) ? 0.5f : 4.0f, M_PI - i - 1.5f);
                         summons.Summon(sentry);
@@ -170,7 +170,7 @@ class boss_auriaya : public CreatureScript
             {
                 summons.Summon(summoned);
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                 {
                     summoned->AI()->AttackStart(target);
                     summoned->AddThreat(target, 250.0f);
@@ -283,11 +283,11 @@ class boss_auriaya : public CreatureScript
                             // TODO: Check if this works correctly. Otherwise, we will summon those directly.
                             Talk(EMOTE_DEFENDER);
                             DoCast(SPELL_DEFENDER_TRIGGER);
-                            if (Creature* trigger = me->FindNearestCreature(NPC_FERAL_DEFENDER_TRIGGER, 50.0f, true))
+                            if (auto trigger = me->FindNearestCreature(NPC_FERAL_DEFENDER_TRIGGER, 50.0f, true))
                                 DoCast(trigger, SPELL_ACTIVATE_DEFENDER, true);
                             break;
                         case EVENT_SUMMON_SWARMING_GUARDIAN:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_SUMMON_SWARMING_GUARDIAN);
                             events.ScheduleEvent(EVENT_SUMMON_SWARMING_GUARDIAN, urand(30000, 45000));
                             break;
@@ -414,7 +414,7 @@ class npc_sanctum_sentry : public CreatureScript
                             events.ScheduleEvent(EVENT_RIP, urand(12000, 15000));
                             break;
                         case EVENT_POUNCE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                             {
                                 DoResetThreat();
                                 me->AddThreat(target, 100.0f);
@@ -523,7 +523,7 @@ class npc_feral_defender : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_FERAL_POUNCE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                             {
                                 DoResetThreat();
                                 me->AddThreat(target, 100.0f);
@@ -533,7 +533,7 @@ class npc_feral_defender : public CreatureScript
                             events.ScheduleEvent(EVENT_FERAL_POUNCE, urand(10000, 12000));
                             break;
                         case EVENT_RUSH:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                             {
                                 DoResetThreat();
                                 me->AddThreat(target, 100.0f);
@@ -639,7 +639,7 @@ class achievement_nine_lives : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Auriaya = target->ToCreature())
+            if (auto Auriaya = target->ToCreature())
                 if (Auriaya->AI()->GetData(DATA_NINE_LIVES))
                     return true;
 
@@ -657,7 +657,7 @@ class achievement_crazy_cat_lady : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Auriaya = target->ToCreature())
+            if (auto Auriaya = target->ToCreature())
                 if (Auriaya->AI()->GetData(DATA_CRAZY_CAT_LADY))
                     return true;
 

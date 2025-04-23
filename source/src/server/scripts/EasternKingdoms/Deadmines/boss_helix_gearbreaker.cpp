@@ -212,7 +212,7 @@ public:
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                     player->ResetAchievementCriteriaByEntry(16209);
             }
         }
@@ -239,7 +239,7 @@ public:
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                 {
                     if (player->GetVehicleKit())
                     {
@@ -253,7 +253,7 @@ public:
             }
             _JustDied();
 
-            if (Creature* Defias1 = me->SummonCreature(48421, Defias_RP_spawns[0]))
+            if (auto Defias1 = me->SummonCreature(48421, Defias_RP_spawns[0]))
                 Defias1->SetDisplayId(2317);
         }
 
@@ -301,7 +301,7 @@ public:
                         if (me->GetVehicle()->GetBase())
                         {
                             targetGUID = me->GetVehicle()->GetBase()->GetGUID();
-                            if (Player* player = ObjectAccessor::GetPlayer(*me, targetGUID))
+                            if (auto player = ObjectAccessor::GetPlayer(*me, targetGUID))
                             {
                                 player->RemoveVehicleKit();
                                 WorldPacket data(SMSG_PLAYER_VEHICLE_DATA, player->GetPackGUID().size() + 4);
@@ -509,7 +509,7 @@ public:
                     {
                         DoStartMovement(me->getVictim());
                         for (int i = 0; i < 5; i++)
-                            if (Creature* rat = me->SummonCreature(NPC_MINE_RAT, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
+                            if (auto rat = me->SummonCreature(NPC_MINE_RAT, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation()))
                                 rat->AI()->AttackStart(me->getVictim());
                     }
                     break;
@@ -759,7 +759,7 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* aurEff)
         {
-            if (Unit* target = GetUnitOwner())
+            if (auto target = GetUnitOwner())
                 target->CastSpell(target, SPELL_CHEST_BOMB_EXPLOSION, true);
         }
 
@@ -960,7 +960,7 @@ public:
             if (type == EFFECT_MOTION_TYPE || type == POINT_MOTION_TYPE)
             {
                 if (id == 1004)//bomb just landed
-                    if (Creature* helix = me->FindNearestCreature(NPC_HELIX, 200.f, true))
+                    if (auto helix = me->FindNearestCreature(NPC_HELIX, 200.f, true))
                         helix->AI()->SummonedMovementInform(me, EFFECT_MOTION_TYPE, id);
             }
         }
@@ -968,7 +968,7 @@ public:
         void InitializeAI()
         {
             if (instance)
-                if (Creature* helix = me->FindNearestCreature(NPC_HELIX, 200.f, true))
+                if (auto helix = me->FindNearestCreature(NPC_HELIX, 200.f, true))
                     helix->AI()->JustSummoned(me);
         }
 

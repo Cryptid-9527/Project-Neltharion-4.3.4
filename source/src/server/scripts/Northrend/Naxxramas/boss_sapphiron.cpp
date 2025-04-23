@@ -139,7 +139,7 @@ class boss_sapphiron : public CreatureScript
                     IceBlockMap::iterator itr = _iceblocks.find(target->GetGUID());
                     if (itr != _iceblocks.end() && !itr->second)
                     {
-                        if (GameObject* iceblock = me->SummonGameObject(GO_ICEBLOCK, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, 0, 0, 0, 0, 25000))
+                        if (auto iceblock = me->SummonGameObject(GO_ICEBLOCK, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, 0, 0, 0, 0, 25000))
                             itr->second = iceblock->GetGUID();
                     }
                 }
@@ -203,10 +203,10 @@ class boss_sapphiron : public CreatureScript
             {
                 for (IceBlockMap::const_iterator itr = _iceblocks.begin(); itr != _iceblocks.end(); ++itr)
                 {
-                    if (Player* player = ObjectAccessor::GetPlayer(*me, itr->first))
+                    if (auto player = ObjectAccessor::GetPlayer(*me, itr->first))
                         player->RemoveAura(SPELL_ICEBOLT);
 
-                    if (GameObject* go = ObjectAccessor::GetGameObject(*me, itr->second))
+                    if (auto go = ObjectAccessor::GetGameObject(*me, itr->second))
                         go->Delete();
                 }
                 _iceblocks.clear();
@@ -269,7 +269,7 @@ class boss_sapphiron : public CreatureScript
                                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true);
                                 if (!target)
                                     target = me->getVictim();
-                                if (Creature* summon = DoSummon(NPC_BLIZZARD, target, 0.0f, urand(25, 30) * IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
+                                if (auto summon = DoSummon(NPC_BLIZZARD, target, 0.0f, urand(25, 30) * IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                                     summon->GetMotionMaster()->MoveFollow(target, 0, 0);
                                 events.ScheduleEvent(EVENT_BLIZZARD, RAID_MODE(20, 7) * IN_MILLISECONDS, 0, PHASE_GROUND);
                                 break;
@@ -380,7 +380,7 @@ class boss_sapphiron : public CreatureScript
 
                     for (IceBlockMap::const_iterator itr = _iceblocks.begin(); itr != _iceblocks.end(); ++itr)
                     {
-                        if (GameObject* go = GameObject::GetGameObject(*me, itr->second))
+                        if (auto go = GameObject::GetGameObject(*me, itr->second))
                         {
                             if (go->IsInBetween(me, target, 2.0f)
                                 && me->GetExactDist2d(target->GetPositionX(), target->GetPositionY()) - me->GetExactDist2d(go->GetPositionX(), go->GetPositionY()) < 5.0f)

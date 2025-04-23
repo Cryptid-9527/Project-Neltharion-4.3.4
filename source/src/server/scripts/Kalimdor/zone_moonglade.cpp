@@ -327,7 +327,7 @@ public:
             for (std::list<Player*>::const_iterator itr = playerOnQuestList.begin(); itr != playerOnQuestList.end(); ++itr)
             {
                 // Check if found player target has active quest
-                if (Player* player = (*itr))
+                if (auto player = (*itr))
                 {
                     if (player->GetQuestStatus(10965) == QUEST_STATUS_INCOMPLETE)
                     {
@@ -471,7 +471,7 @@ public:
                         switch (Step)
                         {
                             case 0:
-                                if (Creature* mob = me->SummonCreature(ASPECT_RAVEN, AspectRavenSummon, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000))
+                                if (auto mob = me->SummonCreature(ASPECT_RAVEN, AspectRavenSummon, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 2000))
                                 {
                                     mob->AddThreat(me, 10000.0f);
                                     mob->AI()->AttackStart(me);
@@ -598,7 +598,7 @@ public:
             {
                 me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation());
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-                if (Player* player = me->SelectNearestPlayer(40.0f))
+                if (auto player = me->SelectNearestPlayer(40.0f))
                     AttackStart(player);
             }
         }
@@ -640,7 +640,7 @@ public:
                     events.ScheduleEvent(EVENT_CAST_CLEAVE, urand(8000, 10000));
                     break;
                 case EVENT_CAST_STARFALL:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         DoCast(target, SPELL_OMEN_STARFALL);
                     events.ScheduleEvent(EVENT_CAST_STARFALL, urand(14000, 16000));
                     break;
@@ -679,13 +679,13 @@ public:
 
             if (events.ExecuteEvent() == EVENT_DESPAWN)
             {
-                if (GameObject* trap = me->FindNearestGameObject(GO_ELUNE_TRAP_1, 5.0f))
+                if (auto trap = me->FindNearestGameObject(GO_ELUNE_TRAP_1, 5.0f))
                     trap->RemoveFromWorld();
 
-                if (GameObject* trap = me->FindNearestGameObject(GO_ELUNE_TRAP_2, 5.0f))
+                if (auto trap = me->FindNearestGameObject(GO_ELUNE_TRAP_2, 5.0f))
                     trap->RemoveFromWorld();
 
-                if (Creature* omen = me->FindNearestCreature(NPC_OMEN, 5.0f, false))
+                if (auto omen = me->FindNearestCreature(NPC_OMEN, 5.0f, false))
                     omen->DespawnOrUnsummon();
 
                 me->DespawnOrUnsummon();

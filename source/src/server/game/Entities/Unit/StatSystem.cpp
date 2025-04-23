@@ -1175,7 +1175,7 @@ void Guardian::UpdateMaxHealth()
     // Glyph of Voidwalker
     if (GetEntry() == ENTRY_VOIDWALKER)
     {
-        if (Player* owner = GetSpellModOwner())
+        if (auto owner = GetSpellModOwner())
             if (AuraEffect* auraEff = owner->GetAuraEffect(56247, 0))
                 AddPct(value, auraEff->GetAmount());
     } 
@@ -1287,7 +1287,7 @@ void Guardian::UpdateDamagePhysical(WeaponAttackType attType)
 
 void TempSummon::SetSpellBonusDamage(int32 damage)
 {
-    if (Player* player = GetCharmerOrOwnerPlayerOrPlayerItself())
+    if (auto player = GetCharmerOrOwnerPlayerOrPlayerItself())
     {
         m_bonusSpellDamage = damage;
         player->SetUInt32Value(PLAYER_PET_SPELL_POWER, damage);

@@ -59,14 +59,14 @@ class boss_darkmaster_gandling : public CreatureScript
             void Reset()
             {
                 _Reset();
-                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
+                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
                     gate->SetGoState(GO_STATE_ACTIVE);
             }
 
             void JustDied(Unit* /*killer*/)
             {
                 _JustDied();
-                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
+                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
                     gate->SetGoState(GO_STATE_ACTIVE);
             }
 
@@ -78,7 +78,7 @@ class boss_darkmaster_gandling : public CreatureScript
                 events.ScheduleEvent(EVENT_CURSE, 2000);
                 events.ScheduleEvent(EVENT_SHADOW_PORTAL, 16000);
 
-                if (GameObject* gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
+                if (auto gate = me->GetMap()->GetGameObject(instance->GetData64(GO_GATE_GANDLING)))
                     gate->SetGoState(GO_STATE_READY);
             }
 
@@ -175,32 +175,32 @@ class spell_shadow_portal : public SpellScriptLoader
                     switch (urand(0, 5))
                     {
                         case ROOM_HALL_OF_SECRETS:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_RAVENIAN))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_HALLOFSECRETS;
                             break;
                         case ROOM_HALL_OF_THE_DAMNED:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_THEOLEN))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_HALLOFTHEDAMNED;
                             break;
                         case ROOM_THE_COVEN:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_MALICIA))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_THECOVEN;
                             break;
                         case ROOM_THE_SHADOW_VAULT:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_ILLUCIA))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_THESHADOWVAULT;
                             break;
                         case ROOM_BAROV_FAMILY_VAULT:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_BAROV))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_BAROVFAMILYVAULT;
                             break;
                         case ROOM_VAULT_OF_THE_RAVENIAN:
-                            if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                            if (auto instance = GetCaster()->GetInstanceScript())
                                 if (GameObject::GetGameObject(*caster, instance->GetData64(GO_GATE_POLKELT))->GetGoState() == GO_STATE_ACTIVE)
                                     spell_to_cast = SPELL_SHADOW_PORTAL_VAULTOFTHERAVENIAN;
                             break;
@@ -335,8 +335,8 @@ class spell_shadow_portal_rooms : public SpellScriptLoader
                         }
                     }
 
-                    if (InstanceScript* instance = GetCaster()->GetInstanceScript())
-                        if (GameObject* gate = GameObject::GetGameObject(*caster, instance->GetData64(gate_to_close)))
+                    if (auto instance = GetCaster()->GetInstanceScript())
+                        if (auto gate = GameObject::GetGameObject(*caster, instance->GetData64(gate_to_close)))
                             gate->SetGoState(GO_STATE_READY);
                 }
             }

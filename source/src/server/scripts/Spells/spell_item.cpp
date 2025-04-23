@@ -366,7 +366,7 @@ class spell_item_gnomish_death_ray : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (urand(0, 99) < 15)
                         caster->CastSpell(caster, SPELL_GNOMISH_DEATH_RAY_SELF, true, NULL);    // failure
@@ -569,7 +569,7 @@ class spell_item_net_o_matic : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     uint32 spellId = SPELL_NET_O_MATIC_TRIGGERED3;
                     uint32 roll = urand(0, 99);
@@ -626,13 +626,13 @@ class spell_item_noggenfogger_elixir : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(caster, decision(), true, NULL);
             }
 
             uint32 decision()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     if
                         ((!caster->HasAura(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED1) && !caster->HasAura(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED2) && !caster->HasAura(SPELL_NOGGENFOGGER_ELIXIR_TRIGGERED3)) //has none of the auras
@@ -743,7 +743,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveAurasDueToSpell(SPELL_ILLUSION_ELIXIR_TRIGGERED1);
                 caster->RemoveAurasDueToSpell(SPELL_ILLUSION_ELIXIR_TRIGGERED2);
@@ -764,7 +764,7 @@ public:
 
         uint32 decision()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 uint32 spellId;
                 if (NearbyMorphTarget())
@@ -856,8 +856,8 @@ public:
 
             /*
             TC_LOG_ERROR("sql.sql", "player morph: started");
-            if (Unit* caster = GetCaster())
-            if (Unit* target = NearbyMorphTarget())
+            if (auto caster = GetCaster())
+            if (auto target = NearbyMorphTarget())
             {
                     target->CastSpell(caster, SPELL_ILLUSION_CLONE, true);
                     TC_LOG_ERROR("sql.sql", "player morph: morph target nearby, GUID: %u", NearbyMorphTarget()->GetGUID());
@@ -872,7 +872,7 @@ public:
         void HandleRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             /*
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 TC_LOG_ERROR("sql.sql", "player morph: player demorphing.");
                 caster->SetDisplayId(caster->GetNativeDisplayId());
@@ -906,7 +906,7 @@ class spell_item_piccolo_of_the_flaming_fire : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                     target->HandleEmoteCommand(EMOTE_STATE_DANCE);
             }
 
@@ -1267,7 +1267,7 @@ class spell_item_six_demon_bag : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     uint32 spellId = 0;
                     uint32 rand = urand(0, 99);
@@ -1416,11 +1416,11 @@ class spell_item_red_rider_air_rifle : public SpellScriptLoader
             {
                 PreventHitDefaultEffect(effIndex);
                 Unit* caster = GetCaster();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     caster->CastSpell(caster, SPELL_AIR_RIFLE_HOLD_VISUAL, true);
                     // needed because this spell shares GCD with its triggered spells (which must not be cast with triggered flag)
-                    if (Player* player = caster->ToPlayer())
+                    if (auto player = caster->ToPlayer())
                         player->GetGlobalCooldownMgr().CancelGlobalCooldown(GetSpellInfo());
                     if (urand(0, 4))
                         caster->CastSpell(target, SPELL_AIR_RIFLE_SHOOT, false);
@@ -1473,7 +1473,7 @@ class spell_item_create_heart_candy : public SpellScriptLoader
             void HandleScript(SpellEffIndex effIndex)
             {
                 PreventHitDefaultEffect(effIndex);
-                if (Player* target = GetHitPlayer())
+                if (auto target = GetHitPlayer())
                 {
                     static const uint32 items[] = {ITEM_HEART_CANDY_1, ITEM_HEART_CANDY_2, ITEM_HEART_CANDY_3, ITEM_HEART_CANDY_4, ITEM_HEART_CANDY_5, ITEM_HEART_CANDY_6, ITEM_HEART_CANDY_7, ITEM_HEART_CANDY_8};
                     target->AddItem(items[urand(0, 7)], 1);
@@ -1786,7 +1786,7 @@ class spell_item_shimmering_vessel : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     target->setDeathState(JUST_RESPAWNED);
             }
 
@@ -1870,7 +1870,7 @@ class spell_item_crystal_prison_dummy_dnd : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     if (target->isDead() && !target->isPet())
                     {
                         GetCaster()->SummonGameObject(OBJECT_IMPRISONED_DOOMGUARD, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation(), 0, 0, 0, 0, uint32(target->GetRespawnTime()-time(NULL)));
@@ -2138,7 +2138,7 @@ class spell_item_demon_broiled_surprise : public SpellScriptLoader
                 if (player->GetQuestStatus(QUEST_SUPER_HOT_STEW) != QUEST_STATUS_INCOMPLETE)
                     return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
 
-                if (Creature* creature = player->FindNearestCreature(NPC_ABYSSAL_FLAMEBRINGER, 10, false))
+                if (auto creature = player->FindNearestCreature(NPC_ABYSSAL_FLAMEBRINGER, 10, false))
                     if (creature->isDead())
                         return SPELL_CAST_OK;
                 return SPELL_FAILED_NOT_HERE;
@@ -2229,7 +2229,7 @@ class spell_item_impale_leviroth : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
-                if (Unit* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     if (target->GetEntry() == NPC_LEVIROTH && !target->HealthBelowPct(95))
                         target->CastSpell(target, SPELL_LEVIROTH_SELF_IMPALE, true);
             }
@@ -2444,7 +2444,7 @@ class spell_item_rocket_boots : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Battleground* bg = caster->GetBattleground())
+                if (auto bg = caster->GetBattleground())
                     bg->EventPlayerDroppedFlag(caster);
 
                 caster->RemoveSpellCooldown(SPELL_ROCKET_BOOTS_PROC);
@@ -2582,7 +2582,7 @@ class spell_item_chicken_cover : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /* effIndex */)
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     if (!target->HasAura(SPELL_CHICKEN_NET) && (caster->GetQuestStatus(QUEST_CHICKEN_PARTY) == QUEST_STATUS_INCOMPLETE || caster->GetQuestStatus(QUEST_FLOWN_THE_COOP) == QUEST_STATUS_INCOMPLETE))
                     {
@@ -2622,7 +2622,7 @@ class spell_item_muisek_vessel : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     if (target->isDead())
                         target->DespawnOrUnsummon();
             }
@@ -2703,7 +2703,7 @@ class spell_item_healthstone : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (caster->HasAura(74434))
                     {
                         inSoulburn = true;
@@ -3026,9 +3026,9 @@ class spell_item_bird_shot : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (Player *player = caster->ToPlayer())
-                        if (Unit* target = GetHitUnit())
+                        if (auto target = GetHitUnit())
                             if (Creature *flameDruid = target->ToCreature())
                                 if (flameDruid->GetEntry() == 52661)
                                 {
@@ -3065,7 +3065,7 @@ class spell_item_tholo_thermometer : public SpellScriptLoader
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (Player *player = caster->ToPlayer())
                     {
                         if (player->FindNearestCreature(53190, 10.0f))
@@ -3104,7 +3104,7 @@ class spell_item_loom_of_fate : public SpellScriptLoader
                 if (!eventInfo.GetDamageInfo())
                     return false;
 
-                if (Unit* caster = eventInfo.GetActionTarget())
+                if (auto caster = eventInfo.GetActionTarget())
                     if (caster->HealthAbovePct(35) && !caster->HasSpellCooldown(GetId()))
                         if (caster->HealthBelowPctDamaged(35, eventInfo.GetDamageInfo()->GetDamage()))
                             return true;
@@ -3114,7 +3114,7 @@ class spell_item_loom_of_fate : public SpellScriptLoader
             void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
             {
                 PreventDefaultAction();
-                if (Unit* caster = eventInfo.GetActionTarget())
+                if (auto caster = eventInfo.GetActionTarget())
                 {
                     caster->AddSpellCooldown(GetId(), 0, (time(NULL) + 60));
                     caster->CastSpell(caster, GetSpellInfo()->Effects[EFFECT_0].TriggerSpell, true);
@@ -3154,7 +3154,7 @@ public:
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->CastSpell(caster, 96890, true);
 
@@ -3205,7 +3205,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->CastCustomSpell(96993, SPELLVALUE_BASE_POINT0, CalculatePct(aurEff->GetBaseAmount() - aurEff->GetAmount(), 8), caster, true);
         }
 
@@ -3234,7 +3234,7 @@ public:
 
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
         {
-            if (Player* player = GetTarget()->ToPlayer())
+            if (auto player = GetTarget()->ToPlayer())
             {
                 if (player->HasSpellCooldown(GetId()))
                     return;
@@ -3309,9 +3309,9 @@ public:
 
         void HandleProc(AuraEffect const* aurEff, ProcEventInfo& eventInfo)
         {
-            if (Unit* caster = eventInfo.GetActor())
+            if (auto caster = eventInfo.GetActor())
             {
-                if (Unit* target = eventInfo.GetActionTarget())
+                if (auto target = eventInfo.GetActionTarget())
                 {
                     int32 damage = eventInfo.GetDamageInfo()->GetDamage();
                     caster->CastCustomSpell(target, SPELL_WRATH_OF_TERECGOSA_PROC, &damage, NULL, NULL, TRIGGERED_FULL_MASK, NULL, aurEff);
@@ -3365,7 +3365,7 @@ public:
             {
                 std::list<Unit*> temp;
                 for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                    if (Unit* unit = (*itr)->ToUnit())
+                    if (auto unit = (*itr)->ToUnit())
                         temp.push_back(unit);
 
                 targets.clear();
@@ -3400,7 +3400,7 @@ public:
 
         bool CheckProc(ProcEventInfo& eventInfo)
         {
-            if (Unit* actionTarget = eventInfo.GetActionTarget())
+            if (auto actionTarget = eventInfo.GetActionTarget())
             {
                 if (!eventInfo.GetDamageInfo())
                     return false;
@@ -3415,7 +3415,7 @@ public:
 
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& eventInfo)
         {
-            if (Unit* actionTarget = eventInfo.GetActionTarget())
+            if (auto actionTarget = eventInfo.GetActionTarget())
             {
                 if (AuraEffect* aurEff = GetAura()->GetEffect(EFFECT_1))
                 {
@@ -3559,7 +3559,7 @@ public:
 
         void OnPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Player* player = GetTarget()->ToPlayer())
+            if (auto player = GetTarget()->ToPlayer())
             {
                 Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_HEAD);
                 if (!item || item->GetEntry() != ITEM_FADED_WIZARD_HAT)
@@ -3700,7 +3700,7 @@ public:
             //        break;
             //}
             //for (uint8 i = min; i < max; i++)
-            //    if (GameObject* go = GetCaster()->SummonGameObject(GOB_DYNAMITE_BUNDLE, dynamitePosition[i].GetPositionX(), dynamitePosition[i].GetPositionY(), dynamitePosition[i].GetPositionZ(), dynamitePosition[i].GetOrientation(), 0, 0, 0, 0, 1000))
+            //    if (auto go = GetCaster()->SummonGameObject(GOB_DYNAMITE_BUNDLE, dynamitePosition[i].GetPositionX(), dynamitePosition[i].GetPositionY(), dynamitePosition[i].GetPositionZ(), dynamitePosition[i].GetOrientation(), 0, 0, 0, 0, 1000))
             //        go->Delete(20000);
         }
 

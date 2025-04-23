@@ -54,7 +54,7 @@ void WorldSession::HandleWarGameAccept(WorldPacket& recvData)
     if (!challenger)
         return;
 
-    if (Player* challenged = challenger->wargameRequest->opponent)
+    if (auto challenged = challenger->wargameRequest->opponent)
     {
         if (challenged != GetPlayer())
         {
@@ -89,7 +89,7 @@ void WorldSession::HandleWarGameAccept(WorldPacket& recvData)
     for (uint8 i = 0; i < 2; ++i)
     {
         loopGroup = i == 0 ? myGroup : oppGroup;
-        for (GroupReference* itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)
@@ -131,7 +131,7 @@ void WorldSession::HandleWarGameAccept(WorldPacket& recvData)
     for (uint8 i = 0; i < 2; ++i)
     {
         loopGroup = i == 0 ? myGroup : oppGroup;
-        for (GroupReference* itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = loopGroup->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* member = itr->getSource();
             if (!member)

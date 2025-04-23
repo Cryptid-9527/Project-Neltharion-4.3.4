@@ -263,7 +263,7 @@ class boss_bwd_onyxia : public CreatureScript
 
         void JustReachedHome()
         {
-            if (Creature* nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
+            if (auto nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
                 if (!nefarian->IsInEvadeMode())
                 {
                     nefarian->GetMotionMaster()->MoveIdle();
@@ -340,14 +340,14 @@ class boss_bwd_onyxia : public CreatureScript
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->SetInCombatWithZone();
                 start = true;
-                if (Creature* nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
+                if (auto nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
                     nefarian->AI()->DoAction(START_PHASE_PRE_P1);
             }
         }
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Creature* nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
+            if (auto nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
                 nefarian->AI()->DoAction(ACTION_ONYXIA_DEATH);
             summons.DespawnAll();
             me->SetVisible(false);
@@ -482,7 +482,7 @@ class boss_bwd_nefarian : public CreatureScript
 
         bool Execute(uint64 execTime, uint32 /*diff*/)
         {
-            if (Creature* c = _owner->ToCreature())
+            if (auto c = _owner->ToCreature())
             {
                 if (_currentPhase != PHASE_3)
                     c->DespawnOrUnsummon(1000);
@@ -490,14 +490,14 @@ class boss_bwd_nefarian : public CreatureScript
                 {
                     Position destPos, pos;
                     c->GetPosition(&pos);
-                    if (Creature* t = c->SummonCreature(NPC_SHADOWBLAZE_FLASHPOINT, pos.m_positionX, pos.m_positionY, pos.m_positionZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
+                    if (auto t = c->SummonCreature(NPC_SHADOWBLAZE_FLASHPOINT, pos.m_positionX, pos.m_positionY, pos.m_positionZ, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 30000))
                         t->CastSpell(t, SPELL_BRUSHFIRE_AURA, true);
                     Player* player = NULL;
                     float dist = 0.0f;
                     Map::PlayerList const& players = c->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* plr = itr->getSource())
+                            if (auto plr = itr->getSource())
                                 if (plr->isAlive())
                                     if (!AccountMgr::IsGMAccount(plr->GetSession()->GetSecurity()))
                                     {
@@ -582,7 +582,7 @@ class boss_bwd_nefarian : public CreatureScript
 
         void JustReachedHome()
         {
-            if (Creature* onyxia = me->FindNearestCreature(BOSS_ONYXIA, 500.0f, false))
+            if (auto onyxia = me->FindNearestCreature(BOSS_ONYXIA, 500.0f, false))
                 onyxia->Respawn(true);
             instance->SetData(DATA_NEFARIAN_ELEVATOR, GO_STATE_TRANSPORT_READY);
             _JustReachedHome();
@@ -681,7 +681,7 @@ class boss_bwd_nefarian : public CreatureScript
                 GetCreatureListWithEntryInGrid(creatures, me, NPC_ANIMATED_BONE_WARRIOR, 500.0f);
                 if (!creatures.empty())
                     for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); iter++)
-                        if (Creature* c = *iter)
+                        if (auto c = *iter)
                             c->AI()->DoAction(ACTION_DESACTIVATE_BONES_WARRIOR);
                 break;
             }
@@ -735,7 +735,7 @@ class boss_bwd_nefarian : public CreatureScript
                 GetCreatureListWithEntryInGrid(creatures, me, NPC_CHROMATIC_PROTOTYPE, 500.0f);
                 if (!creatures.empty())
                     for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); iter++)
-                        if (Creature* c = *iter)
+                        if (auto c = *iter)
                         {
                             c->NearTeleportTo(c->GetPositionX(), c->GetPositionY(), 17.0f, c->GetOrientation());
                             c->m_Events.AddEvent(new CheckReactState(c), c->m_Events.CalculateTime(1000));
@@ -894,7 +894,7 @@ class boss_bwd_nefarian : public CreatureScript
                     me->RemoveAllAuras();
                     me->CastSpell(me, SPELL_NEFARIAN_INTRO_4_LIFT_OFF_ANIM_KIT, true);
                     me->GetMotionMaster()->MovePath(NEFARIAN_INTRO_PATH, true);
-                    if (Creature* onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
+                    if (auto onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
                         onyxia->AI()->DoAction(ACTION_STOP_INTRO);
                     break;
                 case EVENT_NEFARIAN_HAIL_OF_BONES:
@@ -908,7 +908,7 @@ class boss_bwd_nefarian : public CreatureScript
                     me->GetMotionMaster()->MoveIdle();
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->SetInCombatWithZone();
-                    if (Unit* victim = me->SelectVictim())
+                    if (auto victim = me->SelectVictim())
                         AttackStart(victim);
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
                     changePhase(PHASE_1);
@@ -927,7 +927,7 @@ class boss_bwd_nefarian : public CreatureScript
                         GetCreatureListWithEntryInGrid(creatures, me, NPC_ANIMATED_BONE_WARRIOR, 500.0f);
                         if (!creatures.empty())
                             for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); iter++)
-                                if (Creature* c = *iter)
+                                if (auto c = *iter)
                                     c->NearTeleportTo(c->GetPositionX(), c->GetPositionY(), 9.0f, c->GetOrientation());
                     }
                     DoCast(SPELL_NEFARIAN_SHADOW_OF_COWARDICE);
@@ -945,7 +945,7 @@ class boss_bwd_nefarian : public CreatureScript
                     Map::PlayerList const& players = me->GetMap()->GetPlayers();
                     if (!players.isEmpty())
                         for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->isAlive() && !player->HasAura(SPELL_HITTING_YA_PLAYER) && !player->HasAura(SPELL_DOMINION) && !player->HasAura(SPELL_PLAYER_MIND_LIBERATE))
                                     targets.push_back(player);
                     if (targets.empty())
@@ -957,7 +957,7 @@ class boss_bwd_nefarian : public CreatureScript
                     {
                         if (targets.empty())
                             break;
-                        if (Unit* target = Trinity::Containers::SelectRandomContainerElement(targets))
+                        if (auto target = Trinity::Containers::SelectRandomContainerElement(targets))
                         {
                             if (target->m_movementInfo.HasMovementFlag(MOVEMENTFLAG_FALLING_FAR))
                                 target->m_movementInfo.RemoveMovementFlag(MOVEMENTFLAG_FALLING_FAR);
@@ -981,7 +981,7 @@ class boss_bwd_nefarian : public CreatureScript
                     break;
                 case EVENT_NEFARIAN_ELECTROCUTE:
                     me->CastSpell(me, SPELL_NEFARIAN_ELECTROCUTE, true);
-                    if (Creature* nefarianLightingMachine = me->FindNearestCreature(NPC_NEFARIAN_LIGHTING_MACHINE, 1000.0f))
+                    if (auto nefarianLightingMachine = me->FindNearestCreature(NPC_NEFARIAN_LIGHTING_MACHINE, 1000.0f))
                         nefarianLightingMachine->CastSpell(nefarianLightingMachine, SPELL_NEFARIAN_ELECTROCUTE_DUMMY, true);
                     break;
                 case EVENT_NEFARIAN_CLEAVE:
@@ -1009,7 +1009,7 @@ class boss_bwd_nefarian : public CreatureScript
                     me->SetCanFly(false);
                     me->GetMotionMaster()->MoveIdle();
                     me->SetReactState(REACT_AGGRESSIVE);
-                    if (Unit* victim = me->SelectVictim())
+                    if (auto victim = me->SelectVictim())
                         AttackStart(victim);
                     changePhase(PHASE_3);
                     break;
@@ -1022,7 +1022,7 @@ class boss_bwd_nefarian : public CreatureScript
                     {
                         Creature* target = NULL;
                         for (std::list<Creature*>::iterator iter = creatures.begin(); iter != creatures.end(); iter++)
-                            if (Creature* c = *iter)
+                            if (auto c = *iter)
                                 if (c->HasAura(SPELL_ONYXIA_FEIGN_DEATH))
                                 {
                                     target = *iter;
@@ -1119,7 +1119,7 @@ public:
                     {
                         if (me->HasUnitState(UNIT_STATE_ROOT))
                         {
-                            if (Creature* nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
+                            if (auto nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
                                 if (nefarian->AI()->GetData(DATA_PHASE) == PHASE_3)
                                     DoCastVictim(SPELL_BONES_LAUNCH);
                             me->resetAttackTimer();
@@ -1217,11 +1217,11 @@ public:
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
             tick++;
-            if (Unit* target = GetCaster())
+            if (auto target = GetCaster())
             {
                 if (target->GetPower(POWER_ALTERNATE_POWER) == 100)
                 {
-                    if (Creature* onyxia = target->ToCreature())
+                    if (auto onyxia = target->ToCreature())
                         onyxia->AI()->DoAction(ACTION_OVERCHARGE);
                     target->ModifyPower(POWER_ALTERNATE_POWER, -100);
                 }
@@ -1263,8 +1263,8 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* onyxia = GetCaster())
-                if (Creature* nefarian = onyxia->FindNearestCreature(BOSS_NEFARIAN, 35.0f))
+            if (auto onyxia = GetCaster())
+                if (auto nefarian = onyxia->FindNearestCreature(BOSS_NEFARIAN, 35.0f))
                     if (!onyxia->HasAura(SPELL_ONYXIA_DEATHWING_CHILDREN))
                         //onyxia->AddAura(SPELL_ONYXIA_DEATHWING_CHILDREN, onyxia);
                         onyxia->AddAura(SPELL_NEFARIAN_DEATHWING_CHILDREN, onyxia);
@@ -1300,8 +1300,8 @@ public:
 
         void HandleEffectPeriodic(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* nefarian = GetCaster())
-                if (Creature* onyxia = nefarian->FindNearestCreature(BOSS_ONYXIA, 35.0f))
+            if (auto nefarian = GetCaster())
+                if (auto onyxia = nefarian->FindNearestCreature(BOSS_ONYXIA, 35.0f))
                     if (!nefarian->HasAura(SPELL_NEFARIAN_DEATHWING_CHILDREN))
                         //nefarian->AddAura(SPELL_NEFARIAN_DEATHWING_CHILDREN, nefarian);
                         nefarian->AddAura(SPELL_ONYXIA_DEATHWING_CHILDREN, nefarian);
@@ -1367,12 +1367,12 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 Map::PlayerList const& players = caster->GetMap()->GetPlayers();
                 if (!players.isEmpty())
                     for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                        if (Player* player = itr->getSource())
+                        if (auto player = itr->getSource())
                             if (player->isAlive())
                                 if (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()))
                                     if (player->GetPositionZ() >= 12.59f)
@@ -1442,7 +1442,7 @@ public:
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
             // Also resurrects Animated Bone Warriors in the area of effect. from http://www.wowwiki.com/Nefarian_%28Blackwing_Descent_tactics%29
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastSpell(target, SPELL_ANIMATED_BONES, true);
         }
 
@@ -1485,7 +1485,7 @@ public:
             if (PlayerList.isEmpty())
                 return;
             for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                     if (player->isAlive())
                         if (!AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()))
                             if (caster->isInBackInMap(player, 40.0f, static_cast<float>(M_PI / 6)))
@@ -1521,7 +1521,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 if (target->GetTypeId() != TYPEID_PLAYER)
                     if (target->GetEntry() == BOSS_ONYXIA)
                         target->ModifyPower(POWER_ALTERNATE_POWER, 25);
@@ -1529,7 +1529,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            if (Unit* me = GetCaster())
+            if (auto me = GetCaster())
             {
                 std::list<Creature*> creatures;
                 GetCreatureListWithEntryInGrid(creatures, me, NPC_INVISIBLE_STALKER_CATACLYSM_BOSS_2, 1000.0f);
@@ -1576,13 +1576,13 @@ class spell_lighting_discharge_damage : public SpellScriptLoader
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 unitList.remove_if(LightingDischargeTargetSelector(caster));
         }
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 int32 damage = GetHitDamage();
                 int32 eletric = target->GetPower(POWER_ALTERNATE_POWER);
@@ -1653,7 +1653,7 @@ public:
             _events.Reset();
             me->CastSpell(me, 83970, true);
             me->CastSpell(me, SPELL_AURA_OF_DREAD_2, true);
-            /*if (Creature* c = me->SummonCreature(NPC_INVISIBLE_STALKER, -27.80208f, -224.4497f, 63.34686f, 0.0f))
+            /*if (auto c = me->SummonCreature(NPC_INVISIBLE_STALKER, -27.80208f, -224.4497f, 63.34686f, 0.0f))
                 c->CastSpell(c, SPELL_DRAGON_ORB, true);*/
             if (auto c1 = me->SummonCreature(144951, -27.80208f, -224.4497f, 63.34686f, 0.0f))
             if (auto c2 = me->SummonCreature(144951, -27.784096f, -214.836548f, 70.166710f, 6.195622f))
@@ -1710,12 +1710,12 @@ public:
                 case EVENT_INTRO_STEP_1:
                     Talk(0);
                     _events.ScheduleEvent(EVENT_INTRO_STEP_2, 21000);
-                    if (Creature* onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
+                    if (auto onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
                         onyxia->SetVisible(true);
                     break;
                 case EVENT_INTRO_STEP_2:
                     Talk(1);
-                    if (Creature* onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
+                    if (auto onyxia = me->FindNearestCreature(BOSS_ONYXIA, 200.0f))
                         onyxia->AI()->DoAction(ACTION_INTRO);
                     _instance->SetData(DATA_NEFARIAN_ELEVATOR, GO_STATE_TRANSPORT_READY);
                     _events.ScheduleEvent(EVENT_INTRO_STEP_3, 11000);
@@ -1783,7 +1783,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* go)
     {
         // add here the previous boss done check
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
         {
             if (instance->IsDone(DATA_NEFARIAN))
                 return false;
@@ -1799,15 +1799,15 @@ public:
                                                 || !instance->IsDoneInHeroic(DATA_CHIMAERON)))
                 return false;
 
-            if (Creature* nefarius = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, true))
+            if (auto nefarius = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, true))
             {
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_DRAGON_ORB, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                 nefarius->SetVisible(true);
             }
-            else if (Creature* nefarius = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, false))
+            else if (auto nefarius = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, false))
             {
                 nefarius->Respawn(true);
-                if (Creature* onyxia = go->FindNearestCreature(BOSS_ONYXIA, 500.0f, false))
+                if (auto onyxia = go->FindNearestCreature(BOSS_ONYXIA, 500.0f, false))
                     onyxia->Respawn(true);
                 player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_DRAGON_ORB, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                 nefarius->SetVisible(true);
@@ -1822,9 +1822,9 @@ public:
     {
         player->PlayerTalkClass->ClearMenus();
         player->CLOSE_GOSSIP_MENU();
-        if (Creature* c = go->FindNearestCreature(NPC_INVISIBLE_STALKER, 10, true))
+        if (auto c = go->FindNearestCreature(NPC_INVISIBLE_STALKER, 10, true))
             c->DespawnOrUnsummon();
-        if (Creature* c = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, true))
+        if (auto c = go->FindNearestCreature(NPC_NEFARIUS_INTRO, 200, true))
             c->AI()->DoAction(START_INTRO);
 
         go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
@@ -1855,7 +1855,7 @@ public:
 
         void onPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (AuraEffect* effect = GetAura()->GetEffect(EFFECT_0))
                     effect->RecalculateAmount(caster);
         }
@@ -1863,7 +1863,7 @@ public:
         void CalculateAmount(AuraEffect const* aurEff, int32& amount, bool& canBeRecalculated)
         {
             canBeRecalculated = true;
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 uint32 spellId = sSpellMgr->GetSpellIdForDifficulty(81118, GetCaster());
                 if (Aura* magmaStack = caster->GetAura(spellId, caster->GetGUID()))
@@ -1900,8 +1900,8 @@ public:
 
         void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
-                if (Creature* nefarian = target->FindNearestCreature(BOSS_NEFARIAN, 500))
+            if (auto target = GetHitUnit())
+                if (auto nefarian = target->FindNearestCreature(BOSS_NEFARIAN, 500))
                     if (nefarian->AI()->GetData(DATA_PHASE) == PHASE_3)
                     {
                         target->CastSpell(target, SPELL_ANIMATED_BONES, true);
@@ -1971,10 +1971,10 @@ public:
 
             for (std::list<WorldObject*>::iterator itr = unitList.begin(); itr != unitList.end(); itr++)
             {
-                if (Player* player = (*itr)->ToPlayer())
+                if (auto player = (*itr)->ToPlayer())
                 {
                     for (int cnt = 0; cnt < 3; cnt++)
-                        if (Creature* marker = pillar[cnt])
+                        if (auto marker = pillar[cnt])
                             if (pl[cnt] == NULL)
                                 if (player->GetDistance(marker) <= 7.0f)
                                     pl[cnt] = player;
@@ -2025,7 +2025,7 @@ public:
 
         void IsSummonedBy(Unit* player)
         {
-            if (Creature* nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
+            if (auto nefarian = me->FindNearestCreature(BOSS_NEFARIAN, 500))
                 nefarian->AI()->JustSummoned(me);
             Position pos;
             me->GetPosition(&pos);
@@ -2038,7 +2038,7 @@ public:
         {
             if (checkPlDist <= diff)
             {
-                if (Unit* player = Unit::GetUnit(*me, plGUID))
+                if (auto player = Unit::GetUnit(*me, plGUID))
                     if (me->GetDistance2d(player->GetPositionX(), player->GetPositionY()) <= 0.5f)
                     {
                         player->Kill(player);
@@ -2071,7 +2071,7 @@ public:
 
         void Remove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 std::list<Creature*> dominions_trackers;
                 target->GetCreatureListWithEntryInGrid(dominions_trackers, NPC_DOMINION_TRACKER, 200.0f);
@@ -2116,7 +2116,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (Aura* aura = caster->GetAura(SPELL_PLAYER_STEALTH_POWER))
                 {
@@ -2174,7 +2174,7 @@ public:
 
         void Remove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetTarget())
+            if (auto target = GetTarget())
             {
                 // Rogues (Cloak of Shadows), Mages (Ice Block) and Paladins (Divine Shield)
                 // can get rid of the Explosive Cinders without any negative effects (ie. it will not knock back players on your platform).

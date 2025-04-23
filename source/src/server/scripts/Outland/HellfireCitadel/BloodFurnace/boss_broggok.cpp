@@ -162,11 +162,11 @@ class go_broggok_lever : public GameObjectScript
 
         bool OnGossipHello(Player* /*player*/, GameObject* go)
         {
-            if (InstanceScript* instance = go->GetInstanceScript())
+            if (auto instance = go->GetInstanceScript())
                 if (instance->GetData(TYPE_BROGGOK_EVENT) != DONE && instance->GetData(TYPE_BROGGOK_EVENT) != IN_PROGRESS)
                 {
                     instance->SetData(TYPE_BROGGOK_EVENT, IN_PROGRESS);
-                    if (Creature* broggok = Creature::GetCreature(*go, instance->GetData64(DATA_BROGGOK)))
+                    if (auto broggok = Creature::GetCreature(*go, instance->GetData64(DATA_BROGGOK)))
                         broggok->AI()->DoAction(ACTION_PREPARE_BROGGOK);
                 }
             go->UseDoorOrButton();

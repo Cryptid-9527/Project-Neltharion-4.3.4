@@ -209,7 +209,7 @@ class achievement_consumption_junction : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Trollgore = target->ToCreature())
+            if (auto Trollgore = target->ToCreature())
                 if (Trollgore->AI()->GetData(DATA_CONSUMPTION_JUNCTION))
                     return true;
 

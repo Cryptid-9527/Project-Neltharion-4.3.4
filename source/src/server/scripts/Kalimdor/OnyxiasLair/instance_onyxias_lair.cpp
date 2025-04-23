@@ -99,7 +99,7 @@ public:
                 case GO_WHELP_SPAWNER:
                     Position goPos;
                     go->GetPosition(&goPos);
-                    if (Creature* temp = go->SummonCreature(NPC_WHELP, goPos, TEMPSUMMON_CORPSE_DESPAWN))
+                    if (auto temp = go->SummonCreature(NPC_WHELP, goPos, TEMPSUMMON_CORPSE_DESPAWN))
                     {
                         temp->SetInCombatWithZone();
                         ++ManyWhelpsCounter;
@@ -119,7 +119,7 @@ public:
 
         void FloorEruption(uint64 floorEruptedGUID)
         {
-            if (GameObject* pFloorEruption = instance->GetGameObject(floorEruptedGUID))
+            if (auto pFloorEruption = instance->GetGameObject(floorEruptedGUID))
             {
                 //THIS GOB IS A TRAP - What shall i do? =(
                 //Cast it spell? Copyed Heigan method

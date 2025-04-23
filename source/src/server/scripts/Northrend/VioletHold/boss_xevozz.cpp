@@ -105,7 +105,7 @@ public:
 
             for (std::list<Creature*>::const_iterator iter = assistList.begin(); iter != assistList.end(); ++iter)
             {
-                if (Creature* pSphere = *iter)
+                if (auto pSphere = *iter)
                     pSphere->Kill(pSphere, false);
             }
         }
@@ -113,7 +113,7 @@ public:
         void JustSummoned(Creature* summoned)
         {
             summoned->SetSpeed(MOVE_RUN, 0.5f);
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
             {
                 summoned->AddThreat(target, 0.00f);
                 summoned->AI()->AttackStart(target);
@@ -139,7 +139,7 @@ public:
             Talk(SAY_AGGRO);
             if (instance)
             {
-                if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_XEVOZZ_CELL)))
+                if (auto pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_XEVOZZ_CELL)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -264,7 +264,7 @@ public:
             {
                 if (instance)
                 {
-                    if (Creature* pXevozz = Unit::GetCreature(*me, instance->GetData64(DATA_XEVOZZ)))
+                    if (auto pXevozz = Unit::GetCreature(*me, instance->GetData64(DATA_XEVOZZ)))
                     {
                         float fDistance = me->GetDistance2d(pXevozz);
                         if (fDistance <= 3)

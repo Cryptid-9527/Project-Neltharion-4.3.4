@@ -197,7 +197,7 @@ public:
 
             if (uiImpaleTimer <= diff)
             {
-              if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+              if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                   DoCast(target, SPELL_IMPALE);
               uiImpaleTimer = urand(8000, 12000);
             } else uiImpaleTimer -= diff;
@@ -571,7 +571,7 @@ public:
 
             if (uiGrievousWoundTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_GRIEVOUS_WOUND);
                 uiGrievousWoundTimer = 18000 + rand() % 4000;
             } else uiGrievousWoundTimer -= diff;
@@ -677,7 +677,7 @@ public:
 
             if (uiAcidSpitTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_ACID_SPIT);
                 uiAcidSpitTimer = 2000 + rand() % 2000;
             } else uiAcidSpitTimer -= diff;
@@ -690,7 +690,7 @@ public:
 
             if (uiPoisonBreathTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_POISON_BREATH);
                 uiPoisonBreathTimer = 8000 + rand() % 4000;
             } else uiPoisonBreathTimer -= diff;

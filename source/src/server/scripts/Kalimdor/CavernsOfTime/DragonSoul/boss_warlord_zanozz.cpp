@@ -205,7 +205,7 @@ public:
 		{
 			me->DespawnCreaturesInArea(NPC_VOID_OF_THE_UNMAKING, 300.f);
 			instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
-			if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+			if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
 				portal->SetVisible(true);
 			_Reset();
 			if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
@@ -263,7 +263,7 @@ public:
 			auto& players = me->GetMap()->GetPlayers();
 			for (auto itr = players.begin(); itr != players.end(); ++itr)
 			{
-				if (Player* target = itr->getSource())
+				if (auto target = itr->getSource())
 				{
 					Talk(id, target->GetGUID(), CHAT_MSG_MONSTER_WHISPER, TEXT_RANGE_AREA);
 					break; // remove this after whisper is not longer raid wide
@@ -289,7 +289,7 @@ public:
 			if (instance->GetData(DATA_RAID_MODE) == RAID_MODE_LFR)
 				me->SetLootMode(LOOT_MODE_LFR);
 
-			if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+			if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
 				portal->SetVisible(false);
 
 			me->CallForHelp(100.0f);
@@ -315,7 +315,7 @@ public:
 			}
 
 			instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
-			if (Creature* portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
+			if (auto portal = me->FindNearestCreature(NPC_TRAVEL_TO_WYRMREST_TEMPLE, 200.00f))
 				portal->SetVisible(true);
 			_JustDied();
 
@@ -325,7 +325,7 @@ public:
 				AchievementEntry const* zanozza = sAchievementStore.LookupEntry(6128);
 				for (auto itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
 				{
-					if (Player* player = itr->getSource())
+					if (auto player = itr->getSource())
 					{
 						player->CompletedAchievement(zanozza);
 					}
@@ -582,7 +582,7 @@ public:
 				{
 					if (me->HasAura(SPELL_VOID_OF_THE_UNMAKING_ACTIVE))
 					{
-						if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 3.0f, true))
+						if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0, 3.0f, true))
 						{
 							if (target->isAlive())
 							{
@@ -599,12 +599,12 @@ public:
 								events.ScheduleEvent(EVENT_ENABLE_EXPLOSON, 5000);
 							}
 						}
-						else if (Creature* nearzon = me->FindNearestCreature(NPC_WARLORD_ZONOZZ, 5.0f, true))
+						else if (auto nearzon = me->FindNearestCreature(NPC_WARLORD_ZONOZZ, 5.0f, true))
 						{
 							me->RemoveAurasDueToSpell(SPELL_VOID_OF_THE_UNMAKING_ACTIVE);
 							me->StopMoving();
 							me->GetMotionMaster()->Clear();
-							if (Creature* zonozz = instance->GetCreature(DATA_WARLORD_ZONOZZ))
+							if (auto zonozz = instance->GetCreature(DATA_WARLORD_ZONOZZ))
 							{
 								if (Aura* aura = me->GetAura(SPELL_VOID_DIFFUSION_DMG_INCREASE))
 								{
@@ -671,7 +671,7 @@ public:
 				}
 				case EVENT_LFR_MOVE_TO_ZONOZZ:
 					me->GetMotionMaster()->Clear();
-					if (Creature* zonozz = instance->GetCreature(DATA_WARLORD_ZONOZZ))
+					if (auto zonozz = instance->GetCreature(DATA_WARLORD_ZONOZZ))
 						me->GetMotionMaster()->MoveChase(zonozz);
 					events.CancelEvent(EVENT_LFR_CHANGE_DIRECTION);
 					events.ScheduleEvent(EVENT_LFR_CHECK_ZONOZZ_DISTANCE, 500);
@@ -686,7 +686,7 @@ public:
 						break;
 					}
 
-					if (Creature* zonozz = creatures.front())
+					if (auto zonozz = creatures.front())
 					{
 						me->RemoveAurasDueToSpell(SPELL_VOID_OF_THE_UNMAKING_ACTIVE);
 						me->GetMotionMaster()->Clear();
@@ -863,7 +863,7 @@ public:
 				switch (eventid)
 				{
 				case EVENT_OOZE_SPIT:
-					if (Unit* currentTarget = me->getVictim())
+					if (auto currentTarget = me->getVictim())
 						if (!me->IsWithinMeleeRange(currentTarget))
 							if (me->GetDistance(currentTarget))
 							{
@@ -1215,7 +1215,7 @@ public:
 		void AfterRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
 		{
 			if (GetTargetApplication()->GetRemoveMode() == AURA_REMOVE_BY_ENEMY_SPELL)
-				if (InstanceScript* instance = GetTarget()->GetInstanceScript())
+				if (auto instance = GetTarget()->GetInstanceScript())
 					if (instance->GetData(DATA_RAID_MODE) != RAID_MODE_LFR)
 						GetTarget()->CastSpell(GetTarget(), SPELL_DISRUPTING_SHADOWS_DISPEL, true);
 		}

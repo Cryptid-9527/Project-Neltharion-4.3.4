@@ -88,12 +88,12 @@ public:
 
        void OpenDoors(bool Boss_Killed)
        {
-           if (GameObject* door1 = me->GetMap()->GetGameObject(instance->GetData64(GO_EMBERSEER_IN)))
+           if (auto door1 = me->GetMap()->GetGameObject(instance->GetData64(GO_EMBERSEER_IN)))
                door1->SetGoState(GO_STATE_ACTIVE);
-           if (GameObject* door2 = me->GetMap()->GetGameObject(instance->GetData64(GO_DOORS)))
+           if (auto door2 = me->GetMap()->GetGameObject(instance->GetData64(GO_DOORS)))
                door2->SetGoState(GO_STATE_ACTIVE);
            if (Boss_Killed)
-               if (GameObject* door3 = me->GetMap()->GetGameObject(instance->GetData64(GO_EMBERSEER_OUT)))
+               if (auto door3 = me->GetMap()->GetGameObject(instance->GetData64(GO_EMBERSEER_OUT)))
                     door3->SetGoState(GO_STATE_ACTIVE);
        }
 
@@ -120,7 +120,7 @@ public:
                         events.ScheduleEvent(EVENT_FLAMEBUFFET, 14 * IN_MILLISECONDS);
                         break;
                     case EVENT_PYROBLAST:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, SPELL_PYROBLAST);
                         events.ScheduleEvent(EVENT_PYROBLAST, 15 * IN_MILLISECONDS);
                         break;

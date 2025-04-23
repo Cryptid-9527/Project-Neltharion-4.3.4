@@ -217,7 +217,7 @@ class boss_kilnara : public CreatureScript
                 /*
                 if (action == ACTION_WAVE_OF_AGONY)
                 {
-                    if (Creature* target = ObjectAccessor::GetCreature(*me, WaveofAgonyTargetGUID))
+                    if (auto target = ObjectAccessor::GetCreature(*me, WaveofAgonyTargetGUID))
                     {
                         WaveofAgonyTargetGUID = 0;
                         target->DespawnOrUnsummon(500);
@@ -420,7 +420,7 @@ class boss_kilnara : public CreatureScript
                         case EVENT_CAMOUFLAGE_HUNTING:
                         {
                             //me->monsterYell("EVENT_CAMOUFLAGE_HUNTING", LANG_UNIVERSAL, 0);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             {
                                 me->CastSpell(target, SPELL_SHADOWSTEP, true);
                                 me->RemoveAura(SPELL_VENGEFULL_SMASH);
@@ -821,7 +821,7 @@ public:
 
         SpellCastResult CheckCast()
         {
-            if (Unit* c = GetCaster())
+            if (auto c = GetCaster())
                 if ((c->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED)) || c->HasAuraWithMechanic(MECHANIC_DISARM))
                 {
                     c->RemoveAurasDueToSpell(96764);

@@ -1829,7 +1829,7 @@ class Unit : public WorldObject
         Unit* GetCharmerOrOwner() const { return GetCharmerGUID() ? GetCharmer() : GetOwner(); }
         Unit* GetCharmerOrOwnerOrSelf() const
         {
-            if (Unit* u = GetCharmerOrOwner())
+            if (auto u = GetCharmerOrOwner())
                 return u;
 
             return (Unit*)this;
@@ -1868,7 +1868,7 @@ class Unit : public WorldObject
         bool isPossessedByPlayer() const { return HasUnitState(UNIT_STATE_POSSESSED) && IS_PLAYER_GUID(GetCharmerGUID()); }
         bool isPossessing() const
         {
-            if (Unit* u = GetCharm())
+            if (auto u = GetCharm())
                 return u->isPossessed();
             else
                 return false;

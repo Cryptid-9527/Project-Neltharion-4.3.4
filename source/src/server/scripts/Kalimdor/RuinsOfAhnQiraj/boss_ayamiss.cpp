@@ -101,7 +101,7 @@ class boss_ayamiss : public CreatureScript
                         who->GetMotionMaster()->MovePoint(POINT_PARALYZE, AltarPos);
                         break;
                     case NPC_HORNET:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                             who->AI()->AttackStart(target);
                         break;
                 }
@@ -189,7 +189,7 @@ class boss_ayamiss : public CreatureScript
                             events.ScheduleEvent(EVENT_POISON_STINGER, urand(2000, 3000));
                             break;
                         case EVENT_PARALYZE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
                             {
                                 DoCast(target, SPELL_PARALYZE);
                                 instance->SetData64(DATA_PARALYZED, target->GetGUID());
@@ -200,8 +200,8 @@ class boss_ayamiss : public CreatureScript
                             break;
                         case EVENT_SWARMER_ATTACK:
                             for (std::list<uint64>::iterator i = _swarmers.begin(); i != _swarmers.end(); ++i)
-                                if (Creature* swarmer = me->GetMap()->GetCreature(*i))
-                                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                                if (auto swarmer = me->GetMap()->GetCreature(*i))
+                                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM))
                                         swarmer->AI()->AttackStart(target);
 
                             _swarmers.clear();
@@ -254,7 +254,7 @@ class npc_hive_zara_larva : public CreatureScript
             {
                 if (type == POINT_MOTION_TYPE)
                     if (id == POINT_PARALYZE)
-                        if (Player* target = ObjectAccessor::GetPlayer(*me, _instance->GetData64(DATA_PARALYZED)))
+                        if (auto target = ObjectAccessor::GetPlayer(*me, _instance->GetData64(DATA_PARALYZED)))
                             DoCast(target, SPELL_FEED); // Omnomnom
             }
 

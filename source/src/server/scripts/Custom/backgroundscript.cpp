@@ -721,7 +721,7 @@ public:
 			return false;
 		}
 
-		if (Guild* guild = player->GetGuild())
+		if (auto guild = player->GetGuild())
 		{
 			if (!guild->GetId())
 			{
@@ -775,7 +775,7 @@ public:
 		if (player->HasSpellCooldown(90065))
 			return false;
 
-		if (Guild* guild = player->GetGuild())
+		if (auto guild = player->GetGuild())
 		{
 			if (!guild->GetId())
 			{
@@ -972,7 +972,7 @@ public:
 
 	void OnUpdateZone(Player* player, uint32 newZone, uint32 newArea)
 	{
-		if (Battleground* bg = player->GetBattleground())
+		if (auto bg = player->GetBattleground())
 			if (bg->isArena())
 				return;
 
@@ -983,7 +983,7 @@ public:
 
 	void OnLogin(Player* player)
 	{
-		if (Battleground* bg = player->GetBattleground())
+		if (auto bg = player->GetBattleground())
 			if (bg->isArena())
 				return;
 

@@ -248,9 +248,9 @@ class instance_halls_of_origination : public InstanceMapScript
                     _deadElementals += cnt;
                 if (_deadElementals == 4)
                 {
-                    if (GameObject* mirror = instance->GetGameObject(SunMirrorGUID))
+                    if (auto mirror = instance->GetGameObject(SunMirrorGUID))
                         mirror->SetGoState(GO_STATE_ACTIVE);
-                    if (GameObject* door = instance->GetGameObject(AnraphetDoorGUID))
+                    if (auto door = instance->GetGameObject(AnraphetDoorGUID))
                         door->SetGoState(GO_STATE_ACTIVE);
                 }
             }
@@ -274,7 +274,7 @@ class instance_halls_of_origination : public InstanceMapScript
                         SetBossState(data, IN_PROGRESS); // Needs to be set to IN_PROGRESS or else the gameobjects state won't be updated
                         SetBossState(data, DONE);
                         IncreaseDeadElementals();
-                        if (Creature* brann = instance->GetCreature(BrannBronzebeardGUID))
+                        if (auto brann = instance->GetCreature(BrannBronzebeardGUID))
                             brann->AI()->DoAction(ACTION_ELEMENTAL_DIED);
                         break;
                     }

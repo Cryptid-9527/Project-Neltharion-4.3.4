@@ -143,30 +143,30 @@ public:
             {
                 case TYPE_BJARNGRIM:
                     if (uiData == DONE)
-                        if (GameObject* pDoor = instance->GetGameObject(m_uiBjarngrimDoorGUID))
+                        if (auto pDoor = instance->GetGameObject(m_uiBjarngrimDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
                     m_auiEncounter[0] = uiData;
                     break;
                 case TYPE_VOLKHAN:
                     if (uiData == DONE)
-                        if (GameObject* pDoor = instance->GetGameObject(m_uiVolkhanDoorGUID))
+                        if (auto pDoor = instance->GetGameObject(m_uiVolkhanDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
                     m_auiEncounter[1] = uiData;
                     break;
                 case TYPE_IONAR:
                     if (uiData == DONE)
-                        if (GameObject* pDoor = instance->GetGameObject(m_uiIonarDoorGUID))
+                        if (auto pDoor = instance->GetGameObject(m_uiIonarDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
                     m_auiEncounter[2] = uiData;
                     break;
                 case TYPE_LOKEN:
                     if (uiData == DONE)
                     {
-                        if (GameObject* pDoor = instance->GetGameObject(m_uiLokenDoorGUID))
+                        if (auto pDoor = instance->GetGameObject(m_uiLokenDoorGUID))
                             pDoor->SetGoState(GO_STATE_ACTIVE);
 
                         // Appears to be type 5 GO with animation. Need to figure out how this work, code below only placeholder
-                        if (GameObject* pGlobe = instance->GetGameObject(m_uiLokenGlobeGUID))
+                        if (auto pGlobe = instance->GetGameObject(m_uiLokenGlobeGUID))
                             pGlobe->SetGoState(GO_STATE_ACTIVE);
                     }
                     m_auiEncounter[3] = uiData;

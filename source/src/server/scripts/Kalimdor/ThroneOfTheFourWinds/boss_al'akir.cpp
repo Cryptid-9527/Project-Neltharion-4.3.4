@@ -161,7 +161,7 @@ public:
     {
     std::list<Player*> targets = _trash->GetPlayersInRange(1, true);
     for (std::list<Player*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-        if (Player* player = *itr)
+        if (auto player = *itr)
             if (!player->HasAura(SPELL_SQUALL_LINE_BOARDED) && !player->HasAura(95751) && !player->GetVehicle() && !player->HasAura(85269))
                 player->CastSpell(_trash, SPELL_SQUALL_LINE_BOARDED, true);
     if (!_trash->HasAura(SPELL_SQUALL_PERIODIC))
@@ -186,7 +186,7 @@ public:
     {
         if (_trash)
         {
-            if (Unit* player = ObjectAccessor::GetUnit(*_trash, _playerGUID))
+            if (auto player = ObjectAccessor::GetUnit(*_trash, _playerGUID))
                 player->UpdatePosition(player->GetPositionX(), player->GetPositionY(), _trash->GetPositionZ(), true);
             _trash->SetFacingTo(_trash->GetOrientation() + 0.01f);
             _trash->m_Events.AddEvent(this, execTime + 100);
@@ -608,7 +608,7 @@ public:
                         if (me->HasUnitState(UNIT_STATE_CASTING)) events.ScheduleEvent(eventId, 250);
                         else
                         {
-                            if (Unit* victim = me->getVictim())
+                            if (auto victim = me->getVictim())
                                 if (victim->GetDistance2d(me->GetPositionX(), me->GetPositionY()) > 35.0f)
                                     DoCastVictim(SPELL_ELECTROCUTE);
                             events.ScheduleEvent(EVENT_ELECTROCUTE, 1000, 0, _phase);
@@ -729,7 +729,7 @@ public:
 
                         //me->MonsterYell("PHASE 3 STARTING", LANG_UNIVERSAL, 0);
                         
-                        if (GameObject* go = instance->instance->GetGameObject(instance->GetData64(GOB_CENTER_PLATFORM)))
+                        if (auto go = instance->instance->GetGameObject(instance->GetData64(GOB_CENTER_PLATFORM)))
                             go->SetDestructibleState(GO_DESTRUCTIBLE_DESTROYED);
                         
 
@@ -820,7 +820,7 @@ public:
         void GetNextTarget()
         {
             if (instance)
-                if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+                if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                 {
                     me->SetFacingTo(me->GetAngle(alakir) + (clockwise ? (M_PI / 2.f) : (-M_PI / 2.f)));
 
@@ -848,7 +848,7 @@ public:
             //TC_LOG_ERROR("sql.sql", "%u was just summoned by: %u", me->GetGUID(), summoner->GetEntry());
 
             if (instance)
-                if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+                if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                 {
                     alakir->AI()->JustSummoned(me);
                 }
@@ -945,7 +945,7 @@ public:
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             if (!players.isEmpty())
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (player->GetGUID() != caster->GetGUID())
                             if (caster->GetDistance2d(player) < 30.0f)
                             {
@@ -963,7 +963,7 @@ public:
 
         void visualEffect()
         {
-            if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+            if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                 me->CastSpell(alakir->GetPositionX(), alakir->GetPositionY(), alakir->GetPositionZ(), SPELL_LIGHTING_STRIKE_DUMMY, true);
         }
 
@@ -1053,14 +1053,14 @@ public:
         void DamageTaken(Unit* caster, uint32& damage)
         {
             if (damage > me->GetHealth())
-                if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+                if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                     me->AddAura(SPELL_FEEDBACK, alakir);
         }
 
         void IsSummonedBy(Unit* summoner)
         {
             if (instance)
-                if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+                if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                     alakir->AI()->JustSummoned(me);
         }
     private:
@@ -1086,8 +1086,8 @@ public:
         void RemoveFlags(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
 
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                 {
                     /*
                     float x, y;
@@ -1186,7 +1186,7 @@ public:
         void IsSummonedBy(Unit* summoner)
         {
             if (instance)
-                if (Creature* alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
+                if (auto alakir = Creature::GetCreature(*me, instance->GetData64(DATA_ALAKIR)))
                     alakir->AI()->JustSummoned(me);
         }
     private:
@@ -1267,7 +1267,7 @@ public:
         {
             if (Unit *caster = GetUnitOwner())
                 if (InstanceScript *instance = caster->GetInstanceScript())
-                    if (Creature* alakir = Creature::GetCreature(*caster, instance->GetData64(DATA_ALAKIR)))
+                    if (auto alakir = Creature::GetCreature(*caster, instance->GetData64(DATA_ALAKIR)))
                     {
                         float x, y;
                         alakir->GetNearPoint2D(x, y, 50.0f, alakir->GetAngle(caster));

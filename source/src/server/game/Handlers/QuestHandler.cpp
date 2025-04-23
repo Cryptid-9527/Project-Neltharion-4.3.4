@@ -136,7 +136,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket& recvData)
         return;
     }
 
-    if (Player* playerQuestObject = object->ToPlayer())
+    if (auto playerQuestObject = object->ToPlayer())
     {
         if ((!_player->GetDivider() && _player->GetDivider() != guid) || !playerQuestObject->CanShareQuest(questId))
         {
@@ -193,7 +193,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket& recvData)
             {
                 if (Group* group = _player->GetGroup())
                 {
-                    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+                    for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
                     {
                         Player* player = itr->getSource();
 
@@ -563,7 +563,7 @@ void WorldSession::HandleQuestgiverCompleteQuest(WorldPacket& recvData)
         return;
     }
 
-    if (Battleground* bg = _player->GetBattleground())
+    if (auto bg = _player->GetBattleground())
         bg->HandleQuestComplete(questId, _player);
 
     if (_player->GetQuestStatus(questId) != QUEST_STATUS_COMPLETE)
@@ -607,7 +607,7 @@ void WorldSession::HandlePushQuestToParty(WorldPacket& recvPacket)
 
     TC_LOG_DEBUG("network.opcode", "WORLD: Received CMSG_PUSHQUESTTOPARTY questId = %u", questId);
 
-    for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+    for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
     {
         Player* receiver = itr->getSource();
 

@@ -95,7 +95,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 summoned->AI()->AttackStart(player);
         }
 
@@ -114,7 +114,7 @@ public:
         {
             if (HealthBelowPct(20))
             {
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                 {
                     if (player->GetTypeId() == TYPEID_PLAYER)
                         CAST_PLR(player)->GroupEventHappens(QUEST_MISSING_DIPLO_PT11, me);

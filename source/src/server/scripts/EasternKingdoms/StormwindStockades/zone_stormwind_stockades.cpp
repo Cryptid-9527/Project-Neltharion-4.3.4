@@ -207,7 +207,7 @@ public:
 						g_IsVanished = true;
 						break;
 					case EVENT_AFTERVANISH:
-						if (Unit* newtarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true)) {
+						if (auto newtarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true)) {
 							DoCast(newtarget, SPELL_SHADOWSTEP, true);
 							DoCastVictim(SPELL_SWEEP);
 							me->SetInCombatWith(newtarget);

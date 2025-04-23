@@ -325,7 +325,7 @@ public:
             me->RemoveAllAuras();
             me->DeleteThreatList();
             Talk(TALK_ASIRA_DEATH);
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
+            if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
                 thrall->AI()->DoAction(ACTION_STOP_COMBAT);
             RemoveEncounterFrame();
             _JustDied();
@@ -361,7 +361,7 @@ public:
             DoCast(SPELL_ATTACK_ME);
             events.ScheduleEvent(EVENT_MARK_OF_SILENCE, 100);
             events.ScheduleEvent(EVENT_CHOKING_SMOKE_BOMB, 10000);
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
+            if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
                 thrall->AI()->DoAction(ACTION_START_COMBAT);
             
             AddEncounterFrame();
@@ -483,14 +483,14 @@ public:
         void JustDied(Unit* who)
         {
             /*
-            if (Creature* who = me->FindNearestCreature(NPC_THRALL_EVENT_2, 100.f))
+            if (auto who = me->FindNearestCreature(NPC_THRALL_EVENT_2, 100.f))
                 who->ToCreature()->AI()->DoAction(ACTION_KILL_CREATURE);
             */
         }
 
         void IsSummonedBy(Unit* owner) override
         {
-            if (Player* p = me->SelectNearestPlayer(100.f))
+            if (auto p = me->SelectNearestPlayer(100.f))
                 AttackStart(p);
         }
 
@@ -499,7 +499,7 @@ public:
             if (type == POINT_MOTION_TYPE)
                 if (pointId == EVENT_BACKSTAB)
                 {
-                    if (Unit* v = me->getVictim())
+                    if (auto v = me->getVictim())
                     {
                         me->SetFacingTo(me->GetAngle(v));
                         UpdateVictim();
@@ -519,7 +519,7 @@ public:
                         DoCast(me->getVictim(), spell, false);
                     break;
                 case SPELL_BACKSTAB:
-                    if (Unit* victim = me->getVictim())
+                    if (auto victim = me->getVictim())
                     {
                         if (backStabCount == 2)
                         {
@@ -641,13 +641,13 @@ public:
                     case lifeWardenBossOutroPathSize - 1:
                         if (isOutroPath)
                         {
-                            if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
+                            if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
                                 thrall->SetVisible(false);
                             me->SetVisible(false);
                         }
                         break;
                     case 4:
-                        if (Creature* asira = instance->GetCreature(DATA_ASIRA))
+                        if (auto asira = instance->GetCreature(DATA_ASIRA))
                         {
                                 int32 seat = 1;
                                 asira->CastCustomSpell(me, SPELL_RIDE_DRAKE_VEHICLE, &seat, NULL, NULL, TRIGGERED_FULL_MASK);
@@ -690,7 +690,7 @@ public:
                         me->GetMotionMaster()->MoveSmoothPath(lifeWardenBossPath, lifeWardenBossPathSize);
                         break;
                     case EVENT_KILL_DRAKE:
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
                         {
                             me->SetFacingToObject(thrall);
                             thrall->SetFacingToObject(me);
@@ -698,7 +698,7 @@ public:
                             thrall->AI()->TalkWithDelay(17000, TALK_THRALL_I_HAVENT_TO_BE);
                         }
 
-                        if (Creature* asira = instance->GetCreature(DATA_ASIRA))
+                        if (auto asira = instance->GetCreature(DATA_ASIRA))
                         {
                             asira->ExitVehicle(&Asira_landing);
                             asira->RemoveAurasDueToSpell(SPELL_RIDE_DRAKE_VEHICLE);
@@ -711,8 +711,8 @@ public:
                         events.ScheduleEvent(EVENT_LAND_GROUND, 4000);
                         break;
                     case EVENT_LAND_GROUND:
-                        if (Creature* asira = instance->GetCreature(DATA_ASIRA))
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
+                        if (auto asira = instance->GetCreature(DATA_ASIRA))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_2))
                         {
                             asira->SetFacingTo(asira->GetAngle(thrall));
                             thrall->SetFacingTo(thrall->GetAngle(asira));
@@ -720,11 +720,11 @@ public:
                         }
                         break;
                     case EVENT_COMBAT_START:
-                        if (Creature* asira = instance->GetCreature(DATA_ASIRA))
+                        if (auto asira = instance->GetCreature(DATA_ASIRA))
                         {
                             asira->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                             asira->SetReactState(REACT_AGGRESSIVE);
-                            if (Player* p = asira->FindNearestPlayer(100.f))
+                            if (auto p = asira->FindNearestPlayer(100.f))
                                 asira->AddThreat(p, 100.f);
                         }
                         break;
@@ -780,7 +780,7 @@ public:
             if (spell->Id == SPELL_TWILIGHT_DRAKE_1SHOT)
                 if (caster->GetEntry() == NPC_TWILIGHT_KILLER_DRAKE)
                 {
-                    if (Creature* c = caster->ToCreature())
+                    if (auto c = caster->ToCreature())
                         c->AI()->Talk(0);
 
                     me->DisableMovementFlagUpdate(true);
@@ -824,7 +824,7 @@ public:
                     switch (point)
                     {
                     case 5:
-                        if (Creature* c = me->SummonCreature(NPC_TWILIGHT_KILLER_DRAKE,
+                        if (auto c = me->SummonCreature(NPC_TWILIGHT_KILLER_DRAKE,
                             Twilight_Drake_spawn.GetPositionX() + frand(-10.f, 10.f),
                             Twilight_Drake_spawn.GetPositionY() + frand(-10.f, 10.f),
                             Twilight_Drake_spawn.GetPositionZ() + frand(-10.f, 10.f),
@@ -838,7 +838,7 @@ public:
                         if (Vehicle* v = me->GetVehicleKit())
                         {
                             /*
-                            if (Unit* p = v->GetPassenger(0))
+                            if (auto p = v->GetPassenger(0))
                                 p->ExitVehicle(&player_safe_landing);
                             else
                             */
@@ -1066,7 +1066,7 @@ public:
         {
             if (type == POINT_MOTION_TYPE && id == POINT_OUTRO)
             {
-                if (Creature* drake = GetArisaDrake())
+                if (auto drake = GetArisaDrake())
                 {
                     DoCast(drake, SPELL_RESURECT_ASIRA_DRAKE, false);
                     events.ScheduleEvent(EVENT_OUTRO_2, 4500);
@@ -1135,7 +1135,7 @@ public:
             summons.DespawnEntry(NPC_THRALL_FIRE_TOTEM);
             pos = (*me);
             me->MoveBlink(pos, 5.f, frand(0.f, M_PI * 2.f));
-            if (Creature* summon = me->SummonCreature(NPC_THRALL_FIRE_TOTEM, pos))
+            if (auto summon = me->SummonCreature(NPC_THRALL_FIRE_TOTEM, pos))
             {
                 summon->SetReactState(REACT_PASSIVE);
             }
@@ -1213,7 +1213,7 @@ public:
                         break;
                     }
                     case EVENT_OUTRO_2:
-                        if (Creature* drake = GetArisaDrake())
+                        if (auto drake = GetArisaDrake())
                         {
                             int32 seat = 1;
                             me->CastCustomSpell(drake, SPELL_RIDE_DRAKE_VEHICLE, &seat, NULL, NULL, TRIGGERED_FULL_MASK);
@@ -1221,7 +1221,7 @@ public:
                             drake->AI()->DoAction(ACTION_START_OUTRO);
 
                             for (uint8 i = 0; i < 5; i++)
-                                if (Creature* lifeWarden = me->SummonCreature(drakeInfo[i].entry, drakeInfo[i].position, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
+                                if (auto lifeWarden = me->SummonCreature(drakeInfo[i].entry, drakeInfo[i].position, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000))
                                     lifeWarden->GetMotionMaster()->MoveSmoothPath(drakeInfo[i].pathName, lifeWardenPathSize);
                         }
                         break;
@@ -1253,7 +1253,7 @@ public:
         Creature* GetArisaDrake()
         {
             for (uint64 summonGuid : summons)
-                if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGuid))
+                if (auto summon = ObjectAccessor::GetCreature(*me, summonGuid))
                     if (summon->GetEntry() == NPC_ASIRA_LIFE_WARDEN)
                         return summon;
             return NULL;
@@ -1434,7 +1434,7 @@ public:
         void HandleProc(AuraEffect const* /*aurEff*/, ProcEventInfo& /*eventInfo*/)
         {
             PreventDefaultAction();
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->SetFacingToObject(GetTarget());
 

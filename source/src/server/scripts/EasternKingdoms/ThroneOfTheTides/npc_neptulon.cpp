@@ -162,7 +162,7 @@ public:
     }
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             if (player)
             {
@@ -294,7 +294,7 @@ public:
             Talk(10);
             _Evade();
             me->Respawn(true);
-            if (GameObject* go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
+            if (auto go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
             {
                 instance->HandleGameObject(instance->GetData64(GO_ABYSSAL_MAW_04), true, NULL);
             }
@@ -325,7 +325,7 @@ public:
             me->SetFacingTo(3.2825f);
             me->DespawnCreaturesInArea(NPC_BLIGHT_OF_OZUMAT);
             me->DespawnCreaturesInArea(NPC_BLIGHT_OF_OZUMAT_SUMMONER);
-            if (GameObject* go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
+            if (auto go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
             {
                 //TC_LOG_ERROR("sql.sql", "opening door - evade");
                 instance->HandleGameObject(instance->GetData64(GO_ABYSSAL_MAW_04), true, NULL);
@@ -467,7 +467,7 @@ public:
                         for (int i = 0; i < 6; ++i)
                         {
                             int j = urand(0,9);
-                            if (Creature* murloc = me->SummonCreature(NPC_DEEP_MURLOC_INVADER, outside_holes_ccw_from_5_oclock[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
+                            if (auto murloc = me->SummonCreature(NPC_DEEP_MURLOC_INVADER, outside_holes_ccw_from_5_oclock[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
                             {
                                 murloc->GetMotionMaster()->MoveJump(inside_holes_ccw_from_5_oclock[j], 15.0f, 15.0f, 1001);
                                 murloc->SetReactState(REACT_PASSIVE);
@@ -498,7 +498,7 @@ public:
                     case EVENT_SUMMON_BEHEMOTH:
                     {
                         int j = urand(0, 1);
-                        if (Creature* behemoth = me->SummonCreature(NPC_UNYIELDING_BEHEMOTH, spawns[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto behemoth = me->SummonCreature(NPC_UNYIELDING_BEHEMOTH, spawns[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                         {
                             behemoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_ATTACKABLE_1);
                             behemoth->SetReactState(REACT_PASSIVE);
@@ -546,7 +546,7 @@ public:
                     {
                         sappers = 3;
                         for (int i = 6; i < 9; ++i)
-                            if (Creature* sapper = me->SummonCreature(NPC_FACELESS_SAPPER, spawns[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
+                            if (auto sapper = me->SummonCreature(NPC_FACELESS_SAPPER, spawns[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 3000))
                             {
                                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, sapper);
                                 sapper->GetMotionMaster()->MoveJump(spawns[i + 3], 15.0f, 15.0f, 1001);
@@ -573,7 +573,7 @@ public:
                     case EVENT_SUMMON_BEAST:
                     {
                         int j = urand(0, 1);
-                        if (Creature* beast = me->SummonCreature(NPC_BLIGHT_BEAST, spawns[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
+                        if (auto beast = me->SummonCreature(NPC_BLIGHT_BEAST, spawns[j], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 10000))
                         {
                             summons.Summon(beast);
                             beast->AddAura(SPELL_WATER_JUMP_VISUAL, beast);
@@ -587,7 +587,7 @@ public:
                     case EVENT_BLIGHT_OF_OZUMAT:
                     {
                         if(blightOfOzumatSummoner && blightOfOzumatSummoner->isAlive())
-                            if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
+                            if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 80.0f, true))
                                 blightOfOzumatSummoner->CastSpell(victim, SPELL_BLIGHT_OF_OZUMAT, true);
                         events.RescheduleEvent(EVENT_BLIGHT_OF_OZUMAT, 10000);
                         break;
@@ -631,7 +631,7 @@ public:
                         }
                         Position pos;
                         me->GetPosition(&pos);
-                        if (Creature* blight = me->SummonCreature(NPC_BLIGHT_OF_OZUMAT_SUMMONER, pos))
+                        if (auto blight = me->SummonCreature(NPC_BLIGHT_OF_OZUMAT_SUMMONER, pos))
                         {
                             blight->RemoveAllAuras();
                             blight->CastSpell(blight, SPELL_BLIGHT_OF_OZUMAT_ROOM_TRIGGER);
@@ -704,7 +704,7 @@ public:
                             me->DespawnCreaturesInArea(NPC_BLIGHT_OF_OZUMAT_ROOM, 500.f);
                             me->DespawnCreaturesInArea(NPC_BLIGHT_OF_OZUMAT_SUMMONER, 500.f);
 
-                            if (GameObject* go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
+                            if (auto go = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 100.0f))
                             {
                                 instance->HandleGameObject(go->GetGUID(), true, NULL);
                             }
@@ -836,7 +836,7 @@ public:
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER)
-                if (Creature* neptulon = me->FindNearestCreature(BOSS_NEPTULON, 100.0f, true))
+                if (auto neptulon = me->FindNearestCreature(BOSS_NEPTULON, 100.0f, true))
                     neptulon->AI()->DoAction(ACTION_KILLED_PLAYER);
         }
 
@@ -902,7 +902,7 @@ public:
                     {
                         if (IsHeroic())
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                                 DoCast(target, SPELL_VEIL_OF_SHADOW);
                             events.RescheduleEvent(EVENT_VEIL_OF_SHADOW, urand(10000, 15000));
                         }
@@ -947,7 +947,7 @@ public:
         void KilledUnit(Unit* victim)
         {
             if (victim->GetTypeId() == TYPEID_PLAYER)
-                if (Creature* neptulon = me->FindNearestCreature(BOSS_NEPTULON, 100.0f, true))
+                if (auto neptulon = me->FindNearestCreature(BOSS_NEPTULON, 100.0f, true))
                     neptulon->AI()->DoAction(ACTION_KILLED_PLAYER);
         }
         void EnterCombat(Unit* /*attacker*/)
@@ -1071,7 +1071,7 @@ public:
 
         void HandleEffect(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
             {
                 uint32 maxHealth = target->GetMaxHealth();
                 target->CastSpell(target, 76155, true);
@@ -1094,7 +1094,7 @@ public:
                 for (Player* player : players)
                     for (uint8 i = 0; i < MAX_SUMMON_SLOT; ++i)
                         if (player->m_SummonSlot[i])
-                            if (Creature* summon = caster->GetMap()->GetCreature(player->m_SummonSlot[i]))
+                            if (auto summon = caster->GetMap()->GetCreature(player->m_SummonSlot[i]))
                                 if (summon->ToTotem())
                                     unitList.push_back(summon);
             }

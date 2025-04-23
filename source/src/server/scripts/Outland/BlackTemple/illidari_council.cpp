@@ -155,7 +155,7 @@ public:
         // finds and stores the GUIDs for each Council member using instance data system.
         void LoadCouncilGUIDs()
         {
-            if (InstanceScript* instance = me->GetInstanceScript())
+            if (auto instance = me->GetInstanceScript())
             {
                 Council[0] = instance->GetData64(DATA_GATHIOSTHESHATTERER);
                 Council[1] = instance->GetData64(DATA_VERASDARKSHADOW);
@@ -181,7 +181,7 @@ public:
             {
                 if (AggroYellTimer <= diff)
             {
-                if (Creature* pMember = Creature::GetCreature(*me, Council[YellCounter]))
+                if (auto pMember = Creature::GetCreature(*me, Council[YellCounter]))
                 {
                     pMember->AI()->Talk(CouncilAggro[YellCounter].entry);
                     AggroYellTimer = CouncilAggro[YellCounter].timer;
@@ -196,7 +196,7 @@ public:
             {
                 if (EnrageTimer <= diff)
             {
-                if (Creature* pMember = Creature::GetCreature(*me, Council[YellCounter]))
+                if (auto pMember = Creature::GetCreature(*me, Council[YellCounter]))
                 {
                     pMember->CastSpell(pMember, SPELL_BERSERK, true);
                     pMember->AI()->Talk(CouncilEnrage[YellCounter].entry);
@@ -265,7 +265,7 @@ public:
             if (instance)
             {
                 instance->SetData(DATA_ILLIDARICOUNCILEVENT, NOT_STARTED);
-                if (Creature* VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
+                if (auto VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
                     VoiceTrigger->AI()->EnterEvadeMode();
             }
 
@@ -293,7 +293,7 @@ public:
                 Council[3] = instance->GetData64(DATA_VERASDARKSHADOW);
 
                 // Start the event for the Voice Trigger
-                if (Creature* VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
+                if (auto VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
                 {
                     CAST_AI(mob_blood_elf_council_voice_trigger::mob_blood_elf_council_voice_triggerAI, VoiceTrigger->AI())->LoadCouncilGUIDs();
                     CAST_AI(mob_blood_elf_council_voice_trigger::mob_blood_elf_council_voice_triggerAI, VoiceTrigger->AI())->EventStarted = true;
@@ -328,7 +328,7 @@ public:
                     {
                         if (instance)
                         {
-                            if (Creature* VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
+                            if (auto VoiceTrigger = (Unit::GetCreature(*me, instance->GetData64(DATA_BLOOD_ELF_COUNCIL_VOICE))))
                                 VoiceTrigger->DealDamage(VoiceTrigger, VoiceTrigger->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
                             instance->SetData(DATA_ILLIDARICOUNCILEVENT, DONE);
                             //me->SummonCreature(AKAMAID, 746.466980f, 304.394989f, 311.90208f, 6.272870f, TEMPSUMMON_DEAD_DESPAWN, 0);
@@ -354,7 +354,7 @@ public:
                     {
                         if (Council[i])
                         {
-                            if (Creature* Member = (Unit::GetCreature((*me), Council[i])))
+                            if (auto Member = (Unit::GetCreature((*me), Council[i])))
                             {
                                 // This is the evade/death check.
                                 if (Member->isAlive() && !Member->getVictim())
@@ -424,7 +424,7 @@ struct boss_illidari_councilAI : public ScriptedAI
     {
         for (uint8 i = 0; i < 4; ++i)
         {
-            if (Unit* unit = Unit::GetUnit(*me, Council[i]))
+            if (auto unit = Unit::GetUnit(*me, Council[i]))
                 if (unit != me && unit->getVictim())
                 {
                     AttackStart(unit->getVictim());
@@ -442,7 +442,7 @@ struct boss_illidari_councilAI : public ScriptedAI
         damage /= 4;
         for (uint8 i = 0; i < 4; ++i)
         {
-            if (Creature* unit = Unit::GetCreature(*me, Council[i]))
+            if (auto unit = Unit::GetCreature(*me, Council[i]))
                 if (unit != me && damage < unit->GetHealth())
                 {
                     unit->ModifyHealth(-int32(damage));
@@ -543,7 +543,7 @@ public:
 
             if (BlessingTimer <= diff)
             {
-                if (Unit* unit = SelectCouncilMember())
+                if (auto unit = SelectCouncilMember())
                 {
                     switch (urand(0, 1))
                     {
@@ -567,7 +567,7 @@ public:
 
             if (HammerOfJusticeTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     // is in ~10-40 yd range
                     if (me->IsInRange(target, 10.0f, 40.0f, false))
@@ -680,7 +680,7 @@ public:
 
             if (BlizzardTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(target, SPELL_BLIZZARD);
                     BlizzardTimer = urand(45, 91) * 1000;
@@ -691,7 +691,7 @@ public:
 
             if (FlamestrikeTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(target, SPELL_FLAMESTRIKE);
                     FlamestrikeTimer = urand(55, 101) * 1000;
@@ -748,7 +748,7 @@ public:
 
             if (EmpoweredSmiteTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(target, SPELL_EMPOWERED_SMITE);
                     EmpoweredSmiteTimer = 38000;
@@ -763,7 +763,7 @@ public:
 
             if (DivineWrathTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                 {
                     DoCast(target, SPELL_DIVINE_WRATH);
                     DivineWrathTimer = urand(40, 81) * 1000;
@@ -848,7 +848,7 @@ public:
 
                 if (VanishTimer <= diff)                          // Disappear and stop attacking, but follow a random unit
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     {
                         VanishTimer = 30000;
                         AppearEnvenomTimer= 28000;

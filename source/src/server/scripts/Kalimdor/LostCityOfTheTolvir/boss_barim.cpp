@@ -240,7 +240,7 @@ public:
                 }
                 case NPC_BLAZE_OF_HEAVENS:
                 case NPC_HARBINGER_OF_DARKNESS:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM,0))
                         summon->AI()->AttackStart(target);
                     break;
                 case NPC_HEAVENS_FURY:
@@ -318,7 +318,7 @@ public:
                         DoCastRandom(SPELL_BLAZE_OF_THE_HEAVENS_SUMMON_EGG, 100.0f, true);
                         break;
                     case EVENT_PLAGUE_OF_AGES:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_PLAGUE_OF_AGES, true);
                         events.ScheduleEvent(EVENT_PLAGUE_OF_AGES, urand(12000, 16000), 0, PHASE_NORMAL);
                         break;
@@ -328,7 +328,7 @@ public:
                         break;
                     case EVENT_HEAVENS_FURY:
                         if (!me->HasReactState(REACT_PASSIVE))
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(target, SPELL_HEAVENS_FURY, true);
                         events.ScheduleEvent(EVENT_HEAVENS_FURY, urand(22000, 35000), 0, PHASE_NORMAL);
                         break;
@@ -336,7 +336,7 @@ public:
                         Talk(SAY_REPETANCE);
                         me->StopMoving();
                         DoCastAOE(SPELL_REPENTANCE);
-                        if (Creature* c = me->FindNearestCreature(NPC_BLAZE_OF_HEAVENS, 500.0f))
+                        if (auto c = me->FindNearestCreature(NPC_BLAZE_OF_HEAVENS, 500.0f))
                         {
                             c->AI()->DoAction(ACTION_EGG_INTERMISSION);
                         }
@@ -421,7 +421,7 @@ class npc_harbinger_of_darkness : public CreatureScript
 
             void IsSummonedBy(Unit* /*who*/)
             {
-                if (Creature* barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
+                if (auto barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
                     barim->AI()->JustSummoned(me);
 
                 if (auto blaze = me->FindNearestCreature(NPC_BLAZE_OF_HEAVENS, 100.0f, true))
@@ -433,7 +433,7 @@ class npc_harbinger_of_darkness : public CreatureScript
 
             void JustReachedHome()
             {
-                if (Creature* barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
+                if (auto barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
                     barim->AI()->EnterEvadeMode();
             }
 
@@ -441,7 +441,7 @@ class npc_harbinger_of_darkness : public CreatureScript
             {
                 DoCastAOE(SPELL_WAIL_OF_DARKNESS_AOE);
 
-                if (Creature* barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
+                if (auto barim = Creature::GetCreature(*me, instance->GetData64(DATA_HIGH_PROPHET_BARIM)))
                     barim->AI()->DoAction(PHASE_NORMAL);
 
                 me->DespawnOrUnsummon();
@@ -469,7 +469,7 @@ class npc_harbinger_of_darkness : public CreatureScript
 
                 if (WailOfDarknessTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                         DoCast(target, SPELL_WAIL_OF_DARKNESS_RANDOM, true);
                     WailOfDarknessTimer = 2000;
                 } else WailOfDarknessTimer -= diff;
@@ -703,7 +703,7 @@ class npc_soul_fragment : public CreatureScript
                 me->SetReactState(REACT_PASSIVE);
                 owner->CastSpell(me, SPELL_SOUL_SEVER_CLONE);
 
-                if (Creature* harbinger = me->FindNearestCreature(NPC_HARBINGER_OF_DARKNESS, 100.0f, true))
+                if (auto harbinger = me->FindNearestCreature(NPC_HARBINGER_OF_DARKNESS, 100.0f, true))
                 {
                     DoCast(harbinger, SPELL_SOUL_FRAGMENT);
                     me->ClearUnitState(UNIT_STATE_CASTING);

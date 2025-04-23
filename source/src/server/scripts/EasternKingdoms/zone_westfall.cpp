@@ -110,10 +110,10 @@ public:
         {
             if(!bSummoned)
             {
-                if (Creature* Thug1 = me->SummonCreature(NPC_THUG, -9859.36f, 1332.42f, 41.985f, 2.495f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                    if (Creature* Thug2 = me->SummonCreature(NPC_THUG, -9862.51f, 1332.079f, 41.985f, 0.85f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                        if (Creature* Thug3 = me->SummonCreature(NPC_THUG, -9863.49f, 1335.489f, 41.985f, 5.63f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                            if (Creature* Thug4 = me->SummonCreature(NPC_THUG, -9860.42f, 1335.459f, 41.985f, 4.11f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                if (auto Thug1 = me->SummonCreature(NPC_THUG, -9859.36f, 1332.42f, 41.985f, 2.495f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                    if (auto Thug2 = me->SummonCreature(NPC_THUG, -9862.51f, 1332.079f, 41.985f, 0.85f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                        if (auto Thug3 = me->SummonCreature(NPC_THUG, -9863.49f, 1335.489f, 41.985f, 5.63f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                            if (auto Thug4 = me->SummonCreature(NPC_THUG, -9860.42f, 1335.459f, 41.985f, 4.11f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
                             {
                                 Thug1GUID = Thug1->GetGUID();
                                 Thug2GUID = Thug2->GetGUID();
@@ -131,11 +131,11 @@ public:
             {
                 if (bSummoned)
                 {
-                    if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                        if (Creature* Thug1 = me->GetCreature(*me, Thug1GUID))
-                            if (Creature* Thug2 = me->GetCreature(*me, Thug2GUID))
-                                if (Creature* Thug3 = me->GetCreature(*me, Thug3GUID))
-                                    if (Creature* Thug4 = me->GetCreature(*me, Thug4GUID))
+                    if (auto player = me->GetPlayer(*me, PlayerGUID))
+                        if (auto Thug1 = me->GetCreature(*me, Thug1GUID))
+                            if (auto Thug2 = me->GetCreature(*me, Thug2GUID))
+                                if (auto Thug3 = me->GetCreature(*me, Thug3GUID))
+                                    if (auto Thug4 = me->GetCreature(*me, Thug4GUID))
                                     {
                                         switch (Phase)
                                         { // MonsterSay move to ->creature_texts
@@ -228,7 +228,7 @@ public:
                                             }
                                         case 10:
                                             {
-                                                if (Player* player = me->GetPlayer(*me, PlayerGUID))
+                                                if (auto player = me->GetPlayer(*me, PlayerGUID))
                                                     player->KilledMonsterCredit(42417, PlayerGUID);
                                                 SummonTimer = 2500;
                                                 Phase++;
@@ -324,12 +324,12 @@ public:
         {
             if (!bSummoned)
             {
-                if (Creature* Investigator01 = me->SummonCreature(NPC_INVESTIGATOR2,-9854.414f, 916.481f, 30.100f, 5.3867f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
+                if (auto Investigator01 = me->SummonCreature(NPC_INVESTIGATOR2,-9854.414f, 916.481f, 30.100f, 5.3867f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
                 {
                     Investigator01GUID = Investigator01->GetGUID();
                     bSummoned1 = true;
                 }
-                if (Creature* Investigator02 = me->SummonCreature(NPC_INVESTIGATOR2, -9854.252f, 906.651f, 29.833f, 0.730950f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
+                if (auto Investigator02 = me->SummonCreature(NPC_INVESTIGATOR2, -9854.252f, 906.651f, 29.833f, 0.730950f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
                 {
                     Investigator02GUID = Investigator02->GetGUID();
                     bSummoned2 = true;
@@ -347,9 +347,9 @@ public:
             {
                 if (bSummoned)
                 {
-                    if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                        if (Creature* Investigator01 = me->GetCreature(*me, Investigator01GUID))
-                            if (Creature* Investigator02 = me->GetCreature(*me, Investigator02GUID))
+                    if (auto player = me->GetPlayer(*me, PlayerGUID))
+                        if (auto Investigator01 = me->GetCreature(*me, Investigator01GUID))
+                            if (auto Investigator02 = me->GetCreature(*me, Investigator02GUID))
                             {
                                 switch (Phase)
                                 {
@@ -633,8 +633,8 @@ public:
         {
             if(!bSummoned)
             {
-                if (Creature* glubtok1 = me->SummonCreature(42492, -9848.11f, 1395.29f, 37.70f, 0.56f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 85000))
-                    if (Creature* shadowy1 = me->SummonCreature(42515, -9826.083f, 1406.738f, 36.885f, 3.56f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 85000))
+                if (auto glubtok1 = me->SummonCreature(42492, -9848.11f, 1395.29f, 37.70f, 0.56f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 85000))
+                    if (auto shadowy1 = me->SummonCreature(42515, -9826.083f, 1406.738f, 36.885f, 3.56f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 85000))
                     {
                         GlubtoklGUID = glubtok1->GetGUID();
                         Shadowy1GUID = shadowy1->GetGUID();
@@ -651,9 +651,9 @@ public:
             {
                 if (bSummoned)
                 {
-                    //if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                    if (Creature* glubtok1 = me->GetCreature(*me, GlubtoklGUID))
-                        if (Creature* shadowy1 = me->GetCreature(*me, Shadowy1GUID))
+                    //if (auto player = me->GetPlayer(*me, PlayerGUID))
+                    if (auto glubtok1 = me->GetCreature(*me, GlubtoklGUID))
+                        if (auto shadowy1 = me->GetCreature(*me, Shadowy1GUID))
                         {
                             switch (Phase)
                             {
@@ -847,7 +847,7 @@ public:
         {
             if (HungryTimer < diff)
             {
-                if (Creature* stew = me->FindNearestCreature(NPC_STEW, 10.0f, true))
+                if (auto stew = me->FindNearestCreature(NPC_STEW, 10.0f, true))
                 {
                     if (me->HasAura(SPELL_FULL_BELLY) && Phase == 0)
                         return;
@@ -878,7 +878,7 @@ public:
                         }
                     case 3:
                         {
-                            if (Unit* player = me->GetPlayer(*stew, stew->GetUInt64Value(UNIT_FIELD_SUMMONEDBY)))
+                            if (auto player = me->GetPlayer(*stew, stew->GetUInt64Value(UNIT_FIELD_SUMMONEDBY)))
                                 player->ToPlayer()->KilledMonsterCredit(42617, 0);
                             HungryTimer = 25000;
                             Phase++;
@@ -1017,7 +1017,7 @@ public:
         {
             if(!bSummoned)
             {
-                if (Creature* Shadowy2 = me->SummonCreature(NPC_SHADOWY2,-11016.31f, 1478.82f, 47.80f, 2.016f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                if (auto Shadowy2 = me->SummonCreature(NPC_SHADOWY2,-11016.31f, 1478.82f, 47.80f, 2.016f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
                 {
                     Shadowy2GUID = Shadowy2->GetGUID();
                     bSummoned = true;
@@ -1031,33 +1031,33 @@ public:
         {
             if(!bSummoned1)
             {
-                if (Creature* Witness1 = me->SummonCreature(NPC_LISTENER,-11009.036f, 1490.47f, 43.58f, 4.16f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                    if (Creature* Witness2 = me->SummonCreature(NPC_LISTENER,-11010.76f, 1488.21f, 43.57f, 4.33f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                        if (Creature* Witness3 = me->SummonCreature(NPC_LISTENER,-11017.39f, 1491.76f, 43.19f, 4.78f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                            if (Creature* Witness4 = me->SummonCreature(NPC_LISTENER,-11021.73f, 1493.054f, 43.184f, 5.09f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                if (Creature* Witness5 = me->SummonCreature(NPC_LISTENER,-11025.74f, 1487.70f, 43.17f, 5.45f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                    if (Creature* Witness6 = me->SummonCreature(NPC_LISTENER,-11025.25f, 1482.23f, 43.03f, 6.04f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                        if (Creature* Witness7 = me->SummonCreature(NPC_LISTENER,-11029.68f, 1481.255f, 43.185f, 6.20f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                            if (Creature* Witness8 = me->SummonCreature(NPC_LISTENER,-11024.46f, 1473.88f, 43.02f, 0.43f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                if (Creature* Witness9 = me->SummonCreature(NPC_LISTENER,-11019.49f, 1471.70f, 43.21f, 1.09f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                    if (Creature* Witness10 = me->SummonCreature(NPC_LISTENER,-11021.56f, 1497.053f, 43.20f, 5.00f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                        if (Creature* Witness11 = me->SummonCreature(NPC_LISTENER,-11012.29f, 1488.14f, 43.77f, 4.16f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                            if (Creature* Witness12 = me->SummonCreature(NPC_LISTENER,-11014.67f, 1493.14f, 43.23f, 4.60f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                if (Creature* Witness13 = me->SummonCreature(NPC_LISTENER,-11019.8f, 1494.25f, 43.2f, 4.77f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                    if (Creature* Witness14 = me->SummonCreature(NPC_LISTENER,-11023.6f, 1489.35f, 43.17f, 4.77f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                        if (Creature* Witness15 = me->SummonCreature(NPC_LISTENER,-11023.1f, 1482.51f, 43.07f, 6.25f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                            if (Creature* Witness16 = me->SummonCreature(NPC_LISTENER,-11027.2f, 1494.37f, 43.17f, 5.15f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                if (Creature* Witness17 = me->SummonCreature(NPC_LISTENER,-11029.6f, 1488.29f, 43.19f, 5.64f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                    if (Creature* Witness18 = me->SummonCreature(NPC_LISTENER,-11030.8f, 1485.13f, 43.31f, 5.94f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                        if (Creature* Witness19 = me->SummonCreature(NPC_LISTENER,-11026.2f, 1478.62f, 42.94f, 6.17f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                            if (Creature* Witness20 = me->SummonCreature(NPC_LISTENER,-11013.2f, 1497.81f, 43.31f, 4.44f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                if (Creature* Witness21 = me->SummonCreature(NPC_LISTENER,-11011.6f, 1492.61f, 43.39f, 4.44f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                    if (Creature* Witness22 = me->SummonCreature(NPC_LISTENER,-11015.4f, 1489.06f, 43.28f, 4.73f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                        if (Creature* Witness23 = me->SummonCreature(NPC_LISTENER,-11020.2f, 1490.15f, 43.19f, 5.07f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                            if (Creature* Witness24 = me->SummonCreature(NPC_LISTENER,-11009.9f, 1483.52f, 44.06f, 3.88f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                                if (Creature* Witness25 = me->SummonCreature(NPC_LISTENER,-11020.1f, 1484.87f, 43.18f, 5.33f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                                    if (Creature* Witness26 = me->SummonCreature(NPC_LISTENER,-11017.7f, 1487.42f, 43.24f, 4.89f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
-                                                                                                                        if (Creature* Witness27 = me->SummonCreature(NPC_LISTENER,-11017.9f, 1498.24f, 43.20f, 5.04f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                if (auto Witness1 = me->SummonCreature(NPC_LISTENER,-11009.036f, 1490.47f, 43.58f, 4.16f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                    if (auto Witness2 = me->SummonCreature(NPC_LISTENER,-11010.76f, 1488.21f, 43.57f, 4.33f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                        if (auto Witness3 = me->SummonCreature(NPC_LISTENER,-11017.39f, 1491.76f, 43.19f, 4.78f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                            if (auto Witness4 = me->SummonCreature(NPC_LISTENER,-11021.73f, 1493.054f, 43.184f, 5.09f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                if (auto Witness5 = me->SummonCreature(NPC_LISTENER,-11025.74f, 1487.70f, 43.17f, 5.45f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                    if (auto Witness6 = me->SummonCreature(NPC_LISTENER,-11025.25f, 1482.23f, 43.03f, 6.04f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                        if (auto Witness7 = me->SummonCreature(NPC_LISTENER,-11029.68f, 1481.255f, 43.185f, 6.20f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                            if (auto Witness8 = me->SummonCreature(NPC_LISTENER,-11024.46f, 1473.88f, 43.02f, 0.43f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                if (auto Witness9 = me->SummonCreature(NPC_LISTENER,-11019.49f, 1471.70f, 43.21f, 1.09f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                    if (auto Witness10 = me->SummonCreature(NPC_LISTENER,-11021.56f, 1497.053f, 43.20f, 5.00f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                        if (auto Witness11 = me->SummonCreature(NPC_LISTENER,-11012.29f, 1488.14f, 43.77f, 4.16f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                            if (auto Witness12 = me->SummonCreature(NPC_LISTENER,-11014.67f, 1493.14f, 43.23f, 4.60f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                if (auto Witness13 = me->SummonCreature(NPC_LISTENER,-11019.8f, 1494.25f, 43.2f, 4.77f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                    if (auto Witness14 = me->SummonCreature(NPC_LISTENER,-11023.6f, 1489.35f, 43.17f, 4.77f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                        if (auto Witness15 = me->SummonCreature(NPC_LISTENER,-11023.1f, 1482.51f, 43.07f, 6.25f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                            if (auto Witness16 = me->SummonCreature(NPC_LISTENER,-11027.2f, 1494.37f, 43.17f, 5.15f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                if (auto Witness17 = me->SummonCreature(NPC_LISTENER,-11029.6f, 1488.29f, 43.19f, 5.64f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                    if (auto Witness18 = me->SummonCreature(NPC_LISTENER,-11030.8f, 1485.13f, 43.31f, 5.94f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                        if (auto Witness19 = me->SummonCreature(NPC_LISTENER,-11026.2f, 1478.62f, 42.94f, 6.17f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                            if (auto Witness20 = me->SummonCreature(NPC_LISTENER,-11013.2f, 1497.81f, 43.31f, 4.44f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                if (auto Witness21 = me->SummonCreature(NPC_LISTENER,-11011.6f, 1492.61f, 43.39f, 4.44f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                    if (auto Witness22 = me->SummonCreature(NPC_LISTENER,-11015.4f, 1489.06f, 43.28f, 4.73f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                        if (auto Witness23 = me->SummonCreature(NPC_LISTENER,-11020.2f, 1490.15f, 43.19f, 5.07f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                            if (auto Witness24 = me->SummonCreature(NPC_LISTENER,-11009.9f, 1483.52f, 44.06f, 3.88f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                                if (auto Witness25 = me->SummonCreature(NPC_LISTENER,-11020.1f, 1484.87f, 43.18f, 5.33f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                                    if (auto Witness26 = me->SummonCreature(NPC_LISTENER,-11017.7f, 1487.42f, 43.24f, 4.89f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                                                                                                                        if (auto Witness27 = me->SummonCreature(NPC_LISTENER,-11017.9f, 1498.24f, 43.20f, 5.04f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
                                                                                                                         {
                                                                                                                             Witness1GUID = Witness1->GetGUID();
                                                                                                                             Witness2GUID = Witness2->GetGUID();
@@ -1098,8 +1098,8 @@ public:
             {
                 if (bSummoned)
                 {
-                    if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                        if (Creature* Shadowy2 = me->GetCreature(*me, Shadowy2GUID))
+                    if (auto player = me->GetPlayer(*me, PlayerGUID))
+                        if (auto Shadowy2 = me->GetCreature(*me, Shadowy2GUID))
                         {
                             switch (Phase)
                             {
@@ -1167,7 +1167,7 @@ public:
                                 }
                             case 9:
                                 {
-                                    if (Creature* listener = me->FindNearestCreature(NPC_LISTENER, 35.0f, true))
+                                    if (auto listener = me->FindNearestCreature(NPC_LISTENER, 35.0f, true))
                                     {
                                         if(!bText)
                                         {
@@ -1262,7 +1262,7 @@ public:
             {
                 if(!bSumm1)
                 {
-                    if (Creature* Shadowy3 = me->SummonCreature(42662, -11138.659f, 545.20f, 70.30f, 0.19f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                    if (auto Shadowy3 = me->SummonCreature(42662, -11138.659f, 545.20f, 70.30f, 0.19f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
                     {
                         Shadowy3GUID = Shadowy3->GetGUID();
                         Shadowy3->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -1274,7 +1274,7 @@ public:
 
                 if(!bSumm2)
                 {
-                    if (Creature* Glubtok3 = me->SummonCreature(42492,-11128.11f, 547.52f, 70.41f, 3.32f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
+                    if (auto Glubtok3 = me->SummonCreature(42492,-11128.11f, 547.52f, 70.41f, 3.32f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 90000))
                     {
                         Glubtok3GUID = Glubtok3->GetGUID();
                         Glubtok3->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -1296,9 +1296,9 @@ public:
             {
                 if (bSumm)
                 {
-                    if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                        if (Creature* Glubtok3 = me->GetCreature(*me, Glubtok3GUID))
-                            if (Creature* Shadowy3 = me->GetCreature(*me, Shadowy3GUID))
+                    if (auto player = me->GetPlayer(*me, PlayerGUID))
+                        if (auto Glubtok3 = me->GetCreature(*me, Glubtok3GUID))
+                            if (auto Shadowy3 = me->GetCreature(*me, Shadowy3GUID))
                             {
                                 switch (Phase)
                                 {
@@ -1453,7 +1453,7 @@ public:
 
             if (Defias_DoFire)
             {
-                if (Creature* pTarget = me->FindNearestCreature(45937, 30.0f, true))
+                if (auto pTarget = me->FindNearestCreature(45937, 30.0f, true))
                 {
                     if (ThrowTimer < diff)
                     {
@@ -1589,14 +1589,14 @@ public:
         {
             if(!bSummonn)
             {
-                if (Creature* Investigator04 = me->SummonCreature(NPC_INVESTIGATOR4, -9856.825f, 1279.25f, 40.96f, 3.29f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
+                if (auto Investigator04 = me->SummonCreature(NPC_INVESTIGATOR4, -9856.825f, 1279.25f, 40.96f, 3.29f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
                 {
                     Investigator04GUID = Investigator04->GetGUID();
                     Investigator04->CastSpell(Investigator04, 79346, true);
                     bSummonn1 = true;
                 }
 
-                if (Creature* Home = me->SummonCreature(NPC_HOME, -9862.88f, 1278.52f, 40.80f, 0.43f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
+                if (auto Home = me->SummonCreature(NPC_HOME, -9862.88f, 1278.52f, 40.80f, 0.43f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 66000))
                 {
                     HomeGUID = Home->GetGUID();
                     Home->CastSpell(Home, 79346, true);
@@ -1618,9 +1618,9 @@ public:
             {
                 if (bSummonn)
                 {
-                    if (Player* player = me->GetPlayer(*me, PlayerGUID))
-                        if (Creature* Investigator04 = me->GetCreature(*me, Investigator04GUID))
-                            if (Creature* Home = me->GetCreature(*me, HomeGUID))
+                    if (auto player = me->GetPlayer(*me, PlayerGUID))
+                        if (auto Investigator04 = me->GetCreature(*me, Investigator04GUID))
+                            if (auto Home = me->GetCreature(*me, HomeGUID))
                             {
                                 switch (Phase)
                                 {

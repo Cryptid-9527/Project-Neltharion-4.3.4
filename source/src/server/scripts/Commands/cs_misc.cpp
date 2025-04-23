@@ -875,7 +875,7 @@ public:
             return false;
         }
 
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
 
@@ -1384,7 +1384,7 @@ public:
         // save GM account without delay and output message
         if (!AccountMgr::IsPlayerAccount(handler->GetSession()->GetSecurity()))
         {
-            if (Player* target = handler->getSelectedPlayer())
+            if (auto target = handler->getSelectedPlayer())
                 target->SaveToDB();
             else
                 player->SaveToDB();
@@ -1443,7 +1443,7 @@ public:
         if (handler->GetSession() && AccountMgr::IsPlayerAccount(handler->GetSession()->GetSecurity()))
         {
             // 7355: "Stuck"
-            if (Player* player = handler->GetSession()->GetPlayer())
+            if (auto player = handler->GetSession()->GetPlayer())
                 player->CastSpell(player, 7355, false);
             return true;
         }
@@ -1469,7 +1469,7 @@ public:
             if (!spellInfo)
                 return false;
 
-            if (Player* caster = handler->GetSession()->GetPlayer())
+            if (auto caster = handler->GetSession()->GetPlayer())
                 Spell::SendCastResult(caster, spellInfo, 0, SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW);
 
             return false;

@@ -117,7 +117,7 @@ public:
             {
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                 {
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                     return player;
                 }
             }

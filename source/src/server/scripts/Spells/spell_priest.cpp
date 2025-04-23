@@ -261,7 +261,7 @@ class spell_pri_lightwell_renew : public SpellScriptLoader
 
             void CalculateAmount(AuraEffect const* /*aurEff*/, int32& amount, bool& /*canBeRecalculated*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     amount = int32(((GetSpellInfo()->Effects[EFFECT_0].CalcValue(caster) + ((caster->SpellBaseHealingBonusDone(GetSpellInfo()->GetSchoolMask()) * 0.308f))) * 1.15f));
                     // Bonus from Glyph of Lightwell
@@ -306,7 +306,7 @@ class spell_pri_mana_burn : public SpellScriptLoader
 
             void HandleAfterHit()
             {
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     unitTarget->RemoveAurasWithMechanic((1 << MECHANIC_FEAR) | (1 << MECHANIC_POLYMORPH));
             }
 
@@ -365,7 +365,7 @@ class spell_pri_pain_and_suffering_proc : public SpellScriptLoader
             void HandleEffectScriptEffect(SpellEffIndex /*effIndex*/)
             {
                 // Refresh Shadow Word: Pain on target
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                     if (AuraEffect* aur = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_PRIEST, 0x8000, 0, 0, GetCaster()->GetGUID()))
                     {
                         aur->GetBase()->RefreshDuration();
@@ -401,7 +401,7 @@ class spell_pri_mind_blast : public SpellScriptLoader
             void HandleOnHit()
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     if (Aura* aur = caster->GetAuraOfRankedSpell(15273, caster->GetGUID()))
                     {
@@ -439,7 +439,7 @@ class spell_pri_mind_spike : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     unitTarget->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, caster->GetGUID(), NULL, true, false, SPELLFAMILY_PRIEST, SPELL_SCHOOL_MASK_SHADOW);
                     unitTarget->RemoveAurasByType(SPELL_AURA_PERIODIC_LEECH, caster->GetGUID(), NULL, true, false, SPELLFAMILY_PRIEST, SPELL_SCHOOL_MASK_SHADOW);
@@ -523,7 +523,7 @@ class spell_pri_penance : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     if (!unitTarget->isAlive())
                         return;
@@ -543,7 +543,7 @@ class spell_pri_penance : public SpellScriptLoader
             SpellCastResult CheckCast()
             {
                 Player* caster = GetCaster()->ToPlayer();
-                if (Unit* target = GetExplTargetUnit())
+                if (auto target = GetExplTargetUnit())
                     if (!caster->IsFriendlyTo(target) && !caster->IsValidAttackTarget(target) || caster->IsFriendlyTo(target) && !caster->IsValidAssistTarget(target))
                         return SPELL_FAILED_BAD_TARGETS;
                 return SPELL_CAST_OK;
@@ -591,7 +591,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
                     return;
                 t13bumped = false;
 
-                if (Player* caster = GetCaster()->ToPlayer())
+                if (auto caster = GetCaster()->ToPlayer())
                 {
                     // +80.68% from sp bonus
                     float bonus = 0.87f;
@@ -617,7 +617,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
                     if (AuraEffect const* mastery = caster->GetDummyAuraEffect(SPELLFAMILY_HUNTER, 566, EFFECT_0))
                         tmpMod += caster->GetMasteryAmount(77484, EFFECT_0);
 
-                    if (Unit* victim = GetUnitOwner())
+                    if (auto victim = GetUnitOwner())
                     {
                         Unit::AuraEffectList const& mHealingDonePctWithAura = caster->GetAuraEffectsByType(SPELL_AURA_MOD_HEALING_DONE_PERCENT_WITH_SPECIFIC_AURA);
                         for (Unit::AuraEffectList::const_iterator i = mHealingDonePctWithAura.begin(); i != mHealingDonePctWithAura.end(); ++i)
@@ -649,7 +649,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
                 if (dmgInfo.GetAttacker() == target)
                     return;
 
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect* talentAurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 4880, EFFECT_0))
                     {
                         int32 bp = CalculatePct(absorbAmount, talentAurEff->GetAmount());
@@ -659,7 +659,7 @@ class spell_pri_power_word_shield : public SpellScriptLoader
 
             void HandleApplyEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Body and soul
                     if (AuraEffect* bodyAndSoul = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 2218, EFFECT_0))
@@ -743,7 +743,7 @@ class spell_pri_prayer_of_mending_heal : public SpellScriptLoader
 
             void HandleHeal(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetOriginalCaster())
+                if (auto caster = GetOriginalCaster())
                 {
                     if (Aura* prayer = GetHitUnit()->GetAura(41635, caster->GetGUID()))
                         if (prayer->GetCharges() == prayer->CalcMaxCharges())
@@ -796,7 +796,7 @@ class spell_pri_renew : public SpellScriptLoader
 
             void HandleApplyEffect(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     // Divine touch
                     if (AuraEffect const* divineTouch = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 3021, EFFECT_0))
@@ -973,11 +973,11 @@ class spell_pri_vampiric_touch : public SpellScriptLoader
 
             void HandleDispel(DispelInfo* dispelInfo)
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (GetUnitOwner())
                         if (AuraEffect const* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_PRIEST, 1869, EFFECT_1))
                             if (roll_chance_i(aurEff->GetSpellInfo()->Effects[EFFECT_0].BasePoints))
-                                if (Unit* dispeller = dispelInfo->GetDispeller())
+                                if (auto dispeller = dispelInfo->GetDispeller())
                                     dispeller->CastSpell(dispeller, 87204, true);
             }
 
@@ -1040,7 +1040,7 @@ class spell_pri_dispel_magic : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Unit* caster = GetCaster();
-                if (Unit* unitTarget = GetHitUnit())
+                if (auto unitTarget = GetHitUnit())
                 {
                     if (caster->IsFriendlyTo(unitTarget))
                         caster->CastSpell(unitTarget, 97690, true);
@@ -1051,9 +1051,9 @@ class spell_pri_dispel_magic : public SpellScriptLoader
 
             SpellCastResult CheckCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
-                    if (Unit* target = GetExplTargetUnit())
+                    if (auto target = GetExplTargetUnit())
                         if (caster->IsFriendlyTo(target) && caster != target)
                             if (!caster->HasAura(33167))
                                 return SPELL_FAILED_BAD_TARGETS;
@@ -1087,7 +1087,7 @@ class spell_pri_inner_focus : public SpellScriptLoader
 
             void HandleOnCast()
             {
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     if (AuraEffect* aurEff = caster->GetAuraEffectOfRankedSpell(89488, EFFECT_0))
                     {
                         uint32 spellId = 0;
@@ -1128,7 +1128,7 @@ class spell_pri_atonement_heal : public SpellScriptLoader
 
             void HandleHeal(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* caster = GetOriginalCaster())
+                if (auto caster = GetOriginalCaster())
                     if (GetHitUnit()->GetGUID() == caster->GetGUID())
                     {
                         int32 heal = GetHitHeal() / 2.0f;
@@ -1353,7 +1353,7 @@ public:
             if (!GetCaster())
                 return;
 
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 float tmpMod = 0.0f;
                 // Twin Disciplines
@@ -1547,7 +1547,7 @@ public:
 
         void HandleApplyEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                 caster->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
@@ -1556,7 +1556,7 @@ public:
 
         void HandleRemoveEffect(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 caster->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                 caster->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
@@ -1648,9 +1648,9 @@ public:
                 {
                     case EVENT_CHECK_DOTS:
                     {
-                        if (Unit* target = GetUnitOwner())
+                        if (auto target = GetUnitOwner())
                         {
-                            if (Unit* caster = GetCaster())
+                            if (auto caster = GetCaster())
                             {
                                 if (target->HasAura(589, caster->GetGUID()) && target->HasAura(34914, caster->GetGUID()))
                                     caster->CastSpell(caster, 99158, true);
@@ -1667,7 +1667,7 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(99158);
         }
 
@@ -1690,7 +1690,7 @@ class spell_pri_shadow_orb_SpellScript : public SpellScript
 
     void HandleDamage(SpellEffIndex /*effIndex*/)
     {
-        if (Player* caster = GetCaster()->ToPlayer())
+        if (auto caster = GetCaster()->ToPlayer())
         {
             // Shadow orbs
             if (AuraEffect* aurEff = caster->GetDummyAuraEffect(SPELLFAMILY_GENERIC, 4941, EFFECT_0))
@@ -1731,7 +1731,7 @@ public:
 
         void HandleChangeDuration()
         {
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 // this aura will last only 10 seconds for Discipline priests and 23 seconds for Shadow and Holy priests
                 if (caster->GetPrimaryTalentTree(caster->GetActiveSpec()) == TALENT_TREE_PRIEST_DISCIPLINE)
@@ -1774,7 +1774,7 @@ public:
             if (!GetCaster())
                 return;
 
-            if (Player* caster = GetCaster()->ToPlayer())
+            if (auto caster = GetCaster()->ToPlayer())
             {
                 float tmpMod = 0.0f;
                 // Twin Disciplines
@@ -1845,7 +1845,7 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 caster->RemoveAurasDueToSpell(2096);
         }
 
@@ -1909,15 +1909,15 @@ public:
 
         void OnUpdateDummy(AuraEffect* /*aurEff*/, const uint32 diff)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (!caster->HasUnitState(UnitState::UNIT_STATE_CASTING))
                     caster->RemoveAurasDueToSpell(605);
         }
 
         void OnUpdate(AuraEffect* /*aurEff*/, const uint32 diff)
         {
-            if (Unit* target = GetUnitOwner())
-                if (Unit* caster = GetCaster())
+            if (auto target = GetUnitOwner())
+                if (auto caster = GetCaster())
                     if (!target->HasAura(605) || !caster->HasAura(605) || !caster->HasUnitState(UnitState::UNIT_STATE_CASTING))
                     {
                         caster->RemoveAurasDueToSpell(605);
@@ -1927,8 +1927,8 @@ public:
 
         void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetUnitOwner())
-                if (Unit* caster = GetCaster())
+            if (auto target = GetUnitOwner())
+                if (auto caster = GetCaster())
                 {
                     caster->RemoveAurasDueToSpell(605);
                     target->RemoveAurasDueToSpell(605);
@@ -1948,9 +1948,9 @@ public:
 
         void HandleBeforeCast()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (caster->GetPetGUID())
-                    if (Unit* pet = caster->GetGuardianPet())
+                    if (auto pet = caster->GetGuardianPet())
                         if (pet->GetTypeId() == TYPEID_UNIT && pet->GetEntry() == 19668)
                             pet->ToCreature()->DespawnOrUnsummon();
         }

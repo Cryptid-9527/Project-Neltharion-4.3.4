@@ -389,9 +389,9 @@ class boss_lord_rhyolith : public CreatureScript
                         stacks += armor->GetStackAmount();
 
                     me->SetAuraStack(moltenId, me, stacks);
-                    if (Creature* leftFeet = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
+                    if (auto leftFeet = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
                         me->SetAuraStack(moltenId, leftFeet, stacks);
-                    if (Creature* rightFeet = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
+                    if (auto rightFeet = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
                         me->SetAuraStack(moltenId, rightFeet, stacks);
                     break;
                 }
@@ -401,15 +401,15 @@ class boss_lord_rhyolith : public CreatureScript
                     if (me->HasAura(moltenId))
                     {
                         me->RemoveAuraFromStack(moltenId);
-                        if (Creature* leftFoot = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
+                        if (auto leftFoot = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
                             leftFoot->RemoveAuraFromStack(moltenId);
-                        if (Creature* rightFoot = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
+                        if (auto rightFoot = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
                             rightFoot->RemoveAuraFromStack(moltenId);
                     }
                     break;
                 }
                 case ACTION_REDUCE_OBSIDIAN_ARMOR:
-                    if (Creature* leftFeet = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
+                    if (auto leftFeet = me->FindNearestCreature(NPC_LEFT_FOOT, 50.0f))
                     {
                         if (Aura* aura = leftFeet->GetAura(SPELL_OBSIDIAN_ARMOR))
                         {
@@ -423,7 +423,7 @@ class boss_lord_rhyolith : public CreatureScript
                             aura->SetStackAmount(aura->GetStackAmount() - 10);
                         }
                     }
-                    if (Creature* rightFeet = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
+                    if (auto rightFeet = me->FindNearestCreature(NPC_RIGHT_FOOT, 50.0f))
                     {
                         if (Aura* aura = rightFeet->GetAura(SPELL_OBSIDIAN_ARMOR))
                         {
@@ -565,7 +565,7 @@ class boss_lord_rhyolith : public CreatureScript
 
         bool isInPlatform()
         {
-            if (Creature* trigger = me->FindNearestCreature(NPC_MAGMA_CHECK_TRIGGER, 100.0f, true))
+            if (auto trigger = me->FindNearestCreature(NPC_MAGMA_CHECK_TRIGGER, 100.0f, true))
                 if (me->IsWithinDist3d(trigger->GetPositionX(), trigger->GetPositionY(), trigger->GetPositionZ(), 1.0f))
                     return false;
             return true;
@@ -651,7 +651,7 @@ class boss_lord_rhyolith : public CreatureScript
                         if (_energy <= 20 || _energy >= 30)
                         {
                             for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                                if (Creature* feet = ObjectAccessor::GetCreature(*me, *i))
+                                if (auto feet = ObjectAccessor::GetCreature(*me, *i))
                                     if (feet->GetEntry() == NPC_LEFT_FOOT || feet->GetEntry() == NPC_RIGHT_FOOT)
                                         feet->RemoveAurasDueToSpell(SPELL_BURNING_FEET);
                             me->RemoveAurasDueToSpell(SPELL_BURNING_FEET);
@@ -659,7 +659,7 @@ class boss_lord_rhyolith : public CreatureScript
                         else
                         {
                             for (SummonList::iterator i = summons.begin(); i != summons.end(); ++i)
-                                if (Creature* feet = ObjectAccessor::GetCreature(*me, *i))
+                                if (auto feet = ObjectAccessor::GetCreature(*me, *i))
                                     if (feet->GetEntry() == NPC_LEFT_FOOT || feet->GetEntry() == NPC_RIGHT_FOOT)
                                         feet->CastSpell(feet, SPELL_BURNING_FEET, true);
                             DoCast(me, SPELL_BURNING_FEET, true);
@@ -692,8 +692,8 @@ class boss_lord_rhyolith : public CreatureScript
                     }
                     case EVENT_CHECK_LAVA_POOL:
                     {
-                        if (Creature* lFoot = GetLeftLeg())
-                            if (Creature* rFoot = GetRightLeg())
+                        if (auto lFoot = GetLeftLeg())
+                            if (auto rFoot = GetRightLeg())
                             {
                                 me->SetHealth(lFoot->GetHealth() + rFoot->GetHealth());
                                 lFoot->SetHealth(me->GetHealth() / 2);
@@ -780,7 +780,7 @@ class boss_lord_rhyolith : public CreatureScript
                     {
                         Talk(YELL_SUMMON_ADDS);
                         me->AI()->DoAction(ACTION_REMOVE_MOLTEN_STACK);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f, true))
                             for (uint8 point = 0; point < 5; point++)
                                 DoCast(target, SPELL_SUMMON_FRAGMENTS);
 
@@ -852,7 +852,7 @@ class boss_lord_rhyolith : public CreatureScript
                         DoCast(SPELL_IMMOLATION);
                         me->AddAura(SPELL_SIT_GROUND, me);
 
-                        if (Player* player = me->FindNearestPlayer(500.0f))
+                        if (auto player = me->FindNearestPlayer(500.0f))
                             me->SetLootRecipient(player);
 
                         if (IsHeroic())
@@ -896,7 +896,7 @@ class boss_lord_rhyolith : public CreatureScript
 
                         for (uint64 summonGUID : summons)
                         {
-                            if (Creature* crater = ObjectAccessor::GetCreature(*me, summonGUID))
+                            if (auto crater = ObjectAccessor::GetCreature(*me, summonGUID))
                             {
                                 if (crater->GetEntry() == NPC_CRATER && crater->HasAura(SPELL_MAGMA_FLOW_AURA))
                                 {
@@ -910,7 +910,7 @@ class boss_lord_rhyolith : public CreatureScript
                         {
                             for (uint64 summonGUID : summons)
                             {
-                                if (Creature* crater = ObjectAccessor::GetCreature(*me, summonGUID))
+                                if (auto crater = ObjectAccessor::GetCreature(*me, summonGUID))
                                 {
                                     if (crater->GetEntry() == NPC_CRATER)
                                     {
@@ -984,7 +984,7 @@ class npc_left_foot : public CreatureScript
 
             /*
             me->ExitVehicle();
-            if (Creature* rhyolith = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+            if (auto rhyolith = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                 me->EnterVehicle(rhyolith, FOOT_SEAT_LEFT);
             */
         }
@@ -1003,7 +1003,7 @@ class npc_left_foot : public CreatureScript
 
         void DamageTaken(Unit* attacker, uint32& damage) override
         {
-            if (Creature* rhyo = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+            if (auto rhyo = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
             {
                 rhyo->AI()->SetData(DATA_TURN_LEFT, damage);
                 //rhyo->AI()->DamageTaken(attacker, damage);
@@ -1039,7 +1039,7 @@ class npc_right_foot : public CreatureScript
 
             /*
             me->ExitVehicle();
-            if (Creature* rhyolith = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+            if (auto rhyolith = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                 me->EnterVehicle(rhyolith, FOOT_SEAT_LEFT);
             */
         }
@@ -1058,7 +1058,7 @@ class npc_right_foot : public CreatureScript
 
         void DamageTaken(Unit* attacker, uint32& damage) override
         {
-            if (Creature* rhyo = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+            if (auto rhyo = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
             {
                 rhyo->AI()->SetData(DATA_TURN_RIGHT, damage);
                 //rhyo->AI()->DamageTaken(attacker, damage);
@@ -1112,7 +1112,7 @@ class npc_movement_controller : public CreatureScript
                     case EVENT_CHECK_FOR_PLAYERS:
                     {
                         if (checkWipe())
-                            if (Creature* boss = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+                            if (auto boss = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                             if (boss->isInCombat())
                             {
                                 bossInCombat = false;
@@ -1121,11 +1121,11 @@ class npc_movement_controller : public CreatureScript
                             }
 
                         /*
-                        if (Player* player = me->FindNearestPlayer(10.0f))
+                        if (auto player = me->FindNearestPlayer(10.0f))
                         {
                             if (!bossInCombat && me->canSeeOrDetect(player) && player->isAlive())
                             {
-                                if (Creature* boss = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+                                if (auto boss = Unit::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                                 {
                                     if (!boss->isInCombat() && boss->isAlive() && !boss->HasUnitState(UNIT_STATE_EVADE))
                                     {
@@ -1235,8 +1235,8 @@ class npc_volcano_firelands : public CreatureScript // 52582
         {
             if (action == ACTION_PREPARE_LAVA_LINE)
             {
-                if (Creature* pillar = me->SummonCreature(NPC_PILLAR, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - 6.0f, me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000))
-                    if (Creature* rhyolith = Creature::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+                if (auto pillar = me->SummonCreature(NPC_PILLAR, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() - 6.0f, me->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 12000))
+                    if (auto rhyolith = Creature::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                         rhyolith->AI()->JustSummoned(pillar); // rhyolith despawn the pillar if the raid wipes
                 DoCast(me, SPELL_MAGMA_FLOW_AURA, true);
                 _events.ScheduleEvent(EVENT_START_LAVA_LINE, 1000);
@@ -1421,7 +1421,7 @@ class npc_volcano_firelands : public CreatureScript // 52582
                             if (FirePath[line][0][0] == 0.0f && FirePath[line][1][0] == 0.0f)
                                 break;
 
-                            if (Creature* targetTrigger = me->SummonCreature(NPC_DESTINATION_STALKER, FirePath[line][0][point], FirePath[line][1][point], 100.50f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                            if (auto targetTrigger = me->SummonCreature(NPC_DESTINATION_STALKER, FirePath[line][0][point], FirePath[line][1][point], 100.50f, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 10000))
                                 me->CastSpell(targetTrigger, SPELL_MAGMA_FLOW, true);
                         }
                         point++;
@@ -1434,7 +1434,7 @@ class npc_volcano_firelands : public CreatureScript // 52582
                     case EVENT_LAVA_LINE_EXPLOSION:
                     {
                         for (uint64 summonGUID : summons)
-                            if (Creature* stalker = Creature::GetCreature(*me, summonGUID))
+                            if (auto stalker = Creature::GetCreature(*me, summonGUID))
                                 if (stalker->GetEntry() == NPC_DESTINATION_STALKER)
                                     me->CastSpell(stalker, SPELL_MAGMA_FLOW_DAMAGE, true);
                         me->DespawnOrUnsummon(2000);
@@ -1539,7 +1539,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_CHECK_RHYO_DISTANCE:
-                        if (Creature* rhyolith = Creature::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
+                        if (auto rhyolith = Creature::GetCreature(*me, instance->GetData64(DATA_LORD_RHYOLITH)))
                         {
                             if (!me->HasUnitState(UNIT_STATE_FOLLOW))
                                 me->GetMotionMaster()->MoveFollow(rhyolith, 0.0f, 0.0f);
@@ -1693,7 +1693,7 @@ public:
 
         void HandleScript(SpellEffIndex effIndex)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastSpell(target, GetEffectValue(), true);
         }
 
@@ -1986,7 +1986,7 @@ public:
                         if (!firestorm_triggers.empty())
                         {
                             Creature* firestorm_target = Trinity::Containers::SelectRandomContainerElement(firestorm_triggers);
-                            if (Creature* karr_retreated = me->FindNearestCreature(NPC_KAR_EVERBURNING, 1000.0f, true))
+                            if (auto karr_retreated = me->FindNearestCreature(NPC_KAR_EVERBURNING, 1000.0f, true))
                                 if (karr_retreated->isAlive())
                                     DoCast(firestorm_target, SPELL_FIRESTORM);
                         }
@@ -2222,7 +2222,7 @@ public:
             switch (actionId)
             {
             case ACTION_KAR_RETREAT:
-                if (Creature* karr_retreated = me->FindNearestCreature(NPC_KAR_EVERBURNING, 200.0f, true))
+                if (auto karr_retreated = me->FindNearestCreature(NPC_KAR_EVERBURNING, 200.0f, true))
                 {
                     me->GetMotionMaster()->MoveFollow(karr_retreated, 5.0f, M_PI * 1.5f);
                     me->SetInCombatWithZone();

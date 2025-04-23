@@ -158,7 +158,7 @@ public:
 
             if (EssenceGUID)
             {
-                if (Creature* Essence = Unit::GetCreature(*me, EssenceGUID))
+                if (auto Essence = Unit::GetCreature(*me, EssenceGUID))
                 {
                     Essence->DespawnOrUnsummon();
                 }
@@ -211,7 +211,7 @@ public:
             if (!Soul)
                 return false;
 
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
             {
                 CAST_AI(npc_enslaved_soul::npc_enslaved_soulAI, Soul->AI())->ReliquaryGUID = me->GetGUID();
                 Soul->AI()->AttackStart(target);
@@ -282,7 +282,7 @@ public:
                     break;
                 case 2:
                     Timer = 5000;
-                    if (Creature* Summon = DoSpawnCreature(23417+Phase, 0, 0, 0, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
+                    if (auto Summon = DoSpawnCreature(23417+Phase, 0, 0, 0, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
                     {
                         me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_SUBMERGED);  // Ribs: open
                         Summon->AI()->AttackStart(SelectTarget(SELECT_TARGET_TOPAGGRO, 0));
@@ -377,7 +377,7 @@ public:
 void npc_enslaved_soul::npc_enslaved_soulAI::JustDied(Unit* /*killer*/)
 {
     if (ReliquaryGUID)
-        if (Creature* Reliquary = (Unit::GetCreature((*me), ReliquaryGUID)))
+        if (auto Reliquary = (Unit::GetCreature((*me), ReliquaryGUID)))
             ++(CAST_AI(boss_reliquary_of_souls::boss_reliquary_of_soulsAI, Reliquary->AI())->SoulDeathCount);
 
     DoCast(me, SPELL_SOUL_RELEASE, true);

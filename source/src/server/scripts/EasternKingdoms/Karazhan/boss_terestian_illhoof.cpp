@@ -278,7 +278,7 @@ public:
             {
                 if (PortalGUID[i])
                 {
-                    if (Creature* pPortal = Unit::GetCreature(*me, PortalGUID[i]))
+                    if (auto pPortal = Unit::GetCreature(*me, PortalGUID[i]))
                     {
                         CAST_AI(mob_fiendish_portal::mob_fiendish_portalAI, pPortal->AI())->DespawnAllImp();
                         pPortal->DespawnOrUnsummon();
@@ -344,7 +344,7 @@ public:
             {
                 if (PortalGUID[i])
                 {
-                    if (Creature* pPortal = Unit::GetCreature((*me), PortalGUID[i]))
+                    if (auto pPortal = Unit::GetCreature((*me), PortalGUID[i]))
                         pPortal->DespawnOrUnsummon();
 
                     PortalGUID[i] = 0;
@@ -370,7 +370,7 @@ public:
                     DoCast(target, SPELL_SACRIFICE, true);
                     DoCast(target, SPELL_SUMMON_DEMONCHAINS, true);
 
-                    if (Creature* Chains = me->FindNearestCreature(CREATURE_DEMONCHAINS, 5000))
+                    if (auto Chains = me->FindNearestCreature(CREATURE_DEMONCHAINS, 5000))
                     {
                         CAST_AI(mob_demon_chain::mob_demon_chainAI, Chains->AI())->SacrificeGUID = target->GetGUID();
                         Chains->CastSpell(Chains, SPELL_DEMON_CHAINS, true);
@@ -396,7 +396,7 @@ public:
 
                 if (PortalGUID[0] && PortalGUID[1])
                 {
-                    if (Creature* pPortal = Unit::GetCreature(*me, PortalGUID[urand(0, 1)]))
+                    if (auto pPortal = Unit::GetCreature(*me, PortalGUID[urand(0, 1)]))
                         pPortal->CastSpell(me->getVictim(), SPELL_SUMMON_FIENDISIMP, false);
                     SummonTimer = 5000;
                 }

@@ -166,12 +166,12 @@ class boss_jaraxxus : public CreatureScript
                             events.ScheduleEvent(EVENT_FEL_FIREBALL, urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS));
                             return;
                         case EVENT_FEL_LIGHTNING:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LORD_HITTIN))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -SPELL_LORD_HITTIN))
                                 DoCast(target, SPELL_FEL_LIGHTING);
                             events.ScheduleEvent(EVENT_FEL_LIGHTNING, urand(10*IN_MILLISECONDS, 15*IN_MILLISECONDS));
                             return;
                         case EVENT_INCINERATE_FLESH:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_LORD_HITTIN))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_LORD_HITTIN))
                             {
                                 Talk(EMOTE_INCINERATE, target->GetGUID());
                                 Talk(SAY_INCINERATE);
@@ -184,7 +184,7 @@ class boss_jaraxxus : public CreatureScript
                             events.ScheduleEvent(EVENT_NETHER_POWER, 40*IN_MILLISECONDS);
                             return;
                         case EVENT_LEGION_FLAME:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_LORD_HITTIN))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_LORD_HITTIN))
                             {
                                 Talk(EMOTE_LEGION_FLAME, target->GetGUID());
                                 DoCast(target, SPELL_LEGION_FLAME);
@@ -337,7 +337,7 @@ class npc_fel_infernal : public CreatureScript
 
                 if (_felStreakTimer <= diff)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                         DoCast(target, SPELL_FEL_STREAK);
                     _felStreakTimer = 30*IN_MILLISECONDS;
                 }
@@ -462,7 +462,7 @@ class npc_mistress_of_pain : public CreatureScript
                             _events.ScheduleEvent(EVENT_SHIVAN_SLASH, 30*IN_MILLISECONDS);
                             return;
                         case EVENT_SPINNING_STRIKE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 DoCast(target, SPELL_SPINNING_STRIKE);
                             _events.ScheduleEvent(EVENT_SPINNING_STRIKE, 30*IN_MILLISECONDS);
                             return;

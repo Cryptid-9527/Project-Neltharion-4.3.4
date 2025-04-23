@@ -160,7 +160,7 @@ class boss_bronjahm : public CreatureScript
                             events.ScheduleEvent(EVENT_SHADOW_BOLT, 2000);
                             break;
                         case EVENT_CORRUPT_SOUL:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                             {
                                 Talk(SAY_CORRUPT_SOUL);
                                 DoCast(target, SPELL_CORRUPT_SOUL);
@@ -173,7 +173,7 @@ class boss_bronjahm : public CreatureScript
                             me->CastSpell(me, SPELL_SOULSTORM, false);
                             break;
                         case EVENT_FEAR:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 me->CastCustomSpell(SPELL_FEAR, SPELLVALUE_MAX_TARGETS, 1, target, false);
                             events.ScheduleEvent(EVENT_FEAR, urand(8000, 12000), 0, PHASE_2);
                             break;
@@ -217,7 +217,7 @@ class mob_corrupted_soul_fragment : public CreatureScript
                         if (GUID_LOPART(BronjahmGUID) != id)
                             return;
 
-                        if (Creature* bronjahm = ObjectAccessor::GetCreature(*me, BronjahmGUID))
+                        if (auto bronjahm = ObjectAccessor::GetCreature(*me, BronjahmGUID))
                             me->CastSpell(bronjahm, SPELL_CONSUME_SOUL, true);
 
                         summ->UnSummon();

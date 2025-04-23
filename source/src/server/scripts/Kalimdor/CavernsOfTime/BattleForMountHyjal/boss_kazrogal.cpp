@@ -171,7 +171,7 @@ class MarkTargetFilter
     public:
         bool operator()(WorldObject* target) const
         {
-            if (Unit* unit = target->ToUnit())
+            if (auto unit = target->ToUnit())
                 return unit->getPowerType() != POWER_MANA;
             return false;
         }

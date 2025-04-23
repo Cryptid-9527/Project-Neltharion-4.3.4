@@ -262,7 +262,7 @@ public:
 
         if (state == GO_READY)
         {
-            if (Creature* tauren = Unit::GetCreature(*go, taurenGUID))
+            if (auto tauren = Unit::GetCreature(*go, taurenGUID))
             {
                 if (tauren->isDead())
                     tauren->Respawn(true);
@@ -389,7 +389,7 @@ public:
 
                 auto enemy = me->SelectNearbyUnits(NPC_BRISTLEBACK_ONLOOKER, 30.0f);
                 for (auto itr = enemy.begin(); itr != enemy.end(); ++itr)
-                    if (Unit* enemy = (*itr))
+                    if (auto enemy = (*itr))
                         enemy->HandleEmoteCommand(EMOTE_ONESHOT_BATTLE_ROAR);
 
                 _eventStarted = true;
@@ -638,7 +638,7 @@ public:
         {
             if (spellInfo->Id == SPELL_DUMMY_PING)
             {
-                if (Player* player = who->ToPlayer())
+                if (auto player = who->ToPlayer())
                 {
                     _playerGUID = player->GetGUID();
                     Talk(0, _playerGUID);
@@ -701,7 +701,7 @@ public:
             {
                 _checkTimer = 3000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive() || me->GetDistance(player) >= 50.f)
                     {
@@ -855,7 +855,7 @@ public:
             _defenderDieCount = 0;
             _killCount = 0;
 
-            if (GameObject* neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
+            if (auto neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
                 neutralflag->SetPhaseMask(1, true);
 
             if (auto allyflag = me->FindNearestGameObject(BANNER_ALLIANCE_FIELD, 25.f))
@@ -1056,7 +1056,7 @@ public:
                 case EVENT_HILL_HORDE_SIDE_AS_ALLIANCE_1:
                     Talk(0, _playerGUID);
 
-                    if (GameObject* neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
+                    if (auto neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
                         me->SummonGameObject(BANNER_ALLIANCE_FIELD, neutralflag->GetPositionX(), neutralflag->GetPositionY(), neutralflag->GetPositionZ(), 1.0472f, 0.f, 0.f, 0.f, 0.f, 0);
 
                     for (uint8 i = 0; i < 4; i++)
@@ -1116,7 +1116,7 @@ public:
                 case EVENT_HILL_HORDE_SIDE_AS_HORDE_1:
                     Talk(0, _playerGUID);
 
-                    if (GameObject* neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
+                    if (auto neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
                         me->SummonGameObject(BANNER_HORDE_FIELD, neutralflag->GetPositionX(), neutralflag->GetPositionY(), neutralflag->GetPositionZ(), 1.0472f, 0.f, 0.f, 0.f, 0.f, 0);
 
                     for (uint8 i = 0; i < 4; i++)
@@ -1173,7 +1173,7 @@ public:
                 case EVENT_HILL_ALLIANCE_SIDE_AS_ALLIANCE_1:
                     Talk(0, _playerGUID);
 
-                    if (GameObject* neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
+                    if (auto neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
                         me->SummonGameObject(BANNER_ALLIANCE_FIELD, neutralflag->GetPositionX(), neutralflag->GetPositionY(), neutralflag->GetPositionZ(), 0.2f, 0.f, 0.f, 0.f, 0.f, 0);
 
                     for (uint8 i = 16; i < 20; i++)
@@ -1230,7 +1230,7 @@ public:
                 case EVENT_HILL_ALLIANCE_SIDE_AS_HORDE_1:
                     Talk(0, _playerGUID);
 
-                    if (GameObject* neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
+                    if (auto neutralflag = GameObject::GetGameObject(*me, _neturalFlagGUID))
                         me->SummonGameObject(BANNER_HORDE_FIELD, neutralflag->GetPositionX(), neutralflag->GetPositionY(), neutralflag->GetPositionZ(), 0.2f, 0.f, 0.f, 0.f, 0.f, 0);
 
                     for (uint8 i = 16; i < 20; i++)
@@ -1394,7 +1394,7 @@ public:
             me->SetRooted(true);
             me->SetReactState(REACT_PASSIVE);
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 _playerGUID = player->GetGUID();
 
             me->SetDisableGravity(true);
@@ -2001,8 +2001,8 @@ public:
         }
         void HandleScriptEffect(SpellEffIndex effIndex)
         {
-            if (Unit* player = GetCaster())
-                if (Unit* mercenary = GetHitUnit())
+            if (auto player = GetCaster())
+                if (auto mercenary = GetHitUnit())
                 {
                     if (auto veh = mercenary->GetVehicleBase())
                     {
@@ -2288,7 +2288,7 @@ public:
             else
                 _isTower = false;
 
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 _playerGUID = player->GetGUID();
 
@@ -2426,7 +2426,7 @@ public:
                 _onUse = true;
                 me->SetRooted(true);
 
-                if (Player* player = passenger->ToPlayer())
+                if (auto player = passenger->ToPlayer())
                     _playerGUID = player->GetGUID();
             }
 
@@ -2468,7 +2468,7 @@ public:
                 {
                     _checkTimer = 3000;
 
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         if (player->GetQuestStatus(QUEST_RUN_OUT_THE_GUN) == QUEST_STATUS_NONE)
                         {
@@ -2658,7 +2658,7 @@ public:
             {
                 auto chain = me->SelectNearbyUnits(NPC_CHAINS_GAINES, 10.0f);
                 for (auto itr = chain.begin(); itr != chain.end(); ++itr)
-                    if (Unit* chain = (*itr))
+                    if (auto chain = (*itr))
                     {
                         if (chain->GetGUIDLow() == _chainRightGUID)
                         {
@@ -3039,7 +3039,7 @@ public:
             {
                 _checkTimer = 1000;
 
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     if (!player->isAlive())
                     {
@@ -3074,7 +3074,7 @@ public:
                     me->GetMotionMaster()->MoveSmoothPath(MarleyPath, MarleyPathSize);
                     break;
                 case EVENT_MARLEY_FLIGHT_2:
-                    if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                    if (auto player = Unit::GetPlayer(*me, _playerGUID))
                     {
                         _summons.DespawnAll();
                         me->DespawnOrUnsummon();

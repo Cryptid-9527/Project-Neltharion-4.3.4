@@ -287,7 +287,7 @@ class instance_zulaman : public InstanceMapScript
                 if (PlayerList.isEmpty())
                     return;
 
-                if (Creature* Hostage = instance->GetCreature(HostageGUID[num]))
+                if (auto Hostage = instance->GetCreature(HostageGUID[num]))
                 {
                     Hostage->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     Hostage->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -296,28 +296,28 @@ class instance_zulaman : public InstanceMapScript
 
             void SacrifiedHostage()
             {
-                if (Creature* Hostage = instance->GetCreature(HostageGUID[0]))
+                if (auto Hostage = instance->GetCreature(HostageGUID[0]))
                 if (Hostage->GetDistance(Hostage->GetHomePosition()) < 2.f)
                 {
                     Hostage->UpdateEntry(NPC_HOSTAGE_CORPSE_1);
                     Hostage->CastSpell(Hostage, 42726, true);
                     Hostage->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                 }
-                if (Creature* Hostage = instance->GetCreature(HostageGUID[1]))
+                if (auto Hostage = instance->GetCreature(HostageGUID[1]))
                     if (Hostage->GetDistance(Hostage->GetHomePosition()) < 2.f)
                 {
                     Hostage->UpdateEntry(NPC_HOSTAGE_CORPSE_2);
                     Hostage->CastSpell(Hostage, 42726, true);
                     Hostage->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                 }
-                if (Creature* Hostage = instance->GetCreature(HostageGUID[2]))
+                if (auto Hostage = instance->GetCreature(HostageGUID[2]))
                     if (Hostage->GetDistance(Hostage->GetHomePosition()) < 2.f)
                 {
                     Hostage->UpdateEntry(NPC_HOSTAGE_CORPSE_3);
                     Hostage->CastSpell(Hostage, 42726, true);
                     Hostage->SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_FEIGN_DEATH);
                 }
-                if (Creature* Hostage = instance->GetCreature(HostageGUID[3]))
+                if (auto Hostage = instance->GetCreature(HostageGUID[3]))
                     if (Hostage->GetDistance(Hostage->GetHomePosition()) < 2.f)
                 {
                     Hostage->UpdateEntry(NPC_HOSTAGE_CORPSE_4);
@@ -337,7 +337,7 @@ class instance_zulaman : public InstanceMapScript
                             SetData(DATA_SACRIFICES_STATE, STATE_SACRIFICES_ALL_SAFE);
                             DoUpdateWorldState(WORLDSTATE_SHOW_TIMER, 0);
 
-                            if (Creature* hexlord = instance->GetCreature(HexlordGUID))
+                            if (auto hexlord = instance->GetCreature(HexlordGUID))
                                 hexlord->AI()->DoAction(3);
                         }
                     }
@@ -350,7 +350,7 @@ class instance_zulaman : public InstanceMapScript
                         }
                     }
 
-                    if (Creature* hexlord = instance->GetCreature(HexlordGUID))
+                    if (auto hexlord = instance->GetCreature(HexlordGUID))
                         hexlord->SetVisible(true);
 
                     HandleGameObject(HexLordGateGUID, true);
@@ -358,7 +358,7 @@ class instance_zulaman : public InstanceMapScript
                 else
                 {
 
-                    if (Creature* hexlord = instance->GetCreature(HexlordGUID))
+                    if (auto hexlord = instance->GetCreature(HexlordGUID))
                         hexlord->SetVisible(false);
 
                     HandleGameObject(HexLordGateGUID, false);
@@ -450,7 +450,7 @@ class instance_zulaman : public InstanceMapScript
                         chestGUID = AshlisBagGUID;
                         break;
                 }
-                if (GameObject* loot = instance->GetGameObject(chestGUID))
+                if (auto loot = instance->GetGameObject(chestGUID))
                     loot->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE | GO_FLAG_NODESPAWN);
 
             }

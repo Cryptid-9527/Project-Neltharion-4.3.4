@@ -489,7 +489,7 @@ public:
                 return NULL;
 
             for (std::list<HostileReference*>::const_iterator itr = threatlist.begin(); itr != threatlist.end(); ++itr)
-                if (Unit* refTarget = (*itr)->getTarget())
+                if (auto refTarget = (*itr)->getTarget())
                     if (refTarget != me->getVictim() && refTarget->GetTypeId() == TYPEID_PLAYER && !refTarget->HasAura(SPELL_PACKT_OF_THE_DARKFALLEN) && !refTarget->HasAura(SPELL_FATAL_ATRACTION) && !refTarget->HasAura(SPELL_SWARMING_SHADOWS))
                         tempTargets.push_back(refTarget->ToPlayer());
 
@@ -549,43 +549,43 @@ public:
             switch (me->GetEntry())
             {
                 case ADD_HOLY:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_HOLY);
                     break;
                 case ADD_FIRE:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_FIRE);
                     break;
                 case ADD_SHADOW:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_SHADOW);
                     break;
                 case ADD_FROST:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_FROST);
                     break;
                 case ADD_WATER:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_WATER);
                     break;
                 case ADD_NATURE:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_NATURE);
                     break;
                 case ADD_DESIRE:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_DESIRE);
                     break;
                 case ADD_BERSERK:
-                        if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                        if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_BERSEKER);
                     break;
                 case ADD_GAS:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_GAS);
                     break;
                 case ADD_PLAGUE:
-                    if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+                    if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                         ersatzboss->AI()->DoAction(ACTION_PLAGUE);
                     break;
                 default:
@@ -597,7 +597,7 @@ public:
 
         void JustDied(Unit* /* killer */)
         {
-            if (Creature* ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
+            if (auto ersatzboss = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_GUNSHIP_ERSATZBOSS)))
                 ersatzboss->AI()->DoAction(ACTION_ADD_DIED);
         }
 
@@ -631,7 +631,7 @@ public:
         player->PlayerTalkClass->SendCloseGossip();
         if (action == GOSSIP_ACTION_INFO_DEF+1)
         {
-           if (Creature* gunship = creature->SummonCreature(NPC_GUNSHIP_ERSAZBOSS, centerPosBeemz))
+           if (auto gunship = creature->SummonCreature(NPC_GUNSHIP_ERSAZBOSS, centerPosBeemz))
            {
                 gunship->GetAI()->DoAction(ACTION_INTRO);
                 creature->DespawnOrUnsummon();
@@ -643,7 +643,7 @@ public:
     bool OnGossipHello(Player* player, Creature* creature)
     {
         player->PlayerTalkClass->ClearMenus();
-        if (InstanceScript* instance = player->GetInstanceScript())
+        if (auto instance = player->GetInstanceScript())
             if ((instance->GetData(DATA_BOSS_GUNSHIP_ERSATZ) != DONE && instance->GetData(DATA_BOSS_GUNSHIP_ERSATZ) != IN_PROGRESS)|| player->isGameMaster())
                 if ((player->GetGroup() && player->GetGroup()->IsLeader(player->GetGUID())) || player->isGameMaster())
                     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_LEADER, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
@@ -664,9 +664,9 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
-                if (InstanceScript* instance = caster->GetInstanceScript())
+                if (auto instance = caster->GetInstanceScript())
                 {
                     if (caster->GetMapId() == 631 )
                     {

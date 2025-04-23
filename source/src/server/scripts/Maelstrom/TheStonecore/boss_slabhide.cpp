@@ -444,12 +444,12 @@ class boss_slabhide : public CreatureScript
 								me->SetCanFly(true);
 								me->SetDisableGravity(true);
 								me->SetHover(true);
-								if (Creature* gMissile = me->FindNearestCreature(433570, 100.0f))
+								if (auto gMissile = me->FindNearestCreature(433570, 100.0f))
 									gMissile->AddAura(SPELL_STALACTITE, gMissile);
 								else
 								{
 									Position center = { 1275.970703f, 1217.204224f, 247.107544f };
-									if (Creature* gMissile = me->SummonCreature(433570, center, TEMPSUMMON_TIMED_DESPAWN, 10000))
+									if (auto gMissile = me->SummonCreature(433570, center, TEMPSUMMON_TIMED_DESPAWN, 10000))
 										gMissile->AddAura(SPELL_STALACTITE, gMissile);
 								}
 								break;
@@ -470,7 +470,7 @@ class boss_slabhide : public CreatureScript
 								me->SetReactState(REACT_AGGRESSIVE);
 								if (IsHeroic())
 								{
-									if (Unit* victim = me->getVictim())
+									if (auto victim = me->getVictim())
 									{
 										me->SetUInt64Value(UNIT_FIELD_TARGET, victim->GetGUID());
 										me->CastWithDelay(4000, victim, SPELL_CRYSTAL_STORM, true);

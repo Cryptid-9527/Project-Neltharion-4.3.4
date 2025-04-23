@@ -2143,7 +2143,7 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string const& name) const
 bool ObjectMgr::GetPlayerNameByGUID(uint64 guid, std::string &name) const
 {
     // prevent DB access for online player
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         name = player->GetName();
         return true;
@@ -2173,7 +2173,7 @@ bool ObjectMgr::GetPlayerNameByGUID(uint64 guid, std::string &name) const
 bool ObjectMgr::GetPlayerGuildIdByGUID(uint64 guid, uint32 &guildId) const
 {
     // prevent DB access for online player
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
     {
         guildId = player->GetGuildId();
         return true;
@@ -2196,7 +2196,7 @@ bool ObjectMgr::GetPlayerGuildIdByGUID(uint64 guid, uint32 &guildId) const
 
 uint32 ObjectMgr::GetPlayerTeamByGUID(uint64 guid) const
 {
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         return Player::TeamForRace(player->getRace());
 
     InfoCharEntry info;
@@ -2224,7 +2224,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
     if (sInfoMgr->GetCharInfo(GUID_LOPART(guid), info))
         return info.Account;
 
-    if (Player* player = ObjectAccessor::FindPlayer(guid))
+    if (auto player = ObjectAccessor::FindPlayer(guid))
         return player->GetSession()->GetAccountId();
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_BY_GUID);
@@ -9874,7 +9874,7 @@ CreatureTemplate const* ObjectMgr::GetCreatureTemplate(uint32 entry)
 
 VehicleAccessoryList const* ObjectMgr::GetVehicleAccessoryList(Vehicle* veh) const
 {
-    if (Creature* cre = veh->GetBase()->ToCreature())
+    if (auto cre = veh->GetBase()->ToCreature())
     {
         // Give preference to GUID-based accessories
         VehicleAccessoryContainer::const_iterator itr = _vehicleAccessoryStore.find(cre->GetDBTableGUIDLow());

@@ -85,7 +85,7 @@ class boss_shazzrah : public CreatureScript
                             events.ScheduleEvent(EVENT_ARCANE_EXPLOSION, urand(5000, 9000));
                             break;
                         case EVENT_SHAZZRAH_CURSE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -EVENT_SHAZZRAH_CURSE))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true, -EVENT_SHAZZRAH_CURSE))
                                 DoCast(target, SPELL_SHAZZRAH_CURSE);
                             events.ScheduleEvent(EVENT_SHAZZRAH_CURSE, urand(25000, 30000));
                             break;
@@ -100,7 +100,7 @@ class boss_shazzrah : public CreatureScript
                         case EVENT_BLINK:
                             // Teleporting him to a random player and casting Arcane Explosion after that.
                             // Blink is not working cause of LoS System we need to do this hardcoded.
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100.0f, true))
                             {
                                 DoTeleportTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
                                 DoCast(target, SPELL_ARCANE_EXPLOSION);

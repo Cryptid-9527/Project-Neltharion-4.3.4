@@ -263,7 +263,7 @@ public:
                 case 49039:
                 case 49041:
                 {
-                    if (Creature* vehicle = me->FindNearestCreature(NPC_FIREWALL_CENTER, 100.0f, true))
+                    if (auto vehicle = me->FindNearestCreature(NPC_FIREWALL_CENTER, 100.0f, true))
                     {
                         cnt++;
                         summon->CastCustomSpell(VEHICLE_SPELL_RIDE_HARDCODED, SPELLVALUE_BASE_POINT0, cnt, vehicle, false);
@@ -348,12 +348,12 @@ public:
                         }
                         break;
                     case EVENT_FROST_BLOSSOM:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                             me->SummonCreature(NPC_FROST_BLOSSOM_BUNNY, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
                         events.ScheduleEvent(EVENT_FIRE_BLOSSOM, 3000, 0, PHASE_50_PERCENT);
                         break;
                     case EVENT_FIRE_BLOSSOM:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                             me->SummonCreature(NPC_FIRE_BLOSSOM_BUNNY, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
                         events.ScheduleEvent(EVENT_FROST_BLOSSOM, 3000, 0, PHASE_50_PERCENT);
                         break;
@@ -393,7 +393,7 @@ public:
                         std::list<Creature*> stalker;
                         me->GetCreatureListWithEntryInGrid(stalker, NPC_FIRE_BUNNY, 200.0f);
                         for (std::list<Creature*>::iterator itr = stalker.begin(); itr != stalker.end(); itr++)
-                            if (Creature* c = *itr)
+                            if (auto c = *itr)
                             {
                                 c->SetObjectScale(1.4f);
                                 c->GetMotionMaster()->MoveRandom(5.f);
@@ -402,7 +402,7 @@ public:
                         stalker.clear();
                         me->GetCreatureListWithEntryInGrid(stalker, NPC_FROST_BUNNY, 200.0f);
                         for (std::list<Creature*>::iterator itr = stalker.begin(); itr != stalker.end(); itr++)
-                            if (Creature* c = *itr)
+                            if (auto c = *itr)
                             {
                                 c->SetObjectScale(1.4f);
                                 c->GetMotionMaster()->MoveRandom(5.f);
@@ -483,7 +483,7 @@ public:
 
         void AfterRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Creature *glubtok = caster->ToCreature())
                     glubtok->AI()->DoAction(ACTION_BLINK);
         }

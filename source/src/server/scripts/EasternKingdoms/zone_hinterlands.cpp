@@ -128,8 +128,8 @@ public:
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
             me->setFaction(21);
 
-            if (Creature* righthand = me->SummonCreature(NPC_ONGOLONGOS_RIGHT_HAND, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
-                if (Creature* lefthand = me->SummonCreature(NPC_ONGOLONGOS_RIGHT_HAND, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+            if (auto righthand = me->SummonCreature(NPC_ONGOLONGOS_RIGHT_HAND, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto lefthand = me->SummonCreature(NPC_ONGOLONGOS_RIGHT_HAND, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN))
                 {                  
                     righthand->setActive(true);
                     lefthand->setActive(true);
@@ -551,7 +551,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
             {
                 // player->CastSpell(me, SPELL_RIDE_DRAGONHAWK);
                 _playerGUID = player->GetGUID();
@@ -578,7 +578,7 @@ public:
             switch (point)
             {
             case 11:
-                if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                if (auto player = Unit::GetPlayer(*me, _playerGUID))
                 {
                     player->ExitVehicle();
                     me->DespawnOrUnsummon(200);
@@ -697,7 +697,7 @@ public:
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                 me->GetMotionMaster()->MoveIdle();
 
-                if (Player* player = GetPlayerForEscort())
+                if (auto player = GetPlayerForEscort())
                     player->GroupEventHappens(QUEST_RESQUE_OOX_09, me);
 
                 me->CastSpell(me, SPELL_OOX_LIFT_OFF);

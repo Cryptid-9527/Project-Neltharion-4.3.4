@@ -82,7 +82,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 player->FailQuest(QUEST_TRAIL_OF_FIRE);
         }
 
@@ -117,22 +117,22 @@ public:
                     me->DespawnOrUnsummon();
                     break;
                 case 5:
-                    if (Unit* Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
+                    if (auto Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
                         Trigger->CastSpell(Trigger, SPELL_COSMETIC_LOW_POLY_FIRE, false);
                     SetRun(false);
                     break;
                 case 6:
-                    if (Unit* Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
+                    if (auto Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
                         Trigger->CastSpell(Trigger, SPELL_COSMETIC_LOW_POLY_FIRE, false);
                     SetRun(true);
                     break;
                 case 8:
-                    if (Unit* Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
+                    if (auto Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
                         Trigger->CastSpell(Trigger, SPELL_COSMETIC_LOW_POLY_FIRE, false);
                     SetRun(false);
                     break;
                 case 9:
-                    if (Unit* Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
+                    if (auto Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
                         Trigger->CastSpell(Trigger, SPELL_COSMETIC_LOW_POLY_FIRE, false);
                     break;
                 case 10:
@@ -142,7 +142,7 @@ public:
                     SetRun(false);
                     break;
                 case 14:
-                    if (Unit* Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
+                    if (auto Trigger = me->FindNearestCreature(NPC_HANES_FIRE_TRIGGER, 10.0f))
                         Trigger->CastSpell(Trigger, SPELL_COSMETIC_LOW_POLY_FIRE, false);
                     SetRun(true);
                     break;
@@ -179,7 +179,7 @@ public:
             uint64 summonerGUID = 0;
 
             if (me->isSummon())
-                if (Unit* summoner = me->ToTempSummon()->GetSummoner())
+                if (auto summoner = me->ToTempSummon()->GetSummoner())
                     if (summoner->GetTypeId() == TYPEID_PLAYER)
                         summonerGUID = summoner->GetGUID();
 
@@ -388,7 +388,7 @@ public:
 
         void JustSummoned(Creature* summon)
         {
-            if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+            if (auto player = me->GetPlayer(*me, uiPlayerGUID))
             {
                 if (player->isAlive())
                 {
@@ -705,7 +705,7 @@ public:
 
         void UpdateAI(const uint32 uiDiff)
         {
-            if (Player* target = me->SelectNearestPlayer(30)) {
+            if (auto target = me->SelectNearestPlayer(30)) {
                 if (target->isAlive()){
                     if (uiTimer <= uiDiff){
                         switch (me->GetEntry()) {
@@ -735,7 +735,7 @@ public:
         uiPhase ++;
         break;
     case 4:
-        if (Creature* minion = me->FindNearestCreature(npc_valkyr_soulclaimer, 50, true))
+        if (auto minion = me->FindNearestCreature(npc_valkyr_soulclaimer, 50, true))
             minion->AI()->Talk(0);
         uiTimer = 5000;
         uiPhase ++;
@@ -788,7 +788,7 @@ public:
                 me->AI()->Talk(uiPhaseMale);
                 uiPhaseMale ++;
             } else {
-                if (Creature* minion = me->FindNearestCreature(npc_ancient_female_vrykul, 50, true))
+                if (auto minion = me->FindNearestCreature(npc_ancient_female_vrykul, 50, true))
                     minion->AI()->Talk(uiPhaseFemale);
                 uiPhaseFemale ++;
             }
@@ -840,7 +840,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Player* player = me->GetOwner()->ToPlayer())
+            if (auto player = me->GetOwner()->ToPlayer())
                 player->FailQuest(QUEST_DROP_IT_THEN_ROCK_IT);
         }
 
@@ -848,7 +848,7 @@ public:
         {
             if (uiWaveTimer <= diff)
             {
-                if (Creature* pVrykul = me->SummonCreature(NPC_WINTERSKORN_DEFENDER, (1476.85f + rand()%20), (-5327.56f + rand()%20), (194.8f  + rand()%2), 0.0f, TEMPSUMMON_CORPSE_DESPAWN))
+                if (auto pVrykul = me->SummonCreature(NPC_WINTERSKORN_DEFENDER, (1476.85f + rand()%20), (-5327.56f + rand()%20), (194.8f  + rand()%2), 0.0f, TEMPSUMMON_CORPSE_DESPAWN))
                 {
                     pVrykul->AI()->AttackStart(me);
                     pVrykul->GetMotionMaster()->Clear();
@@ -867,7 +867,7 @@ public:
 
             if (killCounter >= 3)
             {
-                if (Player* player = me->GetOwner()->ToPlayer())
+                if (auto player = me->GetOwner()->ToPlayer())
                     player->GroupEventHappens(QUEST_DROP_IT_THEN_ROCK_IT, me);
 
                 me->DespawnOrUnsummon(2000);

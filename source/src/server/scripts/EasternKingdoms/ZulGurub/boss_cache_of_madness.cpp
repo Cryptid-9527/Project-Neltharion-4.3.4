@@ -243,7 +243,7 @@ class npc_ritual_tiki_mask : public CreatureScript
                     {
                         case EVENT_MOVE_AROUND_PLAYER:
                         {
-                            if (Unit* target = me->getVictim())
+                            if (auto target = me->getVictim())
                             {
                                 Position center;
                                 target->GetPosition(&center);
@@ -333,7 +333,7 @@ class npc_ancient_artifact : public CreatureScript
                     active = true;
                     me->GetMotionMaster()->MovePoint(0, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ() + 2.0f);
 
-                    if (InstanceScript* instance = me->GetInstanceScript())
+                    if (auto instance = me->GetInstanceScript())
                     {
                         events.ScheduleEvent(EVENT_MOVE_AROUND, 2000);
                         pathId = instance->GetData(DATA_CACHE_OF_MADNESS_ARTIFACT);
@@ -369,7 +369,7 @@ class npc_ancient_artifact : public CreatureScript
                         }
                         case EVENT_SUMMON_BOSS_VISUAL:
                         {
-                            if (Creature* bunny = me->SummonCreature(NPC_GENERAL_BUNNY, PortalSP, TEMPSUMMON_TIMED_DESPAWN, 30000))
+                            if (auto bunny = me->SummonCreature(NPC_GENERAL_BUNNY, PortalSP, TEMPSUMMON_TIMED_DESPAWN, 30000))
                             {
                                 bunny->CastSpell(bunny, SPELL_PORTAL_AURA, false);
                                 events.ScheduleEvent(EVENT_SHATTER_ARTIFACT, 12000);
@@ -380,7 +380,7 @@ class npc_ancient_artifact : public CreatureScript
                         {
                             for (int i = 0; i < 4; ++i)
                                 if (me->GetEntry() != ArtifactEntry[i])
-                                    if (Creature* artifact = me->FindNearestCreature(ArtifactEntry[i], 30.0f))
+                                    if (auto artifact = me->FindNearestCreature(ArtifactEntry[i], 30.0f))
                                     {
                                         artifact->CastSpell(artifact, SPELL_BREAK_ARTIFACT, true);
                                         artifact->StopMoving();
@@ -420,7 +420,7 @@ class spell_cursed_portal : public SpellScriptLoader
 
             void EffectApply(AuraEffect const * aurEff, AuraEffectHandleModes /*mode*/)
             {
-                if (InstanceScript* instance = GetTarget()->GetInstanceScript())
+                if (auto instance = GetTarget()->GetInstanceScript())
                     instance->SetData(DATA_CACHE_OF_MADNESS_ARTIFACT, DONE);
 
                 aurEff->GetBase()->SetDuration(7000);
@@ -516,7 +516,7 @@ class boss_renataki : public CreatureScript
                             break;
                         case EVENT_AMBUSH:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
                                 me->CastSpell(target, SPELL_EMBUSH, true);
 
                             me->RemoveAura(SPELL_VANISH);
@@ -537,7 +537,7 @@ class boss_renataki : public CreatureScript
                             break;
                         case EVENT_CHARGE_TARGET_DEST:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
                                 me->CastSpell(target, SPELL_CHARGE, true);
 
                             if (me->HasAura(SPELL_THOUSAND_BLADES))
@@ -740,7 +740,7 @@ public:
 
         void HandleScript(SpellEffIndex effIndex)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 target->CastWithDelay(3000, GetCaster(), GetEffectValue(), true);
         }
 
@@ -872,7 +872,7 @@ class boss_wushoolay : public CreatureScript
                             break;
                         case EVENT_CHARGE_PLAYER:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_FARTHEST, 0, 50.0f, true))
                                 me->CastSpell(target, SPELL_CHARGE, true);
                             break;
                         }

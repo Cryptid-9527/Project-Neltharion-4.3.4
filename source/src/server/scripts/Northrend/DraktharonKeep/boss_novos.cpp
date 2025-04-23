@@ -115,7 +115,7 @@ public:
                     luiCrystals.push_back(instance->GetData64(DATA_NOVOS_CRYSTAL_1 + n));
                 for (std::list<uint64>::const_iterator itr = luiCrystals.begin(); itr != luiCrystals.end(); ++itr)
                 {
-                    if (GameObject* temp = instance->instance->GetGameObject(*itr))
+                    if (auto temp = instance->instance->GetGameObject(*itr))
                         temp->SetGoState(GO_STATE_READY);
                 }
             }
@@ -132,7 +132,7 @@ public:
             {
                 for (std::list<uint64>::const_iterator itr = luiCrystals.begin(); itr != luiCrystals.end(); ++itr)
                 {
-                    if (GameObject* temp = instance->instance->GetGameObject(*itr))
+                    if (auto temp = instance->instance->GetGameObject(*itr))
                         temp->SetGoState(GO_STATE_ACTIVE);
                 }
                 instance->SetData(DATA_NOVOS_EVENT, IN_PROGRESS);
@@ -172,7 +172,7 @@ public:
                 case PHASE_2:
                     if (uiTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                             DoCast(target, DUNGEON_MODE(RAND(SPELL_ARCANE_BLAST, SPELL_BLIZZARD, SPELL_FROSTBOLT, SPELL_WRATH_OF_MISERY),
                                                          RAND(H_SPELL_ARCANE_BLAST, H_SPELL_BLIZZARD, H_SPELL_FROSTBOLT, H_SPELL_WRATH_OF_MISERY)));
                         uiTimer = urand(1*IN_MILLISECONDS, 3*IN_MILLISECONDS);
@@ -224,7 +224,7 @@ public:
             if (!luiCrystals.empty())
             {
                 if (instance)
-                    if (GameObject* temp = instance->instance->GetGameObject(luiCrystals.back()))
+                    if (auto temp = instance->instance->GetGameObject(luiCrystals.back()))
                         temp->SetGoState(GO_STATE_READY);
                 luiCrystals.pop_back();
             }
@@ -280,7 +280,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Creature* pNovos = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
+            if (auto pNovos = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
                 CAST_AI(boss_novos::boss_novosAI, pNovos->AI())->RemoveCrystal();
         }
 
@@ -302,8 +302,8 @@ public:
         {
             if (type != POINT_MOTION_TYPE || id != 0)
                 return;
-            if (Creature* pNovos = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
-                if (Unit* target = CAST_AI(boss_novos::boss_novosAI, pNovos->AI())->GetRandomTarget())
+            if (auto pNovos = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
+                if (auto target = CAST_AI(boss_novos::boss_novosAI, pNovos->AI())->GetRandomTarget())
                     AttackStart(target);
         }
     };
@@ -332,10 +332,10 @@ public:
         {
             if (type != POINT_MOTION_TYPE || id !=0)
                 return;
-            if (Creature* Novos = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
+            if (auto Novos = ObjectAccessor::GetCreature(*me, instance ? instance->GetData64(DATA_NOVOS) : 0))
             {
                 Novos->AI()->DoAction(ACTION_MINION_REACHED);
-                if (Unit* target = CAST_AI(boss_novos::boss_novosAI, Novos->AI())->GetRandomTarget())
+                if (auto target = CAST_AI(boss_novos::boss_novosAI, Novos->AI())->GetRandomTarget())
                     AttackStart(target);
             }
         }
@@ -359,7 +359,7 @@ class achievement_oh_novos : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Novos = target->ToCreature())
+            if (auto Novos = target->ToCreature())
                 if (Novos->AI()->GetData(DATA_OH_NOVOS))
                     return true;
 

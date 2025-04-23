@@ -371,7 +371,7 @@ void WorldSession::HandleSendMail(WorldPacket& recvData)
         COD = 0;
 
     // Mail sent between guild members arrives instantly if they have the guild perk "Guild Mail"
-    if (Guild* guild = player->GetGuild())
+    if (auto guild = player->GetGuild())
         if (guild->GetLevel() >= 17 && guild->IsMember(rc))
             deliver_delay = 0;
 

@@ -166,7 +166,7 @@ public:
 
             for (std::list<uint64>::const_iterator itr = m_lGolemGUIDList.begin(); itr != m_lGolemGUIDList.end(); ++itr)
             {
-                if (Creature* temp = Unit::GetCreature(*me, *itr))
+                if (auto temp = Unit::GetCreature(*me, *itr))
                 {
                     if (temp->isAlive())
                         temp->DespawnOrUnsummon();
@@ -183,7 +183,7 @@ public:
 
             for (std::list<uint64>::const_iterator itr = m_lGolemGUIDList.begin(); itr != m_lGolemGUIDList.end(); ++itr)
             {
-                if (Creature* temp = Unit::GetCreature(*me, *itr))
+                if (auto temp = Unit::GetCreature(*me, *itr))
                 {
                     // Only shatter brittle golems
                     if (temp->isAlive() && temp->GetEntry() == NPC_BRITTLE_GOLEM)
@@ -201,7 +201,7 @@ public:
             {
                 m_lGolemGUIDList.push_back(summoned->GetGUID());
 
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     summoned->GetMotionMaster()->MoveFollow(target, 0.0f, 0.0f);
 
                 // Why healing when just summoned?
@@ -319,7 +319,7 @@ public:
 
                 case 3:
                     // 3 - Cast Temper on the Anvil
-                    if (Unit* target = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
+                    if (auto target = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
                     {
                         me->SetOrientation(2.29f);
                         DoCast(target, SPELL_TEMPER, false);
@@ -333,7 +333,7 @@ public:
                     // 4 - Wait for delay to expire
                     if (m_uiDelay_Timer <= uiDiff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0))
                         {
                             me->SetReactState(REACT_AGGRESSIVE);
                             me->SetInCombatWith(target);
@@ -346,7 +346,7 @@ public:
 
                 case 5:
                     // 5 - Spawn the Golems
-                    if (Creature* creatureTarget = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
+                    if (auto creatureTarget = GetClosestCreatureWithEntry(me, NPC_VOLKHAN_ANVIL, 1000.0f, true))
                         for (uint8 i = 0; i < MAX_GOLEM; ++i)
                             me->CastSpell(creatureTarget, SPELL_SUMMON_MOLTEN_GOLEM, true);
 

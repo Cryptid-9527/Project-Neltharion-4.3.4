@@ -127,7 +127,7 @@ class npc_berserking_boulder_roller : public CreatureScript
             {
                 Position pos;
                 summoned->GetPosition(&pos);
-                if (Creature* boulder = summoned->SummonCreature(52350, pos, TEMPSUMMON_TIMED_DESPAWN, 9500))
+                if (auto boulder = summoned->SummonCreature(52350, pos, TEMPSUMMON_TIMED_DESPAWN, 9500))
                 {
                     boulder->EnterVehicle(summoned);
                     boulder->SetReactState(REACT_PASSIVE);
@@ -239,8 +239,8 @@ class npc_boulder : public CreatureScript
                 {
                     //me->CastSpell(me, 96836, false);
                     if (Vehicle* v = me->GetVehicleKit())
-                        if (Unit* p = v->GetPassenger(0))
-                            if (Creature* pC = p->ToCreature())
+                        if (auto p = v->GetPassenger(0))
+                            if (auto pC = p->ToCreature())
                         {
                             p->ExitVehicle();
                             pC->DespawnOrUnsummon();
@@ -496,7 +496,7 @@ class npc_tiki_lord_muloa : public CreatureScript
 
                 if (events.ExecuteEvent() == EVENT_BONE_VOLLEY)
                 {
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                         me->CastSpell(target, 96822, false);
 
                     events.ScheduleEvent(EVENT_TIKI_TORCH, 8000);
@@ -535,7 +535,7 @@ class npc_gub : public CreatureScript
                 me->CastSpell(me, 97014, false);
 
                 for (int i = 0; i < 3; ++i)
-                    if (Creature* fish_target = me->SummonCreature(45979, GubFishSP[i]))
+                    if (auto fish_target = me->SummonCreature(45979, GubFishSP[i]))
                     {
                         FishTargetGUID[i] = fish_target->GetGUID();
                         fish_target->CastSpell(me, 97015, false);
@@ -554,7 +554,7 @@ class npc_gub : public CreatureScript
                 me->CastSpell(me, 97014, false);
 
                 for (int i = 0; i < 3; ++i)
-                    if (Creature* fish_target = ObjectAccessor::GetCreature(*me, FishTargetGUID[i]))
+                    if (auto fish_target = ObjectAccessor::GetCreature(*me, FishTargetGUID[i]))
                         fish_target->CastSpell(me, 97015, false);
             }
 
@@ -937,13 +937,13 @@ class npc_venomancer_mauri : public CreatureScript
             void InitializeAI()
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = me->SummonCreature(45979, MauriTotemSP[i]))
+                    if (auto totem = me->SummonCreature(45979, MauriTotemSP[i]))
                     {
                         TotemGUID[i] = totem->GetGUID();
                         totem->CastSpell(me, TotemSpell[i], false);
                     }
 
-                if (Creature* cauldron = me->SummonCreature(52529, MauriCauldronSP))
+                if (auto cauldron = me->SummonCreature(52529, MauriCauldronSP))
                 {
                     CauldronGUID = cauldron->GetGUID();
 
@@ -965,14 +965,14 @@ class npc_venomancer_mauri : public CreatureScript
             void JustReachedHome()
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                         totem->CastSpell(me, TotemSpell[i], false);
             }
 
             void EnterCombat(Unit* /*who*/)
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                         totem->CastStop();
 
                 Talk(0);
@@ -985,7 +985,7 @@ class npc_venomancer_mauri : public CreatureScript
                 Talk(1);
                 events.Reset();
 
-                if (Creature* cauldron = ObjectAccessor::GetCreature(*me, CauldronGUID))
+                if (auto cauldron = ObjectAccessor::GetCreature(*me, CauldronGUID))
                 {
                     cauldron->RemoveAura(97122);
                     cauldron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -1008,7 +1008,7 @@ class npc_venomancer_mauri : public CreatureScript
                     {
                         case EVENT_WHISPERS_OF_HETHISS:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true))
                                 me->CastSpell(target, 96466, false);
 
                             events.ScheduleEvent(EVENT_WHISPERS_OF_HETHISS, 15000);
@@ -1016,7 +1016,7 @@ class npc_venomancer_mauri : public CreatureScript
                         }
                         case EVENT_POISON_BOLT:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                                 me->CastSpell(target, 96918, false);
 
                             events.ScheduleEvent(EVENT_POISON_BOLT, 5000);
@@ -1065,13 +1065,13 @@ class npc_venomancer_tkulu : public CreatureScript
             void InitializeAI()
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = me->SummonCreature(45979, TkuluTotemSP[i]))
+                    if (auto totem = me->SummonCreature(45979, TkuluTotemSP[i]))
                     {
                         TotemGUID[i] = totem->GetGUID();
                         totem->CastSpell(me, TotemSpell[i], false);
                     }
 
-                if (Creature* cauldron = me->SummonCreature(52529, TkuluCauldronSP))
+                if (auto cauldron = me->SummonCreature(52529, TkuluCauldronSP))
                 {
                     CauldronGUID = cauldron->GetGUID();
 
@@ -1093,14 +1093,14 @@ class npc_venomancer_tkulu : public CreatureScript
             void JustReachedHome()
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                         totem->CastSpell(me, TotemSpell[i], false);
             }
 
             void EnterCombat(Unit* /*who*/)
             {
                 for (int i = 0; i < 2; ++i)
-                    if (Creature* totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
+                    if (auto totem = ObjectAccessor::GetCreature(*me, TotemGUID[i]))
                         totem->CastStop();
 
                 Talk(0);
@@ -1113,7 +1113,7 @@ class npc_venomancer_tkulu : public CreatureScript
                 Talk(1);
                 events.Reset();
 
-                if (Creature* cauldron = ObjectAccessor::GetCreature(*me, CauldronGUID))
+                if (auto cauldron = ObjectAccessor::GetCreature(*me, CauldronGUID))
                 {
                     cauldron->RemoveAura(97122);
                     cauldron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -1140,7 +1140,7 @@ class npc_venomancer_tkulu : public CreatureScript
                             break;
                         case EVENT_POISON_BOLT:
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                                     me->CastSpell(target, 96918, false);
 
                                 events.ScheduleEvent(EVENT_POISON_BOLT, urand(5000, 10000));
@@ -1215,7 +1215,7 @@ struct npc_cauldron_mixerAI : public ScriptedAI
             {
                 case EVENT_BUBBLING_MIXTURE:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             me->CastSpell(target, 96804, false);
 
                         events.ScheduleEvent(EVENT_BUBBLING_MIXTURE, urand(7000, 21000));
@@ -1227,7 +1227,7 @@ struct npc_cauldron_mixerAI : public ScriptedAI
                     break;
                 case EVENT_GOUT_OF_FLAME:
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 30.0f, true))
                             me->CastSpell(target, 96413, false);
 
                         events.ScheduleEvent(EVENT_GOUT_OF_FLAME, urand(7000, 21000));
@@ -1281,7 +1281,7 @@ class npc_gurubashi_cauldron_mixer_frost : public CreatureScript
                         break;
                     case EVENT_FROSTBURN_FORMULA:
                         {
-                            if (Unit* target = SelectTarget(SELECT_TARGET_NEAREST, 0, 50.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_NEAREST, 0, 50.0f, true))
                                 me->CastSpell(target, 96449, false);
 
                             events.ScheduleEvent(EVENT_FROSTBURN_FORMULA, urand(7000, 14000));
@@ -1473,7 +1473,7 @@ class npc_venomguard_destroyer : public CreatureScript
                         case EVENT_BREATH_OF_HETHISS:
                         {
                             events.ScheduleEvent(EVENT_CAULDRON_NEUTRALIZER, urand(5000, 8000));
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 10.0f, true))
                             {
                                 me->SetReactState(REACT_PASSIVE);
                                 me->AttackStop();
@@ -1566,13 +1566,13 @@ class npc_gurubashi_shadow_hunter : public CreatureScript
                 switch (eventId)
                 {
                 case EVENT_SHOOT:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 97239, false);
 
                     events.ScheduleEvent(EVENT_SHADOWED_SHOT, urand(3000, 6000));
                     break;
                 case EVENT_SHADOWED_SHOT:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                         me->CastSpell(target, 96767, false);
                     events.ScheduleEvent(EVENT_SHOOT, urand(3000, 6000));
                     break;
@@ -1682,7 +1682,7 @@ class npc_gurubashi_master_chef : public CreatureScript
                     {
                         case EVENT_FULL_OF_MEAT:
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, -81252))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f, true, -81252))
                                     me->CastSpell(target, 81252, false);
 
                                 events.ScheduleEvent(EVENT_FULL_OF_MEAT, urand(4000, 8000));
@@ -1748,7 +1748,7 @@ public:
 
         void FilterTargets(std::list<WorldObject*>& unitList)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             for (std::list<WorldObject*>::const_iterator itr = unitList.begin(); itr != unitList.end();)
             {
                 WorldObject* temp = (*itr);

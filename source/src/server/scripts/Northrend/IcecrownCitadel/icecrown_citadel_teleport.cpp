@@ -33,7 +33,7 @@ class icecrown_citadel_teleport : public GameObjectScript
         bool OnGossipHello(Player* player, GameObject* go)
         {
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to Light's Hammer.", GOSSIP_SENDER_ICC_PORT, LIGHT_S_HAMMER_TELEPORT);
-            if (InstanceScript* instance = go->GetInstanceScript())
+            if (auto instance = go->GetInstanceScript())
             {
                 if (instance->IsDone(DATA_LORD_MARROWGAR) || player->isGameMaster())
                     player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to the Oratory of the Damned.", GOSSIP_SENDER_ICC_PORT, ORATORY_OF_THE_DAMNED_TELEPORT);
@@ -88,7 +88,7 @@ class at_frozen_throne_teleport : public AreaTriggerScript
                 return true;
             }
 
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
             if (instance->IsDone(DATA_PROFESSOR_PUTRICIDE) &&
                 instance->IsDone(DATA_BLOOD_QUEEN_LANA_THEL) &&
                 instance->IsDone(DATA_SINDRAGOSA) &&

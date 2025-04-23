@@ -111,7 +111,7 @@ public:
 
             if (who->GetTypeId() == TYPEID_PLAYER || who->isPet())
             {
-                if (Creature* guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
+                if (auto guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
                 {
                     guard->getThreatManager().resetAllAggro();
                     guard->CombatStop(true);
@@ -128,7 +128,7 @@ public:
         {
             if (!UpdateVictim())
             {
-                if (Creature* guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
+                if (auto guard = me->FindNearestCreature(NPC_STORMWIND_INFANTRY, 6.0f, true))
                 {
                     me->SetReactState(REACT_AGGRESSIVE);
                     me->AI()->AttackStart(guard);

@@ -411,7 +411,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_VALIONAS_FLAME:
-                        if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             DoCast(pTarget, SPELL_VALIONAS_FLAME);
                         isCasting = true;
                         events.Repeat(urand(15000,25000));
@@ -427,7 +427,7 @@ public:
                 //        DoCast(SelectTarget(SELECT_TARGET_RANDOM, 0), SPELL_DEVOURING_FLAME_TRACKER_SUMMON);
                         if (const Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
-                            if (Creature* trigger = me->SummonCreature(NPC_DEVOURING_FLAMES, *target, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                            if (auto trigger = me->SummonCreature(NPC_DEVOURING_FLAMES, *target, TEMPSUMMON_TIMED_DESPAWN, 20000))
                             {
                                 me->StopMoving();
                                 me->SetFacingToObject(trigger);
@@ -620,7 +620,7 @@ public:
             if (!GetHitUnit())
                 return;
 
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 float distance = caster->GetDistance2d(GetHitUnit());
 

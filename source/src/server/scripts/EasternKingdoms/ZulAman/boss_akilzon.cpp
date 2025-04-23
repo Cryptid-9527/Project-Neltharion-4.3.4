@@ -177,7 +177,7 @@ class boss_akilzon : public CreatureScript
                 me->DeleteThreatList();
 
 
-                if (Creature* bakkalzu = me->FindNearestCreature(NPC_HOSTAGE_1, 200.f, true))
+                if (auto bakkalzu = me->FindNearestCreature(NPC_HOSTAGE_1, 200.f, true))
                     bakkalzu->AI()->DoAction(2);
 
 
@@ -227,7 +227,7 @@ class boss_akilzon : public CreatureScript
             void UpdateAI(uint32 const diff)
             {
                 if (!me->isInCombat())
-                    if (Player* player = me->FindNearestPlayer(15.0f))
+                    if (auto player = me->FindNearestPlayer(15.0f))
                         if (me->ToUnit()->IsValidAttackTarget(player->ToUnit()))
                         {
                             me->AI()->EnterCombat(player->ToUnit());
@@ -336,7 +336,7 @@ class boss_akilzon : public CreatureScript
                                 pos.m_positionZ = frand(80.f, 95.f);
 
 
-                                if (Creature* c = me->SummonCreature(NPC_AKILZON_EAGLE, akilEagleSpawn[i]))
+                                if (auto c = me->SummonCreature(NPC_AKILZON_EAGLE, akilEagleSpawn[i]))
                                     c->AI()->DoAction(ACTION_START_FIGHT);
                             }
                         }
@@ -414,7 +414,7 @@ class mob_akilzon_eagle : public CreatureScript
                     return;
                 if (TargetGUID)
                 {
-                    if (Unit* target = Unit::GetUnit(*me, TargetGUID))
+                    if (auto target = Unit::GetUnit(*me, TargetGUID))
                         DoCast(target, SPELL_EAGLE_SWOOP, true);
                     TargetGUID = 0;
                     events.ScheduleEvent(EVENT_MOVE_AROUND_CIRCLE, 0);
@@ -541,7 +541,7 @@ class npc_amani_kidnapper : public CreatureScript
                     return;
 
                 if (id == POINT_MOVE_TARGET)
-                if (Unit* target = Unit::GetUnit(*me, targetGUID))
+                if (auto target = Unit::GetUnit(*me, targetGUID))
                     if (target->HasAura(SPELL_PLAYER_PLUCKED_RIDING))
                     {
                         me->DespawnOrUnsummon();
@@ -569,7 +569,7 @@ class npc_amani_kidnapper : public CreatureScript
                             me->SetSpeed(MOVE_RUN, 0.8f);
                             me->SetSpeed(MOVE_WALK, 0.8f);
 
-                            if (Unit* target = Unit::GetUnit(*me, targetGUID))
+                            if (auto target = Unit::GetUnit(*me, targetGUID))
                                 me->GetMotionMaster()->MovePoint(POINT_MOVE_TARGET, *target);
                             else
                                 me->DespawnOrUnsummon();

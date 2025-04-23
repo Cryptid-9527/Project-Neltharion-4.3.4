@@ -254,7 +254,7 @@ public:
             return false;
         }
 
-        for (GroupReference* itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = grp->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
 

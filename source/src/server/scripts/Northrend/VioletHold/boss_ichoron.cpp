@@ -124,7 +124,7 @@ public:
 
             if (instance)
             {
-                if (GameObject* pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_ICHORON_CELL)))
+                if (auto pDoor = instance->instance->GetGameObject(instance->GetData64(DATA_ICHORON_CELL)))
                     if (pDoor->GetGoState() == GO_STATE_READY)
                     {
                         EnterEvadeMode();
@@ -244,7 +244,7 @@ public:
                         if (!m_waterElements.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = m_waterElements.begin(); itr != m_waterElements.end(); ++itr)
-                                if (Creature* temp = Unit::GetCreature(*me, *itr))
+                                if (auto temp = Unit::GetCreature(*me, *itr))
                                     if (temp->isAlive())
                                     {
                                         bIsWaterElementsAlive = true;
@@ -368,7 +368,7 @@ public:
             {
                 if (instance)
                 {
-                    if (Creature* pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
+                    if (auto pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
                     {
                         if (me->IsWithinDist(pIchoron, 2.0f, false))
                         {
@@ -386,7 +386,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             DoCast(me, SPELL_SPLASH);
-            if (Creature* pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
+            if (auto pIchoron = Unit::GetCreature(*me, instance->GetData64(DATA_ICHORON)))
                 if (pIchoron->AI())
                     pIchoron->AI()->DoAction(ACTION_WATER_ELEMENT_KILLED);
         }
@@ -406,7 +406,7 @@ class achievement_dehydration : public AchievementCriteriaScript
             if (!target)
                 return false;
 
-            if (Creature* Ichoron = target->ToCreature())
+            if (auto Ichoron = target->ToCreature())
                 if (Ichoron->AI()->GetData(DATA_DEHYDRATION))
                     return true;
 

@@ -56,7 +56,7 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
         if (getPipeKnockBackTimer() < diff)
         {
             for (uint32 i = BG_DS_NPC_PIPE_KNOCKBACK_1; i <= BG_DS_NPC_PIPE_KNOCKBACK_2; ++i)
-                if (Creature* waterSpout = GetBgMap()->GetCreature(BgCreatures[i]))
+                if (auto waterSpout = GetBgMap()->GetCreature(BgCreatures[i]))
                     waterSpout->AI()->DoCast(BG_DS_SPELL_FLUSH);
 
             setPipeKnockBackCount(getPipeKnockBackCount() + 1);
@@ -70,7 +70,7 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
     {
         if (getWaterFallKnockbackTimer() < diff)
         {
-            if (Creature* waterSpout = GetBgMap()->GetCreature(BgCreatures[BG_DS_NPC_WATERFALL_KNOCKBACK]))
+            if (auto waterSpout = GetBgMap()->GetCreature(BgCreatures[BG_DS_NPC_WATERFALL_KNOCKBACK]))
                 waterSpout->CastSpell(waterSpout, BG_DS_SPELL_WATER_SPOUT, true);
 
             setWaterFallKnockbackTimer(BG_DS_WATERFALL_KNOCKBACK_TIMER);
@@ -89,7 +89,7 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
         }
         else if (getWaterFallStatus() == BG_DS_WATERFALL_STATUS_WARNING) // Active collision and start knockback timer
         {
-            if (GameObject* gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
+            if (auto gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
                 gob->SetGoState(GO_STATE_READY);
 
             setWaterFallTimer(BG_DS_WATERFALL_DURATION);
@@ -99,7 +99,7 @@ void BattlegroundDS::PostUpdateImpl(uint32 diff)
         else //if (getWaterFallStatus() == BG_DS_WATERFALL_STATUS_ON) // Remove collision and water
         {
             // turn off collision
-            if (GameObject* gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
+            if (auto gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
                 gob->SetGoState(GO_STATE_ACTIVE);
 
             DoorOpen(BG_DS_OBJECT_WATER_2);
@@ -138,12 +138,12 @@ void BattlegroundDS::StartingEventOpenDoors()
     DoorOpen(BG_DS_OBJECT_WATER_2);
 
     // Turn off collision
-    if (GameObject* gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
+    if (auto gob = GetBgMap()->GetGameObject(BgObjects[BG_DS_OBJECT_WATER_1]))
         gob->SetGoState(GO_STATE_ACTIVE);
 
     // Remove effects of Demonic Circle Summon
     for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
-        if (Player* player = ObjectAccessor::FindPlayer(itr->first))
+        if (auto player = ObjectAccessor::FindPlayer(itr->first))
             if (player->HasAura(48018))
                 player->RemoveAurasDueToSpell(48018);
 }

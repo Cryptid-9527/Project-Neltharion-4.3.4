@@ -252,7 +252,7 @@ public:
         void SaySound(int32 textEntry, Unit* target = 0)
         {
             Talk(textEntry, target ? target->GetGUID() : 0);
-            if (Creature* speaker = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 1000))
+            if (auto speaker = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 1000))
                 speaker->CastSpell(speaker, SPELL_HEAD_SPEAKS, false);
             laugh += 3000;
         }
@@ -283,7 +283,7 @@ public:
                         me->StopMoving();
                         //me->GetMotionMaster()->MoveIdle();
                         DoCast(me, SPELL_HEAD_IS_DEAD);
-                        if (Unit* body = ObjectAccessor::GetUnit(*me, bodyGUID))
+                        if (auto body = ObjectAccessor::GetUnit(*me, bodyGUID))
                             body->Kill(body);
                     }
                     break;
@@ -405,7 +405,7 @@ public:
         {
             if (headGUID)
             {
-                if (Creature* Head = ObjectAccessor::GetCreature((*me), headGUID))
+                if (auto Head = ObjectAccessor::GetCreature((*me), headGUID))
                     Head->DisappearAndDie();
 
                 headGUID = 0;
@@ -433,7 +433,7 @@ public:
             {
                 case 1:
                 {
-                    if (Creature* smoke = me->SummonCreature(HELPER, Spawn[1].x, Spawn[1].y, Spawn[1].z, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
+                    if (auto smoke = me->SummonCreature(HELPER, Spawn[1].x, Spawn[1].y, Spawn[1].z, 0, TEMPSUMMON_TIMED_DESPAWN, 20000))
                         ENSURE_AI(npc_wisp_invis::npc_wisp_invisAI, smoke->AI())->SetType(3);
                     DoCast(me, SPELL_RHYME_BIG);
                     me->SetVisible(true);
@@ -453,7 +453,7 @@ public:
                     IsFlying = false;
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    if (Unit* player = me->FindNearestPlayer(200.0f))
+                    if (auto player = me->FindNearestPlayer(200.0f))
                         me->AI()->AttackStart(player);
                     break;
                 }
@@ -483,7 +483,7 @@ public:
                 if (withhead)
                     SaySound(SAY_PLAYER_DEATH);
                 //maybe possible when player dies from conflagration
-                else if (Creature* Head = ObjectAccessor::GetCreature((*me), headGUID))
+                else if (auto Head = ObjectAccessor::GetCreature((*me), headGUID))
                     CAST_AI(npc_head::npc_headAI, Head->AI())->SaySound(SAY_PLAYER_DEATH);
             }
         }
@@ -538,9 +538,9 @@ public:
             me->StopMoving();
             //me->GetMotionMaster()->MoveIdle();
             SaySound(SAY_DEATH);
-            if (Creature* flame = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
+            if (auto flame = DoSpawnCreature(HELPER, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
                 flame->CastSpell(flame, SPELL_BODY_FLAME, false);
-            if (Creature* wisp = DoSpawnCreature(WISP_INVIS, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
+            if (auto wisp = DoSpawnCreature(WISP_INVIS, 0, 0, 0, 0, TEMPSUMMON_TIMED_DESPAWN, 60000))
                 CAST_AI(npc_wisp_invis::npc_wisp_invisAI, wisp->AI())->SetType(4);
             instance->SetBossState(DATA_HORSEMAN_EVENT, DONE);
 
@@ -594,7 +594,7 @@ public:
                 me->SetName("Headless Horseman, Unhorsed");
 
                 if (!headGUID)
-                    if (Creature* head = DoSpawnCreature(HEAD, float(rand()%6), float(rand()%6), 0, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
+                    if (auto head = DoSpawnCreature(HEAD, float(rand()%6), float(rand()%6), 0, 0, TEMPSUMMON_DEAD_DESPAWN, 0))
                         headGUID = head->GetGUID();
 
                 Unit* Head = ObjectAccessor::GetUnit(*me, headGUID);
@@ -660,7 +660,7 @@ public:
                             break;
                         if (burn <= diff)
                         {
-                            if (Creature* flame = me->SummonCreature(HELPER, Spawn[0].x, Spawn[0].y, Spawn[0].z, 0, TEMPSUMMON_TIMED_DESPAWN, 17000))
+                            if (auto flame = me->SummonCreature(HELPER, Spawn[0].x, Spawn[0].y, Spawn[0].z, 0, TEMPSUMMON_TIMED_DESPAWN, 17000))
                                 CAST_AI(npc_wisp_invis::npc_wisp_invisAI, flame->AI())->SetType(2);
                             burned = true;
                         }
@@ -669,7 +669,7 @@ public:
                     case 2:
                         if (conflagrate <= diff)
                         {
-                            if (Unit* player = SelectRandomPlayer(30.0f))
+                            if (auto player = SelectRandomPlayer(30.0f))
                                 DoCast(player, SPELL_CONFLAGRATION, false);
                             conflagrate = urand(10000, 16000);
                         }
@@ -884,12 +884,12 @@ public:
         player->PlayerTalkClass->ClearMenus();
         if (action == GOSSIP_ACTION_INFO_DEF)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
             {
                 if (instance->GetBossState(DATA_HORSEMAN_EVENT) != IN_PROGRESS && instance->GetBossState(DATA_HORSEMAN_EVENT) != DONE)
                 {
                     player->AreaExploredOrEventHappens(11405);
-                    if (Creature* horseman = go->SummonCreature(HH_MOUNTED, 1758.00f, 1367.00f, 19.51f, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
+                    if (auto horseman = go->SummonCreature(HH_MOUNTED, 1758.00f, 1367.00f, 19.51f, 0, TEMPSUMMON_MANUAL_DESPAWN, 0))
                     {
                         ENSURE_AI(boss_headless_horseman::boss_headless_horsemanAI, horseman->AI())->PlayerGUID = player->GetGUID();
                         ENSURE_AI(boss_headless_horseman::boss_headless_horsemanAI, horseman->AI())->FlyMode();

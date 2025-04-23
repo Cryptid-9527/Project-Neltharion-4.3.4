@@ -111,7 +111,7 @@ public:
                 me->GetRandomNearPosition(pos, 30.0f);
                 pos.m_positionZ = me->GetMap()->GetHeight(pos.GetPositionX(), pos.GetPositionY(), MAX_HEIGHT) + 2.0f;
 
-                if (Creature* trigger = me->SummonCreature(NPC_TRIGGER, pos))
+                if (auto trigger = me->SummonCreature(NPC_TRIGGER, pos))
                 {
                     Creature* temp1 = trigger->FindNearestCreature(NPC_HEALTHY_MUSHROOM, 4.0f, true);
                     Creature* temp2 = trigger->FindNearestCreature(NPC_POISONOUS_MUSHROOM, 4.0f, true);

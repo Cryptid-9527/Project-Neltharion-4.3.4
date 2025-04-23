@@ -288,7 +288,7 @@ void WorldSession::HandleGameObjectUseOpcode(WorldPacket& recvData)
     if (_player->m_mover != _player)
         return;
 
-    if (GameObject* obj = GetPlayer()->GetMap()->GetGameObject(guid))
+    if (auto obj = GetPlayer()->GetMap()->GetGameObject(guid))
         obj->Use(_player);
 }
 
@@ -449,7 +449,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
         !forceCast)
     {
         // Archeology craft artifacts
-        if (Player* player = mover->ToPlayer())
+        if (auto player = mover->ToPlayer())
         {
             if (player->HasSkill(SKILL_ARCHAEOLOGY))
                 for (uint32 i = 9; i < sResearchProjectStore.GetNumRows(); i++)

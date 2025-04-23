@@ -582,7 +582,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket& recvData)
     //    item->SetUInt32Value(ITEM_FIELD_ENCHANTMENT_1_1+1, signs);
 
     // update for owner if online
-    if (Player* owner = ObjectAccessor::FindPlayer(ownerGuid))
+    if (auto owner = ObjectAccessor::FindPlayer(ownerGuid))
         owner->GetSession()->SendPacket(&data);
 }
 

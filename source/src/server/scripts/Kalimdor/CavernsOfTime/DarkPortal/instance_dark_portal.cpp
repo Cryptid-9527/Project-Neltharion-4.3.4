@@ -185,7 +185,7 @@ public:
 
                     if (!mShieldPercent)
                     {
-                        if (Creature* pMedivh = instance->GetCreature(MedivhGUID))
+                        if (auto pMedivh = instance->GetCreature(MedivhGUID))
                         {
                             if (pMedivh->isAlive())
                             {
@@ -216,7 +216,7 @@ public:
                         {
                             for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
                             {
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                 {
                                     if (player->GetQuestStatus(QUEST_OPENING_PORTAL) == QUEST_STATUS_INCOMPLETE)
                                         player->AreaExploredOrEventHappens(QUEST_OPENING_PORTAL);
@@ -282,7 +282,7 @@ public:
             //normalize Z-level if we can, if rift is not at ground level.
             pos.m_positionZ = std::max(me->GetMap()->GetHeight(pos.m_positionX, pos.m_positionY, MAX_HEIGHT), me->GetMap()->GetWaterLevel(pos.m_positionX, pos.m_positionY));
 
-            if (Creature* summon = me->SummonCreature(entry, pos, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 600000))
+            if (auto summon = me->SummonCreature(entry, pos, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 600000))
                 return summon;
 
             TC_LOG_DEBUG("scripts", "Instance Dark Portal: What just happened there? No boss, no loot, no fun...");
@@ -291,7 +291,7 @@ public:
 
         void DoSpawnPortal()
         {
-            if (Creature* pMedivh = instance->GetCreature(MedivhGUID))
+            if (auto pMedivh = instance->GetCreature(MedivhGUID))
             {
                 uint8 tmp = urand(0, 2);
 
@@ -310,7 +310,7 @@ public:
                     temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                    if (Creature* pBoss = SummonedPortalBoss(temp))
+                    if (auto pBoss = SummonedPortalBoss(temp))
                     {
                         if (pBoss->GetEntry() == C_AEONUS)
                             pBoss->AddThreat(pMedivh, 0.0f);

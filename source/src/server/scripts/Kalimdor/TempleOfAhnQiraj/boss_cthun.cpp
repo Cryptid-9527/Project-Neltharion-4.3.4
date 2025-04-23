@@ -222,8 +222,8 @@ public:
 
         void SpawnEyeTentacle(float x, float y)
         {
-            if (Creature* Spawned = DoSpawnCreature(MOB_EYE_TENTACLE, x, y, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 500))
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+            if (auto Spawned = DoSpawnCreature(MOB_EYE_TENTACLE, x, y, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 500))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                     if (Spawned->AI())
                         Spawned->AI()->AttackStart(target);
         }
@@ -266,7 +266,7 @@ public:
                     if (BeamTimer <= diff)
                     {
                         //SPELL_GREEN_BEAM
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             me->InterruptNonMeleeSpells(false);
                             DoCast(target, SPELL_GREEN_BEAM);
@@ -282,7 +282,7 @@ public:
                     //ClawTentacleTimer
                     if (ClawTentacleTimer <= diff)
                     {
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             Creature* Spawned = NULL;
 
@@ -310,7 +310,7 @@ public:
                         me->SetTarget(0);
 
                         //Select random target for dark beam to start on
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                         {
                             //Face our target
                             DarkGlareAngle = me->GetAngle(target);
@@ -540,7 +540,7 @@ public:
             Creature* Spawned;
             Spawned = DoSpawnCreature(MOB_EYE_TENTACLE, x, y, 0, 0, TEMPSUMMON_CORPSE_DESPAWN, 500);
             if (Spawned && Spawned->AI())
-                if (Unit* target = SelectRandomNotStomach())
+                if (auto target = SelectRandomNotStomach())
                     Spawned->AI()->AttackStart(target);
         }
 
@@ -599,7 +599,7 @@ public:
                     {
                         for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
                         {
-                            if (Player* pPlr = itr->getSource())
+                            if (auto pPlr = itr->getSource())
                                 pPlr->PlayDirectSound(RANDOM_SOUND_WHISPER, pPlr);
                         }
                     }
@@ -766,7 +766,7 @@ public:
                     //Stomach Enter Timer
                     if (StomachEnterTimer <= diff)
                     {
-                        if (Unit* target = SelectRandomNotStomach())
+                        if (auto target = SelectRandomNotStomach())
                         {
                             //Set target in stomach
                             Stomach_Map[target->GetGUID()] = true;
@@ -799,10 +799,10 @@ public:
                     //GientClawTentacleTimer
                     if (GiantClawTentacleTimer <= diff)
                     {
-                        if (Unit* target = SelectRandomNotStomach())
+                        if (auto target = SelectRandomNotStomach())
                         {
                             //Spawn claw tentacle on the random target
-                            if (Creature* spawned = me->SummonCreature(MOB_GIANT_CLAW_TENTACLE, *target, TEMPSUMMON_CORPSE_DESPAWN, 500))
+                            if (auto spawned = me->SummonCreature(MOB_GIANT_CLAW_TENTACLE, *target, TEMPSUMMON_CORPSE_DESPAWN, 500))
                                 if (spawned->AI())
                                     spawned->AI()->AttackStart(target);
                         }
@@ -814,10 +814,10 @@ public:
                     //GiantEyeTentacleTimer
                     if (GiantEyeTentacleTimer <= diff)
                     {
-                        if (Unit* target = SelectRandomNotStomach())
+                        if (auto target = SelectRandomNotStomach())
                         {
                             //Spawn claw tentacle on the random target
-                            if (Creature* spawned = me->SummonCreature(MOB_GIANT_EYE_TENTACLE, *target, TEMPSUMMON_CORPSE_DESPAWN, 500))
+                            if (auto spawned = me->SummonCreature(MOB_GIANT_EYE_TENTACLE, *target, TEMPSUMMON_CORPSE_DESPAWN, 500))
                                 if (spawned->AI())
                                     spawned->AI()->AttackStart(target);
                         }
@@ -920,7 +920,7 @@ public:
     {
         eye_tentacleAI(Creature* creature) : Scripted_NoMovementAI(creature)
         {
-            if (Creature* pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
             {
                 pPortal->SetReactState(REACT_PASSIVE);
                 Portal = pPortal->GetGUID();
@@ -933,7 +933,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* p = Unit::GetUnit(*me, Portal))
+            if (auto p = Unit::GetUnit(*me, Portal))
                 p->Kill(p);
         }
 
@@ -995,7 +995,7 @@ public:
         {
             SetCombatMovement(false);
 
-            if (Creature* pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
             {
                 pPortal->SetReactState(REACT_PASSIVE);
                 Portal = pPortal->GetGUID();
@@ -1009,7 +1009,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* p = Unit::GetUnit(*me, Portal))
+            if (auto p = Unit::GetUnit(*me, Portal))
                 p->Kill(p);
         }
 
@@ -1037,7 +1037,7 @@ public:
             {
                 if (EvadeTimer <= diff)
                 {
-                    if (Unit* p = Unit::GetUnit(*me, Portal))
+                    if (auto p = Unit::GetUnit(*me, Portal))
                         p->Kill(p);
 
                     //Dissapear and reappear at new position
@@ -1053,7 +1053,7 @@ public:
                     if (!target->HasAura(SPELL_DIGESTIVE_ACID))
                     {
                         me->SetPosition(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
-                        if (Creature* pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+                        if (auto pPortal = me->SummonCreature(MOB_SMALL_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
                         {
                             pPortal->SetReactState(REACT_PASSIVE);
                             Portal = pPortal->GetGUID();
@@ -1105,7 +1105,7 @@ public:
         {
             SetCombatMovement(false);
 
-            if (Creature* pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
             {
                 pPortal->SetReactState(REACT_PASSIVE);
                 Portal = pPortal->GetGUID();
@@ -1120,7 +1120,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* p = Unit::GetUnit(*me, Portal))
+            if (auto p = Unit::GetUnit(*me, Portal))
                 p->Kill(p);
         }
 
@@ -1149,7 +1149,7 @@ public:
             {
                 if (EvadeTimer <= diff)
                 {
-                    if (Unit* p = Unit::GetUnit(*me, Portal))
+                    if (auto p = Unit::GetUnit(*me, Portal))
                         p->Kill(p);
 
                     //Dissapear and reappear at new position
@@ -1165,7 +1165,7 @@ public:
                     if (!target->HasAura(SPELL_DIGESTIVE_ACID))
                     {
                         me->SetPosition(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), 0);
-                        if (Creature* pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+                        if (auto pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
                         {
                             pPortal->SetReactState(REACT_PASSIVE);
                             Portal = pPortal->GetGUID();
@@ -1224,7 +1224,7 @@ public:
         {
             SetCombatMovement(false);
 
-            if (Creature* pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
+            if (auto pPortal = me->SummonCreature(MOB_GIANT_PORTAL, *me, TEMPSUMMON_CORPSE_DESPAWN))
             {
                 pPortal->SetReactState(REACT_PASSIVE);
                 Portal = pPortal->GetGUID();
@@ -1236,7 +1236,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* p = Unit::GetUnit(*me, Portal))
+            if (auto p = Unit::GetUnit(*me, Portal))
                 p->Kill(p);
         }
 
@@ -1292,7 +1292,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (TempSummon* summon = me->ToTempSummon())
-                if (Unit* summoner = summon->GetSummoner())
+                if (auto summoner = summon->GetSummoner())
                     if (summoner->IsAIEnabled)
                         summoner->GetAI()->DoAction(ACTION_FLESH_TENTACLE_KILLED);
         }

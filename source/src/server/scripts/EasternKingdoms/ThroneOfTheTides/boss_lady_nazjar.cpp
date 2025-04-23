@@ -146,7 +146,7 @@ public:
                 return;
 
             for (std::list<uint64>::const_iterator itr = SummonList.begin(); itr != SummonList.end(); ++itr)
-                if (Creature* temp = Unit::GetCreature(*me, *itr))
+                if (auto temp = Unit::GetCreature(*me, *itr))
                 {
                     instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, temp);
                     temp->DisappearAndDie();
@@ -176,7 +176,7 @@ public:
             {
             case NPC_NAZJAR_TEMPEST_WITCH_LADY:
             case NPC_NAZJAR_HONOR_GUARD:
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     summon->AI()->AttackStart(target);
                 SummonList.push_back(summon->GetGUID());
                 break;
@@ -305,7 +305,7 @@ public:
                 {
                 case SPELL_FUNGAL_SPORES:
                 case SPELL_SUMMON_GEYSER:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         DoCast(target, spell);
                     break;
                 case SPELL_SHOCK_BLAST:
@@ -376,7 +376,7 @@ public:
                     DoCast(me, 97574, true);
 
                     for (auto i = 0; i < 3; ++i)
-                    if (Creature* mob1 = me->SummonCreature(i == 2 ? NPC_NAZJAR_HONOR_GUARD : NPC_NAZJAR_TEMPEST_WITCH_LADY,   summonPOS[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
+                    if (auto mob1 = me->SummonCreature(i == 2 ? NPC_NAZJAR_HONOR_GUARD : NPC_NAZJAR_TEMPEST_WITCH_LADY,   summonPOS[i], TEMPSUMMON_CORPSE_TIMED_DESPAWN, 1000))
                     {
                         instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, mob1);
                         mob1->DisableMovementFlagUpdate(true);
@@ -433,7 +433,7 @@ public:
             if (me->HasReactState(REACT_AGGRESSIVE))
             if (!me->HasUnitState(UNIT_STATE_CASTING))
             if (UpdateVictim())
-            if (Unit* victim = me->getVictim())
+            if (auto victim = me->getVictim())
             if (me->GetDistance(victim) < 6.f)
                 DoMeleeAttackIfReady();
         }
@@ -930,7 +930,7 @@ public:
 
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes mode)
         {
-            if (Unit* owner = GetOwner()->ToUnit())
+            if (auto owner = GetOwner()->ToUnit())
             {
                 owner->ExitVehicle();
                 owner->RemoveAura(VEHICLE_SPELL_RIDE_HARDCODED);

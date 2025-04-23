@@ -205,13 +205,13 @@ public:
 
 	static bool HandleRateCommand(ChatHandler* handler, char const* args)
 	{
-		if (Player* player = handler->GetSession()->GetPlayer())
+		if (auto player = handler->GetSession()->GetPlayer())
 		{
 			if (!*args)
 			{
 				if (player->GetSession()->GetSecurity() > SEC_CONSOLE)
 				{
-					if (Player* target = handler->getSelectedPlayer())
+					if (auto target = handler->getSelectedPlayer())
 					{
 						if (target != player)
 						{
@@ -284,9 +284,9 @@ public:
 
 	static bool HandleSetRateCommand(ChatHandler* handler, char const* args)
 	{
-		if (Player* player = handler->GetSession()->GetPlayer())
+		if (auto player = handler->GetSession()->GetPlayer())
 		{
-			if (Player* target = handler->getSelectedPlayer())
+			if (auto target = handler->getSelectedPlayer())
 			{
 				int rate = atoi((char*)args);
 				int maxRate = 7;

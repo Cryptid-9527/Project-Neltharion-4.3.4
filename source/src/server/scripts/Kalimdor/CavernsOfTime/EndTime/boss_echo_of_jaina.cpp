@@ -98,7 +98,7 @@ public:
             // fixes combat bug - we currently dont know what the players hold in combat
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                     if (player->isAlive())
                         player->CombatStop(false);
 
@@ -210,7 +210,7 @@ public:
                         Talk(JAINA_SAY_SPELL_FROST_BLADES);
                         if (Creature *blink = me->FindNearestCreature(NPC_BLINK_TARGET, 10.0f))
                             blink->DespawnOrUnsummon();
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             _orientation = me->GetAngle(target) - M_PI / 12.0f - me->GetOrientation();
                         for (uint8 i = 0; i < 3; i++)
                             me->CastSpell(me, SPELL_FROST_BLADES, true);
@@ -259,7 +259,7 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit *caster = GetCaster())
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     //caster->CastSpell(caster, SPELL_UNSTABLE_FLARE, true);
                     int32 basepoints0 = 5000 * caster->GetObjectSize();
@@ -329,11 +329,11 @@ public:
         if (go->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE))
             return true;
         
-        if (Creature* g = go->FindNearestCreature(54638, 5.f))
+        if (auto g = go->FindNearestCreature(54638, 5.f))
             g->DespawnOrUnsummon();
         go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
 
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
             instance->SetData(DATA_FRAGMENTS, 0);
         player->PlayerTalkClass->ClearMenus();
         go->Delete(1000);
@@ -388,7 +388,7 @@ public:
                 {
                     if (!(*itr)->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE))
                     if (!(*itr)->FindNearestCreature(54638, 5.f))
-                    if (Creature* g = (*itr)->SummonCreature(54638, (*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto g = (*itr)->SummonCreature(54638, (*itr)->GetPositionX(), (*itr)->GetPositionY(), (*itr)->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN))
                         g->AddAura(92406, g);
                 }
             }
@@ -468,7 +468,7 @@ public:
                     //TC_LOG_ERROR("sql.sql", "Event sparkle fragments.");
                     SparkleFragments();
                     events.ScheduleEvent(EVENT_SPARKLE_FRAGMENTS, 5000);
-                    if (InstanceScript* instance = me->GetInstanceScript())
+                    if (auto instance = me->GetInstanceScript())
                         instance->SetData(DATA_FRAGMENTS, 1);
                     break;
                 case EVENT_TALK_INTRO_JAINA:

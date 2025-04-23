@@ -867,7 +867,7 @@ public:
 
         void IsSummonedBy(Unit* /*who*/)
         {
-            if (Creature* creature = Unit::GetCreature(*me, pInstance->GetData64(BOSS_CAPTAIN_COOKIE)))
+            if (auto creature = Unit::GetCreature(*me, pInstance->GetData64(BOSS_CAPTAIN_COOKIE)))
             {
                 creature->AI()->JustSummoned(me);
 

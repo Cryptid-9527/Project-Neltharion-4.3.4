@@ -174,7 +174,7 @@ public:
                         uiQuelDelar = gQuelDelar->GetGUID();
                         gQuelDelar->SetFlag(GAMEOBJECT_FLAGS, 5);
                     }
-                    if (Player* player = me->GetPlayer(*me, uiPlayer))
+                    if (auto player = me->GetPlayer(*me, uiPlayer))
                     {
                         player->DestroyItemCount(49879, 1, true);
                         player->DestroyItemCount(49889, 1, true);

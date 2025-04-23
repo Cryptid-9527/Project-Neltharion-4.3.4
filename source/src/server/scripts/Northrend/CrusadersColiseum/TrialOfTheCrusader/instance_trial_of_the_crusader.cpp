@@ -102,7 +102,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                     if (!anubArak)
                         anubArak = player->SummonCreature(NPC_ANUBARAK, AnubarakLoc[0].GetPositionX(), AnubarakLoc[0].GetPositionY(), AnubarakLoc[0].GetPositionZ(), 3, TEMPSUMMON_CORPSE_TIMED_DESPAWN, DESPAWN_TIME);
 
-                    if (GameObject* floor = GameObject::GetGameObject(*player, GetData64(GO_ARGENT_COLISEUM_FLOOR)))
+                    if (auto floor = GameObject::GetGameObject(*player, GetData64(GO_ARGENT_COLISEUM_FLOOR)))
                         floor->SetDestructibleState(GO_DESTRUCTIBLE_DAMAGED);
                 }
             }
@@ -112,7 +112,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                 if (!guid)
                     return;
 
-                if (GameObject* go = instance->GetGameObject(guid))
+                if (auto go = instance->GetGameObject(guid))
                     go->SetGoState(GO_STATE_ACTIVE_ALTERNATIVE);
             }
 
@@ -121,7 +121,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                 if (!guid)
                     return;
 
-                if (GameObject* go = instance->GetGameObject(guid))
+                if (auto go = instance->GetGameObject(guid))
                     go->SetGoState(GO_STATE_READY);
             }
 
@@ -243,16 +243,16 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                         break;
                     case BOSS_JARAXXUS:
                         // Cleanup Icehowl
-                        if (Creature* icehowl = instance->GetCreature(IcehowlGUID))
+                        if (auto icehowl = instance->GetCreature(IcehowlGUID))
                             icehowl->DespawnOrUnsummon();
                         if (state == DONE || state == DONE_HM)
                             EventStage = 2000;
                         break;
                     case BOSS_CRUSADERS:
                         // Cleanup Jaraxxus
-                        if (Creature* jaraxxus = instance->GetCreature(JaraxxusGUID))
+                        if (auto jaraxxus = instance->GetCreature(JaraxxusGUID))
                             jaraxxus->DespawnOrUnsummon();
-                        if (Creature* fizzlebang = instance->GetCreature(FizzlebangGUID))
+                        if (auto fizzlebang = instance->GetCreature(FizzlebangGUID))
                             fizzlebang->DespawnOrUnsummon();
                         switch (state)
                         {
@@ -269,7 +269,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                                 if (ResilienceWillFixItTimer > 0)
                                     DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_CHAMPIONS_KILLED_IN_MINUTE);
                                 DoRespawnGameObject(CrusadersCacheGUID, 7*DAY);
-                                if (GameObject* cache = instance->GetGameObject(CrusadersCacheGUID))
+                                if (auto cache = instance->GetGameObject(CrusadersCacheGUID))
                                     cache->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                                 EventStage = 3100;
                                 break;
@@ -279,7 +279,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                         break;
                     case BOSS_VALKIRIES:
                         // Cleanup chest
-                        if (GameObject* cache = instance->GetGameObject(CrusadersCacheGUID))
+                        if (auto cache = instance->GetGameObject(CrusadersCacheGUID))
                             cache->Delete();
                         switch (state)
                         {
@@ -348,8 +348,8 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                                 }
 
                                 if (tributeChest)
-                                    if (Creature* tirion =  instance->GetCreature(TirionGUID))
-                                        if (GameObject* chest = tirion->SummonGameObject(tributeChest, 805.62f, 134.87f, 142.16f, 3.27f, 0, 0, 0, 0, WEEK))
+                                    if (auto tirion =  instance->GetCreature(TirionGUID))
+                                        if (auto chest = tirion->SummonGameObject(tributeChest, 805.62f, 134.87f, 142.16f, 3.27f, 0, 0, 0, 0, WEEK))
                                             chest->SetRespawnTime(chest->GetRespawnDelay());
                                 break;
                             }
@@ -382,16 +382,16 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                             // decrease attempt counter at wipe
                             Map::PlayerList const &PlayerList = instance->GetPlayers();
                             for (Map::PlayerList::const_iterator itr = PlayerList.begin(); itr != PlayerList.end(); ++itr)
-                                if (Player* player = itr->getSource())
+                                if (auto player = itr->getSource())
                                     player->SendUpdateWorldState(UPDATE_STATE_UI_COUNT, TrialCounter);
 
                             // if theres no more attemps allowed
                             if (!TrialCounter)
                             {
-                                if (Unit* announcer = instance->GetCreature(GetData64(NPC_BARRENT)))
+                                if (auto announcer = instance->GetCreature(GetData64(NPC_BARRENT)))
                                     announcer->ToCreature()->DespawnOrUnsummon();
 
-                                if (Creature* anubArak = instance->GetCreature(GetData64(NPC_ANUBARAK)))
+                                if (auto anubArak = instance->GetCreature(GetData64(NPC_ANUBARAK)))
                                     anubArak->DespawnOrUnsummon();
                             }
                         }
@@ -402,7 +402,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
 
                     if ((state == DONE || state == DONE_HM) || NeedSave)
                     {
-                        if (Unit* announcer = instance->GetCreature(GetData64(NPC_BARRENT)))
+                        if (auto announcer = instance->GetCreature(GetData64(NPC_BARRENT)))
                             announcer->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                         Save();
                     }

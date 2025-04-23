@@ -213,7 +213,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Player *player = caster->ToPlayer())
                     if (player->GetQuestStatus(QUEST_GNOLL) == QUEST_STATUS_INCOMPLETE)
                         player->CastSpell(player, SPELL_COGNER_DUMMY_CONE, true);
@@ -248,7 +248,7 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* target = GetHitUnit())
+            if (auto target = GetHitUnit())
                 if (Creature *c = target->ToCreature())
                 {
                     switch (c->GetEntry())
@@ -281,7 +281,7 @@ public:
         {
             std::list<Unit*> temp;
             for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                if (Unit* unit = (*itr)->ToUnit())
+                if (auto unit = (*itr)->ToUnit())
                     temp.push_back(unit);
 
             targets.clear();
@@ -529,9 +529,9 @@ public:
 
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
                 if (Player *player = caster->ToPlayer())
-                    if (Unit* target = GetHitUnit())
+                    if (auto target = GetHitUnit())
                     {
                         if (player->GetQuestStatus(QUES_QUICK_SHOOT) == QUEST_STATUS_INCOMPLETE)
                         {
@@ -552,7 +552,7 @@ public:
         {
             std::list<Unit*> temp;
             for (std::list<WorldObject*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
-                if (Unit* unit = (*itr)->ToUnit())
+                if (auto unit = (*itr)->ToUnit())
                     temp.push_back(unit);
 
             targets.clear();
@@ -560,7 +560,7 @@ public:
             {
                 if ((*itr)->ToCreature())
                     if ((*itr)->ToCreature()->GetEntry() == 24171)
-                        if (Unit* caster = GetCaster())
+                        if (auto caster = GetCaster())
                         {
                             Position pos;
                             (*itr)->ToCreature()->GetPosition(&pos);
@@ -677,7 +677,7 @@ public:
         {
             Position destPos;
             GetHitDest()->GetPosition(&destPos);
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (Player *player = caster->ToPlayer())
                 {

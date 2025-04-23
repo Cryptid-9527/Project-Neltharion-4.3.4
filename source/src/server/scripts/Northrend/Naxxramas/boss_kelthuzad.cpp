@@ -295,7 +295,7 @@ public:
             std::map<uint64, float>::const_iterator itr;
             for (itr = chained.begin(); itr != chained.end(); ++itr)
             {
-                if (Player* charmed = Unit::GetPlayer(*me, (*itr).first))
+                if (auto charmed = Unit::GetPlayer(*me, (*itr).first))
                     charmed->SetObjectScale((*itr).second);
             }
 
@@ -307,7 +307,7 @@ public:
             if (instance)
                 instance->SetData(DATA_ABOMINATION_KILLED, 0);
 
-            if (GameObject* pKTTrigger = me->GetMap()->GetGameObject(KTTriggerGUID))
+            if (auto pKTTrigger = me->GetMap()->GetGameObject(KTTriggerGUID))
             {
                 pKTTrigger->ResetDoorOrButton();
                 pKTTrigger->SetPhaseMask(1, true);
@@ -315,7 +315,7 @@ public:
 
             for (uint8 i = 0; i <= 3; ++i)
             {
-                if (GameObject* pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
+                if (auto pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
                 {
                     if (!((pPortal->getLootState() == GO_READY) || (pPortal->getLootState() == GO_NOT_READY)))
                         pPortal->ResetDoorOrButton();
@@ -343,7 +343,7 @@ public:
             std::map<uint64, float>::const_iterator itr;
             for (itr = chained.begin(); itr != chained.end(); ++itr)
             {
-                if (Player* player = Unit::GetPlayer(*me, (*itr).first))
+                if (auto player = Unit::GetPlayer(*me, (*itr).first))
                     player->SetObjectScale((*itr).second);
             }
             chained.clear();
@@ -357,7 +357,7 @@ public:
             FindGameObjects();
             for (uint8 i = 0; i <= 3; ++i)
             {
-                if (GameObject* pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
+                if (auto pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
                     pPortal->ResetDoorOrButton();
             }
             DoCast(me, SPELL_KELTHUZAD_CHANNEL, false);
@@ -416,7 +416,7 @@ public:
                             }
                             break;
                         case EVENT_TRIGGER:
-                            if (GameObject* pKTTrigger = me->GetMap()->GetGameObject(KTTriggerGUID))
+                            if (auto pKTTrigger = me->GetMap()->GetGameObject(KTTriggerGUID))
                                 pKTTrigger->SetPhaseMask(2, true);
                             break;
                         case EVENT_PHASE:
@@ -454,7 +454,7 @@ public:
 
                         for (uint8 i = 0; i <= 3; ++i)
                         {
-                            if (GameObject* pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
+                            if (auto pPortal = me->GetMap()->GetGameObject(PortalsGUID[i]))
                             {
                                 if (pPortal->getLootState() == GO_READY)
                                     pPortal->UseDoorOrButton();
@@ -467,7 +467,7 @@ public:
                     if (uiGuardiansOfIcecrownTimer <= diff)
                     {
                         // TODO : Add missing text
-                        if (Creature* pGuardian = DoSummon(NPC_ICECROWN, Pos[RAND(2, 5, 8, 11)]))
+                        if (auto pGuardian = DoSummon(NPC_ICECROWN, Pos[RAND(2, 5, 8, 11)]))
                             pGuardian->SetFloatValue(UNIT_FIELD_COMBATREACH, 2);
                         ++nGuardiansOfIcecrownCount;
                         uiGuardiansOfIcecrownTimer = 5000;
@@ -515,7 +515,7 @@ public:
                             std::map<uint64, float>::iterator itr;
                             for (itr = chained.begin(); itr != chained.end();)
                             {
-                                if (Unit* player = Unit::GetPlayer(*me, (*itr).first))
+                                if (auto player = Unit::GetPlayer(*me, (*itr).first))
                                 {
                                     if (!player->isCharmed())
                                     {
@@ -527,7 +527,7 @@ public:
                                         continue;
                                     }
 
-                                    if (Unit* target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, NotCharmedTargetSelector()))
+                                    if (auto target = SelectTarget(SELECT_TARGET_TOPAGGRO, 0, NotCharmedTargetSelector()))
                                     {
                                         switch (player->getClass())
                                         {
@@ -615,12 +615,12 @@ public:
                             break;
                         }
                         case EVENT_FISSURE:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                                 DoCast(target, SPELL_SHADOW_FISURE);
                             events.Repeat(urand(10000, 45000));
                             break;
                         case EVENT_BLAST:
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, RAID_MODE(1, 0), 0, true))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, RAID_MODE(1, 0), 0, true))
                                 DoCast(target, SPELL_FROST_BLAST);
                             if (rand()%2)
                                 Talk(SAY_FROST_BLAST);
@@ -663,7 +663,7 @@ public:
             return false;
 
         pKelthuzadAI->AttackStart(player);
-        if (GameObject* trigger = instance->instance->GetGameObject(instance->GetData64(DATA_KELTHUZAD_TRIGGER)))
+        if (auto trigger = instance->instance->GetGameObject(instance->GetData64(DATA_KELTHUZAD_TRIGGER)))
         {
             if (trigger->getLootState() == GO_READY)
                 trigger->UseDoorOrButton();
@@ -672,7 +672,7 @@ public:
             // Otherwise, they attack immediately as KT is in combat.
             for (uint8 i = 0; i < MAX_ABOMINATIONS; ++i)
             {
-                if (Creature* sum = trigger->SummonCreature(NPC_ABOMINATION, PosAbominations[i]))
+                if (auto sum = trigger->SummonCreature(NPC_ABOMINATION, PosAbominations[i]))
                 {
                     pKelthuzadAI->spawns.Summon(sum);
                     sum->GetMotionMaster()->MoveRandom(9.0f);
@@ -681,7 +681,7 @@ public:
             }
             for (uint8 i = 0; i < MAX_WASTES; ++i)
             {
-                if (Creature* sum = trigger->SummonCreature(NPC_WASTE, PosWastes[i]))
+                if (auto sum = trigger->SummonCreature(NPC_WASTE, PosWastes[i]))
                 {
                     pKelthuzadAI->spawns.Summon(sum);
                     sum->GetMotionMaster()->MoveRandom(5.0f);
@@ -690,7 +690,7 @@ public:
             }
             for (uint8 i = 0; i < MAX_WEAVERS; ++i)
             {
-                if (Creature* sum = trigger->SummonCreature(NPC_WEAVER, PosWeavers[i]))
+                if (auto sum = trigger->SummonCreature(NPC_WEAVER, PosWeavers[i]))
                 {
                     pKelthuzadAI->spawns.Summon(sum);
                     sum->GetMotionMaster()->MoveRandom(9.0f);
@@ -810,7 +810,7 @@ class achievement_just_cant_get_enough : public AchievementCriteriaScript
            if (!target)
                return false;
 
-           if (InstanceScript* instance = target->GetInstanceScript())
+           if (auto instance = target->GetInstanceScript())
                if (instance->GetData(DATA_ABOMINATION_KILLED) >= 18)
                    return true;
 

@@ -117,19 +117,19 @@ public:
                     {
                         Map::PlayerList const& players = instance->GetPlayers();
                         for (Map::PlayerList::const_iterator i = players.begin(); i != players.end(); ++i)
-                            if (Player* player = i->getSource())
+                            if (auto player = i->getSource())
                             {
-                                if (Creature* anshal = instance->GetCreature(uiAnshal))
+                                if (auto anshal = instance->GetCreature(uiAnshal))
                                 {
                                     anshal->LowerPlayerDamageReq(anshal->GetMaxHealth());
                                     player->Kill(anshal);
                                 }
-                                if (Creature* nezir = instance->GetCreature(uiNezir))
+                                if (auto nezir = instance->GetCreature(uiNezir))
                                 {
                                     nezir->LowerPlayerDamageReq(nezir->GetMaxHealth());
                                     player->Kill(nezir);
                                 }
-                                if (Creature* rohash = instance->GetCreature(uiRohash))
+                                if (auto rohash = instance->GetCreature(uiRohash))
                                 {
                                     rohash->LowerPlayerDamageReq(rohash->GetMaxHealth());
                                     player->Kill(rohash);
@@ -149,7 +149,7 @@ public:
         void OnPlayerEnter(Player *player)
         {
             if (instance->IsHeroic() && !IsDoneInHeroic(DATA_CONCLAVE_OF_WIND_EVENT))
-                if (Creature* Alakir = instance->GetCreature(uiAlakir))
+                if (auto Alakir = instance->GetCreature(uiAlakir))
                     Alakir->SetVisible(false);
 
             player->ClearInCombat();
@@ -187,13 +187,13 @@ public:
                             DoUpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_WIND_BOSSES_ALL_DEAD);
                             DoCastSpellOnPlayers(SPELL_WIND_BOSSES_ALL_DEAD);
                             UpdateEncounterState(ENCOUNTER_CREDIT_CAST_SPELL, 88835, NULL);
-                            if (Creature* anshal = instance->GetCreature(uiAnshal))
+                            if (auto anshal = instance->GetCreature(uiAnshal))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, anshal);
-                            if (Creature* nezir = instance->GetCreature(uiNezir))
+                            if (auto nezir = instance->GetCreature(uiNezir))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, nezir);
-                            if (Creature* rohash = instance->GetCreature(uiRohash))
+                            if (auto rohash = instance->GetCreature(uiRohash))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, rohash);
-                            if (Creature* Alakir = instance->GetCreature(uiAlakir))
+                            if (auto Alakir = instance->GetCreature(uiAlakir))
                                 Alakir->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                             if (auto wall = instance->GetGameObject(windWall_guid))
                                 wall->SetGoState(GO_STATE_ACTIVE);
@@ -201,17 +201,17 @@ public:
                         case IN_PROGRESS:
                             canEnrage = true;
                             enrageTimer = 480000;
-                            if (Creature* anshal = instance->GetCreature(uiAnshal))
+                            if (auto anshal = instance->GetCreature(uiAnshal))
                             {
                                 SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, anshal);
                                 anshal->SetInCombatWithZone();
                             }
-                            if (Creature* nezir = instance->GetCreature(uiNezir))
+                            if (auto nezir = instance->GetCreature(uiNezir))
                             {
                                 SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, nezir);
                                 nezir->SetInCombatWithZone();
                             }
-                            if (Creature* rohash = instance->GetCreature(uiRohash))
+                            if (auto rohash = instance->GetCreature(uiRohash))
                             {
                                 SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, rohash);
                                 rohash->SetInCombatWithZone();
@@ -219,11 +219,11 @@ public:
                             break;
                         case NOT_STARTED:
                             canEnrage = false;
-                            if (Creature* anshal = instance->GetCreature(uiAnshal))
+                            if (auto anshal = instance->GetCreature(uiAnshal))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, anshal);
-                            if (Creature* nezir = instance->GetCreature(uiNezir))
+                            if (auto nezir = instance->GetCreature(uiNezir))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, nezir);
-                            if (Creature* rohash = instance->GetCreature(uiRohash))
+                            if (auto rohash = instance->GetCreature(uiRohash))
                                 SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, rohash);
                             break;
                         }
@@ -235,7 +235,7 @@ public:
             }
 
             if (instance->IsHeroic() && !IsDoneInHeroic(DATA_CONCLAVE_OF_WIND_EVENT))
-                if (Creature* Alakir = instance->GetCreature(uiAlakir))
+                if (auto Alakir = instance->GetCreature(uiAlakir))
                     Alakir->SetVisible(false);
 
             return true;
@@ -247,7 +247,7 @@ public:
             {
                 Map::PlayerList const& players = instance->GetPlayers();
                 for (auto i = players.begin(); i != players.end(); ++i)
-                    if (Player* player = i->getSource())
+                    if (auto player = i->getSource())
                     {
                         Position pos(*player);
                         if (player->GetPositionZ() <= 170.0f && !player->GetVehicle() && !player->HasAura(82724))
@@ -270,11 +270,11 @@ public:
             {
                 if (enrageTimer <= diff)
                 {
-                    if (Creature* anshal = instance->GetCreature(uiAnshal))
+                    if (auto anshal = instance->GetCreature(uiAnshal))
                         anshal->CastSpell(anshal, SPELL_BERSERK, true);
-                    if (Creature* nezir = instance->GetCreature(uiNezir))
+                    if (auto nezir = instance->GetCreature(uiNezir))
                         nezir->CastSpell(nezir, SPELL_BERSERK, true);
-                    if (Creature* rohash = instance->GetCreature(uiRohash))
+                    if (auto rohash = instance->GetCreature(uiRohash))
                         rohash->CastSpell(rohash, SPELL_BERSERK, true);
                     canEnrage = false;
                 }

@@ -107,14 +107,14 @@ public:
 
             if (uiBoulderTossTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_BOULDER_TOSS);
                 uiBoulderTossTimer = urand(9000, 15000);
             } else uiBoulderTossTimer -= diff;
 
             if (uiGroundSpikeTimer <= diff)
             {
-                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                     DoCast(target, SPELL_GROUND_SPIKE);
                 uiGroundSpikeTimer = urand(12000, 17000);
             } else uiGroundSpikeTimer -= diff;
@@ -194,7 +194,7 @@ class spell_krystallus_shatter : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                 {
                     target->RemoveAurasDueToSpell(SPELL_STONED);
                     target->CastSpell((Unit*)NULL, SPELL_SHATTER_EFFECT, true);

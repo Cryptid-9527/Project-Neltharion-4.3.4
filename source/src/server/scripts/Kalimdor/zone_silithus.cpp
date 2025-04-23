@@ -800,7 +800,7 @@ public:
                         break;
                     case 65:
                         me->SetVisible(false);
-                        if (Creature* AnachronosQuestTrigger = (Unit::GetCreature(*me, AnachronosQuestTriggerGUID)))
+                        if (auto AnachronosQuestTrigger = (Unit::GetCreature(*me, AnachronosQuestTriggerGUID)))
                         {
                             Talk(ARYGOS_YELL_1);
                             AnachronosQuestTrigger->AI()->EnterEvadeMode();
@@ -996,7 +996,7 @@ public:
             {
                 uint32 desptimer = WavesInfo[WaveCount].DespTimer;
 
-                if (Creature* spawn = me->SummonCreature(WavesInfo[WaveCount].CreatureId, SpawnLocation[i], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, desptimer))
+                if (auto spawn = me->SummonCreature(WavesInfo[WaveCount].CreatureId, SpawnLocation[i], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, desptimer))
                 {
                     if (spawn->GetEntry() == 15423)
                         spawn->SetUInt32Value(UNIT_FIELD_DISPLAYID, 15427+rand()%4);
@@ -1097,7 +1097,7 @@ void mob_qiraj_war_spawn::mob_qiraj_war_spawnAI::JustDied(Unit* /*slayer*/)
     if (!MobGUID)
         return;
 
-    if (Creature* mob = Unit::GetCreature(*me, MobGUID))
+    if (auto mob = Unit::GetCreature(*me, MobGUID))
         if (npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI* triggerAI = CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, mob->AI()))
             triggerAI->LiveCounter();
 
@@ -1119,7 +1119,7 @@ public:
 
         if (quest->GetQuestId() == QUEST_A_PAWN_ON_THE_ETERNAL_BOARD)
         {
-            if (Creature* trigger = go->FindNearestCreature(15454, 100, player))
+            if (auto trigger = go->FindNearestCreature(15454, 100, player))
             {
                 Unit* Merithra = trigger->SummonCreature(15378, -8034.535f, 1535.14f, 2.61f, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
                 Unit* Caelestrasz = trigger->SummonCreature(15379, -8032.767f, 1533.148f, 2.61f, 1.5f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);

@@ -447,7 +447,7 @@ public:
 
                 if (instance->GetData(TYPE_CHESS) == NOT_STARTED)
                 {
-                    if (Creature* pMedivh =  Unit::GetCreature(*creature, instance->GetData64(NPC_ECHO_MEDIVH)))
+                    if (auto pMedivh =  Unit::GetCreature(*creature, instance->GetData64(NPC_ECHO_MEDIVH)))
                         pMedivh->AI()->Talk(TALK_EVENT_BEGIN);
                     instance->SetData(TYPE_CHESS, IN_PROGRESS);
                 }
@@ -521,7 +521,7 @@ public:
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        if (Creature* pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
+        if (auto pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
             pSquare->RemoveAllAuras();
         me->SetVisible(false);
         // ToDo: remove corpse after 10 sec
@@ -543,7 +543,7 @@ public:
         if (eventType == AI_EVENT_CUSTOM_A)
         {
             // clear the current square
-            if (Creature* pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
+            if (auto pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
                 pSquare->RemoveAllAuras();
 
             events.ScheduleEvent(EVENT_MOVE_PIECE, 1000);
@@ -555,7 +555,7 @@ public:
             Reset();
 
             // ToDo: enable this when the scope of the spell is clear
-            //if (Creature* pStalker = instance->GetSingleCreatureFromStorage(NPC_WAITING_ROOM_STALKER))
+            //if (auto pStalker = instance->GetSingleCreatureFromStorage(NPC_WAITING_ROOM_STALKER))
             //    pStalker->CastSpell(pStalker, SPELL_AI_ACTION_TIMER, true);
 
             //DoCast(me, SPELL_AI_SNAPSHOT_TIMER, true);
@@ -589,7 +589,7 @@ public:
         if (!((instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE && m_faction == FACTION_ID_CHESS_ALLIANCE) ||
               (instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE && m_faction == FACTION_ID_CHESS_HORDE)))
         {
-            if (Unit* target = GetTargetByType(TARGET_TYPE_RANDOM, 5.0f))
+            if (auto target = GetTargetByType(TARGET_TYPE_RANDOM, 5.0f))
                 DoCast(target, SPELL_CHANGE_FACING);
             else
                 me->SetFacingTo(m_fCurrentOrientation);
@@ -724,7 +724,7 @@ public:
                 case EVENT_COMMAND_TIMER:
                 {
                     // just update facing if some enemy is near
-                    if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
+                    if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
                         DoCast(pTarget, SPELL_CHANGE_FACING);
                     else
                     {
@@ -746,7 +746,7 @@ public:
                             //DoCast(me, uiMoveSpell, true);
 
                             // workaround which provides specific move target
-                            if (Unit* pTarget = GetMovementSquare())
+                            if (auto pTarget = GetMovementSquare())
                                 DoCast(pTarget, SPELL_MOVE_GENERIC, true);
 
                             m_fCurrentOrientation = me->GetOrientation();
@@ -766,7 +766,7 @@ public:
                 }
                 case EVENT_MOVE_PIECE:
                 {
-                    if (Creature* pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
+                    if (auto pSquare = Unit::GetCreature(*me, m_currentSquareGuid))
                     {
                         m_fCurrentOrientation = me->GetOrientation();
                         DoCast(pSquare, SPELL_MOVE_MARKER, true);
@@ -823,7 +823,7 @@ public:
             if (!uiDamage || !m_bIsAttacked || !instance || pDoneBy->GetTypeId() != TYPEID_UNIT)
                 return;
 
-            if (Creature* pMedivh =  Unit::GetCreature(*me, instance->GetData64(NPC_ECHO_MEDIVH)))
+            if (auto pMedivh =  Unit::GetCreature(*me, instance->GetData64(NPC_ECHO_MEDIVH)))
             {
                 if (instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE)
                     DoPlaySoundToSet(pMedivh, SOUND_ID_CHECK_PLAYER);
@@ -866,7 +866,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
             {
                 DoCast(me, SPELL_HEROISM);
 
@@ -879,7 +879,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f))
             {
                 DoCast(me, SPELL_SWEEP);
 
@@ -955,7 +955,7 @@ public:
             if (!uiDamage || !m_bIsAttacked || !instance || pDoneBy->GetTypeId() != TYPEID_UNIT)
                 return;
 
-            if (Creature* pMedivh =  Unit::GetCreature(*me, instance->GetData64(NPC_ECHO_MEDIVH)))
+            if (auto pMedivh =  Unit::GetCreature(*me, instance->GetData64(NPC_ECHO_MEDIVH)))
             {
                 if (instance->GetData(DATA_TEAM_IN_INSTANCE) == HORDE)
                     DoPlaySoundToSet(pMedivh, SOUND_ID_CHECK_PLAYER);
@@ -998,7 +998,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
             {
                 DoCast(me, SPELL_BLOODLUST);
 
@@ -1012,7 +1012,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f))
             {
                 DoCast(me, SPELL_CLEAVE);
 
@@ -1098,7 +1098,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
             {
                 DoCast(pTarget, SPELL_ELEMENTAL_BLAST);
 
@@ -1112,7 +1112,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 25.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 25.0f))
             {
                 DoCast(pTarget, SPELL_RAIN_OF_FIRE);
 
@@ -1198,7 +1198,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 20.0f))
             {
                 DoCast(pTarget, SPELL_FIREBALL);
 
@@ -1212,7 +1212,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 25.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 25.0f))
             {
                 DoCast(pTarget, SPELL_POISON_CLOUD_ACTION);
 
@@ -1299,7 +1299,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_HEROIC_BLOW);
 
@@ -1313,7 +1313,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
             {
                 DoCast(me, SPELL_SHIELD_BLOCK);
 
@@ -1400,7 +1400,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_VICIOUS_STRIKE);
 
@@ -1414,7 +1414,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f))
             {
                 DoCast(me, SPELL_WEAPON_DEFLECTION);
 
@@ -1500,7 +1500,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
             {
                 DoCast(me, SPELL_GEYSER);
 
@@ -1514,7 +1514,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
             {
                 DoCast(me, SPELL_WATER_SHIELD);
 
@@ -1600,7 +1600,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
             {
                 DoCast(me, SPELL_HELLFIRE);
 
@@ -1614,7 +1614,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 9.0f))
             {
                 DoCast(me, SPELL_FIRE_SHIELD);
 
@@ -1700,7 +1700,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_SMASH);
 
@@ -1714,7 +1714,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_STOMP);
 
@@ -1800,7 +1800,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 8.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_BITE);
 
@@ -1814,7 +1814,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 10.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_HOWL);
 
@@ -1900,7 +1900,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_FRIENDLY, 25.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_FRIENDLY, 25.0f))
             {
                 DoCast(pTarget, SPELL_HEALING);
 
@@ -1914,7 +1914,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 18.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 18.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_HOLY_LANCE);
 
@@ -2000,7 +2000,7 @@ public:
 
         uint32 DoCastPrimarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_FRIENDLY, 25.0f))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_FRIENDLY, 25.0f))
             {
                 DoCast(pTarget, SPELL_SHADOW_MEND_ACTION);
 
@@ -2014,7 +2014,7 @@ public:
 
         uint32 DoCastSecondarySpell() override
         {
-            if (Unit* pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 18.0f, M_PI / 12))
+            if (auto pTarget = GetTargetByType(TARGET_TYPE_RANDOM, 18.0f, M_PI / 12))
             {
                 DoCast(me, SPELL_SHADOW_SPEAR);
 
@@ -2119,7 +2119,7 @@ public:
 
         void OnRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* target = GetUnitOwner())
+            if (auto target = GetUnitOwner())
             {
                 target->RemoveAurasDueToSpell(SPELL_IN_GAME);
                 target->CastSpell(target, SPELL_RECENTLY_IN_GAME, true);

@@ -324,7 +324,7 @@ public:
 
             me->DeleteThreatList();
 
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+            if (auto thrall = instance->GetCreature(DATA_THRALL))
             {
                 thrall->DeleteThreatList();
                 thrall->Respawn(true);
@@ -370,12 +370,12 @@ public:
             Talk(TALK_BENEDICTUS_DEATH, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
             RemoveEncounterFrame();
             SetSparksVisible(false);
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+            if (auto thrall = instance->GetCreature(DATA_THRALL))
                 thrall->AI()->DoAction(ACTION_COMBAT_END);
 
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                     if (player->GetQuestStatus(QUEST_THE_TWILIGHT_PROPHET) == QUEST_STATUS_INCOMPLETE)
                         player->KilledMonsterCredit(QUEST_CREDIT_BENEDICTUS);
 
@@ -407,17 +407,17 @@ public:
             Map::PlayerList const& playerList = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
             {
-                if (Player* player = i->getSource())
+                if (auto player = i->getSource())
                 {
                     player->ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, me->GetEntry(), 0, true);
                     player->ResetAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, ACHIEVEMENT_CRITERIA_CONDITION_NO_SPELL_HIT, 110260, true);
                 }
             }
 
-            if (Creature* shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
+            if (auto shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
                 shell->CastSpell(shell, SPELL_SEAPING_LIGHT, true);
 
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+            if (auto thrall = instance->GetCreature(DATA_THRALL))
             {
                 thrall->SetInCombatWith(me);
                 thrall->AI()->AttackStart(me);
@@ -484,13 +484,13 @@ public:
                     case EVENT_INTRO_5:
                         Talk(TALK_BENEDICTUS_INTRO_1, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
 
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
                             thrall->AI()->SetData(DATA_RESTART_EVENT, 1);
 
                         events.ScheduleEvent(eventId+1, 6000);
                         break;
                     case EVENT_INTRO_7:
-                        if (Creature* holyWall = me->FindNearestCreature(NPC_HOLY_WALL, 50.0f, true))
+                        if (auto holyWall = me->FindNearestCreature(NPC_HOLY_WALL, 50.0f, true))
                             me->SetFacingToObject(holyWall);
 
                         DoCast(SPELL_HOLY_WALL);
@@ -501,17 +501,17 @@ public:
                         {
                             _introDone = false;
                             intro_started = true;
-                            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+                            if (auto thrall = instance->GetCreature(DATA_THRALL))
                                 me->SetFacingToObject(thrall);
 
                             Talk(TALK_BENEDICTUS_INTRO_2, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
-                            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+                            if (auto thrall = instance->GetCreature(DATA_THRALL))
                                 thrall->AI()->DoAction(ACTION_INTRO_1);
                         }
                         break;
                     case EVENT_INTRO_10:
                         Talk(TALK_BENEDICTUS_INTRO_3, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
-                        if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+                        if (auto thrall = instance->GetCreature(DATA_THRALL))
                             thrall->AI()->DoAction(ACTION_INTRO_2);
                         break;
                     case EVENT_INTRO_11:
@@ -568,7 +568,7 @@ public:
                     //me->monsterYell("EVENT_PURIFYING_LIGHT_JUMP", LANG_UNIVERSAL, 0);
                     if (auto v = me->GetVehicleKit())
                         for (int i = 0; i < 5; i++)
-                            if (Unit* passenger = v->GetPassenger(i))
+                            if (auto passenger = v->GetPassenger(i))
                             {
                                 v->EjectPassenger(passenger, EJECT_DIR_FRONT, 0.0f);
                                 Position pos{ orb_targets[i] };
@@ -671,7 +671,7 @@ public:
                 events.SetPhase(PHASE_TWO);
                 Talk(TALK_BENEDICTUS_TWILIGHT_EPIPHANY, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
                 Talk(RAID_BENEDICTUS_WARNING_EPIPHANY, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                if (Creature* shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
+                if (auto shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
                 {
                     shell->RemoveAura(SPELL_SEAPING_LIGHT);
                     shell->CastSpell(shell, SPELL_SEAPING_TWILIGHT, true);
@@ -745,7 +745,7 @@ public:
 
                         if (events.IsInPhase(PHASE_ONE))
                         {
-                            if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+                            if (auto thrall = instance->GetCreature(DATA_THRALL))
                                 thrall->AI()->DoAction(ACTION_CHAIN_LIGHTNING);
                         }
                         DoCast(events.IsInPhase(PHASE_TWO) ? SPELL_CORRUPTING_TWILIGHT : SPELL_PURIFYING_LIGHT);
@@ -825,11 +825,11 @@ public:
 
                                 Talk(TALK_BENEDICTUS_WAVE_OF_VIRTUE, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
                                 Talk(RAID_BENEDICTUS_WARNING_WAVE_OF_VIRTUE, 0, CHAT_MSG_RAID_BOSS_EMOTE);
-                                if (Creature* shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
+                                if (auto shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
                                 {
                                     shell->CastSpell(shell, SPELL_WATER_SHELL_SUMMON, true);
 
-                                    if (Creature* thrall = instance->GetCreature(DATA_THRALL))
+                                    if (auto thrall = instance->GetCreature(DATA_THRALL))
                                     {
                                         thrall->CastStop();
                                         thrall->InterruptNonMeleeSpells(false, 0, true);
@@ -901,7 +901,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/) override
         {
-            if (Creature* arch = instance->GetCreature(DATA_ARCHBISHOP))
+            if (auto arch = instance->GetCreature(DATA_ARCHBISHOP))
                 arch->AI()->JustSummoned(me);
         }
 
@@ -926,7 +926,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/) override
         {
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
+            if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
                 thrall->AI()->JustSummoned(me);
             me->GetMotionMaster()->MoveJumpTo(M_PI, 14.f, 14.f, false);
         }
@@ -1129,7 +1129,7 @@ public:
             }
 
             for (uint8 i = spawn_min; i < spawn_max; i++)
-                if (Creature* summon = me->SummonCreature(wavesInfos[i].entry, wavesInfos[i].position))
+                if (auto summon = me->SummonCreature(wavesInfos[i].entry, wavesInfos[i].position))
                 {
                     summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
 
@@ -1140,28 +1140,28 @@ public:
                     summon->AddThreat(me, 200.f);
                 }
 
-            if (Creature* darkHaze = me->FindNearestCreature(NPC_DARK_HAZE, 200.0f, true))
+            if (auto darkHaze = me->FindNearestCreature(NPC_DARK_HAZE, 200.0f, true))
             {
                 darkHaze->AI()->Talk(TALK_THRALL_3_WARNING_GROUP, NULL, CHAT_MSG_RAID_BOSS_EMOTE, TEXT_RANGE_MAP);
                 darkHaze->SetVisible(false);
                 darkHaze->DespawnOrUnsummon(3000);
             }
 
-            if (Creature* faceless = me->FindNearestCreature(NPC_FACELESS_SHADOW_WEAVER, 100.0f, true))
+            if (auto faceless = me->FindNearestCreature(NPC_FACELESS_SHADOW_WEAVER, 100.0f, true))
             {
                 faceless->CastSpell(faceless, SPELL_SHADOW_SEARCH, true);
                 faceless->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                 faceless->SetInCombatWithZone();
             }
 
-            if (Creature* borer = me->FindNearestCreature(NPC_SHADOW_BORER, 100.0f, true))
+            if (auto borer = me->FindNearestCreature(NPC_SHADOW_BORER, 100.0f, true))
             {
                 borer->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
                 borer->SetInCombatWithZone();
                 borer->AI()->DoCastRandom(SPELL_SHADOW_FORAGE, 0.0f);
             }
 
-            if (Creature* brute = me->FindNearestCreature(NPC_FACELESS_BRUTE, 100.0f, true))
+            if (auto brute = me->FindNearestCreature(NPC_FACELESS_BRUTE, 100.0f, true))
             {
                 brute->CastSpell(brute, SPELL_AGGRO_PERIODIC, true);
                 brute->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
@@ -1187,7 +1187,7 @@ public:
             {
                 std::list<Creature *>::iterator itr = creatureList.begin();
                 std::advance(itr, rand() % creatureList.size());
-                if (Creature* blood = *itr)
+                if (auto blood = *itr)
                 {
                     spewer->CastSpell(blood, SPELL_SUMMON_CORRUPTED_SLIME, true);
                 }
@@ -1220,7 +1220,7 @@ public:
 
             for (uint8 i = 0; i < 12; i++)
                 if (i == 3 || i == 7 || i == 11)
-                    if (Creature* summon = me->SummonCreature(wavesInfos[i].entry, wavesInfos[i].position))
+                    if (auto summon = me->SummonCreature(wavesInfos[i].entry, wavesInfos[i].position))
                     {
                         summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_UNK_6 | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
 
@@ -1329,7 +1329,7 @@ public:
                             events.ScheduleEvent(EVENT_STEP_2, 4000);
                             break;
                         case 9:
-                            if (Creature* arch = instance->GetCreature(DATA_ARCHBISHOP))
+                            if (auto arch = instance->GetCreature(DATA_ARCHBISHOP))
                                 arch->AI()->DoAction(ACTION_START_INTRO);
                             break;
                     }
@@ -1495,7 +1495,7 @@ public:
                     {
                         lavaburst->SetPeriodic(false);
                     }
-                    if (Creature* waterShell = me->FindNearestCreature(NPC_WATER_SHELL, 100.0f, true))
+                    if (auto waterShell = me->FindNearestCreature(NPC_WATER_SHELL, 100.0f, true))
                         me->CastSpell(waterShell, SPELL_WATER_SHELL, true);
 
                     events.ScheduleEvent(EVENT_LAVABURST_TRIGGER, 15000);
@@ -1528,10 +1528,10 @@ public:
             me->DespawnCreaturesInArea(NPC_LIGHT_ORB_JUMP_SUMMON, 200.0f);
             me->ClearInCombat();
 
-            if (Creature* shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
+            if (auto shell = me->FindNearestCreature(NPC_EARTHEN_SHELL_TARGET, 200.0f, true))
                 shell->RemoveAllAuras();
 
-            if (Creature* bishop = instance->GetCreature(DATA_ARCHBISHOP))
+            if (auto bishop = instance->GetCreature(DATA_ARCHBISHOP))
                 bishop->AI()->DoAction(ACTION_RESPAWN);
         }
 
@@ -1557,12 +1557,12 @@ public:
                 {
                     case EVENT_INTRO_1:
                         Talk(TALK_THRALL_4_I_WILL_NOT_ARCHBISHOP, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
-                        if (Creature* arch = instance->GetCreature(DATA_ARCHBISHOP))
+                        if (auto arch = instance->GetCreature(DATA_ARCHBISHOP))
                             arch->AI()->DoAction(ACTION_INTRO_1);
                         break;
                     case EVENT_INTRO_2:
                         Talk(TALK_THRALL_4_YOU_WERE_A_FIGUREHEAD, NULL, CHAT_MSG_MONSTER_SAY, TEXT_RANGE_ZONE);
-                        if (Creature* arch = instance->GetCreature(DATA_ARCHBISHOP))
+                        if (auto arch = instance->GetCreature(DATA_ARCHBISHOP))
                             arch->AI()->DoAction(ACTION_INTRO_2);
                         break;
                     case EVENT_RESET_ENCOUNTER:
@@ -1590,7 +1590,7 @@ public:
                             lavaburst->SetPeriodic(true);
                         break;
                     case EVENT_CHAIN_LIGHTNING:
-                        if (Creature* light = me->FindNearestCreature(NPC_PURIFYING_LIGHT, 200.0f, true))
+                        if (auto light = me->FindNearestCreature(NPC_PURIFYING_LIGHT, 200.0f, true))
                             DoCast(light, SPELL_CHAIN_LIGHTNING);
                         break;
                     default:
@@ -1627,7 +1627,7 @@ public:
 
         void IsSummonedBy(Unit* /*summoner*/) override
         {
-            if (Creature* thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
+            if (auto thrall = instance->GetCreature(DATA_THRALL_EVENT_3))
                 thrall->AI()->JustSummoned(me);
         }
 
@@ -1801,7 +1801,7 @@ public:
 
     bool operator()(WorldObject* object)
     {
-        if (Unit* unit = object->ToUnit())
+        if (auto unit = object->ToUnit())
         {
             if (unit->GetPositionZ() < -116.5f)
                 return false;
@@ -1846,7 +1846,7 @@ public:
 
     bool operator()(WorldObject* object)
     {
-        if (Unit* unit = object->ToUnit())
+        if (auto unit = object->ToUnit())
         {
             if (unit->GetEntry() == NPC_THRALL)
                 return false;

@@ -78,7 +78,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             if (instance->GetData(EVENT_PYRAMID) == PYRAMID_KILLED_ALL_TROLLS)
             {
@@ -134,7 +134,7 @@ public:
                     {
                         case 1:
                             //weegli doesn't fight - he goes & blows up the door
-                            if (Creature* pWeegli = instance->instance->GetCreature(instance->GetData64(ENTRY_WEEGLI)))
+                            if (auto pWeegli = instance->instance->GetCreature(instance->GetData64(ENTRY_WEEGLI)))
                                 pWeegli->AI()->DoAction(0);
                             Talk(SAY_1);
                             Text_Timer = 5000;
@@ -147,7 +147,7 @@ public:
                             me->setFaction(FACTION_HOSTILE);
                             me->m_CombatDistance = 40.0f;
                             me->m_SightDistance = 40.0f;
-                            if (Player* target = Player::GetPlayer(*me, PlayerGUID))
+                            if (auto target = Player::GetPlayer(*me, PlayerGUID))
                                 AttackStart(target);
 
                             if (instance)
@@ -192,7 +192,7 @@ public:
 
         void switchFactionIfAlive(InstanceScript* instance, uint32 entry)
         {
-            if (Creature* crew = instance->instance->GetCreature(instance->GetData64(entry))) {
+            if (auto crew = instance->instance->GetCreature(instance->GetData64(entry))) {
                 if (crew->isAlive()) {
                     crew->m_CombatDistance = 40.0f;
                     crew->m_SightDistance = 40.0f;
@@ -215,7 +215,7 @@ public:
 
     bool OnGossipHello(Player* /*player*/, GameObject* go)
     {
-        if (InstanceScript* instance = go->GetInstanceScript())
+        if (auto instance = go->GetInstanceScript())
         {
             instance->SetData(EVENT_PYRAMID, PYRAMID_CAGES_OPEN);
             //set bly & co to aggressive & start moving to top of stairs
@@ -231,7 +231,7 @@ public:
 private:
     void initBlyCrewMember(InstanceScript* instance, uint32 entry, float x, float y, float z)
     {
-        if (Creature* crew = instance->instance->GetCreature(instance->GetData64(entry)))
+        if (auto crew = instance->instance->GetCreature(instance->GetData64(entry)))
         {
             crew->SetReactState(REACT_AGGRESSIVE);
             crew->SetWalk(true);
@@ -282,7 +282,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             switch (instance->GetData(EVENT_PYRAMID))
             {
@@ -589,7 +589,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_HEX:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true))
                         DoCast(target, SH_HEX);
                     events.ScheduleEvent(EVENT_HEX, 20000);
                     break;
@@ -745,7 +745,7 @@ public:
                     events.ScheduleEvent(EVENT_SLAM, 40000);
                     break;
                 case EVENT_ICICLE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true))
+                    if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 1000.0f, true))
                         DoCast(target, SPELL_ICICLE);
                     events.ScheduleEvent(EVENT_ICICLE, 50000);
                     break;

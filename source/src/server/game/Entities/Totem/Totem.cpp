@@ -69,7 +69,7 @@ void Totem::InitStats(uint32 duration)
         // set display id depending on caster's race
         SetDisplayId(m_owner->GetModelForTotem(PlayerTotemType(m_Properties->Id)));
 
-        if (Player* owner = m_owner->ToPlayer())
+        if (auto owner = m_owner->ToPlayer())
         {
             if (owner->GetPrimaryTalentTree(owner->GetActiveSpec()) == TALENT_TREE_SHAMAN_ENHANCEMENT)
                 m_modSpellHitChance += owner->GetRatingBonusValue(CR_HIT_MELEE);
@@ -150,7 +150,7 @@ void Totem::UnSummon(uint32 msTime)
         m_owner->RemoveAurasDueToSpell(SENTRY_TOTEM_SPELLID);
 
     //remove aura all party members too
-    if (Player* owner = m_owner->ToPlayer())
+    if (auto owner = m_owner->ToPlayer())
     {
         owner->SendAutoRepeatCancel(this);
 
@@ -159,7 +159,7 @@ void Totem::UnSummon(uint32 msTime)
 
         if (Group* group = owner->GetGroup())
         {
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* target = itr->getSource();
                 if (target && group->SameSubGroup(owner, target))

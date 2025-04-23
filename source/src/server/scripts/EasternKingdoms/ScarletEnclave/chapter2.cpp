@@ -70,7 +70,7 @@ public:
         {
             if (spell->Id == SPELL_PERSUASIVE_STRIKE && caster->GetTypeId() == TYPEID_PLAYER && me->isAlive() && !speechCounter)
             {
-                if (Player* player = caster->ToPlayer())
+                if (auto player = caster->ToPlayer())
                 {
                     if (player->GetQuestStatus(QUEST_HOW_TO_WIN_FRIENDS) == QUEST_STATUS_INCOMPLETE)
                     {
@@ -260,7 +260,7 @@ public:
 
         void JustSummoned(Creature* summoned)
         {
-            if (Player* player = GetPlayerForEscort())
+            if (auto player = GetPlayerForEscort())
                 summoned->AI()->AttackStart(player);
 
             if (summoned->GetEntry() == NPC_HIGH_INQUISITOR_VALROTH)
@@ -413,7 +413,7 @@ public:
                     {
                     case 1:
                         me->SetWalk(true);
-                        if (GameObject* tree = me->FindNearestGameObject(GO_INCONSPICUOUS_TREE, 40.0f))
+                        if (auto tree = me->FindNearestGameObject(GO_INCONSPICUOUS_TREE, 40.0f))
                         {
                             Talk(SAY_TREE1);
                             float x, y, z;
@@ -422,8 +422,8 @@ public:
                         }
                         break;
                     case 2:
-                        if (GameObject* tree = me->FindNearestGameObject(GO_INCONSPICUOUS_TREE, 40.0f))
-                            if (Unit* unit = tree->GetOwner())
+                        if (auto tree = me->FindNearestGameObject(GO_INCONSPICUOUS_TREE, 40.0f))
+                            if (auto unit = tree->GetOwner())
                                 AttackStart(unit);
                         break;
                     }
@@ -706,7 +706,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_7, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -736,7 +736,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_8, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -766,7 +766,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_5, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_2, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -796,7 +796,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_2, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -826,7 +826,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_1, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_3, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -856,7 +856,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_9, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -886,7 +886,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_6, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -916,7 +916,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_10, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_4, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -946,7 +946,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_3, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:
@@ -976,7 +976,7 @@ public:
                                 case 6: Talk(SAY_EXEC_THINK_4, player->GetGUID()); break;
                                 case 7: Talk(SAY_EXEC_LISTEN_1, player->GetGUID()); break;
                                 case 8:
-                                    if (Creature* Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
+                                    if (auto Plaguefist = GetClosestCreatureWithEntry(me, NPC_PLAGUEFIST, 85.0f))
                                         Plaguefist->AI()->Talk(SAY_PLAGUEFIST, player->GetGUID());
                                     break;
                                 case 9:

@@ -113,7 +113,7 @@ uint32 CreatureTemplate::GetFirstValidModelId() const
 
 bool AssistDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 {
-    if (Unit* victim = Unit::GetUnit(m_owner, m_victim))
+    if (auto victim = Unit::GetUnit(m_owner, m_victim))
     {
         while (!m_assistants.empty())
         {
@@ -439,7 +439,7 @@ bool Creature::UpdateEntry(uint32 Entry, uint32 team, const CreatureData* data)
     // updates spell bars for vehicles and set player's faction - should be called here, to overwrite faction that is set from the new template
     if (IsVehicle())
     {
-        if (Player* owner = Creature::GetCharmerOrOwnerPlayerOrPlayerItself()) // this check comes in case we don't have a player
+        if (auto owner = Creature::GetCharmerOrOwnerPlayerOrPlayerItself()) // this check comes in case we don't have a player
         {
             setFaction(owner->getFaction()); // vehicles should have same as owner faction
             owner->VehicleSpellInitialize();
@@ -579,7 +579,7 @@ void Creature::Update(uint32 diff)
                 NeedChangeAI = false;
                 IsAIEnabled = true;
                 if (!IsInEvadeMode() && LastCharmerGUID)
-                    if (Unit* charmer = ObjectAccessor::GetUnit(*this, LastCharmerGUID))
+                    if (auto charmer = ObjectAccessor::GetUnit(*this, LastCharmerGUID))
                         i_AI->AttackStart(charmer);
 
                 LastCharmerGUID = 0;
@@ -1567,7 +1567,7 @@ bool Creature::canStartAttack(Unit const* who, bool force) const
             return false;
 
         if (who->isInCombat() && IsWithinDist(who, ATTACK_DISTANCE))
-            if (Unit* victim = who->getAttackerForHelper())
+            if (auto victim = who->getAttackerForHelper())
                 if (IsWithinDistInMap(victim, sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_ASSISTANCE_RADIUS)))
                     force = true;
 
@@ -2238,7 +2238,7 @@ bool Creature::canCreatureAttack(Unit const* victim, bool /*force*/) const
     //Use AttackDistance in distance check if threat radius is lower. This prevents creature bounce in and out of combat every update tick.
     float dist = std::max(GetAttackDistance(victim), sWorld->getFloatConfig(CONFIG_THREAT_RADIUS)) + m_CombatDistance;
 
-    if (Unit* unit = GetCharmerOrOwner())
+    if (auto unit = GetCharmerOrOwner())
         return victim->IsWithinDist(unit, dist);
     else
         return victim->IsInDist(&m_homePosition, dist);
@@ -2310,7 +2310,7 @@ bool Creature::LoadCreaturesAddon(bool reload)
 
     if (!cainfo->auras.empty())
     {
-        for (std::vector<uint32>::const_iterator itr = cainfo->auras.begin(); itr != cainfo->auras.end(); ++itr)
+        for (auto itr = cainfo->auras.begin(); itr != cainfo->auras.end(); ++itr)
         {
             SpellInfo const* AdditionalSpellInfo = sSpellMgr->GetSpellInfo(*itr);
             if (!AdditionalSpellInfo)
@@ -2369,7 +2369,7 @@ void Creature::SetInCombatWithZone()
 
     for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
     {
-        if (Player* player = i->getSource())
+        if (auto player = i->getSource())
         {
             if (player->isGameMaster())
                 continue;
@@ -2401,7 +2401,7 @@ void Creature::AddCreatureSpellCooldown(uint32 spellid)
         return;
 
     uint32 cooldown = spellInfo->GetRecoveryTime();
-    if (Player* modOwner = GetSpellModOwner())
+    if (auto modOwner = GetSpellModOwner())
         modOwner->ApplySpellMod(spellid, SPELLMOD_COOLDOWN, cooldown);
 
     if (cooldown)
@@ -2938,7 +2938,7 @@ void Creature::Regenerate(Powers power)
         {
             if (GetEntry() == 26125) // Dk Ghouls
             {
-                if (Unit* owner = GetOwner())
+                if (auto owner = GetOwner())
                 {
                     if (owner->GetTypeId() == TYPEID_PLAYER)
                     {

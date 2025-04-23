@@ -425,7 +425,7 @@ class boss_sindragosa : public CreatureScript
                             _mysticBuffetStack = std::max<uint32>(_mysticBuffetStack, mysticBuffet->GetStackAmount());
 
                 // Frost Infusion
-                if (Player* player = target->ToPlayer())
+                if (auto player = target->ToPlayer())
                 {
                     if (uint32 spellId = sSpellMgr->GetSpellIdForDifficulty(_isThirdPhase ? SPELL_FROST_BREATH_P2 : SPELL_FROST_BREATH_P1, me))
                     {
@@ -546,7 +546,7 @@ class boss_sindragosa : public CreatureScript
                             break;
                         case EVENT_ICE_TOMB:
                             me->AI()->DoAction(ACTION_ASPHYXIATION_CHECK);
-                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_ICE_TOMB_UNTARGETABLE))
+                            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_ICE_TOMB_UNTARGETABLE))
                             {
                                 Talk(EMOTE_WARN_FROZEN_ORB, target->GetGUID());
                                 DoCast(target, SPELL_FROST_BEACON);
@@ -658,7 +658,7 @@ class npc_ice_tomb : public CreatureScript
             void DoAction(int32 const action)
             {
                 if (action == ACTION_TRIGGER_ASPHYXIATION)
-                    if (Player* player = ObjectAccessor::GetPlayer(*me, _trappedPlayerGUID))
+                    if (auto player = ObjectAccessor::GetPlayer(*me, _trappedPlayerGUID))
                         player->CastSpell(player, SPELL_ASPHYXIATION, true);
             }
 
@@ -666,7 +666,7 @@ class npc_ice_tomb : public CreatureScript
             {
                 me->RemoveAllGameObjects();
 
-                if (Player* player = ObjectAccessor::GetPlayer(*me, _trappedPlayerGUID))
+                if (auto player = ObjectAccessor::GetPlayer(*me, _trappedPlayerGUID))
                 {
                     _trappedPlayerGUID = 0;
                     player->RemoveAurasDueToSpell(SPELL_ICE_TOMB_DAMAGE);
@@ -958,14 +958,14 @@ class npc_rimefang : public CreatureScript
                         case EVENT_ICY_BLAST_CAST:
                             if (--_icyBlastCounter)
                             {
-                                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
+                                if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
                                 {
                                     me->SetFacingToObject(target);
                                     DoCast(target, SPELL_ICY_BLAST);
                                 }
                                 _events.ScheduleEvent(EVENT_ICY_BLAST_CAST, 3000);
                             }
-                            else if (Unit* victim = me->SelectVictim())
+                            else if (auto victim = me->SelectVictim())
                             {
                                 me->SetReactState(REACT_DEFENSIVE);
                                 AttackStart(victim);
@@ -1180,7 +1180,7 @@ class UnchainedMagicTargetSelector
 
         bool operator()(WorldObject* object) const
         {
-            if (Unit* unit = object->ToUnit())
+            if (auto unit = object->ToUnit())
                 return unit->getPowerType() != POWER_MANA;
             return true;
         }
@@ -1268,7 +1268,7 @@ class spell_sindragosa_frost_beacon : public SpellScriptLoader
             void PeriodicTick(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                     caster->CastSpell(GetTarget(), SPELL_ICE_TOMB_DAMAGE, true);
             }
 
@@ -1318,7 +1318,7 @@ public:
             if (TempSummon* summon = GetCaster()->SummonCreature(NPC_ICE_TOMB, pos))
             {
                 summon->AI()->SetGUID(GetHitUnit()->GetGUID(), DATA_TRAPPED_PLAYER);
-                if (GameObject* go = summon->SummonGameObject(GO_ICE_BLOCK, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0))
+                if (auto go = summon->SummonGameObject(GO_ICE_BLOCK, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0))
                 {
                     go->SetSpellId(SPELL_ICE_TOMB_DAMAGE);
                     summon->AddGameObject(go);
@@ -1581,7 +1581,7 @@ class spell_frostwarden_handler_order_whelp : public SpellScriptLoader
                 PreventHitDefaultEffect(effIndex);
                 std::list<Creature*> unitList;
                 GetCreatureListWithEntryInGrid(unitList, GetCaster(), NPC_FROSTWING_WHELP, 150.0f);
-                if (Creature* creature = GetCaster()->ToCreature())
+                if (auto creature = GetCaster()->ToCreature())
                     unitList.remove_if(OrderWhelpTargetSelector(creature));
 
                 if (unitList.empty())
@@ -1636,7 +1636,7 @@ class spell_frostwarden_handler_focus_fire : public SpellScriptLoader
             void PeriodicTick(AuraEffect const* /*aurEff*/)
             {
                 PreventDefaultAction();
-                if (Unit* caster = GetCaster())
+                if (auto caster = GetCaster())
                 {
                     caster->AddThreat(GetTarget(), -float(GetSpellInfo()->Effects[EFFECT_1].CalcValue()));
                     caster->GetAI()->SetData(DATA_WHELP_MARKER, 0);
@@ -1667,14 +1667,14 @@ class at_sindragosa_lair : public AreaTriggerScript
 
         bool OnTrigger(Player* player, AreaTriggerEntry const* /*areaTrigger*/)
         {
-            if (InstanceScript* instance = player->GetInstanceScript())
+            if (auto instance = player->GetInstanceScript())
             {
                 if (!instance->GetData(DATA_SPINESTALKER))
-                    if (Creature* spinestalker = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_SPINESTALKER)))
+                    if (auto spinestalker = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_SPINESTALKER)))
                         spinestalker->AI()->DoAction(ACTION_START_FROSTWYRM);
 
                 if (!instance->GetData(DATA_RIMEFANG))
-                    if (Creature* rimefang = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_RIMEFANG)))
+                    if (auto rimefang = ObjectAccessor::GetCreature(*player, instance->GetData64(DATA_RIMEFANG)))
                         rimefang->AI()->DoAction(ACTION_START_FROSTWYRM);
 
                 if (!instance->GetData(DATA_SINDRAGOSA_FROSTWYRMS) && !instance->GetData64(DATA_SINDRAGOSA) && !instance->IsDone(DATA_SINDRAGOSA))
@@ -1683,7 +1683,7 @@ class at_sindragosa_lair : public AreaTriggerScript
                         return true;
 
                     player->GetMap()->LoadGrid(SindragosaSpawnPos.GetPositionX(), SindragosaSpawnPos.GetPositionY());
-                    if (Creature* sindragosa = player->GetMap()->SummonCreature(NPC_SINDRAGOSA, SindragosaSpawnPos))
+                    if (auto sindragosa = player->GetMap()->SummonCreature(NPC_SINDRAGOSA, SindragosaSpawnPos))
                         sindragosa->AI()->DoAction(ACTION_START_FROSTWYRM);
                 }
             }

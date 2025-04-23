@@ -302,7 +302,7 @@ public:
 
             if (uiSarPortalGuid)
             {
-                if (GameObject* pPortal = GameObject::GetGameObject(*me, uiSarPortalGuid))
+                if (auto pPortal = GameObject::GetGameObject(*me, uiSarPortalGuid))
                 {
                     if (pPortal->GetEntry() == GO_TWILIGHT_PORTAL && me->GetDistance(pPortal) <= 50.0f)
                         pPortal->SetPhaseMask(2, true);
@@ -381,7 +381,7 @@ public:
         void EnterEvadeMode()
         {
             if (uiSarPortalGuid)
-                if (GameObject* pPortal = GameObject::GetGameObject(*me, uiSarPortalGuid))
+                if (auto pPortal = GameObject::GetGameObject(*me, uiSarPortalGuid))
                     pPortal->SetPhaseMask(1, true);
 
             _EnterEvadeMode();
@@ -431,7 +431,7 @@ public:
 
             for (std::list<Unit*>::iterator itr = targets.begin(); itr != targets.end(); itr++)
             {
-                if (Creature* creature = (*itr)->ToCreature())
+                if (auto creature = (*itr)->ToCreature())
                 {
                     if (me->getVictim())
                     {
@@ -465,7 +465,7 @@ public:
             AchievementEntry const* pAE = sAchievementStore.LookupEntry(RAID_MODE(ACHIEV_GONNA_GO_WHEN_THE_VOLCANO_BLOWS_10, ACHIEV_GONNA_GO_WHEN_THE_VOLCANO_BLOWS_25));
             if (pAE)
                 for (std::set<uint64>::iterator it = players.begin(); it != players.end(); ++it)
-                    if (Player* player = Unit::GetPlayer(*me, *it))
+                    if (auto player = Unit::GetPlayer(*me, *it))
                         player->CompletedAchievement(pAE);
         }
 
@@ -653,7 +653,7 @@ public:
         void UpdateAI(const uint32 uiDiff)
         {
             if (!uiSarPortalGuid)
-                if (GameObject* pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 50.0f))
+                if (auto pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 50.0f))
                 {
                     uiSarPortalGuid = pPortal->GetGUID();
                     pPortal->SetPhaseMask(2, true);
@@ -910,7 +910,7 @@ struct dummy_dragonAI : public ScriptedAI
 
         if (uiMyPortalGuid)
         {
-            if (GameObject* pPortal = GameObject::GetGameObject(*me, uiMyPortalGuid))
+            if (auto pPortal = GameObject::GetGameObject(*me, uiMyPortalGuid))
             {
                 if (pPortal->GetEntry() == GO_TWILIGHT_PORTAL && me->GetDistance(pPortal) <= 50.0f)
                 {
@@ -962,7 +962,7 @@ struct dummy_dragonAI : public ScriptedAI
         me->RemoveAurasDueToSpell(SPELL_WILL_OF_SARTHARION);
 
         if (uiMyPortalGuid)
-            if (GameObject* pPortal = GameObject::GetGameObject(*me, uiMyPortalGuid))
+            if (auto pPortal = GameObject::GetGameObject(*me, uiMyPortalGuid))
                 pPortal->SetPhaseMask(1, true);
         _EnterEvadeMode();
         me->GetMotionMaster()->MoveTargetedHome();
@@ -997,7 +997,7 @@ struct dummy_dragonAI : public ScriptedAI
         {
             me->GetMotionMaster()->Clear();
             me->SetInCombatWithZone();
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+            if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
             {
                 me->AddThreat(target, 1.0f);
                 me->Attack(target, true);
@@ -1062,14 +1062,14 @@ struct dummy_dragonAI : public ScriptedAI
 
         if (instance->GetBossState(DATA_SARTHARION_EVENT) == IN_PROGRESS)
         {
-            if (Creature* pSartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION)))
+            if (auto pSartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION)))
                 if (boss_sartharion::boss_sartharionAI* pSartharionAI = CAST_AI(boss_sartharion::boss_sartharionAI, pSartharion->AI()))
                     uiPortalGuid = pSartharionAI->uiSarPortalGuid;
         }
         else
             uiPortalGuid = uiMyPortalGuid;
 
-        if (GameObject* pPortal = GameObject::GetGameObject(*me, uiPortalGuid))
+        if (auto pPortal = GameObject::GetGameObject(*me, uiPortalGuid))
             pPortal->SetPhaseMask(1, true);
 
         switch (me->GetEntry())
@@ -1180,7 +1180,7 @@ struct dummy_dragonAI : public ScriptedAI
                 return;
 
             // Twilight Revenge to main boss
-            if (Unit* pSartharion = Unit::GetUnit(*me, instance->GetData64(DATA_SARTHARION)))
+            if (auto pSartharion = Unit::GetUnit(*me, instance->GetData64(DATA_SARTHARION)))
                 if (pSartharion->isAlive())
                     pSartharion->CastSpell(pSartharion, SPELL_TWILIGHT_REVENGE, false);
         }
@@ -1189,7 +1189,7 @@ struct dummy_dragonAI : public ScriptedAI
     void UpdateAI(const uint32 uiDiff)
     {
         if (!uiMyPortalGuid)
-            if (GameObject* pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 50.0f))
+            if (auto pPortal = me->FindNearestGameObject(GO_TWILIGHT_PORTAL, 50.0f))
             {
                 uiMyPortalGuid = pPortal->GetGUID();
                 pPortal->SetPhaseMask(2, true);
@@ -1279,7 +1279,7 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
+                if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
                     DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
@@ -1386,7 +1386,7 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
+                if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
                     DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
@@ -1503,7 +1503,7 @@ public:
             // shadow fissure
             if (m_uiShadowFissureTimer <= uiDiff)
             {
-                if (Unit* pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
+                if (auto pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 200, true))
                     DoCast(pTarget, RAID_MODE(SPELL_SHADOW_FISSURE, SPELL_SHADOW_FISSURE_H));
 
                 m_uiShadowFissureTimer = urand(15000, 20000);
@@ -2103,7 +2103,7 @@ public:
 
             bool Load()
         {
-            if (Unit* caster = GetCaster())
+            if (auto caster = GetCaster())
             {
                 if (caster->GetMap())
                 {

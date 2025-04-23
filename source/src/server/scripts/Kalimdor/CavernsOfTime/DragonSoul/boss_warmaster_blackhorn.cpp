@@ -460,7 +460,7 @@ public:
         {
 
             Talk(TALK_DEATH);
-            if (Creature* captain = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 200.0f))
+            if (auto captain = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 200.0f))
                 captain->AI()->DoAction(ACTION_FIGHT_FINISHED);
             _JustDied();
         }
@@ -478,7 +478,7 @@ public:
                 if (!IsHeroic())
                 {
                     DragonDespawned = true;
-                    if (Creature* goriona = me->FindNearestCreature(NPC_GORIONA, 500.0f))
+                    if (auto goriona = me->FindNearestCreature(NPC_GORIONA, 500.0f))
                         goriona->DespawnOrUnsummon();
                 }
                 else
@@ -487,7 +487,7 @@ public:
 
             if (IsHeroic() && me->HealthBelowPctDamaged(20, damage) && !eventActive)
             {
-                if (Creature* goriona = me->FindNearestCreature(NPC_GORIONA, 500.0f))
+                if (auto goriona = me->FindNearestCreature(NPC_GORIONA, 500.0f))
                 {
                     if (goriona->GetHealthPct() > 21.00f)
                     {
@@ -537,7 +537,7 @@ public:
                         break;
                     case EVENT_SHOCKWAVE:
                         Talk(TALK_SHOCKWAVE);
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.00f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 45.00f, true))
                         {
                             auto lock_orientation{ me->GetAngle(target) };
                             me->StopMoving();
@@ -550,7 +550,7 @@ public:
                         events.ScheduleEvent(EVENT_SHOCKWAVE, 23000);
                         break;
                     case EVENT_SIPHON_VITALITY:
-                        if (Creature* goriona = me->FindNearestCreature(NPC_GORIONA, 200.0f))
+                        if (auto goriona = me->FindNearestCreature(NPC_GORIONA, 200.0f))
                         {
                             DoCast(goriona, SPELL_SIPHON_VITALITY, true);
                             eventActive = false;
@@ -617,7 +617,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature)
     {
-        if (InstanceScript* instance = creature->GetInstanceScript())
+        if (auto instance = creature->GetInstanceScript())
         {
             switch (creature->GetAreaId())
             {
@@ -658,7 +658,7 @@ public:
             Trinity::WorldObjectListSearcher<Trinity::AllWorldObjectsInRange> searcher(me, targetList, objects);
             me->VisitNearbyObject(70.0f, searcher);
             for (std::list<WorldObject*>::const_iterator i = targetList.begin(); i != targetList.end(); ++i)
-                if (Creature* cannon = (*i)->ToCreature())
+                if (auto cannon = (*i)->ToCreature())
                     if (cannon->GetEntry() == NPC_SKYFIRE_CANNON)
                     {
                         if (phaseTwo)
@@ -686,21 +686,21 @@ public:
                     summon->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_PERIODIC_HEAL, true);
                     break;
                 case NPC_GORIONA:
-                    if (Creature* warmaster = me->SummonCreature(NPC_WARMASTER_BLACKHORN, gorionaSpawnPos))
+                    if (auto warmaster = me->SummonCreature(NPC_WARMASTER_BLACKHORN, gorionaSpawnPos))
                         warmaster->CastCustomSpell(summon, SPELL_RIDE_VEHICLE_HARDCODED, &seatId, NULL, NULL, true);
                     break;
                 case NPC_TWILIGHT_ASSAULT_DRAKE:
-                    if (Creature* dreadblade = me->SummonCreature(NPC_TWILIGHT_ELITE_DREADBLADE, twilightAssaulterPos[0].x, twilightAssaulterPos[0].y, twilightAssaulterPos[0].z, twilightAssaulterPos[0].orientation))
+                    if (auto dreadblade = me->SummonCreature(NPC_TWILIGHT_ELITE_DREADBLADE, twilightAssaulterPos[0].x, twilightAssaulterPos[0].y, twilightAssaulterPos[0].z, twilightAssaulterPos[0].orientation))
                         dreadblade->CastCustomSpell(summon, SPELL_RIDE_VEHICLE_HARDCODED, &seatId, NULL, NULL, true);
                     summon->GetMotionMaster()->MoveSmoothPath(assaultDrakePath, assaultDrakePathSize);
                     break;
                 case NPC_TWILIGHT_ASSAULT_DRAKE_2:
-                    if (Creature* slayer = me->SummonCreature(NPC_TWILIGHT_ELITE_SLAYER, twilightAssaulterPos[1].x, twilightAssaulterPos[1].y, twilightAssaulterPos[1].z, twilightAssaulterPos[1].orientation))
+                    if (auto slayer = me->SummonCreature(NPC_TWILIGHT_ELITE_SLAYER, twilightAssaulterPos[1].x, twilightAssaulterPos[1].y, twilightAssaulterPos[1].z, twilightAssaulterPos[1].orientation))
                         slayer->CastCustomSpell(summon, SPELL_RIDE_VEHICLE_HARDCODED, &seatId, NULL, NULL, true);
                     summon->GetMotionMaster()->MoveSmoothPath(assaultDrake2Path, assaultDrake2PathSize);
                     break;
                 case NPC_TWILIGHT_INFILTRATOR:
-                    if (Creature* sapper = me->SummonCreature(NPC_TWILIGHT_SAPPER, infiltratorPosition, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 4000))
+                    if (auto sapper = me->SummonCreature(NPC_TWILIGHT_SAPPER, infiltratorPosition, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 4000))
                         sapper->CastCustomSpell(summon, SPELL_RIDE_VEHICLE_HARDCODED, &seatId, NULL, NULL, true);
                     summon->GetMotionMaster()->MoveSmoothPath(infiltratorPath, infiltratorPathSize);
                     break;
@@ -726,7 +726,7 @@ public:
                         events.CancelEvent(EVENT_SUMMON_SAPPER);
                         events.CancelEvent(EVENT_SUMMON_ASSAULTER);
                         for (uint64 summonGuid : summons)
-                            if (Creature* summoned = ObjectAccessor::GetCreature(*me, summonGuid))
+                            if (auto summoned = ObjectAccessor::GetCreature(*me, summonGuid))
                                 if (summoned->GetEntry() == NPC_GORIONA)
                                     summoned->AI()->DoAction(ACTION_START_PHASE_2);
                     }
@@ -735,7 +735,7 @@ public:
                     Talk(TALK_SKYFIRE_DESTROYED);
                     events.ScheduleEvent(EVENT_MASSIVE_EXPLOSION, 1000);
                     for (uint8 i = 0; i < 6; i++)
-                        if (Creature* massive = me->SummonCreature(NPC_MASSIVE_EXPLOSION, massiveExplosionPos[i]))
+                        if (auto massive = me->SummonCreature(NPC_MASSIVE_EXPLOSION, massiveExplosionPos[i]))
                             massiveExplosion.push_back(massive);
                     break;
                 default:
@@ -791,7 +791,7 @@ public:
         {
             if (initial)
             {
-                if (Creature* deckFireController = me->SummonCreature(NPC_DECK_FIRE_CONTROLLER, deckFireSpawnPos, TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto deckFireController = me->SummonCreature(NPC_DECK_FIRE_CONTROLLER, deckFireSpawnPos, TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     std::list<Creature* > triggers;
                     me->GetCreatureListWithEntryInGrid(triggers, NPC_SUMMON_ENABLER_STALKER, 200.0f);
@@ -814,7 +814,7 @@ public:
             {
                 for (uint64 summonGuid : summons)
                 {
-                    if (Creature* summon = ObjectAccessor::GetCreature(*me, summonGuid))
+                    if (auto summon = ObjectAccessor::GetCreature(*me, summonGuid))
                     {
                         if (summon->GetEntry() == NPC_DECK_FIRE_CONTROLLER)
                         {
@@ -942,7 +942,6 @@ public:
                     Position Jump_STBD{ -13820.722656f, -14097.240234f, 486.362244f, 1.429589f };
                     Position Jump_PORT{ -13934.761719f, -14081.029297f, 486.362244f, 1.429589f };
 
-                    //TC_LOG_ERROR("sql.sql", "swayze event 55.");
                     if (auto c = me->FindNearestCreature(NPC_KEANU_ORC, 50.f))
                     {
                         c->ExitVehicle();
@@ -999,7 +998,7 @@ public:
                         auto& players = me->GetMap()->GetPlayers();
                         for (auto itr = players.begin(); itr != players.end(); ++itr)
                         {
-                            if (Player* player = itr->getSource())
+                            if (auto player = itr->getSource())
                                 if (player->GetAreaId() == 5922 && player->isAlive() && !player->isGameMaster())
                                 {
                                     playerAlive = true;
@@ -1038,7 +1037,7 @@ public:
                         setCannonsCombatState(true);
                         break;
                     case EVENT_MASSIVE_EXPLOSION:
-                        if (Creature* explosion = Trinity::Containers::SelectRandomContainerElement(massiveExplosion))
+                        if (auto explosion = Trinity::Containers::SelectRandomContainerElement(massiveExplosion))
                             explosion->CastSpell(explosion, SPELL_MASSIVE_EXPLOSION, true);
                         events.ScheduleEvent(EVENT_MASSIVE_EXPLOSION, 1000);
                         break;
@@ -1052,7 +1051,7 @@ public:
 
                         std::list<Creature*> targetList;
                         for (uint64 summonGuid : summons)
-                            if (Creature* summoned = ObjectAccessor::GetCreature(*me, summonGuid))
+                            if (auto summoned = ObjectAccessor::GetCreature(*me, summonGuid))
                                 if (summoned->GetEntry() == NPC_SKYFIRE_FIRE_BRIGADE)
                                     targetList.push_back(summoned);
 
@@ -1361,7 +1360,7 @@ public:
 
                     despawn = true;
 
-                    if (Creature* blackhorn = me->FindNearestCreature(NPC_WARMASTER_BLACKHORN, 200.0f))
+                    if (auto blackhorn = me->FindNearestCreature(NPC_WARMASTER_BLACKHORN, 200.0f))
                         blackhorn->AI()->DoAction(ACTION_DRAGON_DESPAWN);
 
                     Talk(EMOTE_GORIONA_ESCAPE, 0, CHAT_MSG_RAID_BOSS_EMOTE);
@@ -1426,7 +1425,7 @@ public:
                 {
                     case EVENT_TWILIGHT_ONSLAUGHT:
                     {
-                        if (Creature* blackhorn = me->FindNearestCreature(NPC_WARMASTER_BLACKHORN, 100.0f))
+                        if (auto blackhorn = me->FindNearestCreature(NPC_WARMASTER_BLACKHORN, 100.0f))
                             blackhorn->AI()->Talk(TALK_TWILIGHT_ONSLAUGHT);
 
                         Talk(EMOTE_TWILIGHT_ONSLAUGHT, 0, CHAT_MSG_RAID_BOSS_EMOTE);
@@ -1447,12 +1446,12 @@ public:
 
                                 if (validPos)
                                 {
-                                    if (Creature* target = me->SummonCreature(NPC_ONSLAUGHT_TARGET, twilightBarragePos[pos].GetPositionX(), twilightBarragePos[pos].GetPositionY(), twilightBarragePos[pos].GetPositionZ(), 0.00f, TEMPSUMMON_TIMED_DESPAWN, 10500))
+                                    if (auto target = me->SummonCreature(NPC_ONSLAUGHT_TARGET, twilightBarragePos[pos].GetPositionX(), twilightBarragePos[pos].GetPositionY(), twilightBarragePos[pos].GetPositionZ(), 0.00f, TEMPSUMMON_TIMED_DESPAWN, 10500))
                                     {
                                         target->CastSpell(target, SPELL_TWILIGHT_ONSLAUGHT_VISUAL, true);
                                         me->CastSpell(target, SPELL_TWILIGHT_ONSLAUGHT, false);
 
-                                        if (Creature* swayze = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 100.0f))
+                                        if (auto swayze = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 100.0f))
                                             swayze->AI()->DoAction(ACTION_DELAY_DECK_FIRE);
                                     }
                                     break;
@@ -1462,7 +1461,7 @@ public:
                         else
                         {
                             uint8 pos = urand(0, 56);
-                            if (Creature* target = me->SummonCreature(NPC_ONSLAUGHT_TARGET, twilightBarragePos[pos].GetPositionX(), twilightBarragePos[pos].GetPositionY(), twilightBarragePos[pos].GetPositionZ(), 0.00f, TEMPSUMMON_TIMED_DESPAWN, 10500))
+                            if (auto target = me->SummonCreature(NPC_ONSLAUGHT_TARGET, twilightBarragePos[pos].GetPositionX(), twilightBarragePos[pos].GetPositionY(), twilightBarragePos[pos].GetPositionZ(), 0.00f, TEMPSUMMON_TIMED_DESPAWN, 10500))
                             {
                                 target->CastSpell(target, SPELL_TWILIGHT_ONSLAUGHT_VISUAL, true);
                                 me->CastSpell(target, SPELL_TWILIGHT_ONSLAUGHT, false);
@@ -1472,7 +1471,7 @@ public:
                         break;
                     }
                     case EVENT_CORRECT_ORIENTATION_2:
-                        if (Creature* skyfire = me->FindNearestCreature(NPC_THE_SKYFIRE, 200.0f))
+                        if (auto skyfire = me->FindNearestCreature(NPC_THE_SKYFIRE, 200.0f))
                             me->SetFacingToObject(skyfire);
                         break;
                     case EVENT_MOVE_ON_THE_OTHER_SIDE:
@@ -1646,7 +1645,7 @@ public:
                     }
                     case EVENT_CORRECT_ORIENTATION:
                     {
-                        if (Creature* cannon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
+                        if (auto cannon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
                             me->SetFacingToObject(cannon);
                         Position pos(*me);
                         me->SetHomePosition(pos);
@@ -1655,7 +1654,7 @@ public:
                         break;
                     }
                     case EVENT_ACTIVATE_HARPOON:
-                        if (Creature* harpoon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
+                        if (auto harpoon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
                         {
                             if (!harpoon->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
                             {
@@ -1667,7 +1666,7 @@ public:
                         }
                         break;
                     case EVENT_DEACTIVATE_HARPOON:
-                        if (Creature* harpoon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
+                        if (auto harpoon = me->FindNearestCreature(NPC_SKYFIRE_HARPOON_GUN, 80.0f))
                             harpoon->InterruptNonMeleeSpells(false);
                         me->GetMotionMaster()->MovePoint(POINT_END_POSITION, me->GetHomePosition());
                         break;
@@ -1714,7 +1713,7 @@ public:
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                     events.CancelEvent(EVENT_HEAVY_SLUG);
                     events.ScheduleEvent(EVENT_SET_FACING_TO, 1000);
-                    if (Creature* goriona = me->FindNearestCreature(NPC_GORIONA, 200.00f))
+                    if (auto goriona = me->FindNearestCreature(NPC_GORIONA, 200.00f))
                         DoCast(goriona, SPELL_ARTILLERY_BARRAGE);
                     break;
                 default:
@@ -1742,7 +1741,7 @@ public:
                         break;
                     }
                     case EVENT_SET_FACING_TO:
-                        if (Creature* goriona = me->FindNearestCreature(NPC_GORIONA, 200.00f))
+                        if (auto goriona = me->FindNearestCreature(NPC_GORIONA, 200.00f))
                         {
                             if (!goriona->IsFlying())
                             {
@@ -1780,6 +1779,11 @@ public:
         npc_ds_twilight_eliteAI(Creature* creature) : ScriptedAI(creature)
         {
             me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+
+            me->SetReactState(REACT_PASSIVE);
+            me->DeleteThreatList();
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_ATTACKABLE_1);
+
         }
 
         void DoAction(int32 const action)
@@ -1787,11 +1791,21 @@ public:
             switch (action)
             {
                 case ACTION_START_COMBAT:
-                    events.ScheduleEvent(EVENT_BLADE_RUSH, 15500);
-                    events.ScheduleEvent(me->GetEntry() == NPC_TWILIGHT_ELITE_DREADBLADE ? EVENT_DEGENERATION : EVENT_BRUTAL_STRIKE, urand(8500, 9500));
                     break;
                 default:
                     break;
+            }
+        }
+
+        void MovementInform(uint32 type, uint32 id)
+        {
+            if (type == EFFECT_MOTION_TYPE && id == POINT_LANDING)
+            {
+                me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_ATTACKABLE_1);
+                me->SetReactState(REACT_AGGRESSIVE);
+                events.ScheduleEvent(EVENT_BLADE_RUSH, 15500);
+                events.ScheduleEvent(me->GetEntry() == NPC_TWILIGHT_ELITE_DREADBLADE ? EVENT_DEGENERATION : EVENT_BRUTAL_STRIKE, urand(8500, 9500));
+
             }
         }
 
@@ -1805,7 +1819,7 @@ public:
                 {
                     case EVENT_BLADE_RUSH:
 
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 70.0f, true))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 1, 70.0f, true))
                         {
                             float targetDist = me->GetExactDist2d(target);
                             uint32 points = std::max<uint32>(1, targetDist / 3);
@@ -1840,6 +1854,7 @@ public:
             }
 
             if (!me->GetVehicle())
+                if (!me->HasReactState(REACT_PASSIVE))
                 if (UpdateVictim())
                     DoMeleeAttackIfReady();
         }
@@ -1880,7 +1895,10 @@ public:
         void PassengerBoarded(Unit* passenger, int8 seatId, bool apply)
         {
             if (!apply)
-                passenger->ToCreature()->AI()->DoAction(ACTION_START_COMBAT);
+            {
+                passenger->GetMotionMaster()->MoveFall(POINT_LANDING);
+                //passenger->ToCreature()->AI()->DoAction(ACTION_START_COMBAT);
+            }
         }
     };
 
@@ -1935,7 +1953,7 @@ public:
                 if (me->GetPositionX() >= 13469.00f)
                 {
                     delayedDeath = true;
-                    if (Creature* swayze = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 100.0f))
+                    if (auto swayze = me->FindNearestCreature(NPC_SKY_CAPTAIN_SWAYZE, 100.0f))
                         swayze->AI()->Talk(TALK_TWILIGHT_SAPPER);
 
                     DoCast(me, SPELL_DETONATE, true);
@@ -2045,7 +2063,7 @@ public:
             if ((barrageId == GetSpellInfo()->Id) && !targets.empty())
                 return;
 
-            if (Creature* skyfire = GetCaster()->FindNearestCreature(NPC_THE_SKYFIRE, 500.0f))
+            if (auto skyfire = GetCaster()->FindNearestCreature(NPC_THE_SKYFIRE, 500.0f))
                 targets.push_back(skyfire);
         }
 

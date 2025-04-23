@@ -550,8 +550,8 @@ inline void KillRewarder::_InitGroupData()
     if (_group)
     {
         // 2. In case when player is in group, initialize variables necessary for group calculations:
-        for (GroupReference* itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
-            if (Player* member = itr->getSource())
+        for (auto itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
+            if (auto member = itr->getSource())
                 if (member->isAlive() && member->IsAtGroupRewardDistance(_victim))
                 {
                     const uint8 lvl = member->getLevel();
@@ -730,9 +730,9 @@ void KillRewarder::_RewardGroup()
             // 3.1.4. Update guild achievements.
 
             std::vector<uint32> guildList;
-            for (GroupReference* itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = _group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
-                if (Player* member = itr->getSource())
+                if (auto member = itr->getSource())
                 {
                     if (member->IsAtGroupRewardDistance(_victim))
                     {
@@ -740,14 +740,14 @@ void KillRewarder::_RewardGroup()
                         member->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_SPECIAL_PVP_KILL, 1, 0, 0, _victim);
 
                         bool guildAlreadyUpdate = false;
-                        for (std::vector<uint32>::const_iterator guildItr = guildList.begin(); guildItr != guildList.end(); guildItr++)
+                        for (auto guildItr = guildList.begin(); guildItr != guildList.end(); guildItr++)
                             if (*guildItr == member->GetGuildId())
                                 guildAlreadyUpdate = true;
 
                         if (!guildAlreadyUpdate)
                         {
-                            if (Creature* victim = _victim->ToCreature())
-                                if (Guild* guild = member->GetGuild())
+                            if (auto victim = _victim->ToCreature())
+                                if (auto guild = member->GetGuild())
                                 {
                                     guild->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, victim->GetEntry(), 1, 0, victim, member);
                                     guild->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, 0, 0, 0, victim, member);
@@ -779,8 +779,8 @@ void KillRewarder::Reward()
             // 3.2.2. Reward killer.
             _RewardPlayer(_killer, false);
 
-        if (Creature* victim = _victim->ToCreature())
-            if (Guild* guild = _killer->GetGuild())
+        if (auto victim = _victim->ToCreature())
+            if (auto guild = _killer->GetGuild())
             {
                 guild->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, victim->GetEntry(), 1, 0, victim, _killer);
                 guild->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE_GUILD, 0, 0, 0, victim, _killer);
@@ -788,10 +788,10 @@ void KillRewarder::Reward()
     }
 
     // 5. Credit instance encounter.
-    if (Creature* victim = _victim->ToCreature())
+    if (auto victim = _victim->ToCreature())
     {
         if (victim->IsDungeonBoss())
-            if (InstanceScript* instance = victim->GetInstanceScript())
+            if (auto instance = victim->GetInstanceScript())
                 instance->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE, _victim->GetEntry(), _victim);
     }
 
@@ -1828,7 +1828,7 @@ void Player::Update(uint32 p_time)
     UpdateAfkReport(now);
 
     if (isCharmed())
-        if (Unit* charmer = GetCharmer())
+        if (auto charmer = GetCharmer())
             if (charmer->GetTypeId() == TYPEID_UNIT && charmer->isAlive())
                 UpdateCharmedAI();
 
@@ -1877,7 +1877,7 @@ void Player::Update(uint32 p_time)
 
     if (HasUnitState(UNIT_STATE_MELEE_ATTACKING) && !HasUnitState(UNIT_STATE_CASTING))
     {
-        if (Unit* victim = getVictim())
+        if (auto victim = getVictim())
         {
             // default combat reach 10
             // TODO add weapon, skill check
@@ -2251,7 +2251,7 @@ void Player::SetSelection(uint64 guid)
 {
     m_curSelection = guid;
     SetUInt64Value(UNIT_FIELD_TARGET, guid);
-    if (Player* target = ObjectAccessor::FindPlayer(guid))
+    if (auto target = ObjectAccessor::FindPlayer(guid))
         if (HaveSpectators())
         {
             SpectatorAddonMsg msg;
@@ -2483,7 +2483,7 @@ uint8 Player::GetChatTag() const
 {
     //SetSkipOnePacketForASH(true); hackfixed it, not sure why there's a problem
     /*
-    if (Player* player = ObjectAccessor::FindPlayer(GetGUID()))
+    if (auto player = ObjectAccessor::FindPlayer(GetGUID()))
         player->SetSkipOnePacketForASH(true);
     */
     uint8 tag = CHAT_TAG_NONE;
@@ -3359,7 +3359,7 @@ Creature* Player::GetNPCIfCanInteractWith(uint64 guid, uint32 npcflagmask)
 
 GameObject* Player::GetGameObjectIfCanInteractWith(uint64 guid, GameobjectTypes type) const
 {
-    if (GameObject* go = GetMap()->GetGameObject(guid))
+    if (auto go = GetMap()->GetGameObject(guid))
     {
         if (go->GetGoType() == type)
         {
@@ -3516,7 +3516,7 @@ bool Player::HaveSpectators()
     if (IsSpectator())
         return false;
 
-    if (Battleground* bg = GetBattleground())
+    if (auto bg = GetBattleground())
         if (bg->isArena())
         {
             if (bg->GetStatus() != STATUS_IN_PROGRESS)
@@ -3767,7 +3767,7 @@ void Player::GiveLevel(uint8 level)
     if (level == oldLevel)
         return;
 
-    if (Guild* guild = GetGuild())
+    if (auto guild = GetGuild())
         guild->UpdateMemberData(this, GUILD_MEMBER_DATA_LEVEL, level);
 
     PlayerLevelInfo info;
@@ -5557,7 +5557,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
     sObjectAccessor->ConvertCorpseForPlayer(playerguid);
 
     if (uint32 guildId = GetGuildIdFromDB(playerguid))
-        if (Guild* guild = sGuildMgr->GetGuildById(guildId))
+        if (auto guild = sGuildMgr->GetGuildById(guildId))
             guild->DeleteMember(guid, false, false, true);
 
     // remove from arena teams
@@ -5693,7 +5693,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
             {
                 do
                 {
-                    if (Player* pFriend = ObjectAccessor::FindPlayer(MAKE_NEW_GUID((*resultFriends)[0].GetUInt32(), 0, HIGHGUID_PLAYER)))
+                    if (auto pFriend = ObjectAccessor::FindPlayer(MAKE_NEW_GUID((*resultFriends)[0].GetUInt32(), 0, HIGHGUID_PLAYER)))
                     {
                         if (pFriend->IsInWorld())
                         {
@@ -5917,7 +5917,7 @@ void Player::DeleteOldCharacters(uint32 keepDays)
 void Player::BuildPlayerRepop()
 {
 
-    if (InstanceScript* scr = GetInstanceScript())
+    if (auto scr = GetInstanceScript())
     {
         if (scr->IsChallengeModeStarted())
         {
@@ -6034,7 +6034,7 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 
     if (InBattleground())
     {
-        if (Battleground* bg = GetBattleground())
+        if (auto bg = GetBattleground())
             bg->HandlePlayerResurrect(this);
     }
 
@@ -6102,7 +6102,7 @@ void Player::KillPlayer()
     // Start combo point timer
     ComboPointHolderSet& holder = GetComboPointHolder();
     for (uint32 lowGuid : holder)
-        if (Player* player = ObjectAccessor::FindPlayer(MAKE_NEW_GUID(lowGuid, 0, HIGHGUID_PLAYER)))
+        if (auto player = ObjectAccessor::FindPlayer(MAKE_NEW_GUID(lowGuid, 0, HIGHGUID_PLAYER)))
             if (player->GetComboTarget() == GetGUID())
                 player->m_comboPointTimer = 20 * IN_MILLISECONDS;
 }
@@ -6386,7 +6386,7 @@ void Player::RepopAtGraveyard()
     // note: this can be called also when the player is alive
     // for example from WorldSession::HandleMovementOpcodes
 
-    if (InstanceScript* scr = GetInstanceScript())
+    if (auto scr = GetInstanceScript())
         if (scr->IsChallengeModeStarted())
             return;
         
@@ -6402,7 +6402,7 @@ void Player::RepopAtGraveyard()
     WorldSafeLocsEntry const* ClosestGrave = NULL;
 
     // Special handle for battleground maps
-    if (Battleground* bg = GetBattleground())
+    if (auto bg = GetBattleground())
         ClosestGrave = bg->GetClosestGraveYard(this);
     else
     {
@@ -7356,7 +7356,7 @@ void Player::UpdatePrimaryProfessionSlots(uint32 profession_id, bool remove)
     }
 
 
-    if (Guild* guild = sGuildMgr->GetGuildById(GetGuildIdFromDB(GetGUID())))
+    if (auto guild = sGuildMgr->GetGuildById(GetGuildIdFromDB(GetGUID())))
         guild->SetProfessionChanged(GetGUID(), true);
 }
 
@@ -8443,7 +8443,7 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
         victim_guid = victim->GetGUID();
 
-        if (Player* plrVictim = victim->ToPlayer())
+        if (auto plrVictim = victim->ToPlayer())
         {
             if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
                 return false;
@@ -8535,7 +8535,7 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
     if (InBattleground() && honor > 0)
     {
-        if (Battleground* bg = GetBattleground())
+        if (auto bg = GetBattleground())
         {
             bg->UpdatePlayerScore(this, SCORE_BONUS_HONOR, honor, false); //false: prevent looping
         }
@@ -9170,7 +9170,7 @@ void Player::UpdateArea(uint32 newArea)
         for (auto itr = toRemove.begin(); itr != toRemove.end(); ++itr)
             (*itr)->AttackStop();
 
-        if (Unit* victim = getVictim())
+        if (auto victim = getVictim())
             if (!IsValidAttackTarget(victim))
                 AttackStop();
     }
@@ -9345,7 +9345,7 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
         sBattlefieldMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
         sBattlefieldMgr->HandlePlayerEnterZone(this, newZone);
         SendInitWorldStates(newZone, newArea);              // only if really enters to new zone, not just area change, works strange...
-        if (Guild* guild = GetGuild())
+        if (auto guild = GetGuild())
             guild->UpdateMemberData(this, GUILD_MEMBER_DATA_ZONEID, newZone);
     }
 
@@ -9732,7 +9732,7 @@ void Player::DuelComplete(DuelCompleteType type)
                         duel->opponent->ToUnit()->SetPower(POWER_RAGE, 0);
 
                 //pets
-                if (Unit* PlayersPet = sObjectAccessor->GetUnit(*this, ToUnit()->GetPetGUID()))                   
+                if (auto PlayersPet = sObjectAccessor->GetUnit(*this, ToUnit()->GetPetGUID()))                   
                 {
                     PlayersPet->SetHealth(PlayersPet->GetMaxHealth());
                     if (PlayersPet->getPowerType() == POWER_MANA)
@@ -9740,7 +9740,7 @@ void Player::DuelComplete(DuelCompleteType type)
                     PlayersPet->RemoveAurasDueToSpell(91342);
                     PlayersPet->RemoveAurasDueToSpell(63560);
                 }
-                if (Unit* OpponentsPet = sObjectAccessor->GetUnit(*this, duel->opponent->ToUnit()->GetPetGUID()))
+                if (auto OpponentsPet = sObjectAccessor->GetUnit(*this, duel->opponent->ToUnit()->GetPetGUID()))
                 {
                     OpponentsPet->SetHealth(OpponentsPet->GetMaxHealth());
                     if (OpponentsPet->getPowerType() == POWER_MANA)
@@ -10770,7 +10770,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
 
             //TODO: fix this big hack
             if ((go->GetEntry() == BG_AV_OBJECTID_MINE_N || go->GetEntry() == BG_AV_OBJECTID_MINE_S))
-                if (Battleground* bg = GetBattleground())
+                if (auto bg = GetBattleground())
                     if (bg->GetTypeID(true) == BATTLEGROUND_AV)
                         if (!(((BattlegroundAV*)bg)->PlayerCanDoMineQuest(go->GetEntry(), GetTeam())))
                         {
@@ -10914,7 +10914,7 @@ void Player::SendLoot(uint64 guid, LootType loot_type)
             uint32 pLevel = bones->loot.gold;
             bones->loot.clear();
             // creature_loot_template.entry = 1 Player Corpse Loot
-            if (Battleground* bg = GetBattleground())
+            if (auto bg = GetBattleground())
                 if (bg->isBattleground() || bg->isRatedBattleground())
                     loot->FillLoot(1, LootTemplates_Creature, this, true);            
             // It may need a better formula
@@ -13296,7 +13296,7 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
                     if (isInCombat())
                         return EQUIP_ERR_NOT_IN_COMBAT;
 
-                    if (Battleground* bg = GetBattleground())
+                    if (auto bg = GetBattleground())
                         if (bg->isArena() && bg->GetStatus() == STATUS_IN_PROGRESS)
                             return EQUIP_ERR_NOT_DURING_ARENA_MATCH;
                 }
@@ -13451,7 +13451,7 @@ InventoryResult Player::CanUnequipItem(uint16 pos, bool swap) const
         if (isInCombat())
             return EQUIP_ERR_NOT_IN_COMBAT;
 
-        if (Battleground* bg = GetBattleground())
+        if (auto bg = GetBattleground())
             if (bg->isArena() && bg->GetStatus() == STATUS_IN_PROGRESS)
                 return EQUIP_ERR_NOT_DURING_ARENA_MATCH;
     }
@@ -16386,7 +16386,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
         if (!sConditionMgr->IsObjectMeetToConditions(this, source, itr->second.Conditions))
             continue;
 
-        if (Creature* creature = source->ToCreature())
+        if (auto creature = source->ToCreature())
         {
             if (!(itr->second.OptionNpcflag & npcflags))
                 continue;
@@ -16459,7 +16459,7 @@ void Player::PrepareGossipMenu(WorldObject* source, uint32 menuId /*= 0*/, bool 
                     break;
             }
         }
-        else if (GameObject* go = source->ToGameObject())
+        else if (auto go = source->ToGameObject())
         {
             switch (itr->second.OptionType)
             {
@@ -16897,7 +16897,7 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const* quest)
         case HIGHGUID_PET:
         case HIGHGUID_VEHICLE:
         {
-            if (Creature* creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid))
+            if (auto creature = ObjectAccessor::GetCreatureOrPetOrVehicle(*this, guid))
                 objectQR  = sObjectMgr->GetCreatureQuestRelationBounds(creature->GetEntry());
             else
                 return NULL;
@@ -16909,7 +16909,7 @@ Quest const* Player::GetNextQuest(uint64 guid, Quest const* quest)
             //only for quests which cast teleport spells on player
             Map* _map = IsInWorld() ? GetMap() : sMapMgr->FindMap(GetMapId(), GetInstanceId());
             ASSERT(_map);
-            if (GameObject* gameObject = _map->GetGameObject(guid))
+            if (auto gameObject = _map->GetGameObject(guid))
                 objectQR = sObjectMgr->GetGOQuestRelationBounds(gameObject->GetEntry());
             else
                 return NULL;
@@ -17255,7 +17255,7 @@ void Player::AddQuest(Quest const* quest, Object* questGiver)
             limittime = questGiver->ToPlayer()->getQuestStatusMap()[quest_id].Timer / IN_MILLISECONDS;
 
         if (quest_id == CHALLENGE_MODE_QUEST_ID)
-            if (InstanceScript* instanceScript = GetInstanceScript())
+            if (auto instanceScript = GetInstanceScript())
                 limittime = instanceScript->GetChallengeModeRemainingTime();
                            
         AddTimedQuest(quest_id);
@@ -17528,7 +17528,7 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
     else
         moneyRew = int32(quest->GetRewMoneyMaxLevel() * sWorld->getRate(RATE_DROP_MONEY));
 
-    if (Guild* guild = GetGuild())
+    if (auto guild = GetGuild())
     {
         uint32 _xp = quest->XPValue(this);
         uint32 guildRep = std::max(uint32(1), uint32(_xp/450));
@@ -18504,7 +18504,7 @@ void Player::GroupEventHappens(uint32 questId, WorldObject const* pEventObject)
 {
     if (Group* group = GetGroup())
     {
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
 
@@ -19279,12 +19279,12 @@ bool Player::InformQuestGiverAccept(Quest const* quest, Object* questGiver)
     }
     bool r = false;
     if (questGiver)
-        if (Creature* creature = questGiver->ToCreature())
+        if (auto creature = questGiver->ToCreature())
         {
             r = sScriptMgr->OnQuestAccept(this, creature, quest);
             r |= creature->AI()->sQuestAccept(this, quest);
         }
-        else if (GameObject* go = questGiver->ToGameObject())
+        else if (auto go = questGiver->ToGameObject())
         {
             r = sScriptMgr->OnQuestAccept(this, go, quest);
             r |= go->AI()->QuestAccept(this, quest);
@@ -19302,7 +19302,7 @@ bool Player::InformQuestGiverSelect(Quest const* quest, Object* questGiver)
     }
     bool r = false;
     if (questGiver)
-        if (Creature* creature = questGiver->ToCreature())
+        if (auto creature = questGiver->ToCreature())
         {
             r = sScriptMgr->OnQuestSelect(this, creature, quest);
             r |= creature->AI()->sQuestSelect(this, quest);
@@ -19318,12 +19318,12 @@ bool Player::InformQuestGiverObjectiveComplete(Quest const* quest, Object* quest
     }
     bool r = false;
     if (questGiver)
-        if (Creature* creature = questGiver->ToCreature())
+        if (auto creature = questGiver->ToCreature())
         {
             r = sScriptMgr->OnQuestObjectiveComplete(this, creature, quest);
             r |= creature->AI()->sQuestObjectiveComplete(this, quest);
         }
-        else if (GameObject* go = questGiver->ToGameObject())
+        else if (auto go = questGiver->ToGameObject())
         {
             r = sScriptMgr->OnQuestObjectiveComplete(this, go, quest);
             r |= go->AI()->QuestObjectiveComplete(this, quest);
@@ -19341,12 +19341,12 @@ bool Player::InformQuestGiverReward(Quest const* quest, Object* questGiver, uint
     }
     bool r = false;
     if (questGiver)
-        if (Creature* creature = questGiver->ToCreature())
+        if (auto creature = questGiver->ToCreature())
         {
             r = sScriptMgr->OnQuestReward(this, creature, quest, opt);
             r |= creature->AI()->sQuestReward(this, quest, opt);
         }
-        else if (GameObject* go = questGiver->ToGameObject())
+        else if (auto go = questGiver->ToGameObject())
         {
             r = sScriptMgr->OnQuestReward(this, go, quest, opt);
             r |= go->AI()->QuestReward(this, quest, opt);
@@ -21712,7 +21712,7 @@ void Player::SendRaidInfo()
                 bool isHeroic = save->GetDifficulty() == RAID_DIFFICULTY_10MAN_HEROIC || save->GetDifficulty() == RAID_DIFFICULTY_25MAN_HEROIC;
                 uint32 completedEncounters = 0;
                 if (Map* map = sMapMgr->FindMap(save->GetMapId(), save->GetInstanceId()))
-                    if (InstanceScript* instanceScript = ((InstanceMap*)map)->GetInstanceScript())
+                    if (auto instanceScript = ((InstanceMap*)map)->GetInstanceScript())
                         completedEncounters = instanceScript->GetCompletedEncounterMask();
 
                 data << uint32(save->GetMapId());           // map id
@@ -21894,7 +21894,7 @@ bool Player::CheckInstanceLoginValid()
     Map::PlayerList const &playerList = GetMap()->GetPlayers();
     if (!playerList.isEmpty())
         for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
-            if (Player* iPlayer = i->getSource())
+            if (auto iPlayer = i->getSource())
             {
                 if (iPlayer->isGameMaster()) // bypass GMs
                     continue;
@@ -22283,7 +22283,7 @@ void Player::SaveToDB(bool create /*=false*/)
     if (m_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
         _SaveStats(trans);
 
-    if (Guild* guild = GetGuild())
+    if (auto guild = GetGuild())
         guild->SaveProfession(this, trans);
 
     CharacterDatabase.CommitTransaction(trans);
@@ -23136,7 +23136,7 @@ void Player::applyGMFreeze(bool apply)
         if (auto s = GetSession())
             if (auto p = s->GetPlayer())
             {
-                ChatHandler(GetSession()).PSendSysMessage("|TInterface/ICONS/Mail_gmicon:25|t|r|cFF0566b0 A Game Master has unfrozen you.");
+                ChatHandler(s).PSendSysMessage("|TInterface/ICONS/Mail_gmicon:25|t|r|cFF0566b0 A Game Master has unfrozen you.");
                 SendPlaySound(15273, true);
             }
 
@@ -25181,7 +25181,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
     if (crItem->maxcount != 0) // bought
     {
         if (pProto->Quality > ITEM_QUALITY_EPIC || (pProto->Quality == ITEM_QUALITY_EPIC && pProto->ItemLevel >= MinNewsItemLevel[sWorld->getIntConfig(CONFIG_EXPANSION)]))
-            if (Guild* guild = GetGuild())
+            if (auto guild = GetGuild())
                 guild->AddGuildNews(GUILD_NEWS_ITEM_PURCHASED, GetGUID(), 0, item);
         return true;
     }
@@ -25686,7 +25686,7 @@ void Player::SetLFGLeavePoint()
 
 void Player::LeaveBattleground(bool teleportToEntryPoint)
 {
-    if (Battleground* bg = GetBattleground())
+    if (auto bg = GetBattleground())
     {
         bg->RemovePlayerAtLeave(GetGUID(), teleportToEntryPoint, true);
 
@@ -26094,7 +26094,7 @@ void Player::AddComboPoints(Unit* target, int8 count, Spell* spell)
     else
     {
         if (m_comboTarget)
-            if (Unit* target2 = ObjectAccessor::GetUnit(*this, m_comboTarget))
+            if (auto target2 = ObjectAccessor::GetUnit(*this, m_comboTarget))
             {
                 target2->RemoveComboPointHolder(GetGUIDLow());
                 m_comboPointTimer = 0;
@@ -26143,7 +26143,7 @@ void Player::ClearComboPoints()
 
     SendComboPoints();
 
-    if (Unit* target = ObjectAccessor::GetUnit(*this, m_comboTarget))
+    if (auto target = ObjectAccessor::GetUnit(*this, m_comboTarget))
         target->RemoveComboPointHolder(GetGUIDLow());
 
     m_comboTarget = 0;
@@ -26690,7 +26690,7 @@ void Player::SendAurasForTarget(Unit* target)
         auraApp->BuildUpdatePacket(data, false);
     }
 
-    if (Player* stream = target->ToPlayer())
+    if (auto stream = target->ToPlayer())
         if (stream->HaveSpectators() && IsSpectator())
         {
             for (Unit::VisibleAuraMap::const_iterator itr = visibleAuras->begin(); itr != visibleAuras->end(); ++itr)
@@ -26936,7 +26936,7 @@ void Player::UpdateForQuestWorldObjects()
     {
         if (IS_GAMEOBJECT_GUID(*itr))
         {
-            if (GameObject* obj = HashMapHolder<GameObject>::Find(*itr))
+            if (auto obj = HashMapHolder<GameObject>::Find(*itr))
                 obj->BuildValuesUpdateBlockForPlayer(&udata, this);
         }
         else if (IS_CRE_OR_VEH_GUID(*itr))
@@ -26993,7 +26993,7 @@ void Player::SummonIfPossible(bool agree)
 
     // drop flag at summon
     // this code can be reached only when GM is summoning player who carries flag, because player should be immune to summoning spells when he carries flag
-    if (Battleground* bg = GetBattleground())
+    if (auto bg = GetBattleground())
         bg->EventPlayerDroppedFlag(this);
 
     m_summon_expire = 0;
@@ -27272,7 +27272,7 @@ bool Player::GetsRecruitAFriendBonus(bool forXP)
     {
         if (Group* group = this->GetGroup())
         {
-            for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+            for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
             {
                 Player* player = itr->getSource();
                 if (!player)
@@ -27320,7 +27320,7 @@ void Player::RewardPlayerAndGroupAtEvent(uint32 creature_id, WorldObject* pRewar
     // prepare data for near group iteration
     if (Group* group = GetGroup())
     {
-        for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+        for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
         {
             Player* player = itr->getSource();
             if (!player)
@@ -27598,7 +27598,7 @@ Player* Player::GetNextRandomRaidMember(float radius)
     std::vector<Player*> nearMembers;
     nearMembers.reserve(group->GetMembersCount());
 
-    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+    for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
     {
         Player* Target = itr->getSource();
 
@@ -28393,7 +28393,7 @@ void Player::StoreLootItem(uint8 lootSlot, Loot* loot, GameObject* go)
 
         if (ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item->itemid))
             if (proto->Quality > ITEM_QUALITY_EPIC || (proto->Quality == ITEM_QUALITY_EPIC && proto->ItemLevel >= MinNewsItemLevel[sWorld->getIntConfig(CONFIG_EXPANSION)]))
-                if (Guild* guild = GetGuild())
+                if (auto guild = GetGuild())
                     guild->AddGuildNews(GUILD_NEWS_ITEM_LOOTED, GetGUID(), 0, item->itemid);
 
         SendNewItem(newitem, uint32(item->count), false, false, true);
@@ -29886,9 +29886,9 @@ void Player::ActivateSpec(uint8 spec)
 
                 if (bRemoveAura && group)
                 {
-                    for (GroupReference* itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
+                    for (auto itr = group->GetFirstMember(); itr != NULL; itr = itr->next())
                     {
-                        if (Player* member = itr->getSource())
+                        if (auto member = itr->getSource())
                         {
                             if (member->GetGUID() == GetGUID())
                                 continue;

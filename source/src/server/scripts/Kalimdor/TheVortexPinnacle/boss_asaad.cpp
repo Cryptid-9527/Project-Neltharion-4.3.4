@@ -131,7 +131,7 @@ public:
 
         void JustReachedHome()
         {
-            if (Creature* c = Unit::GetCreature(*me, stormTargetGUID))
+            if (auto c = Unit::GetCreature(*me, stormTargetGUID))
                 me->Kill(c);
         }
 
@@ -146,7 +146,7 @@ public:
                 me->SetCanFly(true);
                 me->SetDisableGravity(true);
                 me->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ() + 10, pos.GetOrientation());
-                if (Creature* c = Unit::GetCreature(*me, stormTargetGUID))
+                if (auto c = Unit::GetCreature(*me, stormTargetGUID))
                 {
                     for (int i = 0; i < 40; i++)
                     {
@@ -212,7 +212,7 @@ public:
                 {
                 case EVENT_CHAIN_LIGHTNING:
                     me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_INTERRUPT_CAST, true);
-                    if (Unit* const target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
+                    if (auto const target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
                         me->CastSpell(target, SPELL_CHAIN_LIGHTNING, false);
                     events.ScheduleEvent(EVENT_CHAIN_LIGHTNING, urand(50000, 65000));
                     break;
@@ -226,13 +226,13 @@ public:
                     break;
                 case EVENT_SUMMON_UNSTABLE_GROUND_FIELD:
                     me->GetRandomPoint(centerPos, 25, pos);
-                    if (Creature* c = me->SummonCreature(46492, pos, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto c = me->SummonCreature(46492, pos, TEMPSUMMON_MANUAL_DESPAWN))
                         stormTargetGUID = c->GetGUID();
                     break;
                 case EVENT_CLEAN_UP:
                     me->SetCanFly(false);
                     me->SetDisableGravity(false);
-                    if (Creature* c = Unit::GetCreature(*me, stormTargetGUID))
+                    if (auto c = Unit::GetCreature(*me, stormTargetGUID))
                         me->Kill(c);
                     me->GetMotionMaster()->MoveFall();
                     events.ScheduleEvent(EVENT_SUMMON_UNSTABLE_GROUND_FIELD, urand(20000, 25000));
@@ -281,7 +281,7 @@ public:
 
         void CleanUp()
         {
-            if (InstanceScript* const instance = me->GetInstanceScript())
+            if (auto const instance = me->GetInstanceScript())
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_GROUNDING_FIELD_BUFF);
             me->DespawnOrUnsummon();
         }
@@ -333,13 +333,13 @@ public:
                 isMoving = false;
                 break;
             case 42:
-                if (Creature* c = me->FindNearestCreature(NPC_ASAAD, 100.0f))
+                if (auto c = me->FindNearestCreature(NPC_ASAAD, 100.0f))
                 {
                     c->AI()->DoAction(INTERUPT_SLIPSTREAM_CAST);
 
-                    if (Creature* temp1 = me->SummonCreature(463871, _trianglePos[0], TEMPSUMMON_MANUAL_DESPAWN))
-                        if (Creature* temp2 = me->SummonCreature(463871, _trianglePos[1], TEMPSUMMON_MANUAL_DESPAWN))
-                            if (Creature* temp3 = me->SummonCreature(463871, _trianglePos[2], TEMPSUMMON_MANUAL_DESPAWN))
+                    if (auto temp1 = me->SummonCreature(463871, _trianglePos[0], TEMPSUMMON_MANUAL_DESPAWN))
+                        if (auto temp2 = me->SummonCreature(463871, _trianglePos[1], TEMPSUMMON_MANUAL_DESPAWN))
+                            if (auto temp3 = me->SummonCreature(463871, _trianglePos[2], TEMPSUMMON_MANUAL_DESPAWN))
                             {
                                 temp1->CastSpell(c, SPELL_STORM_RUNE_BEAM, true);
                                 temp2->CastSpell(c, SPELL_STORM_RUNE_BEAM, true);
@@ -464,7 +464,7 @@ public:
                 switch (eventId)
                 {
                 case EVENT_ARCANE_BARRAGE:
-                    if (Player* player = me->FindNearestPlayer(55.0f))
+                    if (auto player = me->FindNearestPlayer(55.0f))
                     {
                         me->AddThreat(player, 55.0f);
                         me->AI()->AttackStart(player);
@@ -555,7 +555,7 @@ class spell_asaad_static_cling : public SpellScriptLoader
 
         bool operator() (WorldObject* obj)
         {
-            if (Unit* target = obj->ToUnit())
+            if (auto target = obj->ToUnit())
                 if (target->HasUnitMovementFlag(MOVEMENTFLAG_FALLING))
                     return true;
             return false;

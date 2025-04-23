@@ -382,7 +382,7 @@ public:
         InstanceScript* instance = player->GetInstanceScript();
         if (!instance || instance->GetData(DATA_COMMANDER_ULTHOK) != DONE)
             return true;
-        if (Creature* neptulon = instance->instance->GetCreature(instance->GetData64(DATA_NEPTULON)))
+        if (auto neptulon = instance->instance->GetCreature(instance->GetData64(DATA_NEPTULON)))
         {
             neptulon->AI()->DoAction(ACTION_NEPTULON_INTRO);
         }
@@ -418,7 +418,7 @@ public:
             //TC_LOG_ERROR("sql.sql", "recognized spellclick.");
             if (passenger->isInCombat())
             {
-                if (Player* passPlayer = passenger->ToPlayer())
+                if (auto passPlayer = passenger->ToPlayer())
                     if (auto s = passPlayer->GetSession())
                         s->SendNotification(s->GetTrinityString(LANG_YOU_IN_COMBAT));
                 return;
@@ -472,7 +472,7 @@ public:
             instance->HandleGameObject(instance->GetData64(GO_ABYSSAL_MAW_01), false, instance->instance->GetGameObject(instance->GetData64(GO_ABYSSAL_MAW_01)));
             events.Reset();
             for (int i = 0; i < 10; i++)
-                if (Creature* murloc = me->SummonCreature(NPC_DEEP_MURLOC_DRUDGE, posMurlocs[i], TEMPSUMMON_MANUAL_DESPAWN))
+                if (auto murloc = me->SummonCreature(NPC_DEEP_MURLOC_DRUDGE, posMurlocs[i], TEMPSUMMON_MANUAL_DESPAWN))
                 {
                     murlocGUIDs[i] = murloc->GetGUID();
                     if (i <= 4)
@@ -661,7 +661,7 @@ public:
                 {
                 case EVENT_HEALING_WAVE:
                     events.RescheduleEvent(EVENT_HEALING_WAVE, 4000);
-                    if (Creature* ally = me->FindNearestCreature(NPC_NAZJAR_INVADER, 35.0f))
+                    if (auto ally = me->FindNearestCreature(NPC_NAZJAR_INVADER, 35.0f))
                     {
                         if (ally->isInCombat() && ally->GetHealthPct() <= 75.0f)
                         {
@@ -669,7 +669,7 @@ public:
                             return;
                         }
                     }
-                    if (Creature* ally = me->FindNearestCreature(NPC_NAZJAR_TEMPEST_WITCH, 35.0f))
+                    if (auto ally = me->FindNearestCreature(NPC_NAZJAR_TEMPEST_WITCH, 35.0f))
                     {
                         if (ally->isInCombat() && ally->GetHealthPct() <= 75.0f)
                         {
@@ -681,12 +681,12 @@ public:
                         DoCast(me, SPELL_HEALING_WAVE);
                     break;
                 case EVENT_HEX:
-                    if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
+                    if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                         DoCast(victim, SPELL_HEX);
                     events.RescheduleEvent(EVENT_HEX, urand(11000, 12000));
                     break;
                 case EVENT_WRATH:
-                    if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
+                    if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 35.0f, true))
                         DoCast(victim, SPELL_WRATH);
                     events.RescheduleEvent(EVENT_WRATH, 6000);
                     break;
@@ -742,7 +742,7 @@ public:
                     if (me->HasUnitState(UNIT_STATE_CASTING)) events.ScheduleEvent(eventId, 250);
                     else
                     {
-                        if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 28.0f, true))
+                        if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 28.0f, true))
                             DoCast(victim, SPELL_CHAIN_LIGHTNING);
                         events.RescheduleEvent(EVENT_CHAIN_LIGHTNING, urand(13000, 17000));
                     }
@@ -751,7 +751,7 @@ public:
                     if (me->HasUnitState(UNIT_STATE_CASTING)) events.ScheduleEvent(eventId, 250);
                     else
                     {
-                        if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
+                        if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 40.0f, true))
                             DoCast(victim, SPELL_LIGHTNING_SURGE);
                         events.RescheduleEvent(EVENT_LIGHTNING_SURGE, urand(18000, 21000));
                     }
@@ -1478,7 +1478,7 @@ public:
         {
             DoCast(SPELL_SUMMON_UNSTABLE_CORRUPTION);
             if (isEventMob)
-                if (GameObject* door = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 50.0f))
+                if (auto door = me->FindNearestGameObject(GO_ABYSSAL_MAW_04, 50.0f))
                     door->AI()->DoAction(1001);
         }
         void UpdateAI(uint32 diff)
@@ -1607,8 +1607,8 @@ public:
 
         void HandleOnEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            if (Unit* caster = GetCaster())
-                if (Unit* target = GetTarget())
+            if (auto caster = GetCaster())
+                if (auto target = GetTarget())
                 if (target->ToPlayer())
                 {
                     target->SetDisableGravity(false);

@@ -207,7 +207,7 @@ public:
         void UpdateAI(const uint32 diff)
         {
 
-            if (Player* player = me->FindNearestPlayer(100.0f))
+            if (auto player = me->FindNearestPlayer(100.0f))
                 if (player->GetTeam() == HORDE)
                     me->SetVisible(true);
 
@@ -237,7 +237,7 @@ public:
         void UpdateAI(const uint32 diff)
         {
 
-            if (Player* player = me->FindNearestPlayer(100.0f))
+            if (auto player = me->FindNearestPlayer(100.0f))
                 if (player->GetTeam() == ALLIANCE)
                     me->SetVisible(true);
 
@@ -274,7 +274,7 @@ public:
             {
                 if (urand(1, 100) <= 30)
                 {
-                    if (Unit* servitor = GetCaster())
+                    if (auto servitor = GetCaster())
                         if (WorldObject* owner = GetOwner())
                         {
                             Position pos;

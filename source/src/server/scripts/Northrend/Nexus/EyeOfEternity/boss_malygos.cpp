@@ -468,7 +468,7 @@ public:
             {
                 case ACTION_LAND_ENCOUNTER_START:
                     events.CancelEventGroup(1);
-                    if (Creature* alexstraszaBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
+                    if (auto alexstraszaBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
                     {
                         Position pos;
                         pos.m_positionZ = alexstraszaBunny->GetPositionZ();
@@ -668,7 +668,7 @@ public:
         {
             if (spell->Id == SPELL_POWER_SPARK_MALYGOS)
             {
-                if (Creature* creature = caster->ToCreature())
+                if (auto creature = caster->ToCreature())
                 {
                     creature->DespawnOrUnsummon();
                 }
@@ -696,7 +696,7 @@ public:
             switch (id)
             {
                 case POINT_NEAR_RANDOM_PORTAL_P_NONE:
-                    if (Creature* portal = me->FindNearestCreature(NPC_PORTAL_TRIGGER, 31.0f, true))
+                    if (auto portal = me->FindNearestCreature(NPC_PORTAL_TRIGGER, 31.0f, true))
                     {
                         events.ScheduleEvent(EVENT_STOP_PORTAL_BEAM, 10*IN_MILLISECONDS, 1, PHASE_NOT_STARTED);
                         events.ScheduleEvent(EVENT_RANDOM_PORTAL, 14*IN_MILLISECONDS, 1, PHASE_NOT_STARTED);
@@ -799,7 +799,7 @@ public:
                         DoCast(SPELL_RANDOM_PORTAL);
                         break;
                     case EVENT_LAND_START_ENCOUNTER:
-                        if (GameObject* iris = me->GetMap()->GetGameObject(instance->GetData64(DATA_FOCUSING_IRIS_GUID)))
+                        if (auto iris = me->GetMap()->GetGameObject(instance->GetData64(DATA_FOCUSING_IRIS_GUID)))
                         {
                             me->SetFacingToObject(iris);
                             iris->Delete(); // this is not the best way.
@@ -856,7 +856,7 @@ public:
                     case EVENT_FLY_OUT_OF_PLATFORM:
                         if (!_performingDestroyPlatform)
                         {
-                            if (Creature* alexstraszaBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
+                            if (auto alexstraszaBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
                             {
                                 Position randomPosOnRadius;
                                 // Hardcodded retail value, reason is Z getters can fail... (TO DO: Change to getter when height calculation works on 100%!)
@@ -926,9 +926,9 @@ public:
 
                         if (!_flyingOutOfPlatform)
                         {
-                            if (Creature* lastArcaneOverloadBunny = me->FindNearestCreature(31253, 200, true))
+                            if (auto lastArcaneOverloadBunny = me->FindNearestCreature(31253, 200, true))
                                 DoCast(lastArcaneOverloadBunny, SPELL_SUMMON_ARCANE_BOMB, true);
-                            if (Creature* lastArcaneOverloadBunny = me->GetMap()->GetCreature(_arcaneOverloadGUID))
+                            if (auto lastArcaneOverloadBunny = me->GetMap()->GetCreature(_arcaneOverloadGUID))
                                 DoCast(lastArcaneOverloadBunny, SPELL_ARCANE_BOMB_TRIGGER, true);
                         }
                         events.ScheduleEvent(EVENT_SUMMON_ARCANE_BOMB, urand(15, 16)*IN_MILLISECONDS, 2, PHASE_TWO);
@@ -970,11 +970,11 @@ public:
                     case EVENT_SURGE_OF_POWER_P_THREE:
                         if (GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL)
                         {
-                            if (Unit* tempSurgeTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, SPELL_RIDE_RED_DRAGON_BUDDY))
+                            if (auto tempSurgeTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, false, SPELL_RIDE_RED_DRAGON_BUDDY))
                             {
                                 if (Vehicle* drakeVehicle = tempSurgeTarget->GetVehicleKit())
                                 {
-                                    if (Unit* passenger = drakeVehicle->GetPassenger(0))
+                                    if (auto passenger = drakeVehicle->GetPassenger(0))
                                     {
                                         if (passenger->GetTypeId() == TYPEID_PLAYER)
                                         {
@@ -994,7 +994,7 @@ public:
                         events.ScheduleEvent(EVENT_SURGE_OF_POWER_P_THREE, urand(9, 18)*IN_MILLISECONDS, 0, PHASE_THREE);
                         break;
                     case EVENT_STATIC_FIELD:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, false, SPELL_RIDE_RED_DRAGON_BUDDY))
+                        if (auto target = SelectTarget(SELECT_TARGET_RANDOM, 0, 60.0f, false, SPELL_RIDE_RED_DRAGON_BUDDY))
                             DoCast(target, SPELL_STATIC_FIELD_MISSLE, true);
 
                         events.ScheduleEvent(EVENT_STATIC_FIELD, urand(15, 30)*IN_MILLISECONDS, 0, PHASE_THREE);
@@ -1015,7 +1015,7 @@ public:
         {
             _JustDied();
             Talk(SAY_DEATH);
-            if (Creature* alexstraszaGiftBoxBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_GIFT_BOX_BUNNY_GUID)))
+            if (auto alexstraszaGiftBoxBunny = me->GetMap()->GetCreature(instance->GetData64(DATA_GIFT_BOX_BUNNY_GUID)))
             {
                 if (GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL)
                     alexstraszaGiftBoxBunny->SummonGameObject(GO_HEART_OF_MAGIC_10, HeartOfMagicSpawnPos.GetPositionX(), HeartOfMagicSpawnPos.GetPositionY(),
@@ -1063,7 +1063,7 @@ public:
             Map::PlayerList const& players = me->GetMap()->GetPlayers();
             if (!players.isEmpty())
                 for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
-                    if (Player* player = itr->getSource())
+                    if (auto player = itr->getSource())
                         if (player->GetAreaId() == AREA_EYE_OF_ETERNITY)
                             player->GetSession()->SendPacket(data);
         }
@@ -1109,7 +1109,7 @@ public:
         {
             if (spell->Id == SPELL_PORTAL_OPENED)
             {
-                if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+                if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
                 {
                     if (malygos->AI()->GetData(DATA_PHASE) == PHASE_ONE)
                         DoCast(me, SPELL_SUMMON_POWER_PARK, true);
@@ -1125,7 +1125,7 @@ public:
 
             if (_instance)
             {
-                if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+                if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
                 {
                     if (malygos->AI()->GetData(DATA_PHASE) != PHASE_ONE && me->HasAura(SPELL_PORTAL_OPENED))
                     {
@@ -1191,7 +1191,7 @@ public:
             if (!_instance)
                 return;
 
-            if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+            if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
             {
                 if (malygos->AI()->GetData(DATA_PHASE) != PHASE_ONE || _instance->GetBossState(DATA_MALYGOS_EVENT) == FAIL)
                 {
@@ -1320,7 +1320,7 @@ public:
                 ++_wpCount;
             }
             else if (Vehicle* hoverDisk = me->GetVehicleKit())
-                if (Unit* lordPassenger = hoverDisk->GetPassenger(0))
+                if (auto lordPassenger = hoverDisk->GetPassenger(0))
                     lordPassenger->ToCreature()->AI()->DoAction(ACTION_SET_DISK_VICTIM_CHASE);
         }
 
@@ -1469,7 +1469,7 @@ class npc_nexus_lord : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_ARCANE_SHOCK:
-                            if (Unit* victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 5.0f, true))
+                            if (auto victim = SelectTarget(SELECT_TARGET_RANDOM, 0, 5.0f, true))
                                 DoCast(victim, SPELL_ARCANE_SHOCK);
                             _events.ScheduleEvent(EVENT_ARCANE_SHOCK, urand(7, 15)*IN_MILLISECONDS);
                             break;
@@ -1490,7 +1490,7 @@ class npc_nexus_lord : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+                if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
                     malygos->AI()->SetData(DATA_SUMMON_DEATHS, malygos->AI()->GetData(DATA_SUMMON_DEATHS) + 1);
             }
 
@@ -1557,7 +1557,7 @@ class npc_scion_of_eternity : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
-                if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+                if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
                     malygos->AI()->SetData(DATA_SUMMON_DEATHS, malygos->AI()->GetData(DATA_SUMMON_DEATHS) + 1);
             }
 
@@ -1587,7 +1587,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Creature* creature = summoner->ToCreature())
+            if (auto creature = summoner->ToCreature())
             {
                 _malygos = creature;
                 _malygos->AI()->SetGUID(me->GetGUID(), DATA_LAST_OVERLOAD_GUID);
@@ -1600,7 +1600,7 @@ public:
 
         void DoAction(int32 const /*action*/)
         {
-            if (Creature* malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
+            if (auto malygos = me->GetMap()->GetCreature(_instance->GetData64(DATA_MALYGOS)))
             {
                 if (malygos->AI()->GetData(DATA_PHASE) == PHASE_TWO)
                     me->DespawnOrUnsummon(6*IN_MILLISECONDS);
@@ -1648,7 +1648,7 @@ public:
 
         void IsSummonedBy(Unit* summoner)
         {
-            if (Player* player = summoner->ToPlayer())
+            if (auto player = summoner->ToPlayer())
                 me->CastSpell(me, 66668, true); // we don't really need the SPELL_RIDE_RED_DRAGON_TRIGGERED
         }
 
@@ -1729,13 +1729,13 @@ class spell_malygos_portal_beam : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                     target->CastSpell(target, SPELL_PORTAL_OPENED);
             }
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                     target->RemoveAura(SPELL_PORTAL_OPENED);
             }
 
@@ -1769,7 +1769,7 @@ class spell_malygos_random_portal : public SpellScriptLoader
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
                 Creature* malygos = GetCaster()->ToCreature();
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                 {
                     Position pos;
                     pos.m_positionZ = target->GetPositionZ();
@@ -1815,7 +1815,7 @@ class IsCreatureVehicleCheck
 
         bool operator()(WorldObject* obj)
         {
-            if (Unit* unit = obj->ToUnit())
+            if (auto unit = obj->ToUnit())
                 if (unit->GetTypeId() == TYPEID_UNIT && unit->GetVehicleKit())
                     return _isVehicle;
 
@@ -1905,7 +1905,7 @@ public:
             Creature* caster = GetCaster()->ToCreature();
             // Each player will enter to the trigger vehicle (entry 30090) which is already spawned (each one can hold up to 5 players, it has 5 seats,
             // the players enter the vehicles casting SPELL_VORTEX_4 or SPELL_VORTEX_5.
-            if (InstanceScript* instance = caster->GetInstanceScript())
+            if (auto instance = caster->GetInstanceScript())
                 instance->SetData(DATA_VORTEX_HANDLING, 0);
 
             // the rest of the vortex execution continues when SPELL_VORTEX_2 is removed.
@@ -1947,21 +1947,21 @@ class spell_malygos_vortex_visual : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* caster = GetCaster()->ToCreature())
+                if (auto caster = GetCaster()->ToCreature())
                 {
                     std::list<HostileReference*> m_threatlist = caster->getThreatManager().getThreatList();
                     for (std::list<HostileReference*>::const_iterator itr = m_threatlist.begin(); itr!= m_threatlist.end(); ++itr)
                     {
-                        if (Unit* target = (*itr)->getTarget())
+                        if (auto target = (*itr)->getTarget())
                         {
                             Player* targetPlayer = target->ToPlayer();
                             if (!targetPlayer || targetPlayer->isGameMaster())
                                 continue;
 
-                            if (InstanceScript* instance = caster->GetInstanceScript())
+                            if (auto instance = caster->GetInstanceScript())
                             {
                                 // Teleport spell - I'm not sure but might be it must be casted by each vehicle when it's passenger leaves it.
-                                if (Creature* trigger = caster->GetMap()->GetCreature(instance->GetData64(DATA_TRIGGER)))
+                                if (auto trigger = caster->GetMap()->GetCreature(instance->GetData64(DATA_TRIGGER)))
                                 {
                                     if (targetPlayer->GetVehicle())
                                         targetPlayer->ExitVehicle();
@@ -1971,7 +1971,7 @@ class spell_malygos_vortex_visual : public SpellScriptLoader
                         }
                     }
 
-                    if (Creature* malygos = caster->ToCreature())
+                    if (auto malygos = caster->ToCreature())
                     {
                         malygos->GetMotionMaster()->Clear();
                         malygos->GetMotionMaster()->MoveIdle();
@@ -2058,8 +2058,8 @@ class spell_nexus_lord_align_disk_aggro : public SpellScriptLoader
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* caster = GetCaster()->ToCreature())
-                    if (Unit* tar = caster->GetVehicleBase())
+                if (auto caster = GetCaster()->ToCreature())
+                    if (auto tar = caster->GetVehicleBase())
                         if (Creature *target = tar->ToCreature())
                             target->GetMotionMaster()->MoveChase(caster->getVictim());
             }
@@ -2083,7 +2083,7 @@ class IsPlayerOnHoverDisk
 
         bool operator()(WorldObject* obj)
         {
-            if (Unit* passenger = obj->ToUnit())
+            if (auto passenger = obj->ToUnit())
                 if (passenger->GetVehicleBase() && passenger->GetVehicleBase()->GetEntry() == NPC_HOVER_DISK_MELEE)
                     return _isOnHoverDisk;
 
@@ -2157,7 +2157,7 @@ class spell_scion_of_eternity_arcane_barrage : public SpellScriptLoader
 
             void TriggerDamageSpellFromPlayer()
             {
-                if (Player* hitTarget = GetHitPlayer())
+                if (auto hitTarget = GetHitPlayer())
                 {
                     // There is some proc in this spell I have absolutely no idea of use, but just in case...
                     TriggerCastFlags triggerFlags = TriggerCastFlags(TRIGGERED_FULL_MASK & ~TRIGGERED_DISALLOW_PROC_EVENTS);
@@ -2202,9 +2202,9 @@ class spell_malygos_destroy_platform_channel : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
-                    if (InstanceScript* instance = target->GetInstanceScript())
-                        if (Creature* platformTrigger = target->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
+                if (auto target = GetTarget()->ToCreature())
+                    if (auto instance = target->GetInstanceScript())
+                        if (auto platformTrigger = target->GetMap()->GetCreature(instance->GetData64(DATA_ALEXSTRASZA_BUNNY_GUID)))
                             platformTrigger->CastSpell(platformTrigger, SPELL_DESTROY_PLATFORM_BOOM_VISUAL);
             }
 
@@ -2244,7 +2244,7 @@ class spell_alexstrasza_bunny_destroy_platform_boom_visual : public SpellScriptL
 
             void HandleDummy(SpellEffIndex /*effIndex*/)
             {
-                if (Creature* target = GetHitCreature())
+                if (auto target = GetHitCreature())
                     target->CastSpell(target, SPELL_DESTROY_PLATFORM_EVENT);
             }
 
@@ -2277,8 +2277,8 @@ class spell_alexstrasza_bunny_destroy_platform_event : public SpellScriptLoader
             void HandleSendEvent(SpellEffIndex /*effIndex*/)
             {
                 Creature* caster = GetCaster()->ToCreature();
-                if (InstanceScript* instance = caster->GetInstanceScript())
-                    if (GameObject* platform = caster->GetMap()->GetGameObject(instance->GetData64(DATA_PLATFORM)))
+                if (auto instance = caster->GetInstanceScript())
+                    if (auto platform = caster->GetMap()->GetGameObject(instance->GetData64(DATA_PLATFORM)))
                         platform->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
             }
 
@@ -2352,7 +2352,7 @@ class spell_wyrmrest_skytalon_ride_red_dragon_buddy_trigger : public SpellScript
 
             void HandleScript(SpellEffIndex /*effIndex*/)
             {
-                if (Unit* target = GetHitUnit())
+                if (auto target = GetHitUnit())
                     target->CastSpell(GetCaster(), GetEffectValue(), true);
             }
 
@@ -2410,7 +2410,7 @@ class spell_malygos_surge_of_power_warning_selector_25 : public SpellScriptLoade
                     caster->AI()->SetGUID(target->GetGUID(), guidDataSlot++);
 
                     if (Vehicle* vehicle = target->GetVehicleKit())
-                        if (Unit* passenger = vehicle->GetPassenger(0))
+                        if (auto passenger = vehicle->GetPassenger(0))
                             if (passenger->GetTypeId() == TYPEID_PLAYER)
                                 caster->AI()->Talk(EMOTE_SURGE_OF_POWER_WARNING_P3, passenger->GetGUID());
                 }
@@ -2506,13 +2506,13 @@ class spell_alexstrasza_gift_beam : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                     target->CastSpell(target, SPELL_ALEXSTRASZAS_GIFT_BEAM_VISUAL);
             }
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                     target->RemoveAura(SPELL_ALEXSTRASZAS_GIFT_BEAM_VISUAL);
             }
 
@@ -2545,7 +2545,7 @@ class spell_alexstrasza_gift_beam_visual : public SpellScriptLoader
 
             void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
+                if (auto target = GetTarget()->ToCreature())
                 {
                     if (target->GetMap()->GetDifficulty() == RAID_DIFFICULTY_10MAN_NORMAL)
                         _alexstraszaGift = target->SummonGameObject(GO_ALEXSTRASZA_S_GIFT_10, target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), target->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0);
@@ -2556,11 +2556,11 @@ class spell_alexstrasza_gift_beam_visual : public SpellScriptLoader
 
             void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
-                if (Creature* target = GetTarget()->ToCreature())
-                    if (InstanceScript* instance = GetCaster()->GetInstanceScript())
+                if (auto target = GetTarget()->ToCreature())
+                    if (auto instance = GetCaster()->GetInstanceScript())
                     {
                         _alexstraszaGift->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
-                        if (GameObject* heartMagic = target->GetMap()->GetGameObject(instance->GetData64(DATA_HEART_OF_MAGIC_GUID)))
+                        if (auto heartMagic = target->GetMap()->GetGameObject(instance->GetData64(DATA_HEART_OF_MAGIC_GUID)))
                         {
                             heartMagic->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
                             // TO DO: This is hack, core doesn't have support for these flags,
@@ -2593,7 +2593,7 @@ class achievement_denyin_the_scion : public AchievementCriteriaScript
         bool OnCheck(Player* source, Unit* /*target*/)
         {
             // Only melee disks can be used
-            if (Unit* disk = source->GetVehicleBase())
+            if (auto disk = source->GetVehicleBase())
                 if (disk->GetEntry() == NPC_HOVER_DISK_MELEE)
                     return true;
 

@@ -219,7 +219,7 @@ void TempSummon::InitStats(uint32 duration)
 
 void TempSummon::InitSummon()
 {
-    if (Unit* owner = GetSummoner())
+    if (auto owner = GetSummoner())
     {
         if (auto c = owner->ToCreature())
         {
@@ -276,7 +276,7 @@ void TempSummon::RemoveFromWorld()
     {
         int32 slot = m_Properties->Slot;
         if (slot > 0)
-            if (Unit* owner = GetSummoner())
+            if (auto owner = GetSummoner())
                 if (owner->m_SummonSlot[slot] == GetGUID())
                     owner->m_SummonSlot[slot] = 0;
     }

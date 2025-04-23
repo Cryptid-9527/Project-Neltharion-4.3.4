@@ -15,7 +15,7 @@ public:
 
         void onPeriodicTick(AuraEffect const* /*aurEff*/)
         {
-            if (Unit* target = GetUnitOwner())
+            if (auto target = GetUnitOwner())
                 if (target->CountPctFromMaxHealth(90) < target->GetHealth())
                     target->RemoveAurasDueToSpell(GetSpellInfo()->Id);
         }
