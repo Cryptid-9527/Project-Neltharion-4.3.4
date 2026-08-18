@@ -11,6 +11,8 @@ Program versions used by our project:
 - Visual Studio 2022 (17): https://aka.ms/vs/17/release/vs_community.exe
 - (Optional, Recommended) [HeidiSQL database client](https://release-assets.githubusercontent.com/github-production-release-asset/109230350/01eb734f-ec46-4145-be10-8be5bc93abf8?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-13T00%3A03%3A38Z&rscd=attachment%3B+filename%3DHeidiSQL_12.21.0.7344_Setup.exe&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-12T23%3A03%3A02Z&ske=2026-08-13T00%3A03%3A38Z&sks=b&skv=2018-11-09&sig=5W7CuxhtT0u0tZ4fDZQ2oqNsQYd4KNXv%2BgHGd4ofG9s%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NjU3ODI2MywibmJmIjoxNzg2NTc2NDYzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.14K53ePFdOQ0WW7Fj0Pt4dZTZQWuS7A_wAZ0uPWJGiE&response-content-disposition=attachment%3B%20filename%3DHeidiSQL_12.21.0.7344_Setup.exe&response-content-type=application%2Foctet-stream)
 
+
+# How-To
 1. Clone repository to machine
 2. Download listed programs, note the database login given for mariaDB.
 3. Open project/bin/relwithdebinfo/data, install and unpack downloads in that location.
