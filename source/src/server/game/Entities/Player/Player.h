@@ -2776,7 +2776,7 @@ class Player : public Unit, public GridObject<Player>
             GM Freeze cleanliness variables
         */
         uint32 m_pre_gmFreeze_PhaseMask{ 0 };
-        WorldLocation m_gmFreeze_location{ 0.f, 0.f, 0.f, 0.f, 0 };
+        WorldLocation m_gmFreeze_location{ 0, 0.f, 0.f, 0.f, 0.f };
         uint64 m_gmFreeze_gmGUID{0};
         bool needsGMFreeze() const;
         bool hasGMFreeze(bool has_everything = true) const;
