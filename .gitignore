@@ -1,3 +1,4 @@
+*.txt
 build*/
 .directory
 .mailmap
@@ -15,10 +16,9 @@ CMakeLists.txt.user
 *.BACKUP.*
 *.BASE.*
 *.LOCAL.*
-/source/sql
-source/sql/base/world.zip
-source/sql/base/characters.zip
-source/sql/base/auth.zip
+source/sql/base/*.zip
+source/sql/base/*.sql
+!/source/sql/base/auth+characters+world download.txt
 project/ALL_BUILD.vcxproj
 project/ALL_BUILD.vcxproj.filters
 project/cmake_install.cmake
@@ -49,7 +49,6 @@ project/src/cmake_install.cmake
 *.tlog
 *.pdb
 *.lib
-*.txt
 *.aps
 *.dmp
 *.dbc
@@ -59,6 +58,11 @@ project/src/cmake_install.cmake
 *.mmtile
 *.vmtree
 *.vmtile
+*.dtree
 *.vmo
 *.bat
 *.lnk
+project/bin/RelWithDebInfo/authserver.conf
+project/bin/RelWithDebInfo/worldserver.conf
+project/bin/RelWithDebInfo/data/*
+!project/bin/RelWithDebInfo/data/dbc+maps+mmaps+vmaps download.txt
