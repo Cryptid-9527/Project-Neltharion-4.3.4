@@ -5,7 +5,6 @@ Project Neltharion, as most recently existed in October 2023.
 This project is the result of four years of veteran player collaboration, with a focus on endgame replay value and solving long-standing problems.
 We implented features, systems, checks, and rules that never existed on blizzard but made a point to keep the game recognizable on the surface to avoid negative effects on players looking for a strictly blizzlike server.
 
-This release is "final", as there will be no further support by myself or under the Project Neltharion name.
 The final product is not perfect, as finding more imperfections than you can fix is a natural part of reverse engineering a game. 
 The 4 year changelog may be impressive, but our project also started with a source we felt, at the time, was 'almost' complete before spending 4 years working on it.
 
@@ -54,6 +53,19 @@ For website support with this core, contact the core's primary web developer Dar
    <img width="1807" height="1508" alt="image" src="https://i.imgur.com/jAwtsRy.png" />
 8. Open Trinitycore.sln with visual studio 2022. Clean solution, build solution, clean solution, rebuild solution. With a fully compiled core, re-attempts should complete very fast. When successful your relwithdebinfo folder should look like as shown below.
 <img width="985" height="793" alt="image" src="https://i.imgur.com/umdgvs3.png" />
+
 9. Rename authserver.conf.dist to authserver.conf.
+
 10. Rename worldserver.conf.dist to worldserver.conf.
-11. Open worldserver and authserver.conf files, correct the database login information.]
+    
+11. Open worldserver and authserver.conf files, correct the database login information.
+
+12. Check the logs folders if the server fails to open.
+
+# Important Notes
+- GM Ranking system has been expanded. The standard 0 (player) through 5 (console) has been expanded to 0-50, allowing intervals of "seniority" to be set up in the future. GM Ranking system now has "flags" in addition to security level. This allows the administrator to designate accounts as certain roles or specific duties, independent from rank. This allows developers and QA staff accounts to have tools not responsibly trusted to GMs.
+- IPs are 100% masked from ingame client commands. Account names are ~99% removed from ingame commands, "pinfo" displays an account name to help game masters understand accounts by name similarity/patterns, if IDs and IPs are actually unique. Commands to pull and act on IPs/Accounts en mass instead use IP masks and account numbers. True IPs are masked everywhere other than live memory and the 'auth.IP_Masking' Table. Clearing this table will confuse several different logging systems, so do so carefully.
+  <img width="1206" height="265" alt="image" src="https://i.imgur.com/sFDlni9.png" />
+With players data protected from game masters, we were able to take usage of masked IPs and Account numbers to a new level. Logs used to cross-check login activity across IPs allow game masters to connect more data points for corrective actions.
+- There exists a Head Game master account security flag that allows for invisibility from other GMs. This improved stealth is on by default (at/before login) for head-gm accounts, and fades when the head gm toggles DND.
+- Take a look through the worldserver.conf and commands data table. Several features and functions are established to assist staff.
