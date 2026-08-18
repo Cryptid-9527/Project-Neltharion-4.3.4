@@ -10,7 +10,7 @@ Program versions used by our project:
 - Cmake 3.25.2(required to specify visual studio 2022): https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2-windows-x86_64.msi
 - Visual Studio 2022 (17): https://aka.ms/vs/17/release/vs_community.exe
 
-<img width="2560" height="1516" alt="image" src="https://i.imgur.com/tyEBzmK.png" />
+<img width="2560" height="1516" alt="image" src="https://i.imgur.com/f4EOekr.png" />
 
 
 Project Neltharion, as most recently existed in October 2023.
