@@ -29,11 +29,9 @@ Program versions used by our project:
 <img width="985" height="793" alt="image" src="https://i.imgur.com/umdgvs3.png" />
 9. Rename authserver.conf.dist to authserver.conf.
 10. Rename worldserver.conf.dist to worldserver.conf.
-11. Open worldserver and authserver.conf files, correct the database login information.
+11. Open worldserver and authserver.conf files, correct the database login information.]
 
-
-#What is it?
-
+# What is it?
 Project Neltharion, as most recently existed in October 2023.
 This project is the result of four years of veteran player collaboration, with a focus on endgame replay value and solving long-standing problems.
 We implented features, systems, checks, and rules that never existed on blizzard but made a point to keep the game recognizable on the surface to avoid negative effects on players looking for a strictly blizzlike server.
