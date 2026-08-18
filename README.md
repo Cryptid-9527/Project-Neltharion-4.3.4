@@ -15,7 +15,7 @@ The 4 year changelog may be impressive, but our project also started with a sour
 - All focus-content scripts and systems received hundreds if not thousands of hours of polishing work.
 
 Focused Content:
-- Endgame 85 Gameplay Loop (CLass Mechanics, Arena, BGs, WPvP, Dungeons, Raids, M+)
+- Endgame 85 Gameplay Loop (Class Mechanics, Arena, BGs, WPvP, Dungeons, Raids, M+)
 - Critical Systems & QOL
 - Starting & chokepoint quest zones
 
