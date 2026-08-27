@@ -66,3 +66,4 @@ project/bin/RelWithDebInfo/authserver.conf
 project/bin/RelWithDebInfo/worldserver.conf
 project/bin/RelWithDebInfo/data/*
 !project/bin/RelWithDebInfo/data/dbc+maps+mmaps+vmaps download.txt
+project/bin/RelWithDebInfo/worldserver.exe
